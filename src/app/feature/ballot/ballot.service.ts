@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Contest, ContestView } from '../../core/models/models';
-import { Observable } from 'rxjs';
+import { Contest } from '../../core/models/models';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +8,7 @@ import { Observable } from 'rxjs';
 export class BallotService {
   http = inject(HttpClient);
 
-  private contestAPIUrl = 'https://localhost:6420/api/contest';
+  private contestAPIUrl = 'https://localhost:4200/api/contest';
 
   ContestsGet(): Promise<Contest[]> {
     return new Promise((resolve, reject) => {
@@ -41,7 +40,7 @@ export class BallotService {
   //   });
   // }
 
-  getAllContests(): Observable<Contest[]> {
-    return this.http.get<Contest[]>('api/contest');
-  }
+  // getAllContests(): Observable<Contest[]> {
+  //   return this.http.get<Contest[]>('api/contest');
+  // }
 }

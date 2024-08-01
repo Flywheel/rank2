@@ -39,14 +39,6 @@ export interface Author {
   eventLog: EventLog[];
 }
 
-export interface Candidate {
-  id: number;
-  authorId: number;
-  candidateName: string;
-  candidateDescription: string;
-  candidateImage: Asset;
-}
-
 export interface Channel {
   id: number;
   authorId: number;
@@ -61,6 +53,18 @@ export interface ChannelMember {
   assetId: string;
 }
 
+export interface Candidate {
+  id: number;
+  authorId: number;
+  channelId: number;
+  label: string;
+  assetId: number;
+}
+
+export interface CandidateView extends Candidate {
+  asset: AssetView;
+}
+
 export interface SlateMember {
   id: number;
   authorId: number;
@@ -70,7 +74,7 @@ export interface SlateMember {
 }
 
 export interface SlateMemberView extends SlateMember {
-  asset: AssetView;
+  candidateView: CandidateView;
 }
 
 export interface SlateView extends Slate {

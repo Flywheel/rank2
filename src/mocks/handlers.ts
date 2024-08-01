@@ -1,13 +1,13 @@
 import { http, HttpResponse } from 'msw';
 
 export const handlers = [
-  http.get('https://localhost:6420/user', () => {
-    return HttpResponse.json({
-      firstName: 'John',
-      lastName: 'Maverick',
-    });
-  }),
-  http.get('https://localhost:6420/api/contest', () => {
+  // http.get('https://localhost:4200/user', () => {
+  //   return HttpResponse.json({
+  //     firstName: 'John',
+  //     lastName: 'Maverick',
+  //   });
+  // }),
+  http.get('https://localhost:4200/api/contest', () => {
     return HttpResponse.json([
       {
         id: 1,
