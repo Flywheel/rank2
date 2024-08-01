@@ -5,10 +5,10 @@ import { isDevMode } from '@angular/core';
 
 async function prepareApp() {
   try {
-    if (isDevMode()) {
-      const { worker: mockData } = await import('./mocks/browser');
-      return mockData.start();
-    }
+    //   if (isDevMode()) {
+    const { worker: mockData } = await import('./mocks/browser');
+    return mockData.start();
+    //   }
   } catch (error) {
     console.error('Failed to start Mock Service Worker:', error);
   }
