@@ -8,11 +8,7 @@ import { Contest } from '../../core/models/models';
 export class BallotService {
   http = inject(HttpClient);
 
-  //private hostDomain = environment.HOST_DOMAIN;
-  private hostDomain = 'https://mh5.netlify.app';
-  private contestAPIUrl = `${this.hostDomain}/api/contest`;
-
-  //private contestAPIUrl = 'https://localhost:4200/api/contest';
+  private contestAPIUrl = `${environment.HOST_DOMAIN}/api/contest`;
 
   ContestsGet(): Promise<Contest[]> {
     console.log(this.contestAPIUrl);

@@ -1,6 +1,20 @@
 import { http, HttpResponse } from 'msw';
 
 export const handlers = [
+  // http.get('**', ({ request }) => {
+  //   // Check if the request is for a chunk file
+  //   if (request.url.includes('/chunk-')) {
+  //     // Return a 404 response for all chunk requests
+  //     return request.passthrough();
+  //   }
+
+  //   // Return a 404 response for all other unmatched requests
+  //   return {
+  //     status: 404,
+  //     body: { error: 'Not Found' },
+  //   };
+  // }),
+
   http.get('**api/ballot', req => {
     console.log('req', req);
     return HttpResponse.json([{}]);
