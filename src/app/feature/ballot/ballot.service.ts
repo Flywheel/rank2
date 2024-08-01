@@ -8,12 +8,13 @@ import { Contest } from '../../core/models/models';
 export class BallotService {
   http = inject(HttpClient);
 
-  private hostDoamin = environment.HOST_DOMAIN;
-  private contestAPIUrl = `${this.hostDoamin}/api/contest`;
+  private hostDomain = environment.HOST_DOMAIN;
+  private contestAPIUrl = `${this.hostDomain}/api/contest`;
 
   //private contestAPIUrl = 'https://localhost:4200/api/contest';
 
   ContestsGet(): Promise<Contest[]> {
+    console.log(this.contestAPIUrl);
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         this.http.get<Contest[]>(this.contestAPIUrl).subscribe({
@@ -31,6 +32,7 @@ export class BallotService {
   ContestsCreate({ closes, opens, contestTitle, contestDescription, authorId, topSlateId }: Contest): Promise<Contest> {
     //ContestsCreate(contest: Contest): Promise<Contest> {
     console.log('input', contestTitle);
+    console.log(this.contestAPIUrl);
     return new Promise((resolve, reject) => {
       this.http
         .post<Contest>(this.contestAPIUrl, { closes, opens, contestTitle, contestDescription, authorId, topSlateId })
