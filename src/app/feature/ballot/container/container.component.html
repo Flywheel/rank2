@@ -1,4 +1,13 @@
-<p>container works!</p>
-<mh5-header />
-<mh5-body />
-<mh5-viewer />
+@if (!showViewer) {
+  <mh5-header></mh5-header>
+  <div>
+    @for (item of theContests(); track $index) {
+      <div (click)="addContest()" (keydown)="addContest()" tabindex="0">{{ item.contestTitle }}</div>
+    }
+  </div>
+  <mh5-body></mh5-body>
+} @else {
+  <mh5-viewer></mh5-viewer>
+}
+
+= =
