@@ -35,12 +35,12 @@ export const BallotStore = signalStore(
   { providedIn: 'root' },
   withDevtools('ballots'),
   withState({
-    currentContestView: emptycontestView,
+    // currentContestView: emptycontestView,
     allContestViews: [emptycontestView],
     allContests: [emptycontest],
-    contestSlate: emptySlateView,
-    voterSlates: [emptySlateView],
-    voterSlate: emptySlateView,
+    // contestSlate: emptySlateView,
+    // voterSlates: [emptySlateView],
+    // voterSlate: emptySlateView,
     isStartupLoadingComplete: false,
     isLoading: false,
   }),
@@ -60,39 +60,49 @@ export const BallotStore = signalStore(
         }));
       },
 
-      async getContestSlateByContestId(contestId: number) {
-        updateState(store, `[Ballot] getContestSlateByContestId Success`, {
-          currentContestView: store.allContestViews().filter(a => a.id === contestId)[0] ?? emptycontestView,
-          contestSlate: store.allContestSlates().filter(a => a.contestId === contestId)[0] ?? emptySlateView,
+      async addContest(contest: Contest) {
+        updateState(store, '[Contest] addContest Pending', { isLoading: true });
+        return await dbBallot.ContestsCreate(contest).then((newContest: Contest) => {
+          updateState(store, '[Contest] addContest Success', {
+            allContests: [...store.allContests(), newContest],
+            isLoading: false,
+          });
         });
       },
 
-      async getVoterSlateByContestId(contestId: number) {
-        const voterSlates: SlateView[] = store.voterSlates() ?? [];
-        const currentVoterSlate: SlateView = voterSlates.filter(a => a.contestId === contestId)[0] ?? emptySlateView;
-        updateState(store, `[Ballot] getCurrentVoterSlateByContestId Success`, {
-          voterSlate: currentVoterSlate,
-          voterSlates: voterSlates,
-        });
-      },
+      // async getContestSlateByContestId(contestId: number) {
+      //   updateState(store, `[Ballot] getContestSlateByContestId Success`, {
+      //     currentContestView: store.allContestViews().filter(a => a.id === contestId)[0] ?? emptycontestView,
+      //     contestSlate: store.allContestSlates().filter(a => a.contestId === contestId)[0] ?? emptySlateView,
+      //   });
+      // },
 
-      async updateVoterSlate(ballot: SlateView) {
-        updateState(store, `[Ballot] UpdateVoterSlate Start`, {
-          isLoading: true,
-        });
-        let updatedAuthorSlates = store.voterSlates();
-        const slateExists = updatedAuthorSlates.some(b => b.contestId === ballot.contestId);
-        if (slateExists) {
-          updatedAuthorSlates = updatedAuthorSlates.map(b => (b.contestId === ballot.contestId ? ballot : b));
-        } else {
-          updatedAuthorSlates = [...updatedAuthorSlates, ballot];
-        }
-        updateState(store, `[Ballot] UpdateVoter Slate Success`, {
-          voterSlates: updatedAuthorSlates,
-          voterSlate: ballot,
-          isLoading: false,
-        });
-      },
+      // async getVoterSlateByContestId(contestId: number) {
+      //   const voterSlates: SlateView[] = store.voterSlates() ?? [];
+      //   const currentVoterSlate: SlateView = voterSlates.filter(a => a.contestId === contestId)[0] ?? emptySlateView;
+      //   updateState(store, `[Ballot] getCurrentVoterSlateByContestId Success`, {
+      //     voterSlate: currentVoterSlate,
+      //     voterSlates: voterSlates,
+      //   });
+      // },
+
+      // async updateVoterSlate(ballot: SlateView) {
+      //   updateState(store, `[Ballot] UpdateVoterSlate Start`, {
+      //     isLoading: true,
+      //   });
+      //   let updatedAuthorSlates = store.voterSlates();
+      //   const slateExists = updatedAuthorSlates.some(b => b.contestId === ballot.contestId);
+      //   if (slateExists) {
+      //     updatedAuthorSlates = updatedAuthorSlates.map(b => (b.contestId === ballot.contestId ? ballot : b));
+      //   } else {
+      //     updatedAuthorSlates = [...updatedAuthorSlates, ballot];
+      //   }
+      //   updateState(store, `[Ballot] UpdateVoter Slate Success`, {
+      //     voterSlates: updatedAuthorSlates,
+      //     voterSlate: ballot,
+      //     isLoading: false,
+      //   });
+      // },
       async setStartupLoadingComplete(state: boolean) {
         updateState(store, '[Ballot] setStartupLoadingComplete Success', { isStartupLoadingComplete: state });
       },

@@ -1,13 +1,13 @@
 import { http, HttpResponse } from 'msw';
 
 export const handlers = [
-  // http.get('https://localhost:4200/user', () => {
-  //   return HttpResponse.json({
-  //     firstName: 'John',
-  //     lastName: 'Maverick',
-  //   });
-  // }),
-  http.get('https://localhost:4200/api/contest', () => {
+  http.get('**api/ballot', req => {
+    console.log('req', req);
+    return HttpResponse.json([{}]);
+  }),
+
+  http.get('**api/contest', req => {
+    console.log('req', req);
     return HttpResponse.json([
       {
         id: 1,
@@ -28,5 +28,10 @@ export const handlers = [
         closes: new Date('2024-11-01'),
       },
     ]);
+  }),
+  http.post('**api/contest', async ({ request }) => {
+    console.log('req', request);
+    const nextPost = await request.json();
+    return HttpResponse.json(nextPost);
   }),
 ];

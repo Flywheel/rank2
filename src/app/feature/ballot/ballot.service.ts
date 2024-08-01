@@ -1,14 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
 import { Contest } from '../../core/models/models';
-
 @Injectable({
   providedIn: 'root',
 })
 export class BallotService {
   http = inject(HttpClient);
 
-  private contestAPIUrl = 'https://localhost:4200/api/contest';
+  private hostDoamin = environment.HOST_DOMAIN;
+  private contestAPIUrl = `${this.hostDoamin}/api/contest`;
+
+  //private contestAPIUrl = 'https://localhost:4200/api/contest';
 
   ContestsGet(): Promise<Contest[]> {
     return new Promise((resolve, reject) => {
@@ -22,6 +25,26 @@ export class BallotService {
           },
         });
       }, 500);
+    });
+  }
+
+  ContestsCreate({ closes, opens, contestTitle, contestDescription, authorId, topSlateId }: Contest): Promise<Contest> {
+    //ContestsCreate(contest: Contest): Promise<Contest> {
+    console.log('input', contestTitle);
+    return new Promise((resolve, reject) => {
+      this.http
+        .post<Contest>(this.contestAPIUrl, { closes, opens, contestTitle, contestDescription, authorId, topSlateId })
+        .subscribe({
+          //this.http.post<Contest>(this.contestAPIUrl, contest).subscribe({
+          next: data => {
+            console.log('data', data);
+            resolve(data);
+          },
+          error: error => {
+            console.log('error', error);
+            reject(error);
+          },
+        });
     });
   }
 

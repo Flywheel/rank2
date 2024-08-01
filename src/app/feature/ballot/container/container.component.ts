@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { BodyComponent } from '../body/body.component';
 import { ViewerComponent } from '../viewer/viewer.component';
@@ -19,9 +19,6 @@ export class ContainerComponent {
   ballotStore = inject(BallotStore);
   showViewer = false;
   theContests = this.ballotStore.allContests;
-  theData = signal<Contest[]>([]);
-  // data$ = this.dbService.AllContests2();
-  // contestData = computed(() => toSignal(this.dbService.AllContests2() ?? [{}]));
 
   testInsert: Contest = {
     id: 1,
@@ -35,15 +32,9 @@ export class ContainerComponent {
 
   constructor() {
     this.showViewer = false;
-    //  this.theData.set(this.dbService.AllContests());
   }
 
   addContest() {
-    //this.ballotStore.addContest(this.testInsert);
-    // this.dbService.addContest(this.testInsert);
-    // this.theData.set(this.dbService.getAllContests());
-    // this.dbService.getContestAllContests2().subscribe(data => {
-    //   console.log(data);
-    // });
+    this.ballotStore.addContest(this.testInsert);
   }
 }
