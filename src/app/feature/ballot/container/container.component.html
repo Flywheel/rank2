@@ -5,6 +5,17 @@
       <div (click)="addContest()" (keydown)="addContest()" tabindex="0">{{ item.contestTitle }}</div>
     }
   </div>
+
+  <div>
+    @for (item of theContestviews(); track $index) {
+      <div>
+        {{ item.contestTitle }}
+      </div>
+      @for (itemx of item.slate.slateMemberViews; track $index) {
+        <div>{{ itemx.placementView.caption }} -- {{ itemx.placementView.asset.mediaType }} {{ itemx.placementView.asset.sourceId }}</div>
+      }
+    }
+  </div>
   <mh5-body></mh5-body>
 } @else {
   <mh5-viewer></mh5-viewer>

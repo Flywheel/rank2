@@ -1,6 +1,6 @@
 import { signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 import { withDevtools, updateState } from '@angular-architects/ngrx-toolkit';
-import { Contest, ContestView, SlateView } from '../../core/models/models';
+import { Contest, ContestView, SlateMemberView, SlateView } from '../../core/interfaces/interfaces';
 import { BallotService } from './ballot.service';
 import { computed, inject } from '@angular/core';
 
@@ -38,9 +38,9 @@ export const BallotStore = signalStore(
     // currentContestView: emptycontestView,
     allContestViews: [emptycontestView],
     allContests: [emptycontest],
-    // contestSlate: emptySlateView,
+    contestSlate: emptySlateView,
     // voterSlates: [emptySlateView],
-    // voterSlate: emptySlateView,
+    //voterSlate: emptySlateView,
     isStartupLoadingComplete: false,
     isLoading: false,
   }),
@@ -68,6 +68,26 @@ export const BallotStore = signalStore(
             isLoading: false,
           });
         });
+      },
+
+      async getAllContestViews() {
+        updateState(store, '[Ballot] getAllContests Start', { isLoading: true });
+        const allContestViews: ContestView[] = await dbBallot.getAllContestViews();
+        updateState(store, '[Ballot] getAllContestViews Success', value => ({
+          ...value,
+          allContestViews,
+          isLoading: false,
+        }));
+      },
+
+      async getAllSlateMembers() {
+        // updateState(store, '[Ballot] getAllSlateMembers Start', { isLoading: true });
+        // const slateMembers: SlateMemberView[] = await dbBallot.getAllContestViews();
+        // updateState(store, '[Ballot] getAllSlateMembers Success', value => ({
+        //   ...value,
+        //   allContests: contests,
+        //   isLoading: false,
+        // }));
       },
 
       // async getContestSlateByContestId(contestId: number) {
@@ -112,6 +132,7 @@ export const BallotStore = signalStore(
   withHooks(store => ({
     onInit: async () => {
       await store.getAllContests();
+      await store.getAllContestViews();
       await store.setStartupLoadingComplete(true);
     },
   }))

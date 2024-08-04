@@ -3,7 +3,7 @@ import { HeaderComponent } from '../header/header.component';
 import { BodyComponent } from '../body/body.component';
 import { ViewerComponent } from '../viewer/viewer.component';
 import { DbService } from '../../../core/db/db.service';
-import { Contest } from '../../../core/models/models';
+import { Contest } from '../../../core/interfaces/interfaces';
 import { BallotStore } from '../ballot.store';
 
 @Component({
@@ -19,6 +19,7 @@ export class ContainerComponent {
   ballotStore = inject(BallotStore);
   showViewer = false;
   theContests = this.ballotStore.allContests;
+  theContestviews = this.ballotStore.allContestViews;
 
   testInsert: Contest = {
     id: 1,
