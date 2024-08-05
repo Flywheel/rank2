@@ -12,14 +12,17 @@ export class BallotService {
   private contestViewAPIUrl = `${environment.HOST_DOMAIN}/api/contestview`;
 
   ContestsGet(): Promise<Contest[]> {
-    console.log(this.contestAPIUrl);
+    console.log(`ballotsService.ContestGet() ${this.contestAPIUrl}`);
     return new Promise((resolve, reject) => {
+      console.log(`ballotsService.ContestGet() START PROMISE ${this.contestAPIUrl}`);
       setTimeout(() => {
         this.http.get<Contest[]>(this.contestAPIUrl).subscribe({
           next: data => {
+            console.log(`ballotsService.ContestGet() Resolved`);
             resolve(data);
           },
           error: error => {
+            console.log('error', error);
             reject(error);
           },
         });
@@ -54,6 +57,7 @@ export class BallotService {
             resolve(data);
           },
           error: error => {
+            console.log('error', error);
             reject(error);
           },
         });

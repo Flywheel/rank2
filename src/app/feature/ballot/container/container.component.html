@@ -1,12 +1,6 @@
 @if (!showViewer) {
   <mh5-header></mh5-header>
   <div>
-    @for (item of theContests(); track $index) {
-      <div (click)="addContest()" (keydown)="addContest()" tabindex="0">{{ item.contestTitle }}</div>
-    }
-  </div>
-
-  <div>
     @for (item of theContestviews(); track $index) {
       <div>
         {{ item.contestTitle }}
@@ -22,3 +16,8 @@
 }
 
 = =
+<div>
+  @for (item of theContests(); track $index) {
+    <div (click)="addContest()" (keydown)="addContest()" tabindex="0">{{ item.topSlateId }}</div>
+  }
+</div>
