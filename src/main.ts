@@ -13,10 +13,7 @@ async function prepareApp() {
       console.log('No data service yet provided');
     }
   } catch (error) {
-    console.error('Failed to start Mock Service Worker:', error);
-    // const { module: importProvidersFrom } = await import('@angular/core')
-    // const { module: InMemoryWebApiModule } = await import('angular-in-memory-web-api');
-    // const c = {...appConfig.providers, InMemoryWebApiModule.forRoot(importProvidersFrom('./mocks/handlers'))};
+    console.error('Did not start Mock Service Worker:', error);
   }
   return Promise.resolve();
 }

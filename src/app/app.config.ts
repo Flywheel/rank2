@@ -21,9 +21,9 @@ const inMemoryDbProviders = [importProvidersFrom(InMemoryWebApiModule.forRoot(Db
 
 const mswProviders = [provideAnimationsAsync(), provideAnimations()];
 
-const allProviders = [...commonProviders, ...inMemoryDbProviders, ...mswProviders];
+//const allProviders = [...commonProviders, ...inMemoryDbProviders, ...mswProviders];
 
 export const appConfig: ApplicationConfig = {
-  providers: [...allProviders],
-  // providers: [...commonProviders, ...(isDevMode() ? mswProviders : inMemoryDbProviders)],
+  // providers: [...allProviders],
+  providers: [...commonProviders, ...(isDevMode() ? mswProviders : inMemoryDbProviders)],
 };
