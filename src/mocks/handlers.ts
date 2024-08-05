@@ -7,17 +7,20 @@ export const handlers = [
   }),
 
   http.get('**api/contest', req => {
-    console.log('req', req);
+    console.log('msw handler get api/contest');
+    console.log(req);
     return HttpResponse.json(contestList);
   }),
   http.post('**api/contest', async ({ request }) => {
-    console.log('req', request);
+    console.log('msw handler post api/contest');
+    console.log(request);
     const nextPost = await request.json();
     return HttpResponse.json(nextPost);
   }),
 
   http.get('**api/contestview', req => {
-    console.log('req', req);
+    console.log('msw handler get api/contestView');
+    console.log(req);
     return HttpResponse.json(contestViewList);
   }),
 
