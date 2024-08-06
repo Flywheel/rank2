@@ -51,17 +51,17 @@ export class BallotService {
 
   getAllContestViews(): Promise<ContestView[]> {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        this.http.get<ContestView[]>(this.contestViewAPIUrl).subscribe({
-          next: data => {
-            resolve(data);
-          },
-          error: error => {
-            console.log('error', error);
-            reject(error);
-          },
-        });
-      }, 500);
+      //    setTimeout(() => {
+      this.http.get<ContestView[]>(this.contestViewAPIUrl).subscribe({
+        next: data => {
+          resolve(data);
+        },
+        error: error => {
+          console.log('error', error);
+          reject(error);
+        },
+      });
+      //    }, 500);
     });
   }
 }

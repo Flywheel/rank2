@@ -1,21 +1,13 @@
 @if (!showViewer) {
   <mh5-header></mh5-header>
-  <div>
-    @for (item of theContestviews(); track $index) {
-      <div>
-        {{ item.contestTitle }}
-      </div>
-      @for (itemx of item.slate.slateMemberViews; track $index) {
-        <div>{{ itemx.placementView.caption }} -- {{ itemx.placementView.asset.mediaType }} {{ itemx.placementView.asset.sourceId }}</div>
-      }
-    }
-  </div>
-  <mh5-body></mh5-body>
+
+  @defer (when isReady$) {
+    <mh5-body />
+  }
 } @else {
   <mh5-viewer></mh5-viewer>
 }
 
-= =
 <div>
   @for (item of theContests(); track $index) {
     <div (click)="addContest()" (keydown)="addContest()" tabindex="0">{{ item.topSlateId }}</div>

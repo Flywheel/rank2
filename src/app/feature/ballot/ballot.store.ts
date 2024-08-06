@@ -35,12 +35,12 @@ export const BallotStore = signalStore(
   { providedIn: 'root' },
   withDevtools('ballots'),
   withState({
-    // currentContestView: emptycontestView,
+    currentContestView: emptycontestView,
     allContestViews: [emptycontestView],
     allContests: [emptycontest],
     contestSlate: emptySlateView,
-    // voterSlates: [emptySlateView],
-    //voterSlate: emptySlateView,
+    voterSlates: [emptySlateView],
+    voterSlate: emptySlateView,
     isStartupLoadingComplete: false,
     isLoading: false,
   }),
@@ -71,7 +71,7 @@ export const BallotStore = signalStore(
       },
 
       async getAllContestViews() {
-        updateState(store, '[Ballot] getAllContests Start', { isLoading: true });
+        updateState(store, '[Ballot] getAllContestViews Start', { isLoading: true });
         const allContestViews: ContestView[] = await dbBallot.getAllContestViews();
         updateState(store, '[Ballot] getAllContestViews Success', value => ({
           ...value,
@@ -90,39 +90,42 @@ export const BallotStore = signalStore(
         // }));
       },
 
-      // async getContestSlateByContestId(contestId: number) {
-      //   updateState(store, `[Ballot] getContestSlateByContestId Success`, {
-      //     currentContestView: store.allContestViews().filter(a => a.id === contestId)[0] ?? emptycontestView,
-      //     contestSlate: store.allContestSlates().filter(a => a.contestId === contestId)[0] ?? emptySlateView,
-      //   });
-      // },
+      async setCurrentContestByContestId(contestId: number) {
+        console.log(`setCurrentContestByContestId ${contestId}`);
+        console.log(store.allContestViews());
+        updateState(store, `[Ballot] getContestSlateByContestId Success`, {
+          currentContestView: store.allContestViews().filter(a => a.id === contestId)[0] ?? emptycontestView,
+          contestSlate: store.allContestSlates().filter(a => a.contestId === contestId)[0] ?? emptySlateView,
+        });
+        console.log(store.currentContestView());
+      },
 
-      // async getVoterSlateByContestId(contestId: number) {
-      //   const voterSlates: SlateView[] = store.voterSlates() ?? [];
-      //   const currentVoterSlate: SlateView = voterSlates.filter(a => a.contestId === contestId)[0] ?? emptySlateView;
-      //   updateState(store, `[Ballot] getCurrentVoterSlateByContestId Success`, {
-      //     voterSlate: currentVoterSlate,
-      //     voterSlates: voterSlates,
-      //   });
-      // },
+      async getVoterSlateByContestId(contestId: number) {
+        const voterSlates: SlateView[] = store.voterSlates() ?? [];
+        const currentVoterSlate: SlateView = voterSlates.filter(a => a.contestId === contestId)[0] ?? emptySlateView;
+        updateState(store, `[Ballot] getCurrentVoterSlateByContestId Success`, {
+          voterSlate: currentVoterSlate,
+          voterSlates: voterSlates,
+        });
+      },
 
-      // async updateVoterSlate(ballot: SlateView) {
-      //   updateState(store, `[Ballot] UpdateVoterSlate Start`, {
-      //     isLoading: true,
-      //   });
-      //   let updatedAuthorSlates = store.voterSlates();
-      //   const slateExists = updatedAuthorSlates.some(b => b.contestId === ballot.contestId);
-      //   if (slateExists) {
-      //     updatedAuthorSlates = updatedAuthorSlates.map(b => (b.contestId === ballot.contestId ? ballot : b));
-      //   } else {
-      //     updatedAuthorSlates = [...updatedAuthorSlates, ballot];
-      //   }
-      //   updateState(store, `[Ballot] UpdateVoter Slate Success`, {
-      //     voterSlates: updatedAuthorSlates,
-      //     voterSlate: ballot,
-      //     isLoading: false,
-      //   });
-      // },
+      async updateVoterSlate(ballot: SlateView) {
+        updateState(store, `[Ballot] UpdateVoterSlate Start`, {
+          isLoading: true,
+        });
+        let updatedAuthorSlates = store.voterSlates();
+        const slateExists = updatedAuthorSlates.some(b => b.contestId === ballot.contestId);
+        if (slateExists) {
+          updatedAuthorSlates = updatedAuthorSlates.map(b => (b.contestId === ballot.contestId ? ballot : b));
+        } else {
+          updatedAuthorSlates = [...updatedAuthorSlates, ballot];
+        }
+        updateState(store, `[Ballot] UpdateVoter Slate Success`, {
+          voterSlates: updatedAuthorSlates,
+          voterSlate: ballot,
+          isLoading: false,
+        });
+      },
       async setStartupLoadingComplete(state: boolean) {
         updateState(store, '[Ballot] setStartupLoadingComplete Success', { isStartupLoadingComplete: state });
       },
@@ -131,9 +134,13 @@ export const BallotStore = signalStore(
 
   withHooks(store => ({
     onInit: async () => {
+      console.log('BallotStore onInit');
       await store.getAllContests();
+      console.log('BallotStore onInit getAllContests complete');
       await store.getAllContestViews();
+      console.log('BallotStore onInit getAllContestViews complete');
       await store.setStartupLoadingComplete(true);
+      console.log('BallotStore onInit setStartupLoadingComplete complete');
     },
   }))
 );

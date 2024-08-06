@@ -1,1 +1,55 @@
-<p>body works!</p>
+<div class="candidate-container">
+  <div
+    cdkDropList
+    #rankedList="cdkDropList"
+    id="rankedDropList"
+    [class.border-on-empty]="candidatesRanked().length === 0"
+    [cdkDropListData]="candidatesRanked()"
+    [cdkDropListConnectedTo]="[availableList]"
+    (cdkDropListDropped)="drop($event)">
+    <div class="candidate-list ranked">
+      @for (ranked of candidatesRanked(); track ranked.id) {
+        <div cdkDrag class="candidate" id="cand-{{ ranked.placementId }}" [attr.tabindex]="ranked.placementId">
+          <span class="move-candidate-up" cdkDragHandle (click)="moveUpOnePosition(ranked)" (keydown)="moveUpOnePosition(ranked)" tabindex="1">
+            @if ($index !== 0) {
+              &#8593;
+            }
+          </span>
+          <span class="sort-handle" cdkDragHandle></span>
+          <span class="candidate-index" cdkDragHandle>{{ $index + 1 }}</span>
+          <span class="candidate-ranked" cdkDragHandle> {{ ranked.placementView.caption }}</span>
+          <button class="move-candidate-down" (click)="moveDownOnePosition(ranked)">&#8595;</button>
+        </div>
+      } @empty {
+        <p>Ready to accept your preferences for {{ contest().contestTitle }}.</p>
+        <p>Drag and reorder candidates here.</p>
+      }
+    </div>
+  </div>
+  @if (candidatesAvailable().length !== 0) {
+    <div class="contestTitle">
+      <span>-</span>
+      <span>Candidates for {{ contest().contestTitle }}</span>
+      <span>-</span>
+    </div>
+  }
+
+  <div
+    cdkDropList
+    #availableList="cdkDropList"
+    id="availableDropList"
+    [cdkDropListData]="candidatesAvailable()"
+    [cdkDropListConnectedTo]="[rankedList]"
+    (cdkDropListDropped)="drop($event)">
+    <div class="candidate-list available">
+      @for (unranked of candidatesAvailable(); track unranked; let theCount = $count) {
+        <div cdkDrag class="candidate" (click)="moveToSelected(unranked)" (keydown)="moveToSelected(unranked)" [attr.tabindex]="unranked.placementId">
+          <a class="candidate-unranked">{{ unranked.placementView.caption }}</a>
+          <span class="add-candidate"></span>
+        </div>
+      } @empty {
+        Finished all {{ ballotStore.contestSlate().slateMemberViews.length }} candidates for {{ contest().contestTitle }}.
+      }
+    </div>
+  </div>
+</div>
