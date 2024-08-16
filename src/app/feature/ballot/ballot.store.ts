@@ -3,7 +3,6 @@ import { withDevtools, updateState } from '@angular-architects/ngrx-toolkit';
 import { Contest, ContestView, SlateView } from '../../core/interfaces/interfaces';
 import { BallotService } from './ballot.service';
 import { computed, inject } from '@angular/core';
-import { setAllEntities, withEntities } from '@ngrx/signals/entities';
 
 const emptySlateView: SlateView = {
   id: 0,
@@ -45,7 +44,6 @@ export const BallotStore = signalStore(
     isStartupLoadingComplete: false,
     isLoading: false,
   }),
-  withEntities<Contest>(),
   withComputed(store => {
     return { allContestSlates: computed<SlateView[]>(() => store.allContestViews().map(c => c.slate)) };
   }),
