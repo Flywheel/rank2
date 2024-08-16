@@ -8,8 +8,6 @@ import { DbService } from '../mocks/db.service';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
-export const fortytwo = 'mmm';
-
 const commonProviders = [
   provideHttpClient(withFetch()),
   provideZoneChangeDetection({ eventCoalescing: true }),
@@ -18,12 +16,8 @@ const commonProviders = [
 ];
 
 const inMemoryDbProviders = [importProvidersFrom(InMemoryWebApiModule.forRoot(DbService, { delay: 1, dataEncapsulation: false, passThruUnknownUrl: true }))];
-
-const mswProviders = [provideAnimationsAsync(), provideAnimations()];
-
-//const allProviders = [...commonProviders, ...inMemoryDbProviders, ...mswProviders];
+const mockServiceWorkerProviders = [provideAnimationsAsync(), provideAnimations()];
 
 export const appConfig: ApplicationConfig = {
-  // providers: [...allProviders],
-  providers: [...commonProviders, ...(isDevMode() ? mswProviders : inMemoryDbProviders)],
+  providers: [...commonProviders, ...(isDevMode() ? mockServiceWorkerProviders : inMemoryDbProviders)],
 };

@@ -5,7 +5,6 @@ import { ViewerComponent } from '../viewer/viewer.component';
 import { Contest } from '../../../core/interfaces/interfaces';
 import { BallotStore } from '../ballot.store';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { AsyncSubject } from 'rxjs';
 @Component({
   selector: 'mh5-container',
   standalone: true,
