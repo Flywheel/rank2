@@ -9,8 +9,10 @@ import { Observable } from 'rxjs';
 export class BallotService {
   http = inject(HttpClient);
 
-  private contestAPIUrl = `${environment.HOST_DOMAIN}/api/contest`;
-  private contestViewAPIUrl = `${environment.HOST_DOMAIN}/api/contestview`;
+  private contestAPIUrl = `api/contest`;
+  private contestViewAPIUrl = `api/contestview`;
+  // private contestAPIUrl = `${environment.HOST_DOMAIN}/api/contest`;
+  // private contestViewAPIUrl = `${environment.HOST_DOMAIN}/api/contestview`;
 
   ContestGet(): Promise<Contest[]> {
     console.log(`ballotsService.ContestGet() ${this.contestAPIUrl}`);
