@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Contest, ContestView } from '../../core/interfaces/interfaces';
+import { Contest, ContestView, Placement } from '../../core/interfaces/interfaces';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
@@ -11,7 +12,7 @@ export class BallotService {
   private contestAPIUrl = `${environment.HOST_DOMAIN}/api/contest`;
   private contestViewAPIUrl = `${environment.HOST_DOMAIN}/api/contestview`;
 
-  ContestsGet(): Promise<Contest[]> {
+  ContestGet(): Promise<Contest[]> {
     console.log(`ballotsService.ContestGet() ${this.contestAPIUrl}`);
     return new Promise((resolve, reject) => {
       console.log(`ballotsService.ContestGet() START PROMISE ${this.contestAPIUrl}`);
@@ -30,7 +31,7 @@ export class BallotService {
     });
   }
 
-  ContestsCreate({ closes, opens, contestTitle, contestDescription, authorId, topSlateId }: Contest): Promise<Contest> {
+  ContestCreate({ closes, opens, contestTitle, contestDescription, authorId, topSlateId }: Contest): Promise<Contest> {
     //ContestsCreate(contest: Contest): Promise<Contest> {
     console.log('input', contestTitle);
     console.log(this.contestAPIUrl);
@@ -48,12 +49,15 @@ export class BallotService {
       });
     });
   }
-
-  getAllContestViews(): Promise<ContestView[]> {
+  PlacementCreate({ authorId, assetId, folioId, caption }: Placement): Promise<Placement> {
+    //ContestsCreate(contest: Contest): Promise<Contest> {
+    console.log('input', caption);
+    console.log(this.contestAPIUrl);
     return new Promise((resolve, reject) => {
-      //    setTimeout(() => {
-      this.http.get<ContestView[]>(this.contestViewAPIUrl).subscribe({
+      this.http.post<Placement>(this.contestAPIUrl, { authorId, assetId, folioId, caption }).subscribe({
+        //this.http.post<Contest>(this.contestAPIUrl, contest).subscribe({
         next: data => {
+          console.log('data', data);
           resolve(data);
         },
         error: error => {
@@ -61,7 +65,30 @@ export class BallotService {
           reject(error);
         },
       });
-      //    }, 500);
     });
+  }
+
+  // getAllContestViews(): Promise<ContestView[]> {
+  //   return new Promise((resolve, reject) => {
+  //     //    setTimeout(() => {
+  //     this.http.get<ContestView[]>(this.contestViewAPIUrl).subscribe({
+  //       next: data => {
+  //         resolve(data);
+  //       },
+  //       error: error => {
+  //         console.log('error', error);
+  //         reject(error);
+  //       },
+  //     });
+  //   });
+  // }
+
+  allContests(): Observable<Contest[]> {
+    console.log(`ballotsService.allContests() ${this.contestAPIUrl}`);
+    return this.http.get<Contest[]>(this.contestAPIUrl);
+  }
+  allContestViews(): Observable<ContestView[]> {
+    console.log(`ballotsService.allContestViews() ${this.contestViewAPIUrl}`);
+    return this.http.get<ContestView[]>(this.contestViewAPIUrl);
   }
 }

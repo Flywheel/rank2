@@ -1,8 +1,10 @@
 import { signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 import { withDevtools, updateState } from '@angular-architects/ngrx-toolkit';
-import { Contest, ContestView, SlateView } from '../../core/interfaces/interfaces';
+import { Contest, ContestView, SlateMember, SlateView } from '../../core/interfaces/interfaces';
 import { BallotService } from './ballot.service';
 import { computed, inject } from '@angular/core';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { exhaustMap, pipe, switchMap, tap } from 'rxjs';
 
 const emptySlateView: SlateView = {
   id: 0,
@@ -50,19 +52,70 @@ export const BallotStore = signalStore(
   withMethods(store => {
     const dbBallot = inject(BallotService);
     return {
-      async getAllContests() {
-        updateState(store, '[Ballot] getAllContests Start', { isLoading: true });
-        const contests: Contest[] = await dbBallot.ContestsGet();
-        updateState(store, '[Ballot] getAllContests Success', value => ({
-          ...value,
-          allContests: contests,
-          isLoading: false,
-        }));
-      },
+      rxContests: rxMethod<void>(
+        pipe(
+          tap(() => {
+            updateState(store, '[Ballot] getAllContests Start', { isLoading: true });
+          }),
+          exhaustMap(() => {
+            return dbBallot.allContests().pipe(
+              tap({
+                next: (allContests: Contest[]) => {
+                  updateState(store, '[Ballot] getAllContests Success', value => ({
+                    ...value,
+                    allContests,
+                    isLoading: false,
+                  }));
+                },
+              })
+            );
+          })
+        )
+      ),
+
+      rxContestViews: rxMethod<void>(
+        pipe(
+          tap(() => {
+            updateState(store, '[Ballot] getAllContestViews Start', { isLoading: true });
+          }),
+          exhaustMap(() => {
+            return dbBallot.allContestViews().pipe(
+              tap({
+                next: (allContestViews: ContestView[]) => {
+                  updateState(store, '[Ballot] getAllContestViews Success', value => ({
+                    ...value,
+                    allContestViews,
+                    isLoading: false,
+                    isStartupLoadingComplete: true,
+                  }));
+                },
+              })
+            );
+          })
+        )
+      ),
+
+      rxContestViewById: rxMethod<number>(
+        pipe(
+          tap(() => {
+            updateState(store, '[Ballot] getContestViewById Start', { isLoading: true });
+          }),
+          switchMap((contestId: number) => {
+            return dbBallot.allContestViews().pipe(
+              tap(() => {
+                updateState(store, `[Ballot] getContestSlateByContestId Success`, {
+                  currentContestView: store.allContestViews().filter(a => a.id === contestId)[0] ?? emptycontestView,
+                  contestSlate: store.allContestSlates().filter(a => a.contestId === contestId)[0] ?? emptySlateView,
+                });
+              })
+            );
+          })
+        )
+      ),
 
       async addContest(contest: Contest) {
         updateState(store, '[Contest] addContest Pending', { isLoading: true });
-        return await dbBallot.ContestsCreate(contest).then((newContest: Contest) => {
+        return await dbBallot.ContestCreate(contest).then((newContest: Contest) => {
           updateState(store, '[Contest] addContest Success', {
             allContests: [...store.allContests(), newContest],
             isLoading: false,
@@ -70,44 +123,35 @@ export const BallotStore = signalStore(
         });
       },
 
-      async getAllContestViews() {
-        updateState(store, '[Ballot] getAllContestViews Start', { isLoading: true });
-        const allContestViews: ContestView[] = await dbBallot.getAllContestViews();
-        updateState(store, '[Ballot] getAllContestViews Success', value => ({
-          ...value,
-          allContestViews,
-          isLoading: false,
-        }));
+      async addSlateMember(SlateMemberView: SlateMember) {
+        updateState(store, '[Contest] addContest Pending', { isLoading: true });
+        console.log('addSlateMember', SlateMemberView);
+        // return await dbBallot.ContestsCreate(contest).then((newContest: Contest) => {
+        //   updateState(store, '[Contest] addContest Success', {
+        //     allContests: [...store.allContests(), newContest],
+        //     isLoading: false,
+        //   });
+        // });
       },
 
-      async getAllSlateMembers() {
-        // updateState(store, '[Ballot] getAllSlateMembers Start', { isLoading: true });
-        // const slateMembers: SlateMemberView[] = await dbBallot.getAllContestViews();
-        // updateState(store, '[Ballot] getAllSlateMembers Success', value => ({
-        //   ...value,
-        //   allContests: contests,
-        //   isLoading: false,
-        // }));
-      },
+      // async getAllSlateMembers() {
+      //   // updateState(store, '[Ballot] getAllSlateMembers Start', { isLoading: true });
+      //   // const slateMembers: SlateMemberView[] = await dbBallot.getAllContestViews();
+      //   // updateState(store, '[Ballot] getAllSlateMembers Success', value => ({
+      //   //   ...value,
+      //   //   allContests: contests,
+      //   //   isLoading: false,
+      //   // }));
+      // },
 
-      async setCurrentContestByContestId(contestId: number) {
-        console.log(`setCurrentContestByContestId ${contestId}`);
-        console.log(store.allContestViews());
-        updateState(store, `[Ballot] getContestSlateByContestId Success`, {
-          currentContestView: store.allContestViews().filter(a => a.id === contestId)[0] ?? emptycontestView,
-          contestSlate: store.allContestSlates().filter(a => a.contestId === contestId)[0] ?? emptySlateView,
-        });
-        console.log(store.currentContestView());
-      },
-
-      async getVoterSlateByContestId(contestId: number) {
-        const voterSlates: SlateView[] = store.voterSlates() ?? [];
-        const currentVoterSlate: SlateView = voterSlates.filter(a => a.contestId === contestId)[0] ?? emptySlateView;
-        updateState(store, `[Ballot] getCurrentVoterSlateByContestId Success`, {
-          voterSlate: currentVoterSlate,
-          voterSlates: voterSlates,
-        });
-      },
+      // async getVoterSlateByContestId(contestId: number) {
+      //   const voterSlates: SlateView[] = store.voterSlates() ?? [];
+      //   const currentVoterSlate: SlateView = voterSlates.filter(a => a.contestId === contestId)[0] ?? emptySlateView;
+      //   updateState(store, `[Ballot] getCurrentVoterSlateByContestId Success`, {
+      //     voterSlate: currentVoterSlate,
+      //     voterSlates: voterSlates,
+      //   });
+      // },
 
       async updateVoterSlate(ballot: SlateView) {
         updateState(store, `[Ballot] UpdateVoterSlate Start`, {
@@ -126,21 +170,14 @@ export const BallotStore = signalStore(
           isLoading: false,
         });
       },
-      async setStartupLoadingComplete(state: boolean) {
-        updateState(store, '[Ballot] setStartupLoadingComplete Success', { isStartupLoadingComplete: state });
-      },
     };
   }),
 
-  withHooks(store => ({
-    onInit: async () => {
+  withHooks({
+    onInit(store) {
       console.log('BallotStore onInit');
-      await store.getAllContests();
-      console.log('BallotStore onInit getAllContests complete');
-      await store.getAllContestViews();
-      console.log('BallotStore onInit getAllContestViews complete');
-      await store.setStartupLoadingComplete(true);
-      console.log('BallotStore onInit setStartupLoadingComplete complete');
+      store.rxContests();
+      store.rxContestViews();
     },
-  }))
+  })
 );

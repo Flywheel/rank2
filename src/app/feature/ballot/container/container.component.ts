@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, untracked } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { BodyComponent } from '../body/body.component';
 import { ViewerComponent } from '../viewer/viewer.component';
 import { Contest } from '../../../core/interfaces/interfaces';
 import { BallotStore } from '../ballot.store';
-import { toObservable } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'mh5-container',
   standalone: true,
@@ -13,13 +12,12 @@ import { toObservable } from '@angular/core/rxjs-interop';
   styleUrl: './container.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContainerComponent implements OnInit {
+export class ContainerComponent {
   ballotStore = inject(BallotStore);
   showViewer = false;
   theContests = this.ballotStore.allContests;
   theContestViews = this.ballotStore.allContestViews;
   theSelectedContest = computed(() => this.ballotStore.currentContestView());
-  isReady$ = toObservable(this.ballotStore.isStartupLoadingComplete);
   emptyContest: Contest = {
     id: 1,
     authorId: 1,
@@ -30,19 +28,15 @@ export class ContainerComponent implements OnInit {
     closes: new Date('2024-11-01'),
   };
 
-  ngOnInit(): void {
-    this.isReady$.subscribe(completed => {
-      if (completed) {
-        this.loadContestById(1);
+  constructor() {
+    effect(() => {
+      if (this.ballotStore.isStartupLoadingComplete()) {
+        console.log('isStartupLoadingComplete');
+        untracked(() => {
+          this.ballotStore.rxContestViewById(1);
+        });
       }
     });
-  }
-
-  async loadContestById(contestId: number) {
-    console.log('loadContestById', contestId);
-    await this.ballotStore.setCurrentContestByContestId(contestId);
-
-    console.log(this.theSelectedContest());
   }
 
   addContest() {

@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal, untracked } from '@angular/core';
 import { ContestView, SlateMemberView, SlateView } from '../../../core/interfaces/interfaces';
 import { BallotStore } from '../ballot.store';
 import { CdkDrag, CdkDragHandle, CdkDropList, CdkDropListGroup, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'mh5-body',
@@ -12,7 +11,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
   styleUrl: './body.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BodyComponent implements OnInit {
+export class BodyComponent {
   authorId = signal<number>(1);
   ballotStore = inject(BallotStore);
   contest = computed<ContestView>(() => this.ballotStore.currentContestView());
@@ -26,17 +25,31 @@ export class BodyComponent implements OnInit {
     const selected = this.candidateList().filter(candidate => candidate.id === this.selectedCandidateId())[0];
     return selected ? selected.placementView.asset.mediaType + '..i..' + selected.placementView.asset.sourceId : '';
   });
-  isReady$ = toObservable(this.ballotStore.isStartupLoadingComplete);
+  //isReady$ = toObservable(this.ballotStore.isStartupLoadingComplete);
 
-  ngOnInit(): void {
-    this.isReady$.subscribe(completed => {
-      if (completed) {
-        console.log(this.contest());
-        console.log(this.candidateList());
-        this.setAvailableCandidates();
+  constructor() {
+    effect(() => {
+      const ready = this.ballotStore.isStartupLoadingComplete();
+      if (ready) {
+        console.log('isStartupLoadingComplete');
+        untracked(() => {
+          console.log(this.contest());
+          console.log(this.candidateList());
+          this.setAvailableCandidates();
+        });
       }
     });
   }
+
+  // ngOnInit(): void {
+  //   this.isReady$.subscribe(completed => {
+  //     if (completed) {
+  //       console.log(this.contest());
+  //       console.log(this.candidateList());
+  //       this.setAvailableCandidates();
+  //     }
+  //   });
+  // }
 
   setAvailableCandidates() {
     console.log('setAvailableCandidates');

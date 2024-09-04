@@ -13,11 +13,14 @@ const commonProviders = [
   provideZoneChangeDetection({ eventCoalescing: true }),
   provideRouter(routes, withViewTransitions(), withComponentInputBinding()),
   provideClientHydration(),
+  provideAnimationsAsync(),
+  provideAnimations(),
 ];
 
-const inMemoryDbProviders = [importProvidersFrom(InMemoryWebApiModule.forRoot(DbService, { delay: 1, dataEncapsulation: false, passThruUnknownUrl: true }))];
-const mockServiceWorkerProviders = [provideAnimationsAsync(), provideAnimations()];
+const inMemoryDbProvidersForProd = [
+  importProvidersFrom(InMemoryWebApiModule.forRoot(DbService, { delay: 1, dataEncapsulation: false, passThruUnknownUrl: true })),
+];
 
 export const appConfig: ApplicationConfig = {
-  providers: [...commonProviders, ...(isDevMode() ? mockServiceWorkerProviders : inMemoryDbProviders)],
+  providers: [...commonProviders, ...(isDevMode() ? inMemoryDbProvidersForProd : [])],
 };
