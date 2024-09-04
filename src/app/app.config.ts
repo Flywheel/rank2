@@ -22,5 +22,5 @@ const inMemoryDbProvidersForProd = [
 ];
 
 export const appConfig: ApplicationConfig = {
-  providers: [...commonProviders, ...(isDevMode() ? inMemoryDbProvidersForProd : [])],
+  providers: [...commonProviders, ...(isDevMode() ? inMemoryDbProvidersForProd : inMemoryDbProvidersForProd)],
 };
