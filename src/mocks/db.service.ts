@@ -11,8 +11,6 @@ export class DbService implements InMemoryDbService {
   createDb() {
     const contestview: ContestView[] = this.mockData.contestViewList;
     const contest: Contest[] = this.mockData.contestList;
-    console.log(`++++++++++++++++++++InMemoryDbService++++++++++++++++++++++++ ${contestview.length} ${contestview[0].contestTitle}`);
-    console.log(contestview);
     return { contest, contestview };
   }
 }

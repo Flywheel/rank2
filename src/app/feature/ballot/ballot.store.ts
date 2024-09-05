@@ -5,6 +5,7 @@ import { BallotService } from './ballot.service';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, pipe, switchMap, tap } from 'rxjs';
+import { LogService } from '../../core/log/log.service';
 
 const emptySlateView: SlateView = {
   id: 0,
@@ -51,6 +52,7 @@ export const BallotStore = signalStore(
   }),
   withMethods(store => {
     const dbBallot = inject(BallotService);
+    const logger = inject(LogService);
     return {
       rxContests: rxMethod<void>(
         pipe(
@@ -125,7 +127,7 @@ export const BallotStore = signalStore(
 
       async addSlateMember(SlateMemberView: SlateMember) {
         updateState(store, '[Contest] addContest Pending', { isLoading: true });
-        console.log('addSlateMember', SlateMemberView);
+        if (logger.enabled) console.log('addSlateMember', SlateMemberView);
         // return await dbBallot.ContestsCreate(contest).then((newContest: Contest) => {
         //   updateState(store, '[Contest] addContest Success', {
         //     allContests: [...store.allContests(), newContest],
@@ -175,7 +177,6 @@ export const BallotStore = signalStore(
 
   withHooks({
     onInit(store) {
-      console.log('BallotStore onInit');
       store.rxContests();
       store.rxContestViews();
     },

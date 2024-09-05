@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, signal, u
 import { ContestView, SlateMemberView, SlateView } from '../../../core/interfaces/interfaces';
 import { BallotStore } from '../ballot.store';
 import { CdkDrag, CdkDragHandle, CdkDropList, CdkDropListGroup, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { LogService } from '../../../core/log/log.service';
 
 @Component({
   selector: 'mh5-body',
@@ -14,6 +15,7 @@ import { CdkDrag, CdkDragHandle, CdkDropList, CdkDropListGroup, CdkDragDrop, mov
 export class BodyComponent {
   authorId = signal<number>(1);
   ballotStore = inject(BallotStore);
+  logger = inject(LogService);
   contest = computed<ContestView>(() => this.ballotStore.currentContestView());
   candidateList = computed(() => this.contest().slate.slateMemberViews);
   selectedCandidateId = signal<number>(0);
@@ -31,10 +33,10 @@ export class BodyComponent {
     effect(() => {
       const ready = this.ballotStore.isStartupLoadingComplete();
       if (ready) {
-        console.log('isStartupLoadingComplete');
+        if (this.logger.enabled) console.log('isStartupLoadingComplete');
         untracked(() => {
-          console.log(this.contest());
-          console.log(this.candidateList());
+          if (this.logger.enabled) console.log(this.contest());
+          if (this.logger.enabled) console.log(this.candidateList());
           this.setAvailableCandidates();
         });
       }
@@ -44,15 +46,15 @@ export class BodyComponent {
   // ngOnInit(): void {
   //   this.isReady$.subscribe(completed => {
   //     if (completed) {
-  //       console.log(this.contest());
-  //       console.log(this.candidateList());
+  //       if (this.logger.enabled)  console.log(this.contest());
+  //       if (this.logger.enabled)  console.log(this.candidateList());
   //       this.setAvailableCandidates();
   //     }
   //   });
   // }
 
   setAvailableCandidates() {
-    console.log('setAvailableCandidates');
+    if (this.logger.enabled) console.log('setAvailableCandidates');
     this.candidatesAvailable.set(this.candidateList());
     // this.candidatesAvailable.set(this.ballotStore.contestSlate().slateMemberViews);
     if (this.ballotStore.voterSlate()?.slateMemberViews) {

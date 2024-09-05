@@ -4,6 +4,7 @@ import { BodyComponent } from '../body/body.component';
 import { ViewerComponent } from '../viewer/viewer.component';
 import { Contest } from '../../../core/interfaces/interfaces';
 import { BallotStore } from '../ballot.store';
+import { LogService } from '../../../core/log/log.service';
 @Component({
   selector: 'mh5-container',
   standalone: true,
@@ -14,6 +15,7 @@ import { BallotStore } from '../ballot.store';
 })
 export class ContainerComponent {
   ballotStore = inject(BallotStore);
+  logger = inject(LogService);
   showViewer = false;
   theContests = this.ballotStore.allContests;
   theContestViews = this.ballotStore.allContestViews;
@@ -31,7 +33,7 @@ export class ContainerComponent {
   constructor() {
     effect(() => {
       if (this.ballotStore.isStartupLoadingComplete()) {
-        console.log('isStartupLoadingComplete');
+        if (this.logger.enabled) console.log('isStartupLoadingComplete');
         untracked(() => {
           this.ballotStore.rxContestViewById(1);
         });
@@ -40,11 +42,11 @@ export class ContainerComponent {
   }
 
   addContest() {
-    console.log(this.theSelectedContest());
+    if (this.logger.enabled) console.log(this.theSelectedContest());
     this.ballotStore.addContest(this.emptyContest);
   }
   selectContest() {
-    console.log(this.theSelectedContest());
+    if (this.logger.enabled) console.log(this.theSelectedContest());
     this.ballotStore.addContest(this.emptyContest);
   }
 }
