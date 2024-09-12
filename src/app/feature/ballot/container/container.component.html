@@ -1,8 +1,7 @@
 @if (!showViewer) {
   <mh5-header></mh5-header>
-  @defer (when ballotStore.isStartupLoadingComplete()) {
-    <mh5-body />
-  }
+
+  <mh5-body />
 } @else {
   <mh5-viewer></mh5-viewer>
 }

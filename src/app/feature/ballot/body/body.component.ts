@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ContestView, SlateMemberView, SlateView } from '../../../core/interfaces/interfaces';
 import { BallotStore } from '../ballot.store';
 import { CdkDrag, CdkDragHandle, CdkDropList, CdkDropListGroup, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
@@ -12,7 +12,7 @@ import { LogService } from '../../../core/log/log.service';
   styleUrl: './body.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BodyComponent {
+export class BodyComponent implements OnInit {
   authorId = signal<number>(1);
   ballotStore = inject(BallotStore);
   logger = inject(LogService);
@@ -27,36 +27,14 @@ export class BodyComponent {
     const selected = this.candidateList().filter(candidate => candidate.id === this.selectedCandidateId())[0];
     return selected ? selected.placementView.asset.mediaType + '..i..' + selected.placementView.asset.sourceId : '';
   });
-  //isReady$ = toObservable(this.ballotStore.isStartupLoadingComplete);
 
-  constructor() {
-    effect(() => {
-      const ready = this.ballotStore.isStartupLoadingComplete();
-      if (ready) {
-        if (this.logger.enabled) console.log('isStartupLoadingComplete');
-        untracked(() => {
-          if (this.logger.enabled) console.log(this.contest());
-          if (this.logger.enabled) console.log(this.candidateList());
-          this.setAvailableCandidates();
-        });
-      }
-    });
+  ngOnInit(): void {
+    this.setAvailableCandidates();
   }
-
-  // ngOnInit(): void {
-  //   this.isReady$.subscribe(completed => {
-  //     if (completed) {
-  //       if (this.logger.enabled)  console.log(this.contest());
-  //       if (this.logger.enabled)  console.log(this.candidateList());
-  //       this.setAvailableCandidates();
-  //     }
-  //   });
-  // }
 
   setAvailableCandidates() {
     if (this.logger.enabled) console.log('setAvailableCandidates');
     this.candidatesAvailable.set(this.candidateList());
-    // this.candidatesAvailable.set(this.ballotStore.contestSlate().slateMemberViews);
     if (this.ballotStore.voterSlate()?.slateMemberViews) {
       this.candidatesRanked.set(
         this.ballotStore.voterSlate().slateMemberViews.reduce((acc: SlateMemberView[], slateMemberView: SlateMemberView) => {

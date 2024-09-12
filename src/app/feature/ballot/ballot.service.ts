@@ -16,24 +16,14 @@ export class BallotService {
   // private contestAPIUrl = `${environment.HOST_DOMAIN}/api/contest`;
   // private contestViewAPIUrl = `${environment.HOST_DOMAIN}/api/contestview`;
 
-  // ContestGet(): Promise<Contest[]> {
-  //   if (this.logger.enabled)  console.log(`ballotsService.ContestGet() ${this.contestAPIUrl}`);
-  //   return new Promise((resolve, reject) => {
-  //     if (this.logger.enabled)  console.log(`ballotsService.ContestGet() START PROMISE ${this.contestAPIUrl}`);
-  //     setTimeout(() => {
-  //       this.http.get<Contest[]>(this.contestAPIUrl).subscribe({
-  //         next: data => {
-  //           if (this.logger.enabled)  console.log(`ballotsService.ContestGet() Resolved`);
-  //           resolve(data);
-  //         },
-  //         error: error => {
-  //           if (this.logger.enabled)  console.log('error', error);
-  //           reject(error);
-  //         },
-  //       });
-  //     }, 500);
-  //   });
-  // }
+  allContests(): Observable<Contest[]> {
+    if (this.logger.enabled) console.log(`ballotsService.allContests() ${this.contestAPIUrl}`);
+    return this.http.get<Contest[]>(this.contestAPIUrl);
+  }
+  allContestViews(): Observable<ContestView[]> {
+    if (this.logger.enabled) console.log(`ballotsService.allContestViews() ${this.contestViewAPIUrl}`);
+    return this.http.get<ContestView[]>(this.contestViewAPIUrl);
+  }
 
   ContestCreate({ closes, opens, contestTitle, contestDescription, authorId, topSlateId }: Contest): Promise<Contest> {
     if (this.logger.enabled) console.log('input', contestTitle);
@@ -86,12 +76,22 @@ export class BallotService {
   //   });
   // }
 
-  allContests(): Observable<Contest[]> {
-    if (this.logger.enabled) console.log(`ballotsService.allContests() ${this.contestAPIUrl}`);
-    return this.http.get<Contest[]>(this.contestAPIUrl);
-  }
-  allContestViews(): Observable<ContestView[]> {
-    if (this.logger.enabled) console.log(`ballotsService.allContestViews() ${this.contestViewAPIUrl}`);
-    return this.http.get<ContestView[]>(this.contestViewAPIUrl);
-  }
+  // ContestGet(): Promise<Contest[]> {
+  //   if (this.logger.enabled)  console.log(`ballotsService.ContestGet() ${this.contestAPIUrl}`);
+  //   return new Promise((resolve, reject) => {
+  //     if (this.logger.enabled)  console.log(`ballotsService.ContestGet() START PROMISE ${this.contestAPIUrl}`);
+  //     setTimeout(() => {
+  //       this.http.get<Contest[]>(this.contestAPIUrl).subscribe({
+  //         next: data => {
+  //           if (this.logger.enabled)  console.log(`ballotsService.ContestGet() Resolved`);
+  //           resolve(data);
+  //         },
+  //         error: error => {
+  //           if (this.logger.enabled)  console.log('error', error);
+  //           reject(error);
+  //         },
+  //       });
+  //     }, 500);
+  //   });
+  // }
 }

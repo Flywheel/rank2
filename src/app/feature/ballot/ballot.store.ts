@@ -14,7 +14,7 @@ const emptySlateView: SlateView = {
   slateMemberViews: [],
 };
 
-const emptycontest: Contest = {
+export const contestInit: Contest = {
   id: 0,
   authorId: 0,
   opens: new Date('1922-01-03'),
@@ -23,7 +23,7 @@ const emptycontest: Contest = {
   contestTitle: '',
   contestDescription: '',
 };
-const emptycontestView: ContestView = {
+const contestViewInit: ContestView = {
   id: 0,
   authorId: 0,
   opens: new Date('1922-01-03'),
@@ -38,13 +38,13 @@ export const BallotStore = signalStore(
   { providedIn: 'root' },
   withDevtools('ballots'),
   withState({
-    currentContestView: emptycontestView,
-    allContestViews: [emptycontestView],
-    allContests: [emptycontest],
+    currentContestView: contestViewInit,
+    allContestViews: [contestViewInit],
+    allContests: [contestInit],
     contestSlate: emptySlateView,
     voterSlates: [emptySlateView],
     voterSlate: emptySlateView,
-    isStartupLoadingComplete: false,
+    //  isStartupLoadingComplete: false,
     isLoading: false,
   }),
   withComputed(store => {
@@ -88,7 +88,7 @@ export const BallotStore = signalStore(
                     ...value,
                     allContestViews,
                     isLoading: false,
-                    isStartupLoadingComplete: true,
+                    //isStartupLoadingComplete: true,
                   }));
                 },
               })
@@ -106,7 +106,7 @@ export const BallotStore = signalStore(
             return dbBallot.allContestViews().pipe(
               tap(() => {
                 updateState(store, `[Ballot] getContestSlateByContestId Success`, {
-                  currentContestView: store.allContestViews().filter(a => a.id === contestId)[0] ?? emptycontestView,
+                  currentContestView: store.allContestViews().filter(a => a.id === contestId)[0] ?? contestViewInit,
                   contestSlate: store.allContestSlates().filter(a => a.contestId === contestId)[0] ?? emptySlateView,
                 });
               })
@@ -179,6 +179,7 @@ export const BallotStore = signalStore(
     onInit(store) {
       store.rxContests();
       store.rxContestViews();
+      store.rxContestViewById(1);
     },
   })
 );

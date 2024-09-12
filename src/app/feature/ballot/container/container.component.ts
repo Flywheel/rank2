@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { BodyComponent } from '../body/body.component';
 import { ViewerComponent } from '../viewer/viewer.component';
 import { Contest } from '../../../core/interfaces/interfaces';
-import { BallotStore } from '../ballot.store';
+import { BallotStore, contestInit } from '../ballot.store';
 import { LogService } from '../../../core/log/log.service';
 @Component({
   selector: 'mh5-container',
@@ -18,28 +18,9 @@ export class ContainerComponent {
   logger = inject(LogService);
   showViewer = false;
   theContests = this.ballotStore.allContests;
-  theContestViews = this.ballotStore.allContestViews;
+  // theContestViews = this.ballotStore.allContestViews;
   theSelectedContest = computed(() => this.ballotStore.currentContestView());
-  emptyContest: Contest = {
-    id: 1,
-    authorId: 1,
-    contestTitle: '-',
-    contestDescription: '-',
-    topSlateId: 0,
-    opens: new Date('2024-01-01'),
-    closes: new Date('2024-11-01'),
-  };
-
-  constructor() {
-    effect(() => {
-      if (this.ballotStore.isStartupLoadingComplete()) {
-        if (this.logger.enabled) console.log('isStartupLoadingComplete');
-        untracked(() => {
-          this.ballotStore.rxContestViewById(1);
-        });
-      }
-    });
-  }
+  emptyContest: Contest = contestInit;
 
   addContest() {
     if (this.logger.enabled) console.log(this.theSelectedContest());
