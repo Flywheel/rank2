@@ -1,5 +1,6 @@
 @if (!showViewer) {
   <mh5-header></mh5-header>
+  <mh5-scroll-contest-horizontal [theContestsInput]="theContests()" />
 
   <mh5-body />
 } @else {
@@ -7,7 +8,5 @@
 }
 
 <div>
-  @for (item of theContests(); track $index) {
-    <div (click)="addContest()" (keydown)="addContest()" tabindex="0">{{ item.topSlateId }}</div>
-  }
+  <mh5-new-contest />
 </div>

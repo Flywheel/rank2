@@ -2,8 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Contest, ContestView, Placement } from '../../core/interfaces/interfaces';
-import { Observable } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { LogService } from '../../core/log/log.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -18,14 +20,26 @@ export class BallotService {
 
   allContests(): Observable<Contest[]> {
     if (this.logger.enabled) console.log(`ballotsService.allContests() ${this.contestAPIUrl}`);
-    return this.http.get<Contest[]>(this.contestAPIUrl);
+    return this.http.get<Contest[]>(this.contestAPIUrl).pipe(takeUntilDestroyed());
   }
   allContestViews(): Observable<ContestView[]> {
     if (this.logger.enabled) console.log(`ballotsService.allContestViews() ${this.contestViewAPIUrl}`);
-    return this.http.get<ContestView[]>(this.contestViewAPIUrl);
+    return this.http.get<ContestView[]>(this.contestViewAPIUrl).pipe(takeUntilDestroyed());
   }
 
-  ContestCreate({ closes, opens, contestTitle, contestDescription, authorId, topSlateId }: Contest): Promise<Contest> {
+  contestCreate({ closes, opens, contestTitle, contestDescription, authorId, topSlateId }: Contest): Observable<Contest> {
+    return this.http.post<Contest>(this.contestAPIUrl, { closes, opens, contestTitle, contestDescription, authorId, topSlateId }).pipe(
+      tap(data => {
+        if (this.logger.enabled) console.log('data', data);
+      }),
+      catchError(error => {
+        if (this.logger.enabled) console.log('error', error);
+        return throwError(() => new Error('ContestCreate failed'));
+      })
+    );
+  }
+
+  ContestCreateOld({ closes, opens, contestTitle, contestDescription, authorId, topSlateId }: Contest): Promise<Contest> {
     if (this.logger.enabled) console.log('input', contestTitle);
     if (this.logger.enabled) console.log(this.contestAPIUrl);
     return new Promise((resolve, reject) => {

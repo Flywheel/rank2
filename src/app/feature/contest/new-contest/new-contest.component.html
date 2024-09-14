@@ -1,0 +1,55 @@
+<form [formGroup]="contestForm" (ngSubmit)="onSubmit()" class="contest-form">
+  <div class="form-row">
+    <label for="contestTitle">Contest Title</label>
+    <input id="contestTitle" formControlName="contestTitle" type="text" />
+    <!-- <div *ngIf="contestForm.get('contestTitle').invalid && contestForm.get('contestTitle').touched">
+        Contest title is required.
+      </div> -->
+    @if (contestForm.get('contestTitle')?.invalid && contestForm.get('contestTitle')?.touched) {
+      <div>Contest title is required.</div>
+    }
+  </div>
+
+  <div class="form-row">
+    @if (contestForm.get('contestDescription')?.invalid && contestForm.get('contestDescription')?.touched) {
+      <label for="contestDescription" style="color: salmon">Contest Description is required</label>
+    } @else {
+      <label for="contestDescription">Contest Description</label>
+    }
+    <input id="contestDescription" formControlName="contestDescription" type="text" />
+  </div>
+
+  <div class="form-row">
+    <label for="opens">Opens</label>
+    <input id="opens" formControlName="opens" type="date" />
+    @if (contestForm.get('opens')?.invalid && contestForm.get('opens')?.touched) {
+      <div>Opening date is required.</div>
+    }
+  </div>
+
+  <div class="form-row">
+    <label for="closes">Closes</label>
+    <input id="closes" formControlName="closes" type="date" />
+    @if (contestForm.get('closes')?.invalid && contestForm.get('closes')?.touched) {
+      <div>Closing date is required.</div>
+    }
+  </div>
+
+  <div class="form-row">
+    <label for="authorId">Author ID</label>
+    <input id="authorId" formControlName="authorId" type="number" />
+    @if (contestForm.get('authorId')?.invalid && contestForm.get('authorId')?.touched) {
+      <div>Author ID is required.</div>
+    }
+  </div>
+
+  <div class="form-row">
+    <label for="topSlateId">Top Slate ID</label>
+    <input id="topSlateId" formControlName="topSlateId" type="number" />
+    @if (contestForm.get('topSlateId')?.invalid && contestForm.get('topSlateId')?.touched) {
+      <div>Top Slate ID is required.</div>
+    }
+  </div>
+
+  <button type="submit" [disabled]="contestForm.invalid">Add Contest</button>
+</form>

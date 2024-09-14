@@ -5,10 +5,12 @@ import { ViewerComponent } from '../viewer/viewer.component';
 import { Contest } from '../../../core/interfaces/interfaces';
 import { BallotStore, contestInit } from '../ballot.store';
 import { LogService } from '../../../core/log/log.service';
+import { NewContestComponent } from '../../contest/new-contest/new-contest.component';
+import { ScrollContestHorizontalComponent } from '../../contest/scroll-contest-horizontal/scroll-contest-horizontal.component';
 @Component({
   selector: 'mh5-container',
   standalone: true,
-  imports: [HeaderComponent, BodyComponent, ViewerComponent],
+  imports: [HeaderComponent, BodyComponent, ViewerComponent, NewContestComponent, ScrollContestHorizontalComponent],
   templateUrl: './container.component.html',
   styleUrl: './container.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,9 +27,11 @@ export class ContainerComponent {
   addContest() {
     if (this.logger.enabled) console.log(this.theSelectedContest());
     this.ballotStore.addContest(this.emptyContest);
+    // this.ballotStore.addContest(this.emptyContest);
   }
-  selectContest() {
+  selectContest(data: Contest) {
     if (this.logger.enabled) console.log(this.theSelectedContest());
-    this.ballotStore.addContest(this.emptyContest);
+    this.ballotStore.setCurrentContestView(data.id);
+    this.ballotStore.addContestOld(this.emptyContest);
   }
 }
