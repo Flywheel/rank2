@@ -1,5 +1,5 @@
 <div class="horizontal-scroll">
   @for (item of theContestsInput(); track $index) {
-    <div class="menu-item" tabindex="$index">{{ item.id }}-{{ item.contestTitle }}</div>
+    <div class="menu-item" (click)="selectContest(item)" (keydown)="selectContest(item)" tabindex="$index">{{ item.id }}-{{ item.contestTitle }}</div>
   }
 </div>

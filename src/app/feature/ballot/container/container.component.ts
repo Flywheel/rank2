@@ -23,15 +23,4 @@ export class ContainerComponent {
   // theContestViews = this.ballotStore.allContestViews;
   theSelectedContest = computed(() => this.ballotStore.currentContestView());
   emptyContest: Contest = contestInit;
-
-  addContest() {
-    if (this.logger.enabled) console.log(this.theSelectedContest());
-    this.ballotStore.addContest(this.emptyContest);
-    // this.ballotStore.addContest(this.emptyContest);
-  }
-  selectContest(data: Contest) {
-    if (this.logger.enabled) console.log(this.theSelectedContest());
-    this.ballotStore.setCurrentContestView(data.id);
-    this.ballotStore.addContestOld(this.emptyContest);
-  }
 }

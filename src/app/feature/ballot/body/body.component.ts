@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal, untracked } from '@angular/core';
 import { ContestView, SlateMemberView, SlateView } from '../../../core/interfaces/interfaces';
 import { BallotStore } from '../ballot.store';
 import { CdkDrag, CdkDragHandle, CdkDropList, CdkDropListGroup, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
@@ -12,7 +12,7 @@ import { LogService } from '../../../core/log/log.service';
   styleUrl: './body.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BodyComponent implements OnInit {
+export class BodyComponent {
   authorId = signal<number>(1);
   ballotStore = inject(BallotStore);
   logger = inject(LogService);
@@ -28,8 +28,13 @@ export class BodyComponent implements OnInit {
     return selected ? selected.placementView.asset.mediaType + '..i..' + selected.placementView.asset.sourceId : '';
   });
 
-  ngOnInit(): void {
-    this.setAvailableCandidates();
+  constructor() {
+    effect(() => {
+      this.contest();
+      untracked(() => {
+        this.setAvailableCandidates();
+      });
+    });
   }
 
   setAvailableCandidates() {
