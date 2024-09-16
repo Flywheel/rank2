@@ -22,9 +22,18 @@ export class BallotService {
     if (this.logger.enabled) console.log(`ballotsService.allContests() ${this.contestAPIUrl}`);
     return this.http.get<Contest[]>(this.contestAPIUrl).pipe(takeUntilDestroyed());
   }
+
+  getContestById(id: number): Observable<Contest> {
+    return this.http.get<Contest>(`${this.contestAPIUrl}/${id}`).pipe(takeUntilDestroyed());
+  }
+
   allContestViews(): Observable<ContestView[]> {
     if (this.logger.enabled) console.log(`ballotsService.allContestViews() ${this.contestViewAPIUrl}`);
     return this.http.get<ContestView[]>(this.contestViewAPIUrl).pipe(takeUntilDestroyed());
+  }
+
+  getContestViewById(id: number): Observable<ContestView> {
+    return this.http.get<ContestView>(`${this.contestViewAPIUrl}/${id}`);
   }
 
   contestCreate({ closes, opens, contestTitle, contestDescription, authorId, topSlateId }: Contest): Observable<Contest> {
@@ -37,23 +46,6 @@ export class BallotService {
         return throwError(() => new Error('ContestCreate failed'));
       })
     );
-  }
-
-  ContestCreateOld({ closes, opens, contestTitle, contestDescription, authorId, topSlateId }: Contest): Promise<Contest> {
-    if (this.logger.enabled) console.log('input', contestTitle);
-    if (this.logger.enabled) console.log(this.contestAPIUrl);
-    return new Promise((resolve, reject) => {
-      this.http.post<Contest>(this.contestAPIUrl, { closes, opens, contestTitle, contestDescription, authorId, topSlateId }).subscribe({
-        next: data => {
-          if (this.logger.enabled) console.log('data', data);
-          resolve(data);
-        },
-        error: error => {
-          if (this.logger.enabled) console.log('error', error);
-          reject(error);
-        },
-      });
-    });
   }
 
   PlacementCreate({ authorId, assetId, folioId, caption }: Placement): Promise<Placement> {
@@ -108,4 +100,21 @@ export class BallotService {
   //     }, 500);
   //   });
   // }
+
+  ContestCreateOld({ closes, opens, contestTitle, contestDescription, authorId, topSlateId }: Contest): Promise<Contest> {
+    if (this.logger.enabled) console.log('input', contestTitle);
+    if (this.logger.enabled) console.log(this.contestAPIUrl);
+    return new Promise((resolve, reject) => {
+      this.http.post<Contest>(this.contestAPIUrl, { closes, opens, contestTitle, contestDescription, authorId, topSlateId }).subscribe({
+        next: data => {
+          if (this.logger.enabled) console.log('data', data);
+          resolve(data);
+        },
+        error: error => {
+          if (this.logger.enabled) console.log('error', error);
+          reject(error);
+        },
+      });
+    });
+  }
 }

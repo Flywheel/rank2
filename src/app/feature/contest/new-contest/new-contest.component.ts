@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BallotStore } from '../../ballot/ballot.store';
 import { LogService } from '../../../core/log/log.service';
@@ -15,6 +15,7 @@ export class NewContestComponent {
   ballotStore = inject(BallotStore);
   logger = inject(LogService);
   contestForm: FormGroup;
+  closeNewContestEditor = output<boolean>();
 
   constructor(private fb: FormBuilder) {
     const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
@@ -37,6 +38,10 @@ export class NewContestComponent {
       const newContest: Contest = this.contestForm.value;
       if (this.logger.enabled) console.log('Submitting new contest', newContest);
       this.ballotStore.addContest(newContest);
+      this.closeNewContestEditor.emit(false);
     }
+  }
+  cancel() {
+    this.closeNewContestEditor.emit(false);
   }
 }

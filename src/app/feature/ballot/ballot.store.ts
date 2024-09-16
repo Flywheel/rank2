@@ -4,7 +4,7 @@ import { Contest, ContestView, SlateMember, SlateView } from '../../core/interfa
 import { BallotService } from './ballot.service';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { exhaustMap, pipe, switchMap, tap } from 'rxjs';
+import { exhaustMap, of, pipe, switchMap, tap } from 'rxjs';
 import { LogService } from '../../core/log/log.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -45,7 +45,6 @@ export const BallotStore = signalStore(
     contestSlate: emptySlateView,
     voterSlates: [emptySlateView],
     voterSlate: emptySlateView,
-    //  isStartupLoadingComplete: false,
     isLoading: false,
   }),
   withComputed(store => {
@@ -100,12 +99,37 @@ export const BallotStore = signalStore(
         )
       ),
 
-      async setCurrentContestView(contestId: number) {
-        updateState(store, `[Ballot] getContestSlateByContestId Success`, {
-          currentContestView: store.allContestViews().filter(a => a.id === contestId)[0] ?? contestViewInit,
-          contestSlate: store.allContestSlates().filter(a => a.contestId === contestId)[0] ?? emptySlateView,
-        });
-      },
+      setCurrentContestView: rxMethod<number>(
+        pipe(
+          tap(() => {
+            updateState(store, '[Ballot] getContestViewById Start', { isLoading: true });
+          }),
+          switchMap(contestId => {
+            const existingContestView = store.allContestViews().find(view => view.id === contestId);
+            if (existingContestView) {
+              return of(existingContestView);
+            } else {
+              const theContestView = dbBallot.getContestViewById(contestId).pipe(
+                tap({
+                  next: (contestView: ContestView) => {
+                    updateState(store, '[Ballot] Load ContestViewById Success', {
+                      allContestViews: [...store.allContestViews(), contestView],
+                    });
+                  },
+                })
+              );
+              return theContestView;
+            }
+          }),
+          tap(contestView =>
+            updateState(store, '[Ballot] getContestViewById Success', {
+              currentContestView: contestView,
+              contestSlate: store.allContestSlates().filter(a => a.contestId === contestView.id)[0] ?? emptySlateView,
+              isLoading: false,
+            })
+          )
+        )
+      ),
 
       async updateVoterSlate(ballot: SlateView) {
         updateState(store, `[Ballot] UpdateVoterSlate Start`, {
@@ -212,7 +236,7 @@ export const BallotStore = signalStore(
   withHooks({
     onInit(store) {
       store.Contests();
-      store.ContestViews();
+      // store.ContestViews();
       store.setCurrentContestView(1);
     },
   })

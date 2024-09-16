@@ -1,18 +1,16 @@
 <form [formGroup]="contestForm" (ngSubmit)="onSubmit()" class="contest-form">
   <div class="form-row">
-    <label for="contestTitle">Contest Title</label>
-    <input id="contestTitle" formControlName="contestTitle" type="text" />
-    <!-- <div *ngIf="contestForm.get('contestTitle').invalid && contestForm.get('contestTitle').touched">
-        Contest title is required.
-      </div> -->
     @if (contestForm.get('contestTitle')?.invalid && contestForm.get('contestTitle')?.touched) {
-      <div>Contest title is required.</div>
+      <label for="contestTitle" class="warning">Contest Title is required</label>
+    } @else {
+      <label for="contestTitle">Contest Title</label>
     }
+    <input id="contestTitle" formControlName="contestTitle" type="text" />
   </div>
 
   <div class="form-row">
     @if (contestForm.get('contestDescription')?.invalid && contestForm.get('contestDescription')?.touched) {
-      <label for="contestDescription" style="color: salmon">Contest Description is required</label>
+      <label for="contestDescription" class="warning">Contest Description is required</label>
     } @else {
       <label for="contestDescription">Contest Description</label>
     }
@@ -52,4 +50,5 @@
   </div>
 
   <button type="submit" [disabled]="contestForm.invalid">Add Contest</button>
+  <button class="cancelButton" (click)="cancel()">Cancel</button>
 </form>

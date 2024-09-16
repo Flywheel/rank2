@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { Contest } from '../../../core/interfaces/interfaces';
 import { LogService } from '../../../core/log/log.service';
 import { BallotStore } from '../../ballot/ballot.store';
@@ -13,9 +13,12 @@ export class ScrollContestHorizontalComponent {
   logger = inject(LogService);
   ballotStore = inject(BallotStore);
   theContestsInput = input<Contest[]>();
+  newContestEditorStateChange = output<boolean>();
 
-  selectContest(data: Contest) {
-    if (this.logger.enabled) console.log(data);
-    this.ballotStore.setCurrentContestView(data.id);
+  selectContest(id: number) {
+    this.ballotStore.setCurrentContestView(id);
+  }
+  newContest() {
+    this.newContestEditorStateChange.emit(true);
   }
 }

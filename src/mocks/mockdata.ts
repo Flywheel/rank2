@@ -15,32 +15,32 @@ export const folios: Folio[] = [
   { id: 2, authorId: 1, name: 'Dem VP 2024' },
 ];
 
-export const assets: Asset[] = [
-  {
-    id: 1,
-    authorId: 1,
-    mediaType: 'image',
-    sourceId: '1',
-  },
-  {
-    id: 2,
-    authorId: 1,
-    mediaType: 'image',
-    sourceId: '2',
-  },
-  {
-    id: 3,
-    authorId: 1,
-    mediaType: 'image',
-    sourceId: '3',
-  },
-  {
-    id: 4,
-    authorId: 1,
-    mediaType: 'image',
-    sourceId: '4',
-  },
-];
+// export const assets: Asset[] = [
+//   {
+//     id: 1,
+//     authorId: 1,
+//     mediaType: 'image',
+//     sourceId: '1',
+//   },
+//   {
+//     id: 2,
+//     authorId: 1,
+//     mediaType: 'image',
+//     sourceId: '2',
+//   },
+//   {
+//     id: 3,
+//     authorId: 1,
+//     mediaType: 'image',
+//     sourceId: '3',
+//   },
+//   {
+//     id: 4,
+//     authorId: 1,
+//     mediaType: 'image',
+//     sourceId: '4',
+//   },
+// ];
 
 export const slateMembers: SlateMemberView[] = [
   {

@@ -1,10 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { BodyComponent } from '../body/body.component';
 import { ViewerComponent } from '../viewer/viewer.component';
-import { Contest } from '../../../core/interfaces/interfaces';
-import { BallotStore, contestInit } from '../ballot.store';
-import { LogService } from '../../../core/log/log.service';
+import { BallotStore } from '../ballot.store';
 import { NewContestComponent } from '../../contest/new-contest/new-contest.component';
 import { ScrollContestHorizontalComponent } from '../../contest/scroll-contest-horizontal/scroll-contest-horizontal.component';
 @Component({
@@ -17,10 +15,13 @@ import { ScrollContestHorizontalComponent } from '../../contest/scroll-contest-h
 })
 export class ContainerComponent {
   ballotStore = inject(BallotStore);
-  logger = inject(LogService);
   showViewer = false;
   theContests = this.ballotStore.allContests;
-  // theContestViews = this.ballotStore.allContestViews;
-  theSelectedContest = computed(() => this.ballotStore.currentContestView());
-  emptyContest: Contest = contestInit;
+  newContest = signal(false);
+  openNewContest() {
+    this.newContest.set(true);
+  }
+  closeNewContest() {
+    this.newContest.set(false);
+  }
 }

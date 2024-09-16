@@ -1,12 +1,15 @@
-@if (!showViewer) {
-  <mh5-header></mh5-header>
-  <mh5-scroll-contest-horizontal [theContestsInput]="theContests()" />
+<mh5-header></mh5-header>
 
-  <mh5-body />
+@if (newContest()) {
+  <mh5-scroll-contest-horizontal />
+  <mh5-new-contest (closeNewContestEditor)="closeNewContest()" />
 } @else {
+  <mh5-scroll-contest-horizontal [theContestsInput]="theContests()" (newContestEditorStateChange)="openNewContest()" />
+  <mh5-body />
+}
+
+@if (showViewer) {
   <mh5-viewer></mh5-viewer>
 }
 
-<div>
-  <mh5-new-contest />
-</div>
+<div></div>
