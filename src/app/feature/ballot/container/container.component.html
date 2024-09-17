@@ -4,8 +4,16 @@
   <mh5-scroll-contest-horizontal />
   <mh5-new-contest (closeNewContestEditor)="closeNewContest()" />
 } @else {
-  <mh5-scroll-contest-horizontal [theContestsInput]="theContests()" (newContestEditorStateChange)="openNewContest()" />
-  <mh5-body />
+  @if (newPlacement()) {
+    <mh5-scroll-contest-horizontal />
+    <mh5-new-placement (closeNewPlacementEditor)="closeNewPlacement()" />
+  } @else {
+    <mh5-scroll-contest-horizontal
+      [theContestsInput]="theContests()"
+      (newContestEditorStateChange)="openNewContest()"
+      (newPlacementEditorStateChange)="openNewPlacement()" />
+    <mh5-body />
+  }
 }
 
 @if (showViewer) {

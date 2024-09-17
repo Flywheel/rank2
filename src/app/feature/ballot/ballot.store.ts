@@ -1,6 +1,6 @@
 import { signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 import { withDevtools, updateState } from '@angular-architects/ngrx-toolkit';
-import { Contest, ContestView, SlateMember, SlateView } from '../../core/interfaces/interfaces';
+import { Contest, ContestView, Placement, SlateMember, SlateView } from '../../core/interfaces/interfaces';
 import { BallotService } from './ballot.service';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -8,11 +8,20 @@ import { exhaustMap, of, pipe, switchMap, tap } from 'rxjs';
 import { LogService } from '../../core/log/log.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-const emptySlateView: SlateView = {
+const placementInit: Placement = {
+  id: 0,
+  authorId: 0,
+  assetId: 0,
+  folioId: 0,
+  caption: '',
+};
+
+const slateViewInit: SlateView = {
   id: 0,
   contestId: 0,
   authorId: 0,
   slateMemberViews: [],
+  isTopSlate: false,
 };
 
 export const contestInit: Contest = {
@@ -20,7 +29,6 @@ export const contestInit: Contest = {
   authorId: 0,
   opens: new Date('1922-01-03'),
   closes: new Date('1922-01-04'),
-  topSlateId: 0,
   contestTitle: '',
   contestDescription: '',
 };
@@ -29,10 +37,10 @@ const contestViewInit: ContestView = {
   authorId: 0,
   opens: new Date('1922-01-03'),
   closes: new Date('1922-01-04'),
-  topSlateId: 0,
   contestTitle: '',
   contestDescription: '',
-  slate: emptySlateView,
+  slateId: 0,
+  slate: slateViewInit,
 };
 
 export const BallotStore = signalStore(
@@ -42,13 +50,16 @@ export const BallotStore = signalStore(
     currentContestView: contestViewInit,
     allContestViews: [contestViewInit],
     allContests: [contestInit],
-    contestSlate: emptySlateView,
-    voterSlates: [emptySlateView],
-    voterSlate: emptySlateView,
+    allPlacements: [placementInit],
+    contestSlate: slateViewInit,
+    voterSlates: [slateViewInit],
+    voterSlate: slateViewInit,
     isLoading: false,
   }),
   withComputed(store => {
-    return { allContestSlates: computed<SlateView[]>(() => store.allContestViews().map(c => c.slate)) };
+    return {
+      allContestSlates: computed<SlateView[]>(() => store.allContestViews().map(c => c.slate)),
+    };
   }),
   withMethods(store => {
     const dbBallot = inject(BallotService);
@@ -124,7 +135,7 @@ export const BallotStore = signalStore(
           tap(contestView =>
             updateState(store, '[Ballot] getContestViewById Success', {
               currentContestView: contestView,
-              contestSlate: store.allContestSlates().filter(a => a.contestId === contestView.id)[0] ?? emptySlateView,
+              contestSlate: store.allContestSlates().filter(a => a.contestId === contestView.id)[0] ?? slateViewInit,
               isLoading: false,
             })
           )
@@ -149,25 +160,6 @@ export const BallotStore = signalStore(
         });
       },
 
-      // setCurrentContestView2: rxMethod<number>(
-      //   pipe(
-      //     tap(() => {
-      //       updateState(store, '[Ballot] getContestViewById Start', { isLoading: true });
-      //     }),
-      //     switchMap((contestId: number) => {
-      //       return dbBallot.allContestViews().pipe(
-      //         takeUntilDestroyed(),
-      //         tap(() => {
-      //           updateState(store, `[Ballot] getContestSlateByContestId Success`, {
-      //             currentContestView: store.allContestViews().filter(a => a.id === contestId)[0] ?? contestViewInit,
-      //             contestSlate: store.allContestSlates().filter(a => a.contestId === contestId)[0] ?? emptySlateView,
-      //           });
-      //         })
-      //       );
-      //     })
-      //   )
-      // ),
-
       addContest(contest: Contest) {
         if (logger.enabled) console.log('addContest', contest);
         updateState(store, '[Contest] addContest Pending', { isLoading: true });
@@ -189,6 +181,24 @@ export const BallotStore = signalStore(
             })
           )
           .subscribe();
+      },
+
+      addPlacement(placement: Placement) {
+        if (logger.enabled) console.log('addPlacement', placement);
+        updateState(store, '[Placement] addPlacement Pending', { isLoading: true });
+        dbBallot
+          .PlacementCreate(placement)
+          .then(newPlacement => {
+            if (logger.enabled) console.log('newPlacement', newPlacement);
+            updateState(store, '[Placement] addPlacement Success', {
+              allPlacements: [...store.allPlacements(), newPlacement],
+              isLoading: false,
+            });
+          })
+          .catch(error => {
+            if (logger.enabled) console.log('error', error);
+            updateState(store, '[Placement] addPlacement Failed', { isLoading: false });
+          });
       },
 
       async addSlateMember(SlateMemberView: SlateMember) {
@@ -221,15 +231,33 @@ export const BallotStore = signalStore(
       //   });
       // },
 
-      async addContestOld(contest: Contest) {
-        updateState(store, '[Contest] addContest Pending', { isLoading: true });
-        return await dbBallot.ContestCreateOld(contest).then((newContest: Contest) => {
-          updateState(store, '[Contest] addContest Success', {
-            allContests: [...store.allContests(), newContest],
-            isLoading: false,
-          });
-        });
-      },
+      // setCurrentContestView2: rxMethod<number>(
+      //   pipe(
+      //     tap(() => {
+      //       updateState(store, '[Ballot] getContestViewById Start', { isLoading: true });
+      //     }),
+      //     switchMap((contestId: number) => {
+      //       return dbBallot.allContestViews().pipe(
+      //         takeUntilDestroyed(),
+      //         tap(() => {
+      //           updateState(store, `[Ballot] getContestSlateByContestId Success`, {
+      //             currentContestView: store.allContestViews().filter(a => a.id === contestId)[0] ?? contestViewInit,
+      //             contestSlate: store.allContestSlates().filter(a => a.contestId === contestId)[0] ?? emptySlateView,
+      //           });
+      //         })
+      //       );
+      //     })
+      //   )
+      // ),
+      // async addContestOld(contest: Contest) {
+      //   updateState(store, '[Contest] addContest Pending', { isLoading: true });
+      //   return await dbBallot.ContestCreateOld(contest).then((newContest: Contest) => {
+      //     updateState(store, '[Contest] addContest Success', {
+      //       allContests: [...store.allContests(), newContest],
+      //       isLoading: false,
+      //     });
+      //   });
+      // },
     };
   }),
 

@@ -36,8 +36,8 @@ export class BallotService {
     return this.http.get<ContestView>(`${this.contestViewAPIUrl}/${id}`);
   }
 
-  contestCreate({ closes, opens, contestTitle, contestDescription, authorId, topSlateId }: Contest): Observable<Contest> {
-    return this.http.post<Contest>(this.contestAPIUrl, { closes, opens, contestTitle, contestDescription, authorId, topSlateId }).pipe(
+  contestCreate({ closes, opens, contestTitle, contestDescription, authorId }: Contest): Observable<Contest> {
+    return this.http.post<Contest>(this.contestAPIUrl, { closes, opens, contestTitle, contestDescription, authorId }).pipe(
       tap(data => {
         if (this.logger.enabled) console.log('data', data);
       }),
@@ -101,20 +101,20 @@ export class BallotService {
   //   });
   // }
 
-  ContestCreateOld({ closes, opens, contestTitle, contestDescription, authorId, topSlateId }: Contest): Promise<Contest> {
-    if (this.logger.enabled) console.log('input', contestTitle);
-    if (this.logger.enabled) console.log(this.contestAPIUrl);
-    return new Promise((resolve, reject) => {
-      this.http.post<Contest>(this.contestAPIUrl, { closes, opens, contestTitle, contestDescription, authorId, topSlateId }).subscribe({
-        next: data => {
-          if (this.logger.enabled) console.log('data', data);
-          resolve(data);
-        },
-        error: error => {
-          if (this.logger.enabled) console.log('error', error);
-          reject(error);
-        },
-      });
-    });
-  }
+  // ContestCreateOld({ closes, opens, contestTitle, contestDescription, authorId, topSlateId }: Contest): Promise<Contest> {
+  //   if (this.logger.enabled) console.log('input', contestTitle);
+  //   if (this.logger.enabled) console.log(this.contestAPIUrl);
+  //   return new Promise((resolve, reject) => {
+  //     this.http.post<Contest>(this.contestAPIUrl, { closes, opens, contestTitle, contestDescription, authorId, topSlateId }).subscribe({
+  //       next: data => {
+  //         if (this.logger.enabled) console.log('data', data);
+  //         resolve(data);
+  //       },
+  //       error: error => {
+  //         if (this.logger.enabled) console.log('error', error);
+  //         reject(error);
+  //       },
+  //     });
+  //   });
+  // }
 }

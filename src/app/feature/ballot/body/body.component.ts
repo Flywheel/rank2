@@ -22,7 +22,14 @@ export class BodyComponent {
 
   candidatesAvailable = signal<SlateMemberView[]>([]);
   candidatesRanked = signal<SlateMemberView[]>([]);
-  preparedBallot = signal<SlateView>({ id: 0, contestId: this.contest().id, authorId: this.authorId(), slateMemberViews: [] });
+  isTopSlate = computed<boolean>(() => this.contest().slate.isTopSlate);
+  preparedBallot = signal<SlateView>({
+    id: 0,
+    contestId: this.contest().id,
+    authorId: this.authorId(),
+    isTopSlate: this.isTopSlate(),
+    slateMemberViews: [],
+  });
   contentParams = computed<string>(() => {
     const selected = this.candidateList().filter(candidate => candidate.id === this.selectedCandidateId())[0];
     return selected ? selected.placementView.asset.mediaType + '..i..' + selected.placementView.asset.sourceId : '';
@@ -121,6 +128,7 @@ export class BodyComponent {
       id: this.contest().id,
       contestId: this.contest().id,
       authorId: 1,
+      isTopSlate: this.isTopSlate(),
       slateMemberViews: preparedSlateMemberViews,
     });
     this.ballotStore.updateVoterSlate(this.preparedBallot());

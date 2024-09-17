@@ -9,7 +9,6 @@ export interface Author {
   id: number;
   name: string;
   authenticatorId: string;
-  folioId: number;
   eventLog: EventLog[];
 }
 
@@ -28,6 +27,7 @@ export interface AssetView extends Asset {
 export interface Folio {
   id: number;
   authorId: number;
+  isDefault: boolean;
   name: string;
 }
 
@@ -50,13 +50,13 @@ export interface Contest {
   opens: Date;
   closes: Date;
   authorId: number;
-  topSlateId: number;
 }
 
 export interface Slate {
   id: number;
   authorId: number;
   contestId: number;
+  isTopSlate: boolean;
 }
 
 export interface SlateMember {
@@ -76,5 +76,6 @@ export interface SlateView extends Slate {
 }
 
 export interface ContestView extends Contest {
+  slateId: number;
   slate: SlateView;
 }
