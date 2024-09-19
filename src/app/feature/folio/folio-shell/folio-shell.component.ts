@@ -24,7 +24,6 @@ export class FolioShellComponent {
   closeNewFolio() {
     this.newFolio.set(false);
   }
-
   openNewPlacement() {
     this.newPlacement.set(true);
   }

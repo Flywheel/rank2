@@ -1,7 +1,5 @@
 <mh5-header />
 
-<mh5-folio-scroll-horizontal [theFoliosInput]="theFolios()" (newFolioEditorStateChange)="openNewFolio()" />
-
 @if (newFolio()) {
   <mh5-folio-scroll-horizontal />
   <mh5-folio-new (closeNewFolioEditor)="closeNewFolio()" />
@@ -16,5 +14,3 @@
       (newPlacementEditorStateChange)="openNewPlacement()" />
   }
 }
-
-<div></div>

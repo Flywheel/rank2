@@ -172,13 +172,13 @@ export const FolioStore = signalStore(
           });
       },
     };
-  }),
-
-  withHooks({
-    onInit(store) {
-      store.Folios();
-      // store.FolioViews();
-      store.setCurrentFolioView(1);
-    },
   })
+
+  // withHooks({
+  //   onInit(store) {
+  //     store.Folios();
+  //     // store.FolioViews();
+  //     store.setCurrentFolioView(1);
+  //   },
+  // })
 );
