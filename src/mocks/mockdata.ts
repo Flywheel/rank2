@@ -10,46 +10,18 @@ import {
   PlacementView,
   Slate,
   SlateMember,
+  FolioView,
 } from '../app/core/interfaces/interfaces';
 
-export const authorList: Author[] = [
-  {
-    id: 1,
-    name: 'miniherald',
-    authenticatorId: 'miniherald',
-    eventLog: [],
-  },
-];
+export const authorList: Author[] = [{ id: 1, name: 'miniherald', authenticatorId: 'miniherald', eventLog: [] }];
 
 export const folioList: Folio[] = [
-  {
-    id: 1,
-    authorId: 1,
-    isDefault: true,
-    folioTopic: '@miniherald',
-  },
-  {
-    id: 2,
-    authorId: 1,
-    isDefault: false,
-    folioTopic: 'Presidential Candidates 2024',
-  },
-  {
-    id: 2,
-    authorId: 1,
-    isDefault: false,
-    folioTopic: 'AimsPoll 2024',
-  },
+  { id: 1, authorId: 1, isDefault: true, folioTopic: '@miniherald' },
+  { id: 2, authorId: 1, isDefault: false, folioTopic: 'Presidential Candidates 2024' },
+  { id: 3, authorId: 1, isDefault: false, folioTopic: 'AimsPoll 2024' },
 ];
 
-export const assets: Asset[] = [
-  {
-    id: 1,
-    authorId: 1,
-    mediaType: 'NoMedia',
-    sourceId: '1',
-  },
-];
+export const assets: Asset[] = [{ id: 1, authorId: 1, mediaType: 'NoMedia', sourceId: '1' }];
 
 export const authorDefaultPlacement: Placement = {
   id: 1,
@@ -74,8 +46,8 @@ const commonProperties = {
 };
 
 const placementsData = [
-  { id: 11, mediaType: 'youtube', sourceId: 'sHky_Xopyrw', caption: 'Kamala Harris', folioId: 2 },
-  { id: 12, mediaType: 'youtube', sourceId: 'URG4bYES91E', caption: 'Robert Kennedy, Jr.', folioId: 2 },
+  { id: 8, mediaType: 'folio', sourceId: '', caption: 'US President 2024', folioId: 1 },
+  { id: 9, mediaType: 'folio', sourceId: '', caption: 'AimsPoll', folioId: 1 },
   { id: 11, mediaType: 'youtube', sourceId: 'sHky_Xopyrw', caption: 'Kamala Harris', folioId: 2 },
   { id: 12, mediaType: 'youtube', sourceId: 'URG4bYES91E', caption: 'Robert Kennedy, Jr.', folioId: 2 },
   { id: 13, mediaType: 'youtube', sourceId: 'V3n8qmgNHZc', caption: 'Chase Oliver', folioId: 2 },
@@ -90,8 +62,8 @@ const placementsData = [
 ];
 
 // Generate the placementList by mapping over placementsData
-const placementList: Placement[] = placementsData.map((data, index) => ({
-  id: index + 2,
+const placementList: Placement[] = placementsData.map(data => ({
+  id: data.id,
   ...commonProperties,
   folioId: data.folioId,
   caption: data.caption,
@@ -112,11 +84,11 @@ const placementViewList: PlacementView[] = placementList.map(placement => {
 });
 placementViewList.unshift(authorDefaultPlacementView);
 
-const folioViewList: Folio[] = folioList.map(folio => {
-  const placements = placementViewList.filter(placement => placement.folioId === folio.id);
+const folioViewList: FolioView[] = folioList.map(folio => {
+  const placementViews = placementViewList.filter(placement => placement.folioId === folio.id);
   return {
     ...folio,
-    placements: placements,
+    placements: placementViews,
   };
 });
 
@@ -150,24 +122,9 @@ export const contestList: Contest[] = [
 ];
 
 export const slateList: Slate[] = [
-  {
-    id: 1,
-    authorId: 1,
-    contestId: 1,
-    isTopSlate: true,
-  },
-  {
-    id: 2,
-    authorId: 1,
-    contestId: 2,
-    isTopSlate: false,
-  },
-  {
-    id: 3,
-    authorId: 1,
-    contestId: 3,
-    isTopSlate: false,
-  },
+  { id: 1, authorId: 1, contestId: 1, isTopSlate: true },
+  { id: 2, authorId: 1, contestId: 2, isTopSlate: false },
+  { id: 3, authorId: 1, contestId: 3, isTopSlate: false },
 ];
 
 export const slateListView: SlateView[] = slateList.map(slate => {
@@ -190,20 +147,24 @@ export const contestViews: ContestView[] = contestList.map(contest => {
 });
 
 const slateMembersData: SlateMember[] = [
-  { id: 0, authorId: 1, slateId: 2, placementId: 1, rankOrder: 1 },
-  { id: 0, authorId: 1, slateId: 2, placementId: 2, rankOrder: 2 },
-  { id: 0, authorId: 1, slateId: 2, placementId: 3, rankOrder: 3 },
-  { id: 0, authorId: 1, slateId: 2, placementId: 4, rankOrder: 4 },
-  { id: 0, authorId: 1, slateId: 2, placementId: 5, rankOrder: 5 },
-  { id: 0, authorId: 1, slateId: 3, placementId: 6, rankOrder: 1 },
-  { id: 0, authorId: 1, slateId: 3, placementId: 7, rankOrder: 2 },
-  { id: 0, authorId: 1, slateId: 3, placementId: 8, rankOrder: 3 },
-  { id: 0, authorId: 1, slateId: 3, placementId: 9, rankOrder: 4 },
+  { id: 0, authorId: 1, slateId: 1, placementId: 8, rankOrder: 1 },
+  { id: 0, authorId: 1, slateId: 1, placementId: 9, rankOrder: 2 },
+  { id: 0, authorId: 1, slateId: 2, placementId: 11, rankOrder: 1 },
+  { id: 0, authorId: 1, slateId: 2, placementId: 12, rankOrder: 2 },
+  { id: 0, authorId: 1, slateId: 2, placementId: 13, rankOrder: 3 },
+  { id: 0, authorId: 1, slateId: 2, placementId: 14, rankOrder: 4 },
+  { id: 0, authorId: 1, slateId: 2, placementId: 15, rankOrder: 5 },
+  { id: 0, authorId: 1, slateId: 3, placementId: 16, rankOrder: 1 },
+  { id: 0, authorId: 1, slateId: 3, placementId: 17, rankOrder: 2 },
+  { id: 0, authorId: 1, slateId: 3, placementId: 18, rankOrder: 3 },
+  { id: 0, authorId: 1, slateId: 3, placementId: 19, rankOrder: 4 },
+  { id: 0, authorId: 1, slateId: 3, placementId: 20, rankOrder: 5 },
+  { id: 0, authorId: 1, slateId: 3, placementId: 21, rankOrder: 6 },
 ];
 
-export const slateMembers: SlateMemberView[] = slateMembersData.map((data, index) => {
+export const slateMembers: SlateMemberView[] = slateMembersData.map(data => {
   return {
-    id: index + 1,
+    id: data.id,
     slateId: data.slateId,
     authorId: 1,
     placementId: data.placementId,
@@ -233,47 +194,3 @@ export const contestViewList: ContestView[] = contestViews.map(contest => {
     slate: slate,
   };
 });
-
-// export const contestViewList: ContestView[] = contestList.map(contest => {
-//   const slateMemberViews = slateMembers.filter(member => member.authorId === contest.authorId && member.slateId === contest.id);
-//   const slate: SlateView = {
-//     id: 2,// contest.slateId,
-//     contestId: contest.id,
-//     authorId: contest.authorId,
-//     slateMemberViews: slateMemberViews,
-//     isTopSlate: true,
-//   };
-//   return {
-//     id: contest.id,
-//     authorId: contest.authorId,
-//     opens: contest.opens,
-//     closes: contest.closes,
-//     topSlateId: contest.id,
-//     contestTitle: contest.contestTitle,
-//     contestDescription: contest.contestDescription,
-//     slateId: slate.id,
-//     slate: slate,
-//   };
-// });
-
-//populateContestViews() {
-// this.contestViews = this.contestData.map(contest => {
-//   const slateMemberViews = this.USPresident24.filter(member => member.contestId === contest.id);
-//   const slate: SlateView = {
-//     id: contest.topSlateId,
-//     contestId: contest.id,
-//     authorId: contest.authorId,
-//     slateMemberViews: slateMemberViews,
-//   };
-//   return {
-//     id: contest.id,
-//     authorId: contest.authorId,
-//     opens: contest.opens,
-//     closes: contest.closes,
-//     topSlateId: contest.topSlateId,
-//     contestTitle: contest.contestTitle,
-//     contestDescription: contest.contestDescription,
-//     slate: slate,
-//   };
-// });
-//}

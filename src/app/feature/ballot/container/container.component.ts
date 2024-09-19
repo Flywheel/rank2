@@ -34,4 +34,9 @@ export class ContainerComponent {
   closeNewPlacement() {
     this.newPlacement.set(false);
   }
+  runLog() {
+    console.log(this.ballotStore.allContests());
+    console.log(this.ballotStore.allContestViews());
+    console.log(this.ballotStore.allContestSlates());
+  }
 }

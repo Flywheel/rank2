@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { InMemoryDbService } from 'angular-in-memory-web-api';
-import { Contest, ContestView } from '../app/core/interfaces/interfaces';
+import { Contest, ContestView, Folio, FolioView } from '../app/core/interfaces/interfaces';
 import { MockdataService } from './mockdata.service';
 
 @Injectable({
@@ -11,8 +11,8 @@ export class DbService implements InMemoryDbService {
   createDb() {
     const contestview: ContestView[] = this.mockData.contestViewList;
     const contest: Contest[] = this.mockData.contestList;
-    const folio = this.mockData.folioList;
-    const folioview = this.mockData.folioViewList;
+    const folio: Folio[] = this.mockData.folioList;
+    const folioview: FolioView[] = this.mockData.folioViewList;
     return { contest, contestview, folio, folioview };
   }
 }
