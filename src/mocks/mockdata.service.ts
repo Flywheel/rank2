@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { contestList, contestViewList, folioList, folioViewList } from './mockdata';
+import { contestList, contestViewList, folioList, folioViewList } from './mockdata3';
 import { Contest, ContestView, Folio, FolioView } from '../app/core/interfaces/interfaces';
 @Injectable({
   providedIn: 'root',

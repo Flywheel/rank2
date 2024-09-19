@@ -28,7 +28,7 @@ export interface Folio {
   id: number;
   authorId: number;
   isDefault: boolean;
-  folioTopic: string;
+  folioName: string;
 }
 
 export interface Placement {

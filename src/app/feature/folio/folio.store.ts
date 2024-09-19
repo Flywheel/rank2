@@ -20,13 +20,13 @@ export const folioInit: Folio = {
   id: 0,
   authorId: 0,
   isDefault: false,
-  folioTopic: '',
+  folioName: '',
 };
 const folioViewInit: FolioView = {
   id: 0,
   authorId: 0,
   isDefault: false,
-  folioTopic: '',
+  folioName: '',
   placements: [],
 };
 

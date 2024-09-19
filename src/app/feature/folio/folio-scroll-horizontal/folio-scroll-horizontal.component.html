@@ -1,7 +1,6 @@
-<p (click)="selectFolio(1)" (keydown)="selectFolio(1)" tabindex="0">folio-scroll-horizontal works!</p>
 <div class="horizontal-scroll">
   @for (folio of theFoliosInput(); track $index) {
-    <div class="menu-item" (click)="selectFolio(folio.id)" (keydown)="selectFolio(folio.id)" tabindex="$index">{{ folio.id }}-{{ folio.folioTopic }}</div>
+    <div class="menu-item" (click)="selectFolio(folio.id)" (keydown)="selectFolio(folio.id)" tabindex="$index">{{ folio.id }}-{{ folio.folioName }}</div>
   }
   <div class="menu-item" (click)="newFolio()" (keydown)="newFolio()" tabindex="0">Add New</div>
 </div>

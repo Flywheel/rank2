@@ -35,8 +35,8 @@ export class FolioService {
     return this.http.get<FolioView>(`${this.folioViewAPIUrl}/${id}`);
   }
 
-  folioCreate({ authorId, isDefault, folioTopic: name }: Folio): Observable<Folio> {
-    return this.http.post<Folio>(this.folioAPIUrl, { authorId, isDefault, name }).pipe(
+  folioCreate({ authorId, isDefault, folioName }: Folio): Observable<Folio> {
+    return this.http.post<Folio>(this.folioAPIUrl, { authorId, isDefault, folioName }).pipe(
       tap(data => {
         if (this.logger.enabled) console.log('data', data);
       }),

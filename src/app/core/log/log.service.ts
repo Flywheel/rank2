@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class LogService {
-  public enabled = false;
+  public enabled = true;
 
   enableLogging(): void {
     this.enabled = true;

@@ -1,1 +1,14 @@
 <p>folio-new works!</p>
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form-container">
+  <div class="form-row">
+    @if (formGroup.get('folioName')?.invalid && formGroup.get('folioName')?.touched) {
+      <label for="folioName" class="warning">Folio Name is required</label>
+    } @else {
+      <label for="folioName">Folio Name</label>
+    }
+    <input id="folioName" formControlName="folioName" type="text" />
+  </div>
+
+  <button type="submit" [disabled]="formGroup.invalid">Add Folio</button>
+  <button class="cancelButton" (click)="cancel()">Cancel</button>
+</form>

@@ -14,7 +14,7 @@ import { Contest } from '../../../core/interfaces/interfaces';
 export class NewContestComponent {
   ballotStore = inject(BallotStore);
   logger = inject(LogService);
-  contestForm: FormGroup;
+  formGroup: FormGroup;
   closeNewContestEditor = output<boolean>();
 
   constructor(private fb: FormBuilder) {
@@ -23,7 +23,7 @@ export class NewContestComponent {
     nextWeek.setDate(nextWeek.getDate() + 7); // Set date to one week from today
     const nextWeekDate = nextWeek.toISOString().split('T')[0]; // Get next week's date in YYYY-MM-DD format
 
-    this.contestForm = this.fb.group({
+    this.formGroup = this.fb.group({
       contestTitle: ['', Validators.required],
       contestDescription: ['', Validators.required],
       opens: [today, Validators.required],
@@ -34,8 +34,8 @@ export class NewContestComponent {
   }
 
   onSubmit() {
-    if (this.contestForm.valid) {
-      const newContest: Contest = this.contestForm.value;
+    if (this.formGroup.valid) {
+      const newContest: Contest = this.formGroup.value;
       if (this.logger.enabled) console.log('Submitting new contest', newContest);
       this.ballotStore.addContest(newContest);
       this.closeNewContestEditor.emit(false);
