@@ -20,13 +20,13 @@ export const folioInit: Folio = {
   id: 0,
   authorId: 0,
   isDefault: false,
-  name: '',
+  folioTopic: '',
 };
 const folioViewInit: FolioView = {
   id: 0,
   authorId: 0,
   isDefault: false,
-  name: '',
+  folioTopic: '',
   placements: [],
 };
 
@@ -57,14 +57,14 @@ export const FolioStore = signalStore(
       Folios: rxMethod<void>(
         pipe(
           tap(() => {
-            updateState(store, '[Ballot] getAllFolios Start', { isLoading: true });
+            updateState(store, '[Folio] getAllFolios Start', { isLoading: true });
           }),
           exhaustMap(() => {
             return dbFolio.allFolios().pipe(
               takeUntilDestroyed(),
               tap({
                 next: (allFolios: Folio[]) => {
-                  updateState(store, '[Ballot] getAllFolios Success', value => ({
+                  updateState(store, '[Folio] getAllFolios Success', value => ({
                     ...value,
                     allFolios,
                     isLoading: false,
@@ -172,13 +172,13 @@ export const FolioStore = signalStore(
           });
       },
     };
-  })
+  }),
 
-  // withHooks({
-  //   onInit(store) {
-  //     store.Folios();
-  //     // store.FolioViews();
-  //     store.setCurrentFolioView(1);
-  //   },
-  // })
+  withHooks({
+    onInit(store) {
+      store.Folios();
+      // store.FolioViews();
+      store.setCurrentFolioView(1);
+    },
+  })
 );
