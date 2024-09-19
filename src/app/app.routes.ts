@@ -5,10 +5,7 @@ export const routes: Routes = [
     path: 'ballot',
     loadComponent: () => import('./feature/ballot/container/container.component').then(m => m.ContainerComponent),
   },
-  //   {
-  //     path: 'content/:mediaType/:sourceId',
-  //     loadComponent: () => import('./feature/content/viewer/viewer.component').then(m => m.ViewerComponent),
-  //   },
+  { path: 'folio', loadComponent: () => import('./feature/folio/folio-shell/folio-shell.component').then(m => m.FolioShellComponent) },
   { path: '', redirectTo: 'ballot', pathMatch: 'full' },
   { path: '**', redirectTo: 'ballot' },
 ];

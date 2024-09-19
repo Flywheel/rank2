@@ -76,12 +76,15 @@ const placementsData = [
 ];
 
 // Generate the placementList by mapping over placementsData
-export const placementList: Placement[] = placementsData.map((data, index) => ({
+const placementList: Placement[] = placementsData.map((data, index) => ({
   id: index + 2,
   ...commonProperties,
   folioId: data.folioId,
   caption: data.caption,
 }));
+
+placementList.unshift(authorDefaultPlacement);
+export { placementList };
 
 const placementViewList: PlacementView[] = placementList.map(placement => {
   return {
@@ -348,7 +351,7 @@ export const slateMembers: SlateMemberView[] = [
 ];
 
 export const contestViewList: ContestView[] = contestViews.map(contest => {
-  const slateMemberViews = slateMembers.filter(member => member.authorId === contest.authorId && member.slateId === contest.id);
+  const slateMemberViews = slateMembers.filter(member => member.slateId === contest.slateId);
   const slate: SlateView = {
     id: contest.slateId,
     contestId: contest.id,
@@ -369,10 +372,10 @@ export const contestViewList: ContestView[] = contestViews.map(contest => {
   };
 });
 
-// export const contestViewList2: ContestView[] = contestList.map(contest => {
+// export const contestViewList: ContestView[] = contestList.map(contest => {
 //   const slateMemberViews = slateMembers.filter(member => member.authorId === contest.authorId && member.slateId === contest.id);
 //   const slate: SlateView = {
-//     id: slateMemberViews[0].slateId,
+//     id: 2,// contest.slateId,
 //     contestId: contest.id,
 //     authorId: contest.authorId,
 //     slateMemberViews: slateMemberViews,

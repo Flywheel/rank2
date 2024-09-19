@@ -1,0 +1,29 @@
+.horizontal-scroll {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  position: relative;
+  border-bottom: 2px solid #e0e0e0;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  & {
+    -ms-overflow-style: none; // IE and Edge
+    scrollbar-width: none; // Firefox
+  }
+
+  .menu-item {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    border-bottom: 4px solid transparent;
+    &.selected {
+      border-bottom: 4px solid azure;
+    }
+    &:hover {
+      border-bottom: 4px dotted grey;
+    }
+  }
+}

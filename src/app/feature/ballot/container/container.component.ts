@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
+import { HeaderComponent } from '../../../shared/header/header.component';
 import { BodyComponent } from '../body/body.component';
 import { ViewerComponent } from '../viewer/viewer.component';
 import { BallotStore } from '../ballot.store';

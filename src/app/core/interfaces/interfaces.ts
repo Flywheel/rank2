@@ -43,6 +43,10 @@ export interface PlacementView extends Placement {
   asset: Asset;
 }
 
+export interface FolioView extends Folio {
+  placements: PlacementView[];
+}
+
 export interface Contest {
   id: number;
   contestTitle: string;
