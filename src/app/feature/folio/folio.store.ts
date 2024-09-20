@@ -51,24 +51,17 @@ export const FolioStore = signalStore(
   withDevtools('folios'),
   withState({
     currentFolioView: folioViewInit,
-    allFolioViews: [folioViewInit],
+    allDBFolioViews: [folioViewInit],
     allFolios: [folioInit],
     allPlacements: [placementInit],
     allAssets: [assetInit],
-    allAssetViews: [assetViewInit],
     isLoading: false,
     isAddingFolio: false,
     isAddingPlacement: false,
   }),
   withComputed(store => {
     return {
-      allFolioPlacements: computed<PlacementView[]>(() =>
-        store
-          .allFolioViews()
-          .map(c => c.placementViews)
-          .flat()
-      ),
-      allAssetViews2: computed<AssetView[]>(() =>
+      allAssetViews: computed<AssetView[]>(() =>
         store.allAssets().map(asset => ({
           ...asset,
           url: '',
@@ -80,10 +73,10 @@ export const FolioStore = signalStore(
 
   withComputed(store => {
     return {
-      placementViewList2: computed<PlacementView[]>(() =>
+      allPlacementViews: computed<PlacementView[]>(() =>
         store.allPlacements().map(placement => ({
           ...placement,
-          asset: store.allAssetViews2().find(a => a.id === placement.assetId) ?? assetViewInit,
+          asset: store.allAssetViews().find(a => a.id === placement.assetId) ?? assetViewInit,
         }))
       ),
     };
@@ -91,9 +84,9 @@ export const FolioStore = signalStore(
 
   withComputed(store => {
     return {
-      folioViewList2: computed<FolioView[]>(() =>
+      allFolioViews: computed<FolioView[]>(() =>
         store.allFolios().map(folio => {
-          const placementViews = store.placementViewList2().filter(placement => placement.folioId === folio.id);
+          const placementViews = store.allPlacementViews().filter(placement => placement.folioId === folio.id);
           return {
             ...folio,
             placementViews,
@@ -134,16 +127,16 @@ export const FolioStore = signalStore(
       FolioViews: rxMethod<void>(
         pipe(
           tap(() => {
-            updateState(store, '[Ballot] getAllFolioViews Start', { isLoading: true });
+            updateState(store, '[Folio] getAllFolioViews Start', { isLoading: true });
           }),
           exhaustMap(() => {
             return dbFolio.allFolioViews().pipe(
               takeUntilDestroyed(),
               tap({
-                next: (allFolioViews: FolioView[]) => {
-                  updateState(store, '[Ballot] getAllFolioViews Success', value => ({
+                next: (allDBFolioViews: FolioView[]) => {
+                  updateState(store, '[Folio] getAllFolioViews Success', value => ({
                     ...value,
-                    allFolioViews,
+                    allDBFolioViews,
                     isLoading: false,
                     //isStartupLoadingComplete: true,
                   }));
@@ -157,18 +150,18 @@ export const FolioStore = signalStore(
       setCurrentFolioView: rxMethod<number>(
         pipe(
           tap(() => {
-            updateState(store, '[Ballot] getFolioViewById Start', { isLoading: true });
+            updateState(store, '[Folio] getFolioViewById Start', { isLoading: true });
           }),
           switchMap(folioId => {
-            const existingFolioView = store.allFolioViews().find(view => view.id === folioId);
+            const existingFolioView = store.allDBFolioViews().find(view => view.id === folioId);
             if (existingFolioView) {
               return of(existingFolioView);
             } else {
               const theFolioView = dbFolio.getFolioViewById(folioId).pipe(
                 tap({
                   next: (folioView: FolioView) => {
-                    updateState(store, '[Ballot] Load FolioViewById Success', {
-                      allFolioViews: [...store.allFolioViews(), folioView],
+                    updateState(store, '[Folio] Load FolioViewById Success', {
+                      allDBFolioViews: [...store.allDBFolioViews(), folioView],
                     });
                   },
                 })
@@ -177,7 +170,7 @@ export const FolioStore = signalStore(
             }
           }),
           tap(folioView =>
-            updateState(store, '[Ballot] getFolioViewById Success', {
+            updateState(store, '[Folio] getFolioViewById Success', {
               currentFolioView: folioView,
               //  folioSlate: store.allFolioSlates().filter(a => a.folioId === folioView.id)[0] ?? slateViewInit,
               isLoading: false,
@@ -185,6 +178,11 @@ export const FolioStore = signalStore(
           )
         )
       ),
+
+      setCurrentFolioView2(folioId: number) {
+        const existingFolioView = store.allFolioViews().find(view => view.id === folioId);
+        updateState(store, '[Folio] getFolioViewById Start', { currentFolioView: existingFolioView, isLoading: true });
+      },
 
       toggleFolioAdder(state: boolean) {
         updateState(store, '[Folio] toggleFolioAdder', { isAddingFolio: state });

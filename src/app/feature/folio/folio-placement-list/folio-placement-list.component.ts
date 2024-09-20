@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { FolioStore } from '../folio.store';
-import { FolioView } from '../../../core/interfaces/interfaces';
+import { PlacementView } from '../../../core/interfaces/interfaces';
 
 @Component({
   selector: 'mh5-folio-placement-list',
@@ -12,6 +12,8 @@ import { FolioView } from '../../../core/interfaces/interfaces';
 export class FolioPlacementListComponent {
   authorId = signal<number>(1);
   folioStore = inject(FolioStore);
-  folio = computed<FolioView>(() => this.folioStore.currentFolioView());
-  placements = computed(() => this.folio().placementViews);
+  // folio = computed<FolioView>(() => this.folioStore.currentFolioView());
+  // placements = computed(() => this.folio().placementViews);
+
+  placements2 = computed<PlacementView[]>(() => this.folioStore.currentFolioView().placementViews);
 }

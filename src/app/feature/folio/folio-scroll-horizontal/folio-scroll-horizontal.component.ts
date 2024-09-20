@@ -18,20 +18,20 @@ export class FolioScrollHorizontalComponent {
   newPlacementEditorStateChange = output<boolean>();
 
   selectFolio(id: number) {
-    this.folioStore.setCurrentFolioView(id);
+    this.folioStore.setCurrentFolioView2(id);
     if (this.logger.enabled) {
       // console.log('selectFolio', id);
 
       console.log('allFolios', this.folioStore.allFolios());
-      console.log('allFolioViews', this.folioStore.allFolioViews());
-      console.log('allFolioViews2', this.folioStore.folioViewList2());
+      //  console.log('allFolioViews', this.folioStore.allFolioViews());
+      //   console.log('allFolioViews2', this.folioStore.allFolioViews());
 
       // console.log('allAssets', this.folioStore.allAssets());
       // console.log('allAssetViews', this.folioStore.allAssetViews2());
 
       console.log('allPlacements', this.folioStore.allPlacements());
       console.log('allPlacementViews', this.folioStore.allPlacements());
-      console.log('allPlacementViews2', this.folioStore.placementViewList2());
+      //   console.log('allPlacementViews2', this.folioStore.allPlacementViews());
     }
   }
   newFolio() {

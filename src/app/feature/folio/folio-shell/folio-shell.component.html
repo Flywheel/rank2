@@ -12,6 +12,14 @@
       [theFoliosInput]="theFolios()"
       (newFolioEditorStateChange)="openNewFolio()"
       (newPlacementEditorStateChange)="openNewPlacement()" />
-    <mh5-folio-placement-list />
+
+    <div class="placement-container">
+      <div class="placement-list">
+        <mh5-folio-placement-list />
+      </div>
+      <div class="placement-info">
+        <div>Add Placement to{{ folioStore.currentFolioView().folioName }}</div>
+      </div>
+    </div>
   }
 }
