@@ -1,6 +1,6 @@
 import { signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 import { withDevtools, updateState } from '@angular-architects/ngrx-toolkit';
-import { Folio, FolioView, Placement, PlacementView } from '../../core/interfaces/interfaces';
+import { Asset, AssetView, Folio, FolioView, Placement, PlacementView } from '../../core/interfaces/interfaces';
 import { FolioService } from './folio.service';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -27,7 +27,23 @@ const folioViewInit: FolioView = {
   authorId: 0,
   isDefault: false,
   folioName: '',
-  placements: [],
+  placementViews: [],
+};
+
+export const assetInit = {
+  id: 0,
+  authorId: 0,
+  mediaType: '',
+  sourceId: '',
+};
+
+export const assetViewInit = {
+  id: 0,
+  authorId: 0,
+  mediaType: '',
+  sourceId: '',
+  url: '',
+  paddingBottom: '',
 };
 
 export const FolioStore = signalStore(
@@ -38,22 +54,61 @@ export const FolioStore = signalStore(
     allFolioViews: [folioViewInit],
     allFolios: [folioInit],
     allPlacements: [placementInit],
+    allAssets: [assetInit],
+    allAssetViews: [assetViewInit],
     isLoading: false,
+    isAddingFolio: false,
+    isAddingPlacement: false,
   }),
   withComputed(store => {
     return {
       allFolioPlacements: computed<PlacementView[]>(() =>
         store
           .allFolioViews()
-          .map(c => c.placements)
+          .map(c => c.placementViews)
           .flat()
+      ),
+      allAssetViews2: computed<AssetView[]>(() =>
+        store.allAssets().map(asset => ({
+          ...asset,
+          url: '',
+          paddingBottom: '',
+        }))
       ),
     };
   }),
+
+  withComputed(store => {
+    return {
+      placementViewList2: computed<PlacementView[]>(() =>
+        store.allPlacements().map(placement => ({
+          ...placement,
+          asset: store.allAssetViews2().find(a => a.id === placement.assetId) ?? assetViewInit,
+        }))
+      ),
+    };
+  }),
+
+  withComputed(store => {
+    return {
+      folioViewList2: computed<FolioView[]>(() =>
+        store.allFolios().map(folio => {
+          const placementViews = store.placementViewList2().filter(placement => placement.folioId === folio.id);
+          return {
+            ...folio,
+            placementViews,
+          };
+        })
+      ),
+    };
+  }),
+
   withMethods(store => {
     const dbFolio = inject(FolioService);
     const logger = inject(LogService);
     return {
+      // #region Folio
+
       Folios: rxMethod<void>(
         pipe(
           tap(() => {
@@ -131,6 +186,10 @@ export const FolioStore = signalStore(
         )
       ),
 
+      toggleFolioAdder(state: boolean) {
+        updateState(store, '[Folio] toggleFolioAdder', { isAddingFolio: state });
+      },
+
       addFolio(folio: Folio) {
         if (logger.enabled) console.log('addFolio', folio);
         updateState(store, '[Folio] addFolio Pending', { isLoading: true });
@@ -154,6 +213,54 @@ export const FolioStore = signalStore(
           .subscribe();
       },
 
+      //#endregion
+
+      //#region Placement
+
+      Placements: rxMethod<void>(
+        pipe(
+          tap(() => {
+            updateState(store, '[Placement] getAllPlacements Start', { isLoading: true });
+          }),
+          exhaustMap(() => {
+            return dbFolio.allPlacements().pipe(
+              takeUntilDestroyed(),
+              tap({
+                next: (allPlacements: Placement[]) => {
+                  updateState(store, '[Placement] getAllPlacements Success', value => ({
+                    ...value,
+                    allPlacements,
+                    isLoading: false,
+                  }));
+                },
+              })
+            );
+          })
+        )
+      ),
+
+      PlacementViews: rxMethod<void>(
+        pipe(
+          tap(() => {
+            updateState(store, '[Placement] getAllPlacementViews Start', { isLoading: true });
+          }),
+          exhaustMap(() => {
+            return dbFolio.allPlacementViews().pipe(
+              takeUntilDestroyed(),
+              tap({
+                next: (allPlacements: PlacementView[]) => {
+                  updateState(store, '[Placement] getAllPlacementViews Success', value => ({
+                    ...value,
+                    allPlacements,
+                    isLoading: false,
+                  }));
+                },
+              })
+            );
+          })
+        )
+      ),
+
       addPlacement(placement: Placement) {
         if (logger.enabled) console.log('addPlacement', placement);
         updateState(store, '[Placement] addPlacement Pending', { isLoading: true });
@@ -171,12 +278,40 @@ export const FolioStore = signalStore(
             updateState(store, '[Placement] addPlacement Failed', { isLoading: false });
           });
       },
+
+      //#endregion
+
+      //#region Asset
+      Assets: rxMethod<void>(
+        pipe(
+          tap(() => {
+            updateState(store, '[Asset] getAllAssets Start', { isLoading: true });
+          }),
+          exhaustMap(() => {
+            return dbFolio.allAssets().pipe(
+              takeUntilDestroyed(),
+              tap({
+                next: (allAssets: Asset[]) => {
+                  updateState(store, '[Asset] getAllAssets Success', value => ({
+                    ...value,
+                    allAssets,
+                    isLoading: false,
+                  }));
+                },
+              })
+            );
+          })
+        )
+      ),
+      //#endregion
     };
   }),
 
   withHooks({
     onInit(store) {
       store.Folios();
+      store.Placements();
+      store.Assets();
       // store.FolioViews();
       store.setCurrentFolioView(1);
     },

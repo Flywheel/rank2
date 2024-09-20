@@ -2,5 +2,9 @@
   @for (folio of theFoliosInput(); track $index) {
     <div class="menu-item" (click)="selectFolio(folio.id)" (keydown)="selectFolio(folio.id)" tabindex="$index">{{ folio.id }}-{{ folio.folioName }}</div>
   }
-  <div class="menu-item" (click)="newFolio()" (keydown)="newFolio()" tabindex="0">Add New</div>
+  @if (folioStore.isAddingFolio() === true) {
+    <div class="menu-item" tabindex="0">Adding Folio</div>
+  } @else {
+    <div class="menu-item" (click)="newFolio()" (keydown)="newFolio()" tabindex="0">Add New Folio</div>
+  }
 </div>

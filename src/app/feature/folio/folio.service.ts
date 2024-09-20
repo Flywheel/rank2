@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Folio, FolioView, Placement } from '../../core/interfaces/interfaces';
+import { Asset, Folio, FolioView, Placement, PlacementView } from '../../core/interfaces/interfaces';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { LogService } from '../../core/log/log.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -16,6 +16,11 @@ export class FolioService {
   private folioViewAPIUrl = `api/folioview`;
   // private folioAPIUrl = `${environment.HOST_DOMAIN}/api/folio`;
   // private folioViewAPIUrl = `${environment.HOST_DOMAIN}/api/folioview`;
+
+  private placementAPIUrl = `api/placement`;
+  private placementViewAPIUrl = `api/placementview`;
+
+  private assetAPIUrl = `api/asset`;
 
   allFolios(): Observable<Folio[]> {
     if (this.logger.enabled) console.log(`folioService.allFolios() ${this.folioAPIUrl}`);
@@ -47,6 +52,16 @@ export class FolioService {
     );
   }
 
+  allPlacements(): Observable<Placement[]> {
+    if (this.logger.enabled) console.log(`folioService.allPlacements() ${this.placementAPIUrl}`);
+    return this.http.get<Placement[]>(this.placementAPIUrl).pipe(takeUntilDestroyed());
+  }
+
+  allPlacementViews(): Observable<PlacementView[]> {
+    if (this.logger.enabled) console.log(`folioService.allFolioViews() ${this.placementViewAPIUrl}`);
+    return this.http.get<PlacementView[]>(this.placementViewAPIUrl).pipe(takeUntilDestroyed());
+  }
+
   PlacementCreate({ authorId, assetId, folioId, caption }: Placement): Promise<Placement> {
     if (this.logger.enabled) console.log('input', caption);
     if (this.logger.enabled) console.log(this.folioAPIUrl);
@@ -63,5 +78,10 @@ export class FolioService {
         },
       });
     });
+  }
+
+  allAssets(): Observable<Asset[]> {
+    if (this.logger.enabled) console.log(`folioService.allAssets() ${this.assetAPIUrl}`);
+    return this.http.get<Asset[]>(this.assetAPIUrl).pipe(takeUntilDestroyed());
   }
 }

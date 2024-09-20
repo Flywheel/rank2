@@ -36,9 +36,11 @@ export class FolioNewComponent {
       if (this.logger.enabled) console.log('Submitting new folio', newFolio);
       this.folioStore.addFolio(newFolio);
       this.closeNewFolioEditor.emit(false);
+      this.folioStore.toggleFolioAdder(false);
     }
   }
   cancel() {
     this.closeNewFolioEditor.emit(false);
+    this.folioStore.toggleFolioAdder(false);
   }
 }

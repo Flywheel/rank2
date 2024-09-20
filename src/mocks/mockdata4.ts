@@ -11,9 +11,10 @@ import {
   Slate,
   SlateMember,
   FolioView,
+  AssetView,
 } from '../app/core/interfaces/interfaces';
 
-// Utility function to generate incremental IDs
+// Utility functions to generate incremental IDs
 let authorIdCounter = 1;
 const generateAuthorId = () => authorIdCounter++;
 
@@ -39,59 +40,58 @@ const generateSlateMemberId = () => slateMemberIdCounter++;
 export const authorList: Author[] = [{ id: generateAuthorId(), name: 'miniherald', authenticatorId: 'miniherald', eventLog: [] }];
 
 // **Folios**
-const foliosData = [
+const initialFolioData = [
   { isDefault: true, folioName: '@miniherald' },
   { isDefault: false, folioName: 'Presidential Candidates 2024' },
   { isDefault: false, folioName: 'AimsPoll' },
 ];
 
-export const folioList: Folio[] = foliosData.map(data => ({
+export const folioList: Folio[] = initialFolioData.map(data => ({
   id: generateFolioId(),
   authorId: authorList[0].id,
   ...data,
 }));
 
-// **Assets**
-const assetsMap: Record<string, Asset> = {};
-export const assets: Asset[] = [];
-const getAssetId = (mediaType: string, sourceId: string) => {
-  const key = `${mediaType}-${sourceId}`;
-  if (!assetsMap[key]) {
-    const asset: Asset = {
-      id: generateAssetId(),
-      authorId: authorList[0].id,
-      mediaType,
-      sourceId,
-    };
-    assets.push(asset);
-    assetsMap[key] = asset;
-  }
-  return assetsMap[key].id;
-};
-
-// **Placements**
-const placementsData = [
-  { mediaType: 'folio', sourceId: '', caption: 'US President 2024', folioTopic: '@miniherald' },
-  { mediaType: 'folio', sourceId: '', caption: 'AimsPoll', folioTopic: '@miniherald' },
-  { mediaType: 'youtube', sourceId: 'sHky_Xopyrw', caption: 'Kamala Harris', folioTopic: 'Presidential Candidates 2024' },
-  { mediaType: 'youtube', sourceId: 'URG4bYES91E', caption: 'Robert Kennedy, Jr.', folioTopic: 'Presidential Candidates 2024' },
-  { mediaType: 'youtube', sourceId: 'V3n8qmgNHZc', caption: 'Chase Oliver', folioTopic: 'Presidential Candidates 2024' },
-  { mediaType: 'youtube', sourceId: '2KsIxLn7UO0', caption: 'Jill Stein', folioTopic: 'Presidential Candidates 2024' },
-  { mediaType: 'youtube', sourceId: 't3J0iRz35jc', caption: 'Randall Terry', folioTopic: 'Presidential Candidates 2024' },
-  { mediaType: 'folio', sourceId: '', caption: 'Border Integrity', folioTopic: 'AimsPoll 2024' },
-  { mediaType: 'folio', sourceId: '', caption: 'Budget Control', folioTopic: 'AimsPoll 2024' },
-  { mediaType: 'folio', sourceId: '', caption: 'Foreign Policy', folioTopic: 'AimsPoll 2024' },
-  { mediaType: 'folio', sourceId: '', caption: 'Reproductive Health', folioTopic: 'AimsPoll 2024' },
-  { mediaType: 'folio', sourceId: '', caption: 'Gun Plague', folioTopic: 'AimsPoll 2024' },
-  { mediaType: 'folio', sourceId: '', caption: 'Minimum Wage', folioTopic: 'AimsPoll 2024' },
+// **Initial Data**
+const initialAssetPlacementData = [
+  { mediaType: 'folio', sourceId: '', caption: '@miniHerald', folioName: '@miniherald' },
+  { mediaType: 'folio', sourceId: '', caption: 'US President 2024', folioName: '@miniherald' },
+  { mediaType: 'folio', sourceId: '', caption: 'AimsPoll', folioName: '@miniherald' },
+  { mediaType: 'youtube', sourceId: 'sHky_Xopyrw', caption: 'Kamala Harris', folioName: 'Presidential Candidates 2024' },
+  { mediaType: 'youtube', sourceId: 'URG4bYES91E', caption: 'Robert Kennedy, Jr.', folioName: 'Presidential Candidates 2024' },
+  { mediaType: 'youtube', sourceId: 'V3n8qmgNHZc', caption: 'Chase Oliver', folioName: 'Presidential Candidates 2024' },
+  { mediaType: 'youtube', sourceId: '2KsIxLn7UO0', caption: 'Jill Stein', folioName: 'Presidential Candidates 2024' },
+  { mediaType: 'youtube', sourceId: 't3J0iRz35jc', caption: 'Randall Terry', folioName: 'Presidential Candidates 2024' },
+  { mediaType: 'folio', sourceId: '', caption: 'Border Integrity', folioName: 'AimsPoll' },
+  { mediaType: 'folio', sourceId: '', caption: 'Budget Control', folioName: 'AimsPoll' },
+  { mediaType: 'folio', sourceId: '', caption: 'Foreign Policy', folioName: 'AimsPoll' },
+  { mediaType: 'folio', sourceId: '', caption: 'Reproductive Health', folioName: 'AimsPoll' },
+  { mediaType: 'folio', sourceId: '', caption: 'Gun Plague', folioName: 'AimsPoll' },
+  { mediaType: 'folio', sourceId: '', caption: 'Minimum Wage', folioName: 'AimsPoll' },
 ];
 
-export const placementList: Placement[] = placementsData.map(data => {
-  const folio = folioList.find(f => f.folioName === data.folioTopic);
+// **Assets**
+export const assetList: Asset[] = initialAssetPlacementData.map(data => ({
+  id: generateAssetId(),
+  authorId: authorList[0].id,
+  mediaType: data.mediaType,
+  sourceId: data.sourceId,
+}));
+
+// **Asset Views**
+export const assetViewList: AssetView[] = assetList.map(asset => ({
+  ...asset,
+  url: '',
+  paddingBottom: '',
+}));
+
+// **Placements**
+export const placementList: Placement[] = initialAssetPlacementData.map((data, index) => {
+  const folio = folioList.find(f => f.folioName === data.folioName);
   return {
     id: generatePlacementId(),
     authorId: authorList[0].id,
-    assetId: getAssetId(data.mediaType, data.sourceId),
+    assetId: assetList[index].id, // Corresponding asset ID
     folioId: folio ? folio.id : 0,
     caption: data.caption,
   };
@@ -100,15 +100,15 @@ export const placementList: Placement[] = placementsData.map(data => {
 // **Placement Views**
 export const placementViewList: PlacementView[] = placementList.map(placement => ({
   ...placement,
-  asset: assets.find(asset => asset.id === placement.assetId)!,
+  asset: assetViewList.find(asset => asset.id === placement.assetId)!,
 }));
 
 // **Folio Views**
 export const folioViewList: FolioView[] = folioList.map(folio => {
-  const placements = placementViewList.filter(placement => placement.folioId === folio.id);
+  const placementViews = placementViewList.filter(placement => placement.folioId === folio.id);
   return {
     ...folio,
-    placements,
+    placementViews,
   };
 });
 

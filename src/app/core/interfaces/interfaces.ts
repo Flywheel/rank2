@@ -40,11 +40,11 @@ export interface Placement {
 }
 
 export interface PlacementView extends Placement {
-  asset: Asset;
+  asset: AssetView;
 }
 
 export interface FolioView extends Folio {
-  placements: PlacementView[];
+  placementViews: PlacementView[];
 }
 
 export interface Contest {

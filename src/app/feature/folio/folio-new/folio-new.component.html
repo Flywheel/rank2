@@ -1,4 +1,3 @@
-<p>folio-new works!</p>
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form-container">
   <div class="form-row">
     @if (formGroup.get('folioName')?.invalid && formGroup.get('folioName')?.touched) {

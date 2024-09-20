@@ -5,11 +5,12 @@ import { FolioScrollHorizontalComponent } from '../folio-scroll-horizontal/folio
 import { FolioNewComponent } from '../folio-new/folio-new.component';
 import { FolioPlacementNewComponent } from '../folio-placement-new/folio-placement-new.component';
 import { LogService } from '../../../core/log/log.service';
+import { FolioPlacementListComponent } from '../folio-placement-list/folio-placement-list.component';
 
 @Component({
   selector: 'mh5-folio-shell',
   standalone: true,
-  imports: [HeaderComponent, FolioScrollHorizontalComponent, FolioNewComponent, FolioPlacementNewComponent],
+  imports: [HeaderComponent, FolioScrollHorizontalComponent, FolioNewComponent, FolioPlacementListComponent, FolioPlacementNewComponent],
   templateUrl: './folio-shell.component.html',
   styleUrl: './folio-shell.component.scss',
 })
