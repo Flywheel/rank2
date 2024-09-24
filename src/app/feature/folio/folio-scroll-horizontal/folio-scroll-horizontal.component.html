@@ -4,6 +4,8 @@
   }
   @if (folioStore.isAddingFolio() === true) {
     <div class="menu-item" tabindex="0">Adding Folio</div>
+  } @else if (folioStore.isAddingPlacement() === true) {
+    <div class="menu-item" tabindex="0">Adding Placement</div>
   } @else {
     <div class="menu-item" (click)="newFolio()" (keydown)="newFolio()" tabindex="0">Add New Folio</div>
   }

@@ -5,11 +5,12 @@ import { ViewerComponent } from '../viewer/viewer.component';
 import { BallotStore } from '../ballot.store';
 import { NewContestComponent } from '../../contest/new-contest/new-contest.component';
 import { ScrollContestHorizontalComponent } from '../../contest/scroll-contest-horizontal/scroll-contest-horizontal.component';
-import { NewPlacementComponent } from '../../contest/new-placement/new-placement.component';
+import { FolioPlacementNewComponent } from '../../folio/folio-placement-new/folio-placement-new.component';
+
 @Component({
   selector: 'mh5-container',
   standalone: true,
-  imports: [HeaderComponent, BodyComponent, ViewerComponent, NewContestComponent, ScrollContestHorizontalComponent, NewPlacementComponent],
+  imports: [HeaderComponent, BodyComponent, ViewerComponent, NewContestComponent, ScrollContestHorizontalComponent, FolioPlacementNewComponent],
   templateUrl: './container.component.html',
   styleUrl: './container.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

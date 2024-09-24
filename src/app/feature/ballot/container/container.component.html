@@ -6,7 +6,7 @@
 } @else {
   @if (newPlacement()) {
     <mh5-scroll-contest-horizontal />
-    <mh5-new-placement (closeNewPlacementEditor)="closeNewPlacement()" />
+    <mh5-folio-placement-new (closeNewPlacementEditor)="closeNewPlacement()" />
   } @else {
     <mh5-scroll-contest-horizontal
       [theContestsInput]="theContests()"

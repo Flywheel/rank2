@@ -1,1 +1,13 @@
-<p>folio-placement-new works!</p>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-container">
+  <div class="form-row">
+    @if (form.get('caption')?.invalid && form.get('caption')?.touched) {
+      <label for="caption" class="warning">Contest Title is required</label>
+    } @else {
+      <label for="caption">Add Placement</label>
+    }
+    <input id="caption" formControlName="caption" type="text" />
+  </div>
+
+  <button type="submit" [disabled]="form.invalid">Add Placement</button>
+  <button class="cancelButton" (click)="cancel()">Cancel</button>
+</form>

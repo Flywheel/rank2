@@ -4,6 +4,7 @@
   white-space: nowrap;
   position: relative;
   border-bottom: 2px solid #e0e0e0;
+  width: 100%;
 
   &::-webkit-scrollbar {
     display: none;
@@ -12,7 +13,13 @@
     -ms-overflow-style: none; // IE and Edge
     scrollbar-width: none; // Firefox
   }
+  .placement-list {
+    width: 40%;
+  }
 
+  .placement-info {
+    width: 60%;
+  }
   .menu-item {
     display: inline-block;
     padding: 5px 10px;

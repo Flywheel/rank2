@@ -4,22 +4,21 @@
   <mh5-folio-scroll-horizontal />
   <mh5-folio-new (closeNewFolioEditor)="closeNewFolio()" />
 } @else {
-  @if (newPlacement()) {
-    <mh5-folio-scroll-horizontal />
-    <mh5-folio-placement-new (closeNewPlacementEditor)="closeNewPlacement()" />
-  } @else {
-    <mh5-folio-scroll-horizontal
-      [theFoliosInput]="theFolios()"
-      (newFolioEditorStateChange)="openNewFolio()"
-      (newPlacementEditorStateChange)="openNewPlacement()" />
+  <mh5-folio-scroll-horizontal
+    [theFoliosInput]="theFolios()"
+    (newFolioEditorStateChange)="openNewFolio()"
+    (newPlacementEditorStateChange)="openNewPlacement()" />
 
-    <div class="placement-container">
-      <div class="placement-list">
-        <mh5-folio-placement-list />
-      </div>
-      <div class="placement-info">
-        <div>Add Placement to{{ folioStore.currentFolioView().folioName }}</div>
-      </div>
+  <div class="horizontal-scroll">
+    <div class="placement-list">
+      <mh5-folio-placement-list />
     </div>
-  }
+    <div class="placement-info">
+      @if (newPlacement()) {
+        <mh5-folio-placement-new (closeNewPlacementEditor)="closeNewPlacement()" />
+      } @else {
+        <div (click)="openNewPlacement()" (keydown)="openNewPlacement()" tabindex="1">Add Placement to <br />{{ folioStore.currentFolioView().folioName }}</div>
+      }
+    </div>
+  </div>
 }
