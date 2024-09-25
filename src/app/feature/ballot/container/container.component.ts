@@ -38,9 +38,13 @@ export class ContainerComponent {
     this.newPlacement.set(false);
   }
   runLog() {
-    console.log('Environment:', environment);
-    console.log(this.ballotStore.allContests());
-    console.log(this.ballotStore.allContestViews());
-    console.log(this.ballotStore.allContestSlates());
+    if (environment.ianConfig.hideLogs) {
+      console.log('Logging is disabled');
+    } else {
+      console.log('Environment:', environment);
+      console.log(this.ballotStore.allContests());
+      console.log(this.ballotStore.allContestViews());
+      console.log(this.ballotStore.allContestSlates());
+    }
   }
 }
