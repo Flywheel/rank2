@@ -1,6 +1,6 @@
 [build]
   command = "ng build --configuration=$NG_ENV"
-  publish = "dist/rank2"
+  publish = "dist/rank2/browser"
 
 [context.production.environment]
   NG_ENV = "production"
