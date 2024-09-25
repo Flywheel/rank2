@@ -102,7 +102,7 @@ export const FolioStore = signalStore(
     return {
       // #region Folio
 
-      Folios: rxMethod<void>(
+      LoadAllFolios: rxMethod<void>(
         pipe(
           tap(() => {
             updateState(store, '[Folio] getAllFolios Start', { isLoading: true });
@@ -124,7 +124,7 @@ export const FolioStore = signalStore(
         )
       ),
 
-      FolioViews: rxMethod<void>(
+      LoadAllFolioViews: rxMethod<void>(
         pipe(
           tap(() => {
             updateState(store, '[Folio] getAllFolioViews Start', { isLoading: true });
@@ -307,11 +307,11 @@ export const FolioStore = signalStore(
 
   withHooks({
     onInit(store) {
-      store.Folios();
+      store.LoadAllFolios();
       store.Placements();
       store.Assets();
       // store.FolioViews();
-      store.setCurrentFolioView(1);
+      store.setCurrentFolioView2(1);
     },
   })
 );

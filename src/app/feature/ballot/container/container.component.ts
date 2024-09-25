@@ -7,6 +7,8 @@ import { NewContestComponent } from '../../contest/new-contest/new-contest.compo
 import { ScrollContestHorizontalComponent } from '../../contest/scroll-contest-horizontal/scroll-contest-horizontal.component';
 import { FolioPlacementNewComponent } from '../../folio/folio-placement-new/folio-placement-new.component';
 
+import { environment } from '../../../../environments/environment';
+
 @Component({
   selector: 'mh5-container',
   standalone: true,
@@ -36,6 +38,7 @@ export class ContainerComponent {
     this.newPlacement.set(false);
   }
   runLog() {
+    console.log('Environment:', environment);
     console.log(this.ballotStore.allContests());
     console.log(this.ballotStore.allContestViews());
     console.log(this.ballotStore.allContestSlates());
