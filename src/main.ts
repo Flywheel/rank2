@@ -4,7 +4,7 @@ import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 
 async function prepareApp() {
-  if (!environment.ianConfig.hideLogs) {
+  if (!environment.ianConfig.showLogs) {
     console.log('Preparing App');
   }
 

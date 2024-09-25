@@ -4,6 +4,6 @@ export const environment = {
   betaTestAuthKey: 'MLKDAY',
   ianConfig: {
     hideAuthorComponent: true,
-    hideLogs: true,
+    showLogs: false,
   },
 };

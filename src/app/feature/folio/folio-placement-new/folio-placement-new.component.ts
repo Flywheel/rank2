@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angula
 import { Placement } from '../../../core/interfaces/interfaces';
 import { LogService } from '../../../core/log/log.service';
 import { FolioStore } from '../folio.store';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'mh5-folio-placement-new',
@@ -25,16 +26,22 @@ export class FolioPlacementNewComponent {
 
   onSubmit() {
     if (this.form.valid) {
+      const folioId = this.folioStore.currentFolioView().id;
       const newPlacement: Placement = {
         id: 0,
         authorId: 1,
-        folioId: this.folioStore.currentFolioView().id,
+        folioId,
         assetId: 1,
         caption: this.form.value.caption,
       };
-      if (this.logger.enabled) console.log('Submitting new placement', newPlacement);
+      if (environment.ianConfig.showLogs) {
+        console.log(`Submitting new placement for ${this.folioStore.currentFolioView().id}`);
+        console.log(newPlacement);
+      }
       this.folioStore.addPlacement(newPlacement);
-      this.folioStore.setCurrentFolioView2(this.folioStore.currentFolioView().id);
+      console.log('allPlacements', this.folioStore.allPlacements());
+      this.folioStore.setCurrentFolioView(folioId);
+
       if (this.logger.enabled) console.log(this.folioStore.currentFolioView().placementViews);
       this.closeNewPlacementEditor.emit(false);
     }

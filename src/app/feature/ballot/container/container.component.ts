@@ -38,9 +38,7 @@ export class ContainerComponent {
     this.newPlacement.set(false);
   }
   runLog() {
-    if (environment.ianConfig.hideLogs) {
-      console.log('Logging is disabled');
-    } else {
+    if (environment.ianConfig.showLogs) {
       console.log('Environment:', environment);
       console.log(this.ballotStore.allContests());
       console.log(this.ballotStore.allContestViews());

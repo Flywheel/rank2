@@ -12,8 +12,7 @@ import { PlacementView } from '../../../core/interfaces/interfaces';
 export class FolioPlacementListComponent {
   authorId = signal<number>(1);
   folioStore = inject(FolioStore);
-  // folio = computed<FolioView>(() => this.folioStore.currentFolioView());
-  // placements = computed(() => this.folio().placementViews);
+  folioId = computed<number>(() => this.folioStore.currentFolioView().id);
 
-  placements2 = computed<PlacementView[]>(() => this.folioStore.currentFolioView().placementViews);
+  placements = computed<PlacementView[]>(() => this.folioStore.allPlacementViews().filter(p => p.folioId === this.folioId()));
 }

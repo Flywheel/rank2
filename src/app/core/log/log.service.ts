@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class LogService {
-  public enabled = environment.ianConfig.hideLogs;
+  public enabled = environment.ianConfig.showLogs;
 
   enableLogging(): void {
     this.enabled = true;

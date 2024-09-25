@@ -2,6 +2,7 @@ import { Component, inject, input, output } from '@angular/core';
 import { LogService } from '../../../core/log/log.service';
 import { FolioStore } from '../folio.store';
 import { Folio } from '../../../core/interfaces/interfaces';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'mh5-folio-scroll-horizontal',
@@ -18,13 +19,11 @@ export class FolioScrollHorizontalComponent {
   newPlacementEditorStateChange = output<boolean>();
 
   selectFolio(id: number) {
-    this.folioStore.setCurrentFolioView2(id);
-    if (this.logger.enabled) {
-      // console.log('selectFolio', id);
-
+    this.folioStore.setCurrentFolioView(id);
+    if (environment.ianConfig.showLogs) {
       console.log('allFolios', this.folioStore.allFolios());
-      //  console.log('allFolioViews', this.folioStore.allFolioViews());
-      //   console.log('allFolioViews2', this.folioStore.allFolioViews());
+      console.log('allFolioViews', this.folioStore.allFolioViews());
+      //  console.log('allFolioViews2', this.folioStore.allFolioViews());
 
       // console.log('allAssets', this.folioStore.allAssets());
       // console.log('allAssetViews', this.folioStore.allAssetViews2());

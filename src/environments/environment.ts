@@ -8,6 +8,6 @@ export const environment = {
   betaTestAuthKey: 'MLK',
   ianConfig: {
     hideAuthorComponent: false,
-    hideLogs: false,
+    showLogs: true,
   },
 };

@@ -5,8 +5,8 @@ import { FolioService } from './folio.service';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, of, pipe, switchMap, tap } from 'rxjs';
-import { LogService } from '../../core/log/log.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { environment } from '../../../environments/environment';
 
 const placementInit: Placement = {
   id: 0,
@@ -98,7 +98,6 @@ export const FolioStore = signalStore(
 
   withMethods(store => {
     const dbFolio = inject(FolioService);
-    const logger = inject(LogService);
     return {
       // #region Folio
 
@@ -189,21 +188,21 @@ export const FolioStore = signalStore(
       },
 
       addFolio(folio: Folio) {
-        if (logger.enabled) console.log('addFolio', folio);
+        if (environment.ianConfig.showLogs) console.log('addFolio', folio);
         updateState(store, '[Folio] addFolio Pending', { isLoading: true });
         dbFolio
           .folioCreate(folio)
           .pipe(
             tap({
               next: (newFolio: Folio) => {
-                if (logger.enabled) console.log('newFolio', newFolio);
+                if (environment.ianConfig.showLogs) console.log('newFolio', newFolio);
                 updateState(store, '[Folio] addFolio Success', {
                   allFolios: [...store.allFolios(), newFolio],
                   isLoading: false,
                 });
               },
               error: error => {
-                if (logger.enabled) console.log('error', error);
+                if (environment.ianConfig.showLogs) console.log('error', error);
                 updateState(store, '[Folio] addFolio Failed', { isLoading: false });
               },
             })
@@ -260,19 +259,23 @@ export const FolioStore = signalStore(
       ),
 
       addPlacement(placement: Placement) {
-        if (logger.enabled) console.log('addPlacement', placement);
+        if (environment.ianConfig.showLogs) console.log('addPlacement', placement);
         updateState(store, '[Placement] addPlacement Pending', { isLoading: true });
         dbFolio
           .PlacementCreate(placement)
           .then(newPlacement => {
-            if (logger.enabled) console.log('newPlacement', newPlacement);
+            if (environment.ianConfig.showLogs) console.log('newPlacement', newPlacement);
             updateState(store, '[Placement] addPlacement Success', {
               allPlacements: [...store.allPlacements(), newPlacement],
               isLoading: false,
             });
+            if (environment.ianConfig.showLogs) {
+              console.log(store.allPlacements());
+              console.log(store.allPlacementViews());
+            }
           })
           .catch(error => {
-            if (logger.enabled) console.log('error', error);
+            if (environment.ianConfig.showLogs) console.log('error', error);
             updateState(store, '[Placement] addPlacement Failed', { isLoading: false });
           });
       },
@@ -311,7 +314,7 @@ export const FolioStore = signalStore(
       store.Placements();
       store.Assets();
       // store.FolioViews();
-      store.setCurrentFolioView2(1);
+      store.setCurrentFolioView(1);
     },
   })
 );
