@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: 'ballot',
-    loadComponent: () => import('./feature/ballot/container/container.component').then(m => m.ContainerComponent),
+    loadComponent: () => import('./feature/ballot/ballot-shell/ballot-shell.component').then(m => m.BallotShellComponent),
   },
   { path: 'folio', loadComponent: () => import('./feature/folio/folio-shell/folio-shell.component').then(m => m.FolioShellComponent) },
   // { path: '', redirectTo: 'folio', pathMatch: 'full' },

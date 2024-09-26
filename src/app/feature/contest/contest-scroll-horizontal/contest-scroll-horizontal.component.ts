@@ -3,13 +3,13 @@ import { Contest } from '../../../core/interfaces/interfaces';
 import { LogService } from '../../../core/log/log.service';
 import { BallotStore } from '../../ballot/ballot.store';
 @Component({
-  selector: 'mh5-scroll-contest-horizontal',
+  selector: 'mh5-contest-scroll-horizontal',
   standalone: true,
   imports: [],
-  templateUrl: './scroll-contest-horizontal.component.html',
-  styleUrl: './scroll-contest-horizontal.component.scss',
+  templateUrl: './contest-scroll-horizontal.component.html',
+  styleUrl: './contest-scroll-horizontal.component.scss',
 })
-export class ScrollContestHorizontalComponent {
+export class ContestScrollHorizontalComponent {
   logger = inject(LogService);
   ballotStore = inject(BallotStore);
   theContestsInput = input<Contest[]>();

@@ -3,21 +3,21 @@ import { HeaderComponent } from '../../../shared/header/header.component';
 import { BodyComponent } from '../body/body.component';
 import { ViewerComponent } from '../viewer/viewer.component';
 import { BallotStore } from '../ballot.store';
-import { NewContestComponent } from '../../contest/new-contest/new-contest.component';
-import { ScrollContestHorizontalComponent } from '../../contest/scroll-contest-horizontal/scroll-contest-horizontal.component';
+import { ContestNewComponent } from '../../contest/contest-new/contest-new.component';
+import { ContestScrollHorizontalComponent } from '../../contest/contest-scroll-horizontal/contest-scroll-horizontal.component';
 import { FolioPlacementNewComponent } from '../../folio/folio-placement-new/folio-placement-new.component';
 
 import { environment } from '../../../../environments/environment';
 
 @Component({
-  selector: 'mh5-container',
+  selector: 'mh5-ballot-shell',
   standalone: true,
-  imports: [HeaderComponent, BodyComponent, ViewerComponent, NewContestComponent, ScrollContestHorizontalComponent, FolioPlacementNewComponent],
-  templateUrl: './container.component.html',
-  styleUrl: './container.component.scss',
+  imports: [HeaderComponent, BodyComponent, ViewerComponent, ContestNewComponent, ContestScrollHorizontalComponent, FolioPlacementNewComponent],
+  templateUrl: './ballot-shell.component.html',
+  styleUrl: './ballot-shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContainerComponent {
+export class BallotShellComponent {
   ballotStore = inject(BallotStore);
   showViewer = false;
   theContests = this.ballotStore.allContests;

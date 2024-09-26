@@ -5,13 +5,13 @@ import { LogService } from '../../../core/log/log.service';
 import { Contest } from '../../../core/interfaces/interfaces';
 
 @Component({
-  selector: 'mh5-new-contest',
+  selector: 'mh5-contest-new',
   standalone: true,
   imports: [ReactiveFormsModule],
-  templateUrl: './new-contest.component.html',
-  styleUrl: './new-contest.component.scss',
+  templateUrl: './contest-new.component.html',
+  styleUrl: './contest-new.component.scss',
 })
-export class NewContestComponent {
+export class ContestNewComponent {
   ballotStore = inject(BallotStore);
   logger = inject(LogService);
   formGroup: FormGroup;
