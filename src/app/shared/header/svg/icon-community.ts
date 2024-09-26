@@ -12,4 +12,4 @@ import { Component } from '@angular/core';
   `,
   styles: '',
 })
-export class CommunityComponent {}
+export class IconCommunityComponent {}

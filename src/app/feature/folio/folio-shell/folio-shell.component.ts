@@ -21,6 +21,7 @@ export class FolioShellComponent {
   theFolios = this.folioStore.allFolios;
   newFolio = signal(false);
   newPlacement = signal(false);
+
   openNewFolio() {
     this.newFolio.set(true);
   }

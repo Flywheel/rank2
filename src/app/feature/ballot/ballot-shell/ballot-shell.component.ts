@@ -23,6 +23,7 @@ export class BallotShellComponent {
   theContests = this.ballotStore.allContests;
   newContest = signal(false);
   newPlacement = signal(false);
+  headerOption = 'contest';
 
   openNewContest() {
     this.newContest.set(true);

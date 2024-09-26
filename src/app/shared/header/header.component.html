@@ -1,4 +1,14 @@
 <div class="header">
-  <a (click)="openFolioPage()" (keydown)="openFolioPage()" tabindex="0" aria-label="demoText"> <mh5-icon-community /> </a>
+  @switch (callerPage()) {
+    @case ('contest') {
+      <a (click)="openFolioPage()" (keydown)="openFolioPage()" tabindex="0" aria-label="demoText"> <mh5-icon-community /> </a>
+    }
+
+    @case ('folio') {
+      <a (click)="openContestPage()" (keydown)="openContestPage()" tabindex="0" aria-label="demoText"> <mh5-icon-mh /> </a>
+    }
+  }
+
   <div class="title">Mini Herald</div>
+  <div></div>
 </div>
