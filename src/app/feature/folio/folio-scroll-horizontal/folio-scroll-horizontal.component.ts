@@ -1,7 +1,6 @@
 import { Component, inject, input, output } from '@angular/core';
-import { LogService } from '../../../core/log/log.service';
 import { FolioStore } from '../folio.store';
-import { Folio } from '../../../core/interfaces/interfaces';
+import { Folio } from '../../../shared/interfaces/interfaces';
 import { environment } from '../../../../environments/environment';
 import { IconPlusComponent } from '../../../shared/svg/icon-plus';
 import { IconProfileComponent } from '../../../shared/svg/icon-profile';
@@ -15,7 +14,6 @@ import { IconShareComponent } from '../../../shared/svg/icon-share';
   styleUrl: './folio-scroll-horizontal.component.scss',
 })
 export class FolioScrollHorizontalComponent {
-  logger = inject(LogService);
   folioStore = inject(FolioStore);
   theFoliosInput = input<Folio[]>();
   newFolioEditorStateChange = output<boolean>();

@@ -1,16 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Asset, Folio, FolioView, Placement, PlacementView } from '../../core/interfaces/interfaces';
+import { Asset, Folio, FolioView, Placement, PlacementView } from '../../shared/interfaces/interfaces';
 import { catchError, Observable, tap, throwError } from 'rxjs';
-import { LogService } from '../../core/log/log.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FolioService {
   http = inject(HttpClient);
-  logger = inject(LogService);
 
   private folioAPIUrl = `api/folio`;
   private folioViewAPIUrl = `api/folioview`;
@@ -22,66 +21,66 @@ export class FolioService {
 
   private assetAPIUrl = `api/asset`;
 
-  allFolios(): Observable<Folio[]> {
-    if (this.logger.enabled) console.log(`folioService.allFolios() ${this.folioAPIUrl}`);
+  foliosGetAll(): Observable<Folio[]> {
+    if (environment.ianConfig.showLogs) console.log(`folioService.allFolios() ${this.folioAPIUrl}`);
     return this.http.get<Folio[]>(this.folioAPIUrl).pipe(takeUntilDestroyed());
   }
 
-  getFolioById(id: number): Observable<Folio> {
+  folioGetById(id: number): Observable<Folio> {
     return this.http.get<Folio>(`${this.folioAPIUrl}/${id}`).pipe(takeUntilDestroyed());
   }
 
-  allFolioViews(): Observable<FolioView[]> {
-    if (this.logger.enabled) console.log(`folioService.allFolioViews() ${this.folioViewAPIUrl}`);
+  folioViewsGetAll(): Observable<FolioView[]> {
+    if (environment.ianConfig.showLogs) console.log(`folioService.allFolioViews() ${this.folioViewAPIUrl}`);
     return this.http.get<FolioView[]>(this.folioViewAPIUrl).pipe(takeUntilDestroyed());
   }
 
-  getFolioViewById(id: number): Observable<FolioView> {
+  folioViewGetById(id: number): Observable<FolioView> {
     return this.http.get<FolioView>(`${this.folioViewAPIUrl}/${id}`);
   }
 
   folioCreate({ authorId, isDefault, folioName }: Folio): Observable<Folio> {
     return this.http.post<Folio>(this.folioAPIUrl, { authorId, isDefault, folioName }).pipe(
       tap(data => {
-        if (this.logger.enabled) console.log('data', data);
+        if (environment.ianConfig.showLogs) console.log('data', data);
       }),
       catchError(error => {
-        if (this.logger.enabled) console.log('error', error);
+        if (environment.ianConfig.showLogs) console.log('error', error);
         return throwError(() => new Error('FolioCreate failed'));
       })
     );
   }
 
-  allPlacements(): Observable<Placement[]> {
-    if (this.logger.enabled) console.log(`folioService.allPlacements() ${this.placementAPIUrl}`);
+  placementsGetAll(): Observable<Placement[]> {
+    if (environment.ianConfig.showLogs) console.log(`folioService.allPlacements() ${this.placementAPIUrl}`);
     return this.http.get<Placement[]>(this.placementAPIUrl).pipe(takeUntilDestroyed());
   }
 
-  allPlacementViews(): Observable<PlacementView[]> {
-    if (this.logger.enabled) console.log(`folioService.allFolioViews() ${this.placementViewAPIUrl}`);
+  placementViewsGetAll(): Observable<PlacementView[]> {
+    if (environment.ianConfig.showLogs) console.log(`folioService.allFolioViews() ${this.placementViewAPIUrl}`);
     return this.http.get<PlacementView[]>(this.placementViewAPIUrl).pipe(takeUntilDestroyed());
   }
 
-  PlacementCreate({ authorId, assetId, folioId, caption }: Placement): Promise<Placement> {
-    if (this.logger.enabled) console.log('input', caption);
-    if (this.logger.enabled) console.log(this.folioAPIUrl);
+  placementCreate({ authorId, assetId, folioId, caption }: Placement): Promise<Placement> {
+    if (environment.ianConfig.showLogs) console.log('input', caption);
+    if (environment.ianConfig.showLogs) console.log(this.folioAPIUrl);
     return new Promise((resolve, reject) => {
       this.http.post<Placement>(this.folioAPIUrl, { authorId, assetId, folioId, caption }).subscribe({
         //this.http.post<Folio>(this.folioAPIUrl, folio).subscribe({
         next: data => {
-          if (this.logger.enabled) console.log('data', data);
+          if (environment.ianConfig.showLogs) console.log('data', data);
           resolve(data);
         },
         error: error => {
-          if (this.logger.enabled) console.log('error', error);
+          if (environment.ianConfig.showLogs) console.log('error', error);
           reject(error);
         },
       });
     });
   }
 
-  allAssets(): Observable<Asset[]> {
-    if (this.logger.enabled) console.log(`folioService.allAssets() ${this.assetAPIUrl}`);
+  assetsGetAll(): Observable<Asset[]> {
+    if (environment.ianConfig.showLogs) console.log(`folioService.allAssets() ${this.assetAPIUrl}`);
     return this.http.get<Asset[]>(this.assetAPIUrl).pipe(takeUntilDestroyed());
   }
 }

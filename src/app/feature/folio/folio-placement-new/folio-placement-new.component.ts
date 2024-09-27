@@ -1,7 +1,6 @@
 import { Component, inject, output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Placement } from '../../../core/interfaces/interfaces';
-import { LogService } from '../../../core/log/log.service';
+import { Placement } from '../../../shared/interfaces/interfaces';
 import { FolioStore } from '../folio.store';
 import { environment } from '../../../../environments/environment';
 
@@ -14,7 +13,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class FolioPlacementNewComponent {
   folioStore = inject(FolioStore);
-  logger = inject(LogService);
+
   form: FormGroup;
   closeNewPlacementEditor = output<boolean>();
 
@@ -29,7 +28,7 @@ export class FolioPlacementNewComponent {
       const folioId = this.folioStore.currentFolioView().id;
       const newPlacement: Placement = {
         id: 0,
-        authorId: 1,
+        authorId: '',
         folioId,
         assetId: 1,
         caption: this.form.value.caption,
@@ -42,7 +41,7 @@ export class FolioPlacementNewComponent {
       console.log('allPlacements', this.folioStore.allPlacements());
       this.folioStore.setCurrentFolioView(folioId);
 
-      if (this.logger.enabled) console.log(this.folioStore.currentFolioView().placementViews);
+      if (environment.ianConfig.showLogs) console.log(this.folioStore.currentFolioView().placementViews);
       this.closeNewPlacementEditor.emit(false);
     }
   }

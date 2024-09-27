@@ -1,7 +1,8 @@
 import { Component, inject, input, output } from '@angular/core';
-import { Contest } from '../../../core/interfaces/interfaces';
-import { LogService } from '../../../core/log/log.service';
+import { Contest } from '../../../shared/interfaces/interfaces';
 import { BallotStore } from '../../ballot/ballot.store';
+import { environment } from '../../../../environments/environment';
+
 @Component({
   selector: 'mh5-contest-scroll-horizontal',
   standalone: true,
@@ -10,7 +11,6 @@ import { BallotStore } from '../../ballot/ballot.store';
   styleUrl: './contest-scroll-horizontal.component.scss',
 })
 export class ContestScrollHorizontalComponent {
-  logger = inject(LogService);
   ballotStore = inject(BallotStore);
   theContestsInput = input<Contest[]>();
   newContestEditorStateChange = output<boolean>();
@@ -18,7 +18,7 @@ export class ContestScrollHorizontalComponent {
 
   selectContest(id: number) {
     this.ballotStore.setCurrentContestView(id);
-    if (this.logger.enabled) {
+    if (environment.ianConfig.showLogs) {
       console.log('selectContest', id);
       console.log('allContestViews', this.ballotStore.allContestViews());
       console.log('allContests', this.ballotStore.allContests());

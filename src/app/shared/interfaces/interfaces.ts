@@ -1,20 +1,24 @@
 export interface EventLog {
   id: number;
-  authorId: number;
+  authorId: string;
   eventText: string;
   eventDate: Date;
 }
 
 export interface Author {
-  id: number;
+  id: string;
   name: string;
   authenticatorId: string;
   eventLog: EventLog[];
 }
 
+export interface AuthorView extends Author {
+  authorFolio: FolioView;
+}
+
 export interface Asset {
   id: number;
-  authorId: number;
+  authorId: string;
   mediaType: string;
   sourceId: string;
 }
@@ -26,14 +30,14 @@ export interface AssetView extends Asset {
 
 export interface Folio {
   id: number;
-  authorId: number;
+  authorId: string;
   isDefault: boolean;
   folioName: string;
 }
 
 export interface Placement {
   id: number;
-  authorId: number;
+  authorId: string;
   folioId: number;
   assetId: number;
   caption: string;
@@ -53,19 +57,19 @@ export interface Contest {
   contestDescription: string;
   opens: Date;
   closes: Date;
-  authorId: number;
+  authorId: string;
 }
 
 export interface Slate {
   id: number;
-  authorId: number;
+  authorId: string;
   contestId: number;
   isTopSlate: boolean;
 }
 
 export interface SlateMember {
   id: number;
-  authorId: number;
+  authorId: string;
   slateId: number;
   placementId: number;
   rankOrder: number;

@@ -1,8 +1,8 @@
 import { Component, inject, output } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BallotStore } from '../../ballot/ballot.store';
-import { LogService } from '../../../core/log/log.service';
-import { Contest } from '../../../core/interfaces/interfaces';
+import { Contest } from '../../../shared/interfaces/interfaces';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'mh5-contest-new',
@@ -13,7 +13,7 @@ import { Contest } from '../../../core/interfaces/interfaces';
 })
 export class ContestNewComponent {
   ballotStore = inject(BallotStore);
-  logger = inject(LogService);
+
   formGroup: FormGroup;
   closeNewContestEditor = output<boolean>();
 
@@ -36,7 +36,7 @@ export class ContestNewComponent {
   onSubmit() {
     if (this.formGroup.valid) {
       const newContest: Contest = this.formGroup.value;
-      if (this.logger.enabled) console.log('Submitting new contest', newContest);
+      if (environment.ianConfig.showLogs) console.log('Submitting new contest', newContest);
       this.ballotStore.addContest(newContest);
       this.closeNewContestEditor.emit(false);
     }

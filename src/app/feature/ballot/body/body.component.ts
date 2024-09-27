@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal, untracked } from '@angular/core';
-import { ContestView, SlateMemberView, SlateView } from '../../../core/interfaces/interfaces';
+import { ContestView, SlateMemberView, SlateView } from '../../../shared/interfaces/interfaces';
 import { BallotStore } from '../ballot.store';
 import { CdkDrag, CdkDragHandle, CdkDropList, CdkDropListGroup, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { LogService } from '../../../core/log/log.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'mh5-body',
@@ -13,9 +13,9 @@ import { LogService } from '../../../core/log/log.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BodyComponent {
-  authorId = signal<number>(1);
+  authorId = signal<string>('');
   ballotStore = inject(BallotStore);
-  logger = inject(LogService);
+
   contest = computed<ContestView>(() => this.ballotStore.currentContestView());
   candidateList = computed(() => this.contest().slate.slateMemberViews);
   selectedCandidateId = signal<number>(0);
@@ -45,7 +45,7 @@ export class BodyComponent {
   }
 
   setAvailableCandidates() {
-    if (this.logger.enabled) console.log('setAvailableCandidates');
+    if (environment.ianConfig.showLogs) console.log('setAvailableCandidates');
     this.candidatesAvailable.set(this.candidateList());
     if (this.ballotStore.voterSlate()?.slateMemberViews) {
       this.candidatesRanked.set(
@@ -127,7 +127,7 @@ export class BodyComponent {
     this.preparedBallot.set({
       id: this.contest().id,
       contestId: this.contest().id,
-      authorId: 1,
+      authorId: '',
       isTopSlate: this.isTopSlate(),
       slateMemberViews: preparedSlateMemberViews,
     });

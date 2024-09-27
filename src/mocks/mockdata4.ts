@@ -12,11 +12,11 @@ import {
   SlateMember,
   FolioView,
   AssetView,
-} from '../app/core/interfaces/interfaces';
+} from '../app/shared/interfaces/interfaces';
 
 // Utility functions to generate incremental IDs
 let authorIdCounter = 1;
-const generateAuthorId = () => authorIdCounter++;
+const generateAuthorId = () => ''; //  authorIdCounter++;
 
 let folioIdCounter = 1;
 const generateFolioId = () => folioIdCounter++;
