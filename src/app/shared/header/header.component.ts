@@ -1,13 +1,14 @@
 import { Component, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
-import { IconCommunityComponent } from './svg/icon-community';
-import { IconMhComponent } from './svg/icon-mh';
-import { IconShareComponent } from './svg/icon-share';
+import { IconCommunityComponent } from '../svg/icon-community';
+import { IconMhComponent } from '../svg/icon-mh';
+import { IconShareComponent } from '../svg/icon-share';
+import { IconProfileComponent } from '../svg/icon-profile';
 
 @Component({
   selector: 'mh5-header',
   standalone: true,
-  imports: [IconCommunityComponent, IconMhComponent, IconShareComponent],
+  imports: [IconCommunityComponent, IconMhComponent, IconShareComponent, IconProfileComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
