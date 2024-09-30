@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { Author, AuthorView } from '../../shared/interfaces/interfaces';
 import { environment } from '../../../environments/environment';
-import id from '@angular/common/locales/id';
+
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({
