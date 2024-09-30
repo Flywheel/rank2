@@ -26,7 +26,7 @@ export class FolioNewComponent {
   onSubmit() {
     if (this.formGroup.valid) {
       const newFolioPrep: Folio = this.formGroup.value;
-      if (environment.ianConfig.showLogs) console.log('Submitting new folio', newFolioPrep);
+      if (environment.ianConfig.showLogs) console.log('Preparing folio', newFolioPrep.folioName);
       const newFolio: Folio = {
         ...newFolioPrep,
         isDefault: false,

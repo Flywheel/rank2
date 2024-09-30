@@ -39,8 +39,8 @@ export const assetInit = {
 
 export const assetViewInit = {
   id: 0,
-  authorId: '',
-  mediaType: '',
+  authorId: '1',
+  mediaType: '1',
   sourceId: '',
   url: '',
   paddingBottom: '',
@@ -84,7 +84,7 @@ export const FolioStore = signalStore(
 
   withComputed(store => {
     return {
-      allFolioViews: computed<FolioView[]>(() =>
+      allComputedFolioViews: computed<FolioView[]>(() =>
         store.allFolios().map(folio => {
           const placementViews = store.allPlacementViews().filter(placement => placement.folioId === folio.id);
           return {
@@ -123,28 +123,28 @@ export const FolioStore = signalStore(
         )
       ),
 
-      loadAllFolioViews: rxMethod<void>(
-        pipe(
-          tap(() => {
-            updateState(store, '[Folio] getAllFolioViews Start', { isLoading: true });
-          }),
-          exhaustMap(() => {
-            return dbFolio.folioViewsGetAll().pipe(
-              takeUntilDestroyed(),
-              tap({
-                next: (allDBFolioViews: FolioView[]) => {
-                  updateState(store, '[Folio] getAllFolioViews Success', value => ({
-                    ...value,
-                    allDBFolioViews,
-                    isLoading: false,
-                    //isStartupLoadingComplete: true,
-                  }));
-                },
-              })
-            );
-          })
-        )
-      ),
+      // loadAllFolioViews: rxMethod<void>(
+      //   pipe(
+      //     tap(() => {
+      //       updateState(store, '[Folio] getAllFolioViews Start', { isLoading: true });
+      //     }),
+      //     exhaustMap(() => {
+      //       return dbFolio.folioViewsGetAll().pipe(
+      //         takeUntilDestroyed(),
+      //         tap({
+      //           next: (allDBFolioViews: FolioView[]) => {
+      //             updateState(store, '[Folio] getAllFolioViews Success', value => ({
+      //               ...value,
+      //               allDBFolioViews,
+      //               isLoading: false,
+      //               //isStartupLoadingComplete: true,
+      //             }));
+      //           },
+      //         })
+      //       );
+      //     })
+      //   )
+      // ),
 
       setCurrentFolioView: rxMethod<number>(
         pipe(
@@ -152,6 +152,7 @@ export const FolioStore = signalStore(
             updateState(store, '[Folio] getFolioViewById Start', { isLoading: true });
           }),
           switchMap(folioId => {
+            if (environment.ianConfig.showLogs) console.log('addPlacement', folioId);
             const existingFolioView = store.allDBFolioViews().find(view => view.id === folioId);
             if (existingFolioView) {
               return of(existingFolioView);

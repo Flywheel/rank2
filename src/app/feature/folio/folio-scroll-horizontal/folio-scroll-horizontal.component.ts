@@ -22,16 +22,10 @@ export class FolioScrollHorizontalComponent {
   selectFolio(id: number) {
     this.folioStore.setCurrentFolioView(id);
     if (environment.ianConfig.showLogs) {
-      console.log('allFolios', this.folioStore.allFolios());
-      console.log('allFolioViews', this.folioStore.allFolioViews());
-      //  console.log('allFolioViews2', this.folioStore.allFolioViews());
-
-      // console.log('allAssets', this.folioStore.allAssets());
-      // console.log('allAssetViews', this.folioStore.allAssetViews2());
-
-      console.log('allPlacements', this.folioStore.allPlacements());
-      console.log('allPlacementViews', this.folioStore.allPlacements());
-      //   console.log('allPlacementViews2', this.folioStore.allPlacementViews());
+      // console.log('allFolios', this.folioStore.allFolios());
+      // console.log('allFolioViews', this.folioStore.allComputedFolioViews());
+      // console.log('allPlacements', this.folioStore.allPlacements());
+      // console.log('allPlacementViews', this.folioStore.allPlacementViews());
     }
   }
   newFolio() {

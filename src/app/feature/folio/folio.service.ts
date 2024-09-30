@@ -30,11 +30,6 @@ export class FolioService {
     return this.http.get<Folio>(`${this.folioAPIUrl}/${id}`).pipe(takeUntilDestroyed());
   }
 
-  folioViewsGetAll(): Observable<FolioView[]> {
-    if (environment.ianConfig.showLogs) console.log(`folioService.allFolioViews() ${this.folioViewAPIUrl}`);
-    return this.http.get<FolioView[]>(this.folioViewAPIUrl).pipe(takeUntilDestroyed());
-  }
-
   folioViewGetById(id: number): Observable<FolioView> {
     return this.http.get<FolioView>(`${this.folioViewAPIUrl}/${id}`);
   }
@@ -43,6 +38,12 @@ export class FolioService {
     return this.http.post<Folio>(this.folioAPIUrl, { authorId, isDefault, folioName }).pipe(
       tap(data => {
         if (environment.ianConfig.showLogs) console.log('data', data);
+
+        this.http.post<FolioView>(this.folioViewAPIUrl, { authorId, isDefault, folioName, placementViews: [] }).subscribe({
+          next: data => {
+            if (environment.ianConfig.showLogs) console.log('data', data);
+          },
+        });
       }),
       catchError(error => {
         if (environment.ianConfig.showLogs) console.log('error', error);
@@ -66,7 +67,6 @@ export class FolioService {
     if (environment.ianConfig.showLogs) console.log(this.folioAPIUrl);
     return new Promise((resolve, reject) => {
       this.http.post<Placement>(this.folioAPIUrl, { authorId, assetId, folioId, caption }).subscribe({
-        //this.http.post<Folio>(this.folioAPIUrl, folio).subscribe({
         next: data => {
           if (environment.ianConfig.showLogs) console.log('data', data);
           resolve(data);
