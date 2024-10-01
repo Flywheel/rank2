@@ -1,7 +1,8 @@
-import { Component, inject, input, OnInit, output } from '@angular/core';
+import { Component, inject, input, OnInit, output, signal } from '@angular/core';
 import { AuthorStore } from '../author.store';
-import { COOKIE_NAME } from '../../../core/interfaces/constants';
+import { AUTHOR_CONSENT_KEY } from '../../../core/interfaces/constants';
 import { environment } from '../../../../environments/environment';
+import { uuidv7 } from 'uuidv7';
 
 @Component({
   selector: 'mh5-author-consent',
@@ -22,7 +23,7 @@ export class AuthorConsentComponent implements OnInit {
   }
 
   checkAuthorConsent(): void {
-    const consent = localStorage.getItem(COOKIE_NAME);
+    const consent = localStorage.getItem(AUTHOR_CONSENT_KEY);
     if (consent && this.forcePopup() === false) {
       this.showConsentPopup = false;
     }
@@ -30,6 +31,7 @@ export class AuthorConsentComponent implements OnInit {
 
   acceptCookies(): void {
     this.setIt('accepted');
+    this.authorStore.authorCreate(uuidv7());
   }
 
   declineCookies(): void {
@@ -37,7 +39,7 @@ export class AuthorConsentComponent implements OnInit {
   }
 
   private setIt(setting: string) {
-    localStorage.setItem(COOKIE_NAME, setting);
+    localStorage.setItem(AUTHOR_CONSENT_KEY, setting);
     this.authorStore.setConsentState(setting);
     this.showConsentPopup = false;
     this.closeComponent.emit(false);

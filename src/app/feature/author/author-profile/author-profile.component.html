@@ -1,28 +1,35 @@
 <div class="mainContainer">
-  @if (authorStore.loggedInAuthor().authenticatorId) {
-    @if (authorStore.loggedInAuthor().authenticatorId !== '0') {
-      <div class="sectionMainTitle">Create Your Author Handle</div>
-      <div class="sectionContentTitle">
-        <input
-          class="newHandleInput"
-          [ngModel]="channelName()"
-          (ngModelChange)="channelName.set($event)"
-          (keyup.enter)="InitializeAuthorHandle()"
-          placeholder="Awaiting entry" />
-      </div>
+  @if (authorStore.loggedInAuthor().id.length > 0) {
+    <div class="sectionMainTitle">Identity Management</div>
+    <div class="sectionContentTitle">Account Identifier Vendor:</div>
+    <div class="sectionContent">{{ authorStore.loggedInAuthor().authenticatorId }}</div>
 
-      @if (isChannelNameOk() !== true) {
-        <div class="sectionContentCaption" style="color: lightpink">Use letters and numbers (no spaces or symbols) up to 16 characters long.</div>
-      } @else {
-        <div class="sectionContentCaption">
-          Channel <span style="color: white"> &#64;{{ channelName() }} </span>
-        </div>
-      }
+    <div class="sectionContentTitle">Social Provider</div>
+    <div class="sectionContent">Development</div>
+    <div class="sectionContentTitle">Name at Provider / AuthorHandle <mh5-icon-timeline /></div>
+    <div class="sectionContent">{{ authorStore.loggedInAuthor().name }} // {{ authorStore.loggedInAuthor().name }}</div>
 
-      <div class="sectionContent">
-        <button (click)="InitializeAuthorHandle()" style="margin-top: 10px">Initialize Handle</button>
+    <div class="sectionMainTitle">Create Your Author Handle</div>
+    <div class="sectionContentTitle">
+      <input
+        class="newHandleInput"
+        [ngModel]="channelName()"
+        (ngModelChange)="channelName.set($event)"
+        (keyup.enter)="InitializeAuthorHandle()"
+        placeholder="Awaiting entry" />
+    </div>
+
+    @if (isChannelNameOk() !== true) {
+      <div class="sectionContentCaption" style="color: lightpink">Use letters and numbers (no spaces or symbols) up to 16 characters long.</div>
+    } @else {
+      <div class="sectionContentCaption">
+        Channel <span style="color: white"> &#64;{{ channelName() }} </span>
       </div>
     }
+
+    <div class="sectionContent">
+      <button (click)="InitializeAuthorHandle()" style="margin-top: 10px">Initialize Handle</button>
+    </div>
   }
 
   <div class="sectionMainTitle">
@@ -46,14 +53,10 @@
     </div>
   }
 
-  <div class="sectionMainTitle">Identity Management</div>
-  <div class="sectionContentTitle">Account Identifier Vendor:</div>
-  <div class="sectionContent">{{ authorStore.loggedInAuthor().authenticatorId }}</div>
-
-  <div class="sectionContentTitle">Social Provider</div>
-  <div class="sectionContent">Development</div>
-  <div class="sectionContentTitle">Name at Provider / AuthorHandle <mh5-icon-timeline /></div>
-  <div class="sectionContent">{{ authorStore.loggedInAuthor().name }} // {{ authorStore.loggedInAuthor().name }}</div>
   <div class="sectionContentTitle">Notices</div>
   <div class="sectionContent"><a style="color: #ddd" [routerLink]="['/tos']">Privacy and Terms of Service</a></div>
 </div>
+
+@defer (when authorStore.consentStatus() !== 'accepted') {
+  <mh5-author-consent [forcePopup]="true" (closeComponent)="closeConsentComponent()" />
+}

@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthorStore } from './feature/author/author.store';
-import { COOKIE_NAME } from './core/interfaces/constants';
+import { AUTHOR_CONSENT_KEY } from './core/interfaces/constants';
 import { AuthorConsentComponent } from './feature/author/author-consent/author-consent.component';
 import { CommonModule } from '@angular/common';
 import { environment } from '../environments/environment';
@@ -34,7 +34,7 @@ export class AppComponent implements OnInit, OnDestroy {
   async onLoad() {
     if (environment.ianConfig.showLogs) console.log('AppComponent ngOnInit');
     if (typeof window !== 'undefined') {
-      const consent = localStorage.getItem(COOKIE_NAME);
+      const consent = localStorage.getItem(AUTHOR_CONSENT_KEY);
       if (environment.ianConfig.showLogs) console.log(consent);
       if (consent) {
         await this.authorStore.setConsentState(consent);

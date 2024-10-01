@@ -10,16 +10,26 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   providedIn: 'root',
 })
 export class AuthorService {
-  private authorAPIUrl = 'api/authors';
+  private authorAPIUrl = 'api/author';
 
   http = inject(HttpClient);
 
-  authorCreate(authenticatorId: string): Observable<Author> {
-    if (environment.ianConfig.showLogs) console.log(`authorCreate Start authenticatorId=${authenticatorId}`);
-    return this.http.post<Author>(this.authorAPIUrl, { name: '', authenticatorId, topicId: 0 }).pipe(
+  authorCreate(uuid: string): Observable<Author> {
+    if (environment.ianConfig.showLogs) console.log(`authorCreate Start authenticatorId=${uuid}`);
+    return this.http.post<Author>(this.authorAPIUrl, { id: uuid }).pipe(
       catchError(this.handleError),
       tap((newAuthor: Author) => {
         if (environment.ianConfig.showLogs) console.log(` addNewAuthorId: ${newAuthor.id}`);
+      })
+    );
+  }
+
+  authorUpdate(author: Author): Observable<Author> {
+    if (environment.ianConfig.showLogs) console.log(`authorUpdate Start authorId=${author.id}`);
+    return this.http.put<Author>(`${this.authorAPIUrl}/${author.id}`, author).pipe(
+      catchError(this.handleError),
+      tap(() => {
+        if (environment.ianConfig.showLogs) console.log(`authorUpdate Success authorId=${author.id}`);
       })
     );
   }

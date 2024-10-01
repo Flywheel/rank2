@@ -1,1 +1,1 @@
-export const COOKIE_NAME = 'authorConsent';
+export const AUTHOR_CONSENT_KEY = 'authorConsent';
