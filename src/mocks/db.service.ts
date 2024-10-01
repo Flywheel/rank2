@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { InMemoryDbService } from 'angular-in-memory-web-api';
-import { Asset, Contest, ContestView, Folio, FolioView, Placement, PlacementView } from '../app/shared/interfaces/interfaces';
+import { Asset, Contest, ContestView, Folio, FolioView, Placement, PlacementView } from '../app/core/interfaces/interfaces';
 import { MockdataService } from './mockdata.service';
 
 @Injectable({

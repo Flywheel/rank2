@@ -12,7 +12,7 @@ import {
   SlateMember,
   FolioView,
   AssetView,
-} from '../app/shared/interfaces/interfaces';
+} from '../app/core/interfaces/interfaces';
 
 // Utility functions to generate incremental IDs
 let authorIdCounter = 1;
@@ -70,7 +70,6 @@ const initialAssetPlacementData = [
   { mediaType: 'folio', sourceId: '', caption: 'Minimum Wage', folioName: 'AimsPoll' },
 ];
 
-// **Assets**
 export const assetList: Asset[] = initialAssetPlacementData.map(data => ({
   id: generateAssetId(),
   authorId: authorList[0].id,
@@ -78,14 +77,12 @@ export const assetList: Asset[] = initialAssetPlacementData.map(data => ({
   sourceId: data.sourceId,
 }));
 
-// **Asset Views**
 export const assetViewList: AssetView[] = assetList.map(asset => ({
   ...asset,
   url: '',
   paddingBottom: '',
 }));
 
-// **Placements**
 export const placementList: Placement[] = initialAssetPlacementData.map((data, index) => {
   const folio = folioList.find(f => f.folioName === data.folioName);
   return {
@@ -97,13 +94,11 @@ export const placementList: Placement[] = initialAssetPlacementData.map((data, i
   };
 });
 
-// **Placement Views**
 export const placementViewList: PlacementView[] = placementList.map(placement => ({
   ...placement,
   asset: assetViewList.find(asset => asset.id === placement.assetId)!,
 }));
 
-// **Folio Views**
 export const folioViewList: FolioView[] = folioList.map(folio => {
   const placementViews = placementViewList.filter(placement => placement.folioId === folio.id);
   return {
@@ -112,7 +107,6 @@ export const folioViewList: FolioView[] = folioList.map(folio => {
   };
 });
 
-// **Contests**
 const contestsData = [
   { contestTitle: '@miniherald', contestDescription: '@miniherald' },
   { contestTitle: 'US President 2024', contestDescription: 'Candidate for President of the United States' },
@@ -127,7 +121,6 @@ export const contestList: Contest[] = contestsData.map(data => ({
   ...data,
 }));
 
-// **Slates**
 export const slateList: Slate[] = contestList.map((contest, index) => ({
   id: generateSlateId(),
   authorId: contest.authorId,
@@ -135,7 +128,6 @@ export const slateList: Slate[] = contestList.map((contest, index) => ({
   isTopSlate: index === 0, // First contest has top slate
 }));
 
-// **Slate Members**
 const slateMembersMapping: Record<string, string[]> = {
   'US President 2024': ['Kamala Harris', 'Robert Kennedy, Jr.', 'Chase Oliver', 'Jill Stein', 'Randall Terry'],
   'AimsPoll 2024': ['Border Integrity', 'Budget Control', 'Foreign Policy', 'Reproductive Health', 'Gun Plague', 'Minimum Wage'],
@@ -160,7 +152,6 @@ Object.entries(slateMembersMapping).forEach(([contestTitle, placementCaptions]) 
   });
 });
 
-// **Slate Member Views**
 export const slateMemberViewList: SlateMemberView[] = slateMembers.map(member => {
   const placementView = placementViewList.find(pv => pv.id === member.placementId);
   return {
@@ -169,7 +160,6 @@ export const slateMemberViewList: SlateMemberView[] = slateMembers.map(member =>
   };
 });
 
-// **Slate Views**
 export const slateListView: SlateView[] = slateList.map(slate => {
   const slateMemberViews = slateMemberViewList.filter(memberView => memberView.slateId === slate.id);
   return {
@@ -178,7 +168,6 @@ export const slateListView: SlateView[] = slateList.map(slate => {
   };
 });
 
-// **Contest Views**
 export const contestViewList: ContestView[] = contestList.map(contest => {
   const slate = slateListView.find(s => s.contestId === contest.id);
   return {

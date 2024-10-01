@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, catchError, tap, throwError } from 'rxjs';
-import { Author, AuthorView } from '../../shared/interfaces/interfaces';
+import { Author, AuthorView } from '../../core/interfaces/interfaces';
 import { environment } from '../../../environments/environment';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

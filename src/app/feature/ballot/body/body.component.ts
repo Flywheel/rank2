@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal, untracked } from '@angular/core';
-import { ContestView, SlateMemberView, SlateView } from '../../../shared/interfaces/interfaces';
+import { ContestView, SlateMemberView, SlateView } from '../../../core/interfaces/interfaces';
 import { BallotStore } from '../ballot.store';
 import { CdkDrag, CdkDragHandle, CdkDropList, CdkDropListGroup, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { environment } from '../../../../environments/environment';

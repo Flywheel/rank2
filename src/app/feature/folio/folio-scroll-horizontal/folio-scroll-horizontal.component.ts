@@ -1,10 +1,10 @@
 import { Component, inject, input, output } from '@angular/core';
 import { FolioStore } from '../folio.store';
-import { Folio } from '../../../shared/interfaces/interfaces';
+import { Folio } from '../../../core/interfaces/interfaces';
 import { environment } from '../../../../environments/environment';
-import { IconPlusComponent } from '../../../shared/svg/icon-plus';
-import { IconProfileComponent } from '../../../shared/svg/icon-profile';
-import { IconShareComponent } from '../../../shared/svg/icon-share';
+import { IconPlusComponent } from '../../../core/svg/icon-plus';
+import { IconProfileComponent } from '../../../core/svg/icon-profile';
+import { IconShareComponent } from '../../../core/svg/icon-share';
 
 @Component({
   selector: 'mh5-folio-scroll-horizontal',

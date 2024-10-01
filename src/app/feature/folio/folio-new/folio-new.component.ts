@@ -1,7 +1,7 @@
 import { Component, inject, output } from '@angular/core';
 import { FolioStore } from '../folio.store';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Folio } from '../../../shared/interfaces/interfaces';
+import { Folio } from '../../../core/interfaces/interfaces';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -13,15 +13,11 @@ import { environment } from '../../../../environments/environment';
 })
 export class FolioNewComponent {
   folioStore = inject(FolioStore);
-
-  formGroup: FormGroup;
+  fb = inject(FormBuilder);
+  formGroup: FormGroup = this.fb.group({
+    folioName: ['', Validators.required],
+  });
   closeNewFolioEditor = output<boolean>();
-
-  constructor(private fb: FormBuilder) {
-    this.formGroup = this.fb.group({
-      folioName: ['', Validators.required],
-    });
-  }
 
   onSubmit() {
     if (this.formGroup.valid) {

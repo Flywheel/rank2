@@ -1,6 +1,6 @@
 import { signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 import { withDevtools, updateState } from '@angular-architects/ngrx-toolkit';
-import { Contest, ContestView, Placement, SlateMember, SlateView } from '../../shared/interfaces/interfaces';
+import { Contest, ContestView, Placement, SlateMember, SlateView } from '../../core/interfaces/interfaces';
 import { BallotService } from './ballot.service';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';

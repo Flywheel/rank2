@@ -1,0 +1,83 @@
+.mainContainer {
+  color: white;
+  background-color: #000;
+  margin: 4px;
+  margin-top: 10px;
+  border-radius: 5px;
+  border: #77a;
+  border-style: solid;
+}
+
+.sectionMainTitle {
+  font-size: 22px;
+  font-weight: bold;
+  color: #ccf;
+  background-color: #333;
+  padding-top: 10px;
+  border-bottom: 1px solid #ccf;
+  margin-bottom: 5px;
+  padding-left: 15px;
+}
+
+.sectionContentTitle {
+  padding-left: 20px;
+  font-size: 14px;
+  color: #bbe;
+  margin-top: 15px;
+}
+
+.sectionContent {
+  font-size: 18px;
+  color: #ddd;
+  margin-bottom: 15px;
+  padding-left: 25px;
+}
+
+.sectionContentCaption {
+  padding-left: 25px;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul li {
+  font-size: 14px;
+  color: #ccc;
+  line-height: 1.6;
+}
+
+ul li span {
+  color: #ccf;
+}
+
+button {
+  background-color: #ccf;
+  color: #000;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #ddd;
+}
+
+.newHandleInput {
+  padding: 10px;
+  font-size: 24px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+p {
+  font-size: 14px;
+  margin: 5px 0;
+}

@@ -1,7 +1,7 @@
 import { Component, inject, output } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BallotStore } from '../../ballot/ballot.store';
-import { Contest } from '../../../shared/interfaces/interfaces';
+import { Contest } from '../../../core/interfaces/interfaces';
 import { environment } from '../../../../environments/environment';
 
 @Component({

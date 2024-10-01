@@ -1,6 +1,6 @@
 import { Component, inject, output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Placement } from '../../../shared/interfaces/interfaces';
+import { Placement } from '../../../core/interfaces/interfaces';
 import { FolioStore } from '../folio.store';
 import { environment } from '../../../../environments/environment';
 
@@ -13,25 +13,30 @@ import { environment } from '../../../../environments/environment';
 })
 export class FolioPlacementNewComponent {
   folioStore = inject(FolioStore);
+  fb = inject(FormBuilder);
+  //form: FormGroup;
 
-  form: FormGroup;
+  formGroup: FormGroup = this.fb.group({
+    folioName: ['', Validators.required],
+  });
+
   closeNewPlacementEditor = output<boolean>();
 
-  constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
-      caption: ['', Validators.required],
-    });
-  }
+  // constructor(private fb: FormBuilder) {
+  //   this.form = this.fb.group({
+  //     caption: ['', Validators.required],
+  //   });
+  // }
 
   onSubmit() {
-    if (this.form.valid) {
+    if (this.formGroup.valid) {
       const folioId = this.folioStore.currentFolioView().id;
       const newPlacement: Placement = {
         id: 0,
         authorId: '',
         folioId,
         assetId: 1,
-        caption: this.form.value.caption,
+        caption: this.formGroup.value.caption,
       };
       if (environment.ianConfig.showLogs) {
         console.log(`Submitting new placement for ${this.folioStore.currentFolioView().id}`);

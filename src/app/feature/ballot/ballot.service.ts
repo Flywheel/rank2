@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Contest, ContestView, Placement } from '../../shared/interfaces/interfaces';
+import { Contest, ContestView, Placement } from '../../core/interfaces/interfaces';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 

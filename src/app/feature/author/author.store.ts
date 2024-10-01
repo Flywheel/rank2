@@ -3,7 +3,7 @@ import { signalStore, withComputed, withMethods, withState } from '@ngrx/signals
 import { pipe, tap, switchMap, of } from 'rxjs';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
-import { Author, AuthorView } from '../../shared/interfaces/interfaces';
+import { Author, AuthorView } from '../../core/interfaces/interfaces';
 import { AuthorService } from './author.service';
 const emptyAuthor: Author = {
   id: '',
@@ -21,22 +21,44 @@ export const AuthorStore = signalStore(
     knownAuthors: [emptyAuthor] as AuthorView[],
     isLoading: false,
     isStartupLoadingComplete: false,
-    cookieStatus: 'unknown' as string,
+    consentStatus: 'unknown' as string,
   }),
 
-  //   withStorageSync<Author>({
-  //     key: 'synced', // key used when writing to/reading from storage
-  //     autoSync: false, // read from storage on init and write on state changes - `true` by default
-  //     select: (state: Author) => Partial<Author>, // projection to keep specific slices in sync
-  //     parse: (stateString: string) => State, // custom parsing from storage - `JSON.parse` by default
-  //     stringify: (state: Author) => string, // custom stringification - `JSON.stringify` by default
-  //     storage: () => sessionstorage, // factory to select storage to sync with
-  //   }),
+  // withStorageSync({
+  //   key: 'authors',
+  // }),
 
   withMethods(store => {
     const dbAuthor = inject(AuthorService);
+
     return {
-      setCurrentAuthorView: rxMethod<string>(
+      async setConsentState(consentValue: string) {
+        updateState(store, '[Author] setCookieState Pending', { isLoading: true });
+
+        updateState(store, '[Author] setCookieState Success', { isLoading: false, consentStatus: consentValue });
+      },
+
+      authorCreate: rxMethod<string>(
+        pipe(
+          tap(() => {
+            updateState(store, '[Author] createAuthor Start', { isLoading: true });
+          }),
+          switchMap(authenticatorId => {
+            return dbAuthor.authorCreate(authenticatorId).pipe(
+              tap({
+                next: (newAuthor: Author) => {
+                  updateState(store, '[Author] createAuthor Success', {
+                    loggedInAuthor: newAuthor,
+                    isLoading: false,
+                  });
+                },
+              })
+            );
+          })
+        )
+      ),
+
+      authorViewSetByUid: rxMethod<string>(
         pipe(
           tap(() => {
             updateState(store, '[Author] getAuthorViewById Start', { isLoading: true });
