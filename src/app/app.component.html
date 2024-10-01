@@ -1,4 +1,4 @@
-@defer (when authorStore.consentStatus() === 'accepted') {
+@defer (when authorStore.consentStatus() === 'unknown') {
   <mh5-author-consent [forcePopup]="false" />
 }
 <router-outlet *ngIf="!isIframe" />
