@@ -3,6 +3,7 @@ import { AuthorStore } from '../author.store';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { IconTimelineComponent } from '../../../core/svg/icon-timeline';
+import { LocalStorageService } from '../../../core/services/local-storage.service';
 
 @Component({
   selector: 'mh5-author-profile',
@@ -15,14 +16,12 @@ export class AuthorProfileComponent {
   channelName = signal<string>('miniherald');
   showConsentPopup = true;
   forcePopup = input<boolean>(false);
+  localStorageService = inject(LocalStorageService);
 
   isChannelNameOk = computed<boolean>(() => this.channelName().length >= 3 && this.channelName().length <= 15);
 
   runSomething() {
-    const consent = localStorage.getItem('cookieConsent');
-    if (consent && this.forcePopup() === false) {
-      this.showConsentPopup = false;
-    }
+    this.localStorageService.updateStorage();
   }
   authorStore = inject(AuthorStore);
   isBackDoorOpen = signal<boolean>(true);

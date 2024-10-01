@@ -24,9 +24,10 @@ export const AuthorStore = signalStore(
     consentStatus: 'unknown' as string,
   }),
 
-  // withStorageSync({
-  //   key: 'authors',
-  // }),
+  withStorageSync({
+    key: 'authors',
+    autoSync: false,
+  }),
 
   withMethods(store => {
     const dbAuthor = inject(AuthorService);

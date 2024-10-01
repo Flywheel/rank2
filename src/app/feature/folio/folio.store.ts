@@ -1,5 +1,5 @@
 import { signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
-import { withDevtools, updateState } from '@angular-architects/ngrx-toolkit';
+import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
 import { Asset, AssetView, Folio, FolioView, Placement, PlacementView } from '../../core/interfaces/interfaces';
 import { FolioService } from './folio.service';
 import { computed, inject } from '@angular/core';
@@ -70,6 +70,12 @@ export const FolioStore = signalStore(
     isAddingFolio: false,
     isAddingPlacement: false,
   }),
+
+  withStorageSync({
+    key: 'folios',
+    autoSync: false,
+  }),
+
   // withComputed(store => {
   //   return {
   //     allAssetViews: computed<AssetView[]>(() =>

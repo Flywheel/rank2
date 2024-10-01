@@ -1,5 +1,5 @@
 import { signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
-import { withDevtools, updateState } from '@angular-architects/ngrx-toolkit';
+import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
 import { Contest, ContestView, Placement, SlateMember, SlateView } from '../../core/interfaces/interfaces';
 import { BallotService } from './ballot.service';
 import { computed, inject } from '@angular/core';
@@ -55,6 +55,10 @@ export const BallotStore = signalStore(
     voterSlates: [slateViewInit],
     voterSlate: slateViewInit,
     isLoading: false,
+  }),
+  withStorageSync({
+    key: 'ballots',
+    autoSync: false,
   }),
   withComputed(store => {
     return {

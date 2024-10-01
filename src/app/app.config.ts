@@ -12,7 +12,7 @@ const commonProviders = [
   provideHttpClient(withFetch()),
   provideZoneChangeDetection({ eventCoalescing: true }),
   provideRouter(routes, withViewTransitions(), withComponentInputBinding()),
-  provideClientHydration(),
+  //provideClientHydration(),
   provideAnimationsAsync(),
   provideAnimations(),
 ];
