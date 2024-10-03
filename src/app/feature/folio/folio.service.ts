@@ -22,12 +22,11 @@ export class FolioService {
   private assetAPIUrl = `api/asset`;
 
   foliosGetAll(): Observable<Folio[]> {
-    if (environment.ianConfig.showLogs) console.log(`folioService.allFolios() ${this.folioAPIUrl}`);
-    return this.http.get<Folio[]>(this.folioAPIUrl).pipe(takeUntilDestroyed());
+    return this.http.get<Folio[]>(this.folioAPIUrl);
   }
 
   folioGetById(id: number): Observable<Folio> {
-    return this.http.get<Folio>(`${this.folioAPIUrl}/${id}`).pipe(takeUntilDestroyed());
+    return this.http.get<Folio>(`${this.folioAPIUrl}/${id}`);
   }
 
   folioViewGetById(id: number): Observable<FolioView> {
@@ -38,7 +37,6 @@ export class FolioService {
     return this.http.post<Folio>(this.folioAPIUrl, { authorId, isDefault, folioName }).pipe(
       tap(data => {
         if (environment.ianConfig.showLogs) console.log('data', data);
-
         this.http.post<FolioView>(this.folioViewAPIUrl, { authorId, isDefault, folioName, placementViews: [] }).subscribe({
           next: data => {
             if (environment.ianConfig.showLogs) console.log('data', data);

@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, output, signal } from '@angular/core';
+import { Component, inject, input, OnInit, output } from '@angular/core';
 import { AuthorStore } from '../author.store';
 import { AUTHOR_CONSENT_KEY } from '../../../core/interfaces/constants';
 import { environment } from '../../../../environments/environment';
@@ -31,7 +31,8 @@ export class AuthorConsentComponent implements OnInit {
 
   acceptCookies(): void {
     this.setIt('accepted');
-    this.authorStore.authorCreate(uuidv7());
+    this.authorStore.addAuthor3({ id: uuidv7(), name: '', authenticatorId: 'ZZZ', eventLog: [] });
+    this.authorStore.writeToStorage();
   }
 
   declineCookies(): void {

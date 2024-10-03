@@ -1,14 +1,12 @@
 <div class="mainContainer">
-  @if (authorStore.loggedInAuthor().id.length > 0) {
-    <div class="sectionMainTitle">Identity Management</div>
-    <div class="sectionContentTitle">Account Identifier Vendor:</div>
-    <div class="sectionContent">{{ authorStore.loggedInAuthor().authenticatorId }}</div>
+  <div class="sectionMainTitle">Identity Management</div>
+  <div class="sectionContentTitle">Account Identifier:</div>
+  <div class="sectionContent">{{ authorStore.loggedInAuthor().id }}</div>
 
-    <div class="sectionContentTitle">Social Provider</div>
-    <div class="sectionContent">Development</div>
-    <div class="sectionContentTitle">Name at Provider / AuthorHandle <mh5-icon-timeline /></div>
-    <div class="sectionContent">{{ authorStore.loggedInAuthor().name }} // {{ authorStore.loggedInAuthor().name }}</div>
-
+  @if (authorStore.loggedInAuthor().name) {
+    <div class="sectionContentTitle">Author Name:</div>
+    <div class="sectionContent">{{ authorStore.loggedInAuthor().name }}</div>
+  } @else {
     <div class="sectionMainTitle">Create Your Author Handle</div>
     <div class="sectionContentTitle">
       <input
@@ -37,16 +35,16 @@
       {{ authorStore.loggedInAuthor().authenticatorId }} Activity
     }
   </div>
-  <div class="sectionContentTitle">Slates Ranked: 0</div>
-  <!-- <div class="sectionContentTitle">Topics: {{ topicStore.authorTopics().length }}; Current={{ currentTopic().name }}</div>
-    <div class="sectionContentTitle">TopicMembers: {{ topicStore.topicMemberCount() }}</div>
-    <div class="sectionContentTitle">Pitches: {{ pitchStore.allPitchesByTopicId().length }}</div> -->
+  <div class="sectionContentTitle">Author Slates {{ authorStore.allAuthors().length }}</div>
+  @for (author of authorStore.allAuthors(); track $index) {
+    <div>{{ author.id }}: {{ author.name }}</div>
+  }
   <div class="sectionContent"></div>
 
   <div class="sectionMainTitle">Actions Available</div>
 
   @if (isBackDoorOpen()) {
-    <button (click)="runSomething()" style="margin: 10px">runSomething</button>
+    <button (click)="runSomething()" style="margin: 10px">Run Test</button>
   } @else {
     <div class="sectionContent">
       <p>Nothing today. Still in development</p>
@@ -56,7 +54,3 @@
   <div class="sectionContentTitle">Notices</div>
   <div class="sectionContent"><a style="color: #ddd" [routerLink]="['/tos']">Privacy and Terms of Service</a></div>
 </div>
-
-@defer (when authorStore.consentStatus() !== 'accepted') {
-  <mh5-author-consent [forcePopup]="true" (closeComponent)="closeConsentComponent()" />
-}

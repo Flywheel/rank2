@@ -14,19 +14,12 @@ import { environment } from '../../../../environments/environment';
 export class FolioPlacementNewComponent {
   folioStore = inject(FolioStore);
   fb = inject(FormBuilder);
-  //form: FormGroup;
 
   formGroup: FormGroup = this.fb.group({
-    folioName: ['', Validators.required],
+    caption: ['', Validators.required],
   });
 
   closeNewPlacementEditor = output<boolean>();
-
-  // constructor(private fb: FormBuilder) {
-  //   this.form = this.fb.group({
-  //     caption: ['', Validators.required],
-  //   });
-  // }
 
   onSubmit() {
     if (this.formGroup.valid) {

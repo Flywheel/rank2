@@ -1,59 +1,13 @@
-import { signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
+import { signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
-import { Asset, AssetView, Folio, FolioView, Placement, PlacementView } from '../../core/interfaces/interfaces';
+import { Asset, Folio, FolioView, Placement, PlacementView } from '../../core/interfaces/interfaces';
+import { assetInit, folioInit, folioViewInit, placementInit, placementViewInit } from '../../core/interfaces/initValues';
 import { FolioService } from './folio.service';
-import { computed, inject } from '@angular/core';
+import { inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { exhaustMap, of, pipe, switchMap, tap } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { catchError, exhaustMap, map, of, pipe, switchMap, tap, throwError } from 'rxjs';
+// import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { environment } from '../../../environments/environment';
-
-const assetInit: Asset = {
-  id: 0,
-  authorId: '',
-  mediaType: '',
-  sourceId: '',
-};
-
-const assetViewInit: AssetView = {
-  id: 0,
-  authorId: '1',
-  mediaType: '1',
-  sourceId: '',
-  url: '',
-  paddingBottom: '',
-};
-
-const placementInit: Placement = {
-  id: 0,
-  authorId: '',
-  assetId: 0,
-  folioId: 0,
-  caption: '',
-};
-
-const placementViewInit: PlacementView = {
-  id: 0,
-  authorId: '',
-  assetId: 0,
-  folioId: 0,
-  caption: '',
-  asset: assetViewInit,
-};
-
-export const folioInit: Folio = {
-  id: 0,
-  authorId: '',
-  isDefault: false,
-  folioName: '',
-};
-const folioViewInit: FolioView = {
-  id: 0,
-  authorId: '',
-  isDefault: false,
-  folioName: '',
-  placementViews: [],
-};
 
 export const FolioStore = signalStore(
   { providedIn: 'root' },
@@ -118,14 +72,14 @@ export const FolioStore = signalStore(
     return {
       // #region Folio
 
-      loadAllFolios: rxMethod<void>(
+      loadAllFoliosx: rxMethod<void>(
         pipe(
           tap(() => {
             updateState(store, '[Folio] getAllFolios Start', { isLoading: true });
           }),
           exhaustMap(() => {
             return dbFolio.foliosGetAll().pipe(
-              takeUntilDestroyed(),
+              // takeUntilDestroyed(),
               tap({
                 next: (allFolios: Folio[]) => {
                   updateState(store, '[Folio] getAllFolios Success', value => ({
@@ -134,6 +88,31 @@ export const FolioStore = signalStore(
                     isLoading: false,
                   }));
                 },
+              })
+            );
+          })
+        )
+      ),
+
+      loadAllFolios: rxMethod<void>(
+        pipe(
+          exhaustMap(() => {
+            updateState(store, '[Folio] getAllFolios Start', { isLoading: true });
+            return dbFolio.foliosGetAll().pipe(
+              map((allFolios: Folio[]) => {
+                updateState(store, '[Folio] getAllFolios Success', value => ({
+                  ...value,
+                  allFolios,
+                  isLoading: false,
+                }));
+                return allFolios;
+              }),
+              catchError(error => {
+                updateState(store, '[Folio] getAllFolios Failure', {
+                  isLoading: false,
+                  // error: error.message || 'An error occurred while loading folios',
+                });
+                return throwError(error);
               })
             );
           })
@@ -234,7 +213,7 @@ export const FolioStore = signalStore(
           }),
           exhaustMap(() => {
             return dbFolio.placementsGetAll().pipe(
-              takeUntilDestroyed(),
+              // takeUntilDestroyed(),
               tap({
                 next: (allPlacements: Placement[]) => {
                   updateState(store, '[Placement] getAllPlacements Success', value => ({
@@ -256,7 +235,7 @@ export const FolioStore = signalStore(
           }),
           exhaustMap(() => {
             return dbFolio.placementViewsGetAll().pipe(
-              takeUntilDestroyed(),
+              // takeUntilDestroyed(),
               tap({
                 next: (allPlacements: PlacementView[]) => {
                   updateState(store, '[Placement] getAllPlacementViews Success', value => ({
@@ -303,7 +282,7 @@ export const FolioStore = signalStore(
           }),
           exhaustMap(() => {
             return dbFolio.assetsGetAll().pipe(
-              takeUntilDestroyed(),
+              //  takeUntilDestroyed(),
               tap({
                 next: (allAssets: Asset[]) => {
                   updateState(store, '[Asset] getAllAssets Success', value => ({

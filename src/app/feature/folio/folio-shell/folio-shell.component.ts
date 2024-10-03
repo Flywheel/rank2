@@ -15,6 +15,12 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './folio-shell.component.scss',
 })
 export class FolioShellComponent {
+  RunTest() {
+    if (environment.ianConfig.showLogs) {
+      console.log(this.folioStore.allFolios());
+      console.log(this.folioStore.loadAllFolios());
+    }
+  }
   folioStore = inject(FolioStore);
 
   showViewer = false;

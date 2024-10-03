@@ -5,6 +5,9 @@ import { FormsModule } from '@angular/forms';
 import { IconTimelineComponent } from '../../../core/svg/icon-timeline';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 import { AuthorConsentComponent } from '../author-consent/author-consent.component';
+import { environment } from '../../../../environments/environment';
+import { Author } from '../../../core/interfaces/interfaces';
+import { uuidv7 } from 'uuidv7';
 
 @Component({
   selector: 'mh5-author-profile',
@@ -14,7 +17,7 @@ import { AuthorConsentComponent } from '../author-consent/author-consent.compone
   styleUrl: './author-profile.component.scss',
 })
 export class AuthorProfileComponent {
-  channelName = signal<string>('miniherald');
+  channelName = signal<string>('');
   showConsentPopup = signal(true);
   forcePopup = input<boolean>(false);
   localStorageService = inject(LocalStorageService);
@@ -24,13 +27,29 @@ export class AuthorProfileComponent {
   closeConsentComponent() {
     this.showConsentPopup.set(false);
   }
+
   runSomething() {
-    this.localStorageService.updateStorage();
+    const authorData: Author = {
+      name: this.channelName(),
+      id: uuidv7(),
+      authenticatorId: this.channelName(),
+      eventLog: [],
+    };
+    this.authorStore.addAuthor3(authorData);
+
+    if (environment.ianConfig.showLogs) {
+      console.log(this.authorStore.loggedInAuthor());
+      console.log(this.authorStore.knownAuthors());
+    }
+    this.authorStore.authorViewByUid(this.authorStore.loggedInAuthor().id);
   }
   authorStore = inject(AuthorStore);
   isBackDoorOpen = signal<boolean>(true);
 
   InitializeAuthorHandle() {
-    throw new Error('Method not implemented.');
+    const authorData: Partial<Author> = {
+      name: this.channelName(),
+    };
+    this.authorStore.authorUpdate(authorData);
   }
 }

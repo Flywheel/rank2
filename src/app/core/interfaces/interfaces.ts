@@ -9,7 +9,7 @@ export interface Author {
   id: string;
   name: string;
   authenticatorId: string;
-  eventLog: EventLog[];
+  eventLog?: EventLog[];
 }
 
 export interface AuthorView extends Author {
