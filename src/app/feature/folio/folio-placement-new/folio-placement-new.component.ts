@@ -2,7 +2,6 @@ import { Component, inject, output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Placement } from '../../../core/interfaces/interfaces';
 import { FolioStore } from '../folio.store';
-import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'mh5-folio-placement-new',
@@ -23,7 +22,7 @@ export class FolioPlacementNewComponent {
 
   onSubmit() {
     if (this.formGroup.valid) {
-      const folioId = this.folioStore.currentFolioView().id;
+      const folioId = this.folioStore.folioViewSelected().id;
       const newPlacement: Placement = {
         id: 0,
         authorId: '',
@@ -31,15 +30,9 @@ export class FolioPlacementNewComponent {
         assetId: 1,
         caption: this.formGroup.value.caption,
       };
-      if (environment.ianConfig.showLogs) {
-        console.log(`Submitting new placement for ${this.folioStore.currentFolioView().id}`);
-        console.log(newPlacement);
-      }
-      this.folioStore.addPlacement(newPlacement);
-      console.log('allPlacements', this.folioStore.allPlacements());
-      this.folioStore.setCurrentFolioView(folioId);
 
-      if (environment.ianConfig.showLogs) console.log(this.folioStore.currentFolioView().placementViews);
+      this.folioStore.addPlacement(newPlacement);
+
       this.closeNewPlacementEditor.emit(false);
     }
   }

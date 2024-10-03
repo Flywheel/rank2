@@ -17,10 +17,12 @@
       @if (newPlacement()) {
         <mh5-folio-placement-new (closeNewPlacementEditor)="closeNewPlacement()" />
       } @else {
-        <div (click)="openNewPlacement()" (keydown)="openNewPlacement()" tabindex="1">Add Placement to <br />{{ folioStore.currentFolioView().folioName }}</div>
+        <div (click)="openNewPlacement()" (keydown)="openNewPlacement()" tabindex="1">
+          Add Placement to <br />{{ folioStore.folioViewSelected().folioName }}
+        </div>
       }
     </div>
   </div>
-  <p class="folio-name">Current Folio: {{ folioStore.currentFolioView().folioName }}</p>
+  <p class="folio-name">Current Folio: {{ folioStore.folioViewSelected().folioName }}</p>
   <button class="btn btn-primary" (click)="RunTest()">Run Test</button>
 }

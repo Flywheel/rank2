@@ -1,25 +1,21 @@
-import { signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
+import { signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
-import { Asset, Folio, FolioView, Placement, PlacementView } from '../../core/interfaces/interfaces';
-import { assetInit, folioInit, folioViewInit, placementInit, placementViewInit } from '../../core/interfaces/initValues';
+import { Asset, AssetView, Folio, FolioView, Placement, PlacementView } from '../../core/interfaces/interfaces';
+import { assetInit, assetViewInit, folioInit, folioViewInit, placementInit } from '../../core/interfaces/initValues';
 import { FolioService } from './folio.service';
-import { inject } from '@angular/core';
+import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { catchError, exhaustMap, map, of, pipe, switchMap, tap, throwError } from 'rxjs';
-// import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { catchError, exhaustMap, map, pipe, tap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 export const FolioStore = signalStore(
   { providedIn: 'root' },
   withDevtools('folios'),
   withState({
-    currentFolioView: folioViewInit,
-    allFolioViews: [folioViewInit],
+    folioIdSelected: 0,
     allFolios: [folioInit],
     allPlacements: [placementInit],
-    allPlacementViews: [placementViewInit],
     allAssets: [assetInit],
-
     isLoading: false,
     isAddingFolio: false,
     isAddingPlacement: false,
@@ -30,70 +26,55 @@ export const FolioStore = signalStore(
     autoSync: false,
   }),
 
-  // withComputed(store => {
-  //   return {
-  //     allAssetViews: computed<AssetView[]>(() =>
-  //       store.allAssets().map(asset => ({
-  //         ...asset,
-  //         url: '',
-  //         paddingBottom: '',
-  //       }))
-  //     ),
-  //   };
-  // }),
+  withComputed(store => {
+    return {
+      allAssetViews: computed<AssetView[]>(() =>
+        store.allAssets().map(asset => ({
+          ...asset,
+          url: '',
+          paddingBottom: '',
+        }))
+      ),
+    };
+  }),
 
-  // withComputed(store => {
-  //   return {
-  //     allPlacementViews: computed<PlacementView[]>(() =>
-  //       store.allPlacements().map(placement => ({
-  //         ...placement,
-  //         asset: store.allAssetViews().find(a => a.id === placement.assetId) ?? assetViewInit,
-  //       }))
-  //     ),
-  //   };
-  // }),
+  withComputed(store => {
+    return {
+      allPlacementViews: computed<PlacementView[]>(() =>
+        store.allPlacements().map(placement => ({
+          ...placement,
+          asset: store.allAssetViews().find(a => a.id === placement.assetId) ?? assetViewInit,
+        }))
+      ),
+    };
+  }),
 
-  // withComputed(store => {
-  //   return {
-  //     allComputedFolioViews: computed<FolioView[]>(() =>
-  //       store.allFolios().map(folio => {
-  //         const placementViews = store.allPlacementViews().filter(placement => placement.folioId === folio.id);
-  //         return {
-  //           ...folio,
-  //           placementViews,
-  //         };
-  //       })
-  //     ),
-  //   };
-  // }),
+  withComputed(store => {
+    return {
+      allComputedFolioViews: computed<FolioView[]>(() =>
+        store.allFolios().map(folio => {
+          const placementViews = store.allPlacementViews().filter(placement => placement.folioId === folio.id);
+          return {
+            ...folio,
+            placementViews,
+          };
+        })
+      ),
+    };
+  }),
+
+  withComputed(store => {
+    return {
+      folioViewSelected: computed<FolioView>(() => {
+        return store.allComputedFolioViews().find(folio => folio.id === store.folioIdSelected()) ?? folioViewInit;
+      }),
+    };
+  }),
 
   withMethods(store => {
     const dbFolio = inject(FolioService);
     return {
       // #region Folio
-
-      loadAllFoliosx: rxMethod<void>(
-        pipe(
-          tap(() => {
-            updateState(store, '[Folio] getAllFolios Start', { isLoading: true });
-          }),
-          exhaustMap(() => {
-            return dbFolio.foliosGetAll().pipe(
-              // takeUntilDestroyed(),
-              tap({
-                next: (allFolios: Folio[]) => {
-                  updateState(store, '[Folio] getAllFolios Success', value => ({
-                    ...value,
-                    allFolios,
-                    isLoading: false,
-                  }));
-                },
-              })
-            );
-          })
-        )
-      ),
-
       loadAllFolios: rxMethod<void>(
         pipe(
           exhaustMap(() => {
@@ -119,64 +100,12 @@ export const FolioStore = signalStore(
         )
       ),
 
-      // loadAllFolioViews: rxMethod<void>(
-      //   pipe(
-      //     tap(() => {
-      //       updateState(store, '[Folio] getAllFolioViews Start', { isLoading: true });
-      //     }),
-      //     exhaustMap(() => {
-      //       return dbFolio.folioViewsGetAll().pipe(
-      //         takeUntilDestroyed(),
-      //         tap({
-      //           next: (allDBFolioViews: FolioView[]) => {
-      //             updateState(store, '[Folio] getAllFolioViews Success', value => ({
-      //               ...value,
-      //               allDBFolioViews,
-      //               isLoading: false,
-      //               //isStartupLoadingComplete: true,
-      //             }));
-      //           },
-      //         })
-      //       );
-      //     })
-      //   )
-      // ),
-
-      setCurrentFolioView: rxMethod<number>(
-        pipe(
-          tap(() => {
-            updateState(store, '[Folio] getFolioViewById Start', { isLoading: true });
-          }),
-          switchMap(folioId => {
-            if (environment.ianConfig.showLogs) console.log('addPlacement', folioId);
-            const existingFolioView = store.allFolioViews().find(view => view.id === folioId);
-            if (existingFolioView) {
-              return of(existingFolioView);
-            } else {
-              const theFolioView = dbFolio.folioViewGetById(folioId).pipe(
-                tap({
-                  next: (folioView: FolioView) => {
-                    updateState(store, '[Folio] Load FolioViewById Success', {
-                      allFolioViews: [...store.allFolioViews(), folioView],
-                    });
-                  },
-                })
-              );
-              return theFolioView;
-            }
-          }),
-          tap(folioView =>
-            updateState(store, '[Folio] getFolioViewById Success', {
-              currentFolioView: folioView,
-              //  folioSlate: store.allFolioSlates().filter(a => a.folioId === folioView.id)[0] ?? slateViewInit,
-              isLoading: false,
-            })
-          )
-        )
-      ),
-
       toggleFolioAdder(state: boolean) {
         updateState(store, '[Folio] toggleFolioAdder', { isAddingFolio: state });
+      },
+
+      setFolioSelected(folioId: number) {
+        updateState(store, '[Folio] setFolioSelected', { folioIdSelected: folioId });
       },
 
       addFolio(folio: Folio) {
@@ -185,65 +114,44 @@ export const FolioStore = signalStore(
         dbFolio
           .folioCreate(folio)
           .pipe(
-            tap({
-              next: (newFolio: Folio) => {
-                if (environment.ianConfig.showLogs) console.log('newFolio', newFolio);
-                updateState(store, '[Folio] addFolio Success', {
-                  allFolios: [...store.allFolios(), newFolio],
-                  isLoading: false,
-                });
-              },
-              error: error => {
-                if (environment.ianConfig.showLogs) console.log('error', error);
-                updateState(store, '[Folio] addFolio Failed', { isLoading: false });
-              },
+            map((newFolio: Folio) => {
+              updateState(store, '[Folio] addFolio Success', {
+                allFolios: [...store.allFolios(), newFolio],
+                isLoading: false,
+              });
+              return newFolio;
+            }),
+            catchError(error => {
+              updateState(store, '[Folio] addFolio Failed', { isLoading: false });
+              return throwError(error);
             })
           )
           .subscribe();
       },
 
-      //#endregion
+      //#endregion Folio
 
       //#region Placement
 
       loadAllPlacements: rxMethod<void>(
         pipe(
-          tap(() => {
+          exhaustMap(() => {
             updateState(store, '[Placement] getAllPlacements Start', { isLoading: true });
-          }),
-          exhaustMap(() => {
             return dbFolio.placementsGetAll().pipe(
-              // takeUntilDestroyed(),
-              tap({
-                next: (allPlacements: Placement[]) => {
-                  updateState(store, '[Placement] getAllPlacements Success', value => ({
-                    ...value,
-                    allPlacements,
-                    isLoading: false,
-                  }));
-                },
-              })
-            );
-          })
-        )
-      ),
-
-      PlacementViews: rxMethod<void>(
-        pipe(
-          tap(() => {
-            updateState(store, '[Placement] getAllPlacementViews Start', { isLoading: true });
-          }),
-          exhaustMap(() => {
-            return dbFolio.placementViewsGetAll().pipe(
-              // takeUntilDestroyed(),
-              tap({
-                next: (allPlacements: PlacementView[]) => {
-                  updateState(store, '[Placement] getAllPlacementViews Success', value => ({
-                    ...value,
-                    allPlacements,
-                    isLoading: false,
-                  }));
-                },
+              map((allPlacements: Placement[]) => {
+                updateState(store, '[Placement] getAllPlacements Success', value => ({
+                  ...value,
+                  allPlacements,
+                  isLoading: false,
+                }));
+                return allPlacements;
+              }),
+              catchError(error => {
+                updateState(store, '[Placement] getAllPlacements Failure', {
+                  isLoading: false,
+                  //  error: error.message || 'An error occurred while loading placements',
+                });
+                return throwError(error);
               })
             );
           })
@@ -261,10 +169,6 @@ export const FolioStore = signalStore(
               allPlacements: [...store.allPlacements(), newPlacement],
               isLoading: false,
             });
-            if (environment.ianConfig.showLogs) {
-              console.log(store.allPlacements());
-              // console.log(store.allPlacementViews());
-            }
           })
           .catch(error => {
             if (environment.ianConfig.showLogs) console.log('error', error);
@@ -305,8 +209,6 @@ export const FolioStore = signalStore(
       store.loadAllFolios();
       store.loadAllPlacements();
       store.Assets();
-      // store.FolioViews();
-      store.setCurrentFolioView(1);
     },
   })
 );

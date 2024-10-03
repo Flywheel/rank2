@@ -1,6 +1,6 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, computed, effect, inject, input, output, untracked } from '@angular/core';
 import { FolioStore } from '../folio.store';
-import { Folio } from '../../../core/interfaces/interfaces';
+import { FolioView } from '../../../core/interfaces/interfaces';
 import { environment } from '../../../../environments/environment';
 import { IconPlusComponent } from '../../../core/svg/icon-plus';
 import { IconProfileComponent } from '../../../core/svg/icon-profile';
@@ -15,17 +15,35 @@ import { IconShareComponent } from '../../../core/svg/icon-share';
 })
 export class FolioScrollHorizontalComponent {
   folioStore = inject(FolioStore);
-  theFoliosInput = input<Folio[]>();
+  theFoliosInput = input<FolioView[]>();
   newFolioEditorStateChange = output<boolean>();
   newPlacementEditorStateChange = output<boolean>();
 
+  firstFolioId = computed<number>(() => {
+    const z = this.theFoliosInput();
+    if (z !== undefined) {
+      const x = z.length ?? 0;
+      return x > 0 ? z[0].id : 0;
+    }
+    return 0;
+  });
+
+  constructor() {
+    effect(() => {
+      const a = this.firstFolioId();
+      console.log(a);
+      untracked(() => {
+        if (a > 0) {
+          this.selectFolio(a);
+        }
+      });
+    });
+  }
+
   selectFolio(id: number) {
-    this.folioStore.setCurrentFolioView(id);
+    this.folioStore.setFolioSelected(id);
     if (environment.ianConfig.showLogs) {
-      // console.log('allFolios', this.folioStore.allFolios());
-      // console.log('allFolioViews', this.folioStore.allComputedFolioViews());
-      // console.log('allPlacements', this.folioStore.allPlacements());
-      // console.log('allPlacementViews', this.folioStore.allPlacementViews());
+      console.log('folioViewSelected', this.folioStore.folioViewSelected());
     }
   }
   newFolio() {

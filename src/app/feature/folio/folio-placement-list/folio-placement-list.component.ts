@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { FolioStore } from '../folio.store';
 import { PlacementView } from '../../../core/interfaces/interfaces';
 
@@ -10,9 +10,7 @@ import { PlacementView } from '../../../core/interfaces/interfaces';
   styleUrl: './folio-placement-list.component.scss',
 })
 export class FolioPlacementListComponent {
-  authorId = signal<number>(1);
   folioStore = inject(FolioStore);
-  folioId = computed<number>(() => this.folioStore.currentFolioView().id);
-
-  placements = computed<PlacementView[]>(() => this.folioStore.allPlacementViews().filter(p => p.folioId === this.folioId()));
+  folioViewSelected = computed(() => this.folioStore.folioViewSelected());
+  folioViewSelectedPlacements = computed<PlacementView[]>(() => this.folioViewSelected().placementViews);
 }

@@ -17,14 +17,15 @@ import { environment } from '../../../../environments/environment';
 export class FolioShellComponent {
   RunTest() {
     if (environment.ianConfig.showLogs) {
-      console.log(this.folioStore.allFolios());
-      console.log(this.folioStore.loadAllFolios());
+      //  console.log(this.folioStore.allFolios());
+      console.log(this.folioStore.allComputedFolioViews());
+      console.log(this.folioStore.allComputedFolioViews()[0].placementViews);
     }
   }
   folioStore = inject(FolioStore);
 
   showViewer = false;
-  theFolios = this.folioStore.allFolios;
+  theFolios = this.folioStore.allComputedFolioViews;
   newFolio = signal(false);
   newPlacement = signal(false);
 
