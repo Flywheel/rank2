@@ -38,10 +38,10 @@ export class AuthorProfileComponent {
     this.authorStore.addAuthor3(authorData);
 
     if (environment.ianConfig.showLogs) {
-      console.log(this.authorStore.loggedInAuthor());
+      console.log(this.authorStore.authorLoggedIn());
       console.log(this.authorStore.knownAuthors());
     }
-    this.authorStore.authorViewByUid(this.authorStore.loggedInAuthor().id);
+    this.authorStore.authorViewByUid(this.authorStore.authorLoggedIn().id);
   }
   authorStore = inject(AuthorStore);
   isBackDoorOpen = signal<boolean>(true);

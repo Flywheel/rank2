@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { signalStore, withMethods, withState } from '@ngrx/signals';
-import { pipe, tap, switchMap, of, exhaustMap, catchError, throwError } from 'rxjs';
+import { pipe, tap, switchMap, of, exhaustMap, catchError, throwError, map } from 'rxjs';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
 import { Author, AuthorView } from '../../core/interfaces/interfaces';
@@ -13,8 +13,9 @@ export const AuthorStore = signalStore(
   { providedIn: 'root' },
   withDevtools('authors'),
   withState({
-    loggedInAuthor: authorInit,
-    allAuthors: [authorInit],
+    authorLoggedIn: authorInit,
+    authorIdSelected: 0,
+    authors: [authorInit],
     currentAuthorView: authorViewInit,
     knownAuthors: [authorViewInit],
     isLoading: false,
@@ -48,7 +49,7 @@ export const AuthorStore = signalStore(
                 next: (allAuthors: Author[]) => {
                   updateState(store, '[Author] getAllAuthors Success', value => ({
                     ...value,
-                    allAuthors: allAuthors,
+                    authors: allAuthors,
                     knownAuthors: allAuthors as AuthorView[],
                     isLoading: false,
                   }));
@@ -58,42 +59,67 @@ export const AuthorStore = signalStore(
           })
         )
       ),
-
-      addAuthor3x: rxMethod<Author>(
+      loadAllAuthors2: rxMethod<void>(
         pipe(
-          tap(() => {
-            updateState(store, '[Author] addAuthor Start', { isLoading: true });
-          }),
-          exhaustMap(author => {
-            return dbAuthor.authorCreate(author).pipe(
-              tap({
-                next: (newAuthor: Author) => {
-                  updateState(store, '[Author] addAuthor Success', value => ({
-                    ...value,
-                    allAuthors: [...value.allAuthors, newAuthor],
-                    isLoading: false,
-                  }));
-                },
-                error: error => {
-                  updateState(store, '[Author] addAuthor Failure', { isLoading: false });
-                  return throwError(error);
-                },
+          exhaustMap(() => {
+            updateState(store, '[Folio] getAllFolios Start', { isLoading: true });
+            return dbAuthor.authorsGetAll().pipe(
+              map((allAuthors: Author[]) => {
+                updateState(store, '[Author] getAllAuthors Success', value => ({
+                  ...value,
+                  authors: allAuthors,
+                  knownAuthors: allAuthors as AuthorView[],
+                  isLoading: false,
+                }));
+                return allAuthors;
+              }),
+              catchError(error => {
+                updateState(store, '[Author] getAllAuthors Failure', {
+                  isLoading: false,
+                  // error: error.message || 'An error occurred while loading folios',
+                });
+                return throwError(error);
               })
             );
           })
         )
       ),
 
-      addAuthor3(author: Author) {
-        // updateState(store, '[Folio] addAuthor Pending', { isLoading: true });
+      // addAuthor3x: rxMethod<Author>(
+      //   pipe(
+      //     tap(() => {
+      //       updateState(store, '[Author] addAuthor Start', { isLoading: true });
+      //     }),
+      //     exhaustMap(author => {
+      //       return dbAuthor.authorCreate(author).pipe(
+      //         tap({
+      //           next: (newAuthor: Author) => {
+      //             updateState(store, '[Author] addAuthor Success', value => ({
+      //               ...value,
+      //               allAuthors: [...value.allAuthors, newAuthor],
+      //               isLoading: false,
+      //             }));
+      //           },
+      //           error: error => {
+      //             updateState(store, '[Author] addAuthor Failure', { isLoading: false });
+      //             return throwError(error);
+      //           },
+      //         })
+      //       );
+      //     })
+      //   )
+      // ),
+
+      addAuthor13(author: Author) {
+        updateState(store, '[Author] addAuthor Pending', { isLoading: true });
         dbAuthor
           .authorCreate(author)
           .pipe(
             tap({
               next: (newAuthor: Author) => {
                 updateState(store, '[Author] createAuthor Success', {
-                  loggedInAuthor: newAuthor,
-                  allAuthors: [...store.allAuthors(), newAuthor],
+                  authorLoggedIn: newAuthor,
+                  authors: [...store.authors(), newAuthor],
                   isLoading: false,
                 });
               },
@@ -106,32 +132,55 @@ export const AuthorStore = signalStore(
           .subscribe();
       },
 
-      authorCreate: rxMethod<Author>(
-        pipe(
-          tap(x => {
-            if (environment.ianConfig.showLogs) console.log(x);
-            updateState(store, '[Author] createAuthor Start', { isLoading: true });
-          }),
-          exhaustMap(author => {
-            return dbAuthor.authorCreate(author).pipe(
-              tap({
-                next: (newAuthor: Author) => {
-                  updateState(store, '[Author] createAuthor Success', {
-                    loggedInAuthor: newAuthor,
-                    allAuthors: [...store.allAuthors(), newAuthor],
-                    isLoading: false,
-                  });
-                  if (environment.ianConfig.showLogs) console.log(` addNewAuthorId: ${newAuthor.id}`);
-                  store.writeToStorage();
-                },
-                error: () => {
-                  updateState(store, '[Author] createAuthor Error', { isLoading: false });
-                },
-              })
-            );
-          })
-        )
-      ),
+      addAuthor3(author: Author) {
+        updateState(store, '[Author] addAuthor Pending', { isLoading: true });
+
+        dbAuthor
+          .authorCreate(author)
+          .pipe(
+            exhaustMap(newAuthor => {
+              updateState(store, '[Author] createAuthor Success', {
+                authorLoggedIn: newAuthor,
+                authors: [...store.authors(), newAuthor],
+                isLoading: false,
+              });
+              return of(newAuthor);
+            }),
+            catchError(error => {
+              if (environment.ianConfig.showLogs) console.log('error', error);
+              updateState(store, '[Author] addAuthor Failure', { isLoading: false });
+              return throwError(error);
+            })
+          )
+          .subscribe();
+      },
+
+      // authorCreate: rxMethod<Author>(
+      //   pipe(
+      //     tap(x => {
+      //       if (environment.ianConfig.showLogs) console.log(x);
+      //       updateState(store, '[Author] createAuthor Start', { isLoading: true });
+      //     }),
+      //     exhaustMap(author => {
+      //       return dbAuthor.authorCreate(author).pipe(
+      //         tap({
+      //           next: (newAuthor: Author) => {
+      //             updateState(store, '[Author] createAuthor Success', {
+      //               loggedInAuthor: newAuthor,
+      //               allAuthors: [...store.allAuthors(), newAuthor],
+      //               isLoading: false,
+      //             });
+      //             if (environment.ianConfig.showLogs) console.log(` addNewAuthorId: ${newAuthor.id}`);
+      //             store.writeToStorage();
+      //           },
+      //           error: () => {
+      //             updateState(store, '[Author] createAuthor Error', { isLoading: false });
+      //           },
+      //         })
+      //       );
+      //     })
+      //   )
+      // ),
 
       authorUpdate: rxMethod<Partial<Author>>(
         pipe(
@@ -139,12 +188,12 @@ export const AuthorStore = signalStore(
             updateState(store, '[Author] updateAuthor Start', { isLoading: true });
           }),
           exhaustMap(authorData => {
-            const authorId = store.loggedInAuthor().id;
+            const authorId = store.authorLoggedIn().id;
             return dbAuthor.authorUpdate(authorId, authorData).pipe(
               tap({
                 next: (updatedAuthor: Author) => {
                   updateState(store, '[Author] updateAuthor Success', {
-                    loggedInAuthor: updatedAuthor,
+                    authorLoggedIn: updatedAuthor,
                     isLoading: false,
                   });
                   store.writeToStorage();
@@ -184,7 +233,7 @@ export const AuthorStore = signalStore(
           }),
           tap(author =>
             updateState(store, '[Author] getAuthorById Success', {
-              loggedInAuthor: author,
+              authorLoggedIn: author,
               isLoading: false,
             })
           )

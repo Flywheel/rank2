@@ -1,11 +1,11 @@
 <div class="mainContainer">
   <div class="sectionMainTitle">Identity Management</div>
   <div class="sectionContentTitle">Account Identifier:</div>
-  <div class="sectionContent">{{ authorStore.loggedInAuthor().id }}</div>
+  <div class="sectionContent">{{ authorStore.authorLoggedIn().id }}</div>
 
-  @if (authorStore.loggedInAuthor().name) {
+  @if (authorStore.authorLoggedIn().name) {
     <div class="sectionContentTitle">Author Name:</div>
-    <div class="sectionContent">{{ authorStore.loggedInAuthor().name }}</div>
+    <div class="sectionContent">{{ authorStore.authorLoggedIn().name }}</div>
   } @else {
     <div class="sectionMainTitle">Create Your Author Handle</div>
     <div class="sectionContentTitle">
@@ -31,12 +31,12 @@
   }
 
   <div class="sectionMainTitle">
-    @if (authorStore.loggedInAuthor().authenticatorId !== undefined) {
-      {{ authorStore.loggedInAuthor().authenticatorId }} Activity
+    @if (authorStore.authorLoggedIn().authenticatorId !== undefined) {
+      {{ authorStore.authorLoggedIn().authenticatorId }} Activity
     }
   </div>
-  <div class="sectionContentTitle">Author Slates {{ authorStore.allAuthors().length }}</div>
-  @for (author of authorStore.allAuthors(); track $index) {
+  <div class="sectionContentTitle">Author Slates {{ authorStore.authors().length }}</div>
+  @for (author of authorStore.authors(); track $index) {
     <div>{{ author.id }}: {{ author.name }}</div>
   }
   <div class="sectionContent"></div>

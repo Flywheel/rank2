@@ -13,9 +13,9 @@ export const FolioStore = signalStore(
   withDevtools('folios'),
   withState({
     folioIdSelected: 0,
-    allFolios: [folioInit],
-    allPlacements: [placementInit],
-    allAssets: [assetInit],
+    folios: [folioInit],
+    placements: [placementInit],
+    assets: [assetInit],
     isLoading: false,
     isAddingFolio: false,
     isAddingPlacement: false,
@@ -29,7 +29,7 @@ export const FolioStore = signalStore(
   withComputed(store => {
     return {
       allAssetViews: computed<AssetView[]>(() =>
-        store.allAssets().map(asset => ({
+        store.assets().map(asset => ({
           ...asset,
           url: '',
           paddingBottom: '',
@@ -41,7 +41,7 @@ export const FolioStore = signalStore(
   withComputed(store => {
     return {
       allPlacementViews: computed<PlacementView[]>(() =>
-        store.allPlacements().map(placement => ({
+        store.placements().map(placement => ({
           ...placement,
           asset: store.allAssetViews().find(a => a.id === placement.assetId) ?? assetViewInit,
         }))
@@ -52,7 +52,7 @@ export const FolioStore = signalStore(
   withComputed(store => {
     return {
       allComputedFolioViews: computed<FolioView[]>(() =>
-        store.allFolios().map(folio => {
+        store.folios().map(folio => {
           const placementViews = store.allPlacementViews().filter(placement => placement.folioId === folio.id);
           return {
             ...folio,
@@ -83,7 +83,7 @@ export const FolioStore = signalStore(
               map((allFolios: Folio[]) => {
                 updateState(store, '[Folio] getAllFolios Success', value => ({
                   ...value,
-                  allFolios,
+                  folios: allFolios,
                   isLoading: false,
                 }));
                 return allFolios;
@@ -116,7 +116,7 @@ export const FolioStore = signalStore(
           .pipe(
             map((newFolio: Folio) => {
               updateState(store, '[Folio] addFolio Success', {
-                allFolios: [...store.allFolios(), newFolio],
+                folios: [...store.folios(), newFolio],
                 isLoading: false,
               });
               return newFolio;
@@ -141,7 +141,7 @@ export const FolioStore = signalStore(
               map((allPlacements: Placement[]) => {
                 updateState(store, '[Placement] getAllPlacements Success', value => ({
                   ...value,
-                  allPlacements,
+                  placements: allPlacements,
                   isLoading: false,
                 }));
                 return allPlacements;
@@ -166,7 +166,7 @@ export const FolioStore = signalStore(
           .then(newPlacement => {
             if (environment.ianConfig.showLogs) console.log('newPlacement', newPlacement);
             updateState(store, '[Placement] addPlacement Success', {
-              allPlacements: [...store.allPlacements(), newPlacement],
+              placements: [...store.placements(), newPlacement],
               isLoading: false,
             });
           })
@@ -191,7 +191,7 @@ export const FolioStore = signalStore(
                 next: (allAssets: Asset[]) => {
                   updateState(store, '[Asset] getAllAssets Success', value => ({
                     ...value,
-                    allAssets,
+                    assets: allAssets,
                     isLoading: false,
                   }));
                 },

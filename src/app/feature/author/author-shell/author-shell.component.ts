@@ -6,7 +6,7 @@ import { AuthorProfileComponent } from '../author-profile/author-profile.compone
   selector: 'mh5-author-shell',
   standalone: true,
   imports: [HeaderComponent, AuthorProfileComponent],
-  templateUrl: './author-shell.component.html',
-  styleUrl: './author-shell.component.scss',
+  template: `<mh5-header callerPage="author" /><mh5-author-profile />`,
+  styles: [],
 })
 export class AuthorShellComponent {}
