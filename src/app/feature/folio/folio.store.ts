@@ -205,10 +205,10 @@ export const FolioStore = signalStore(
   }),
 
   withHooks({
-    onInit(store) {
-      store.loadAllFolios();
-      store.loadAllPlacements();
-      store.Assets();
-    },
+    // onInit(store) {
+    //   // store.loadAllFolios();
+    //   // store.loadAllPlacements();
+    //   // store.Assets();
+    // },
   })
 );

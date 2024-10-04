@@ -8,7 +8,7 @@ export interface EventLog {
 export interface Author {
   id: string;
   name: string;
-  authenticatorId: string;
+  authenticatorId?: string;
   eventLog?: EventLog[];
 }
 

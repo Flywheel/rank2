@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { AuthorStore } from '../author.store';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -18,11 +18,15 @@ import { uuidv7 } from 'uuidv7';
 })
 export class AuthorProfileComponent {
   channelName = signal<string>('');
-  showConsentPopup = signal(true);
-  forcePopup = input<boolean>(false);
+  showConsentPopup = signal(false);
   localStorageService = inject(LocalStorageService);
 
   isChannelNameOk = computed<boolean>(() => this.channelName().length >= 3 && this.channelName().length <= 15);
+
+  ShowConsentDialog() {
+    if (environment.ianConfig.showLogs) console.log('ShowConsentDialog', this.showConsentPopup());
+    this.showConsentPopup.set(true);
+  }
 
   closeConsentComponent() {
     this.showConsentPopup.set(false);
@@ -30,12 +34,10 @@ export class AuthorProfileComponent {
 
   runSomething() {
     const authorData: Author = {
-      name: this.channelName(),
       id: uuidv7(),
-      authenticatorId: this.channelName(),
-      eventLog: [],
+      name: this.channelName(),
     };
-    this.authorStore.addAuthor3(authorData);
+    this.authorStore.authorAdd(authorData);
 
     if (environment.ianConfig.showLogs) {
       console.log(this.authorStore.authorLoggedIn());

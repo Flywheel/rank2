@@ -1,7 +1,14 @@
 <div class="mainContainer">
   <div class="sectionMainTitle">Identity Management</div>
   <div class="sectionContentTitle">Account Identifier:</div>
-  <div class="sectionContent">{{ authorStore.authorLoggedIn().id }}</div>
+  @if (authorStore.authorLoggedIn().id.length === 0) {
+    <div class="sectionContent">
+      No account identifier found.
+      <button style="margin-left: 2em" (click)="ShowConsentDialog()">Initialize Identifier</button>
+    </div>
+  } @else {
+    <div class="sectionContent">{{ authorStore.authorLoggedIn().id }}</div>
+  }
 
   @if (authorStore.authorLoggedIn().name) {
     <div class="sectionContentTitle">Author Name:</div>
@@ -31,8 +38,8 @@
   }
 
   <div class="sectionMainTitle">
-    @if (authorStore.authorLoggedIn().authenticatorId !== undefined) {
-      {{ authorStore.authorLoggedIn().authenticatorId }} Activity
+    @if (authorStore.authorLoggedIn().id !== undefined) {
+      {{ authorStore.authorLoggedIn().id }} Activity
     }
   </div>
   <div class="sectionContentTitle">Author Slates {{ authorStore.authors().length }}</div>
@@ -54,3 +61,9 @@
   <div class="sectionContentTitle">Notices</div>
   <div class="sectionContent"><a style="color: #ddd" [routerLink]="['/tos']">Privacy and Terms of Service</a></div>
 </div>
+
+@defer (when showConsentPopup() === true) {
+  @if (showConsentPopup()) {
+    <mh5-author-consent [forcePopup]="showConsentPopup()" />
+  }
+}

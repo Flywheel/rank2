@@ -3,15 +3,11 @@ import { Asset, AssetView, Placement, PlacementView, Folio, FolioView, Author, A
 export const authorInit: Author = {
   id: '',
   name: '',
-  authenticatorId: '',
-  eventLog: [],
 };
 
 export const authorViewInit: AuthorView = {
   id: '',
   name: '',
-  authenticatorId: '',
-  eventLog: [],
   authorFolio: {
     id: 0,
     authorId: '',

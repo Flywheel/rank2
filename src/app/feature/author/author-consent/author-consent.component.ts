@@ -31,8 +31,7 @@ export class AuthorConsentComponent implements OnInit {
 
   acceptCookies(): void {
     this.setIt('accepted');
-    this.authorStore.addAuthor3({ id: uuidv7(), name: '', authenticatorId: 'ZZZ', eventLog: [] });
-    this.authorStore.writeToStorage();
+    this.authorStore.authorAdd({ id: uuidv7(), name: '', authenticatorId: 'ZZZ', eventLog: [] });
   }
 
   declineCookies(): void {
@@ -41,7 +40,7 @@ export class AuthorConsentComponent implements OnInit {
 
   private setIt(setting: string) {
     localStorage.setItem(AUTHOR_CONSENT_KEY, setting);
-    this.authorStore.setConsentState(setting);
+    this.authorStore.setConsent(setting);
     this.showConsentPopup = false;
     this.closeComponent.emit(false);
   }

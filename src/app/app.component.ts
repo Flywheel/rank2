@@ -4,7 +4,6 @@ import { AuthorStore } from './feature/author/author.store';
 import { AUTHOR_CONSENT_KEY } from './core/interfaces/constants';
 import { AuthorConsentComponent } from './feature/author/author-consent/author-consent.component';
 import { CommonModule } from '@angular/common';
-import { environment } from '../environments/environment';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -32,12 +31,10 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
   async onLoad() {
-    if (environment.ianConfig.showLogs) console.log('AppComponent ngOnInit');
     if (typeof window !== 'undefined') {
       const consent = localStorage.getItem(AUTHOR_CONSENT_KEY);
-      if (environment.ianConfig.showLogs) console.log(consent);
       if (consent) {
-        this.authorStore.setConsentState(consent);
+        this.authorStore.setConsent(consent);
       }
     }
   }
