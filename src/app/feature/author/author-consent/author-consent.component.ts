@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, output } from '@angular/core';
+import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
 import { AuthorStore } from '../author.store';
 import { AUTHOR_CONSENT_KEY } from '../../../core/interfaces/constants';
 import { environment } from '../../../../environments/environment';
@@ -12,9 +12,10 @@ import { uuidv7 } from 'uuidv7';
   styleUrl: './author-consent.component.scss',
 })
 export class AuthorConsentComponent implements OnInit {
-  showConsentPopup = true;
-  forcePopup = input<boolean>(false);
   authorStore = inject(AuthorStore);
+  forcePopup = input<boolean>(false);
+  consentValue = signal<string | null>('');
+  showConsentPopup = computed<boolean>(() => this.consentValue() === null || this.forcePopup());
   closeComponent = output<boolean>();
 
   ngOnInit(): void {
@@ -23,15 +24,12 @@ export class AuthorConsentComponent implements OnInit {
   }
 
   checkAuthorConsent(): void {
-    const consent = localStorage.getItem(AUTHOR_CONSENT_KEY);
-    if (consent && this.forcePopup() === false) {
-      this.showConsentPopup = false;
-    }
+    this.consentValue.set(localStorage.getItem(AUTHOR_CONSENT_KEY));
   }
 
   acceptCookies(): void {
+    this.authorStore.authorAdd({ id: uuidv7(), name: '' });
     this.setIt('accepted');
-    this.authorStore.authorAdd({ id: uuidv7(), name: '', authenticatorId: 'ZZZ', eventLog: [] });
   }
 
   declineCookies(): void {
@@ -41,7 +39,7 @@ export class AuthorConsentComponent implements OnInit {
   private setIt(setting: string) {
     localStorage.setItem(AUTHOR_CONSENT_KEY, setting);
     this.authorStore.setConsent(setting);
-    this.showConsentPopup = false;
+    this.consentValue.set(setting);
     this.closeComponent.emit(false);
   }
 }

@@ -62,8 +62,8 @@
   <div class="sectionContent"><a style="color: #ddd" [routerLink]="['/tos']">Privacy and Terms of Service</a></div>
 </div>
 
-@defer (when showConsentPopup() === true) {
-  @if (showConsentPopup()) {
-    <mh5-author-consent [forcePopup]="showConsentPopup()" />
+@defer (when ShowConsentPopup() === true) {
+  @if (ShowConsentPopup()) {
+    <mh5-author-consent [forcePopup]="ShowConsentPopup()" (closeComponent)="CloseConsentDialog()" />
   }
 }

@@ -18,18 +18,20 @@ import { uuidv7 } from 'uuidv7';
 })
 export class AuthorProfileComponent {
   channelName = signal<string>('');
-  showConsentPopup = signal(false);
+  ShowConsentPopup = signal(false);
   localStorageService = inject(LocalStorageService);
 
   isChannelNameOk = computed<boolean>(() => this.channelName().length >= 3 && this.channelName().length <= 15);
 
   ShowConsentDialog() {
-    if (environment.ianConfig.showLogs) console.log('ShowConsentDialog', this.showConsentPopup());
-    this.showConsentPopup.set(true);
+    if (environment.ianConfig.showLogs) console.log('ShowConsentDialog', this.ShowConsentPopup());
+    this.ShowConsentPopup.set(true);
   }
 
-  closeConsentComponent() {
-    this.showConsentPopup.set(false);
+  CloseConsentDialog() {
+    if (environment.ianConfig.showLogs) console.log('CloseConsentDialog', this.ShowConsentPopup());
+    this.ShowConsentPopup.set(false);
+    if (environment.ianConfig.showLogs) console.log('CloseConsentDialog', this.ShowConsentPopup());
   }
 
   runSomething() {
