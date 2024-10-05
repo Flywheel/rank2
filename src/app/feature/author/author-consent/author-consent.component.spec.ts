@@ -9,11 +9,11 @@ fdescribe('AuthorConsentComponent', () => {
   let fixture: ComponentFixture<AuthorConsentComponent>;
   let mockAuthorStore: { authorAdd: jasmine.Spy; setConsent: jasmine.Spy };
 
-  const mockStorage: { [key: string]: string } = {};
+  const mockStorage: Record<string, string> = {};
 
   beforeEach(async () => {
     mockAuthorStore = {
-      authorAdd: jasmine.createSpy('authorAdd'),
+      authorAdd: jasmine.createSpy('authorAdd'), //authorStateToLocalStorage
       setConsent: jasmine.createSpy('setConsent'),
     };
 

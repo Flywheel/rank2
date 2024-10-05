@@ -37,7 +37,7 @@ let slateMemberIdCounter = 1;
 const generateSlateMemberId = () => slateMemberIdCounter++;
 
 // **Authors**
-export const authorList: Author[] = [{ id: generateAuthorId(), name: 'miniherald', authenticatorId: 'miniherald', eventLog: [] }];
+export const authorList: Author[] = [{ id: generateAuthorId(), name: 'miniherald' }];
 
 // **Folios**
 const initialFolioData = [

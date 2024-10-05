@@ -1,7 +1,7 @@
 <div class="mainContainer">
   <div class="sectionMainTitle">Identity Management</div>
   <div class="sectionContentTitle">Account Identifier:</div>
-  @if (authorStore.authorLoggedIn().id.length === 0) {
+  @if (authorStore.authorLoggedIn() === undefined || authorStore.authorLoggedIn().id.length === 0) {
     <div class="sectionContent">
       No account identifier found.
       <button style="margin-left: 2em" (click)="showConsentDialog()">Initialize Identifier</button>
@@ -10,7 +10,7 @@
     <div class="sectionContent">{{ authorStore.authorLoggedIn().id }}</div>
   }
 
-  @if (authorStore.authorLoggedIn().name) {
+  @if (authorStore.authorLoggedIn().name !== authorDefaultName) {
     <div class="sectionContentTitle">Author Name:</div>
     <div class="sectionContent">{{ authorStore.authorLoggedIn().name }}</div>
   } @else {
@@ -50,7 +50,7 @@
 
   <div class="sectionMainTitle">Actions Available</div>
 
-  @if (isBackDoorOpen()) {
+  @if (isRunSomethingVisible()) {
     <button (click)="runSomething()" style="margin: 10px">Run Test</button>
   } @else {
     <div class="sectionContent">

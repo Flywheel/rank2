@@ -8,8 +8,6 @@ export interface EventLog {
 export interface Author {
   id: string;
   name: string;
-  authenticatorId?: string;
-  eventLog?: EventLog[];
 }
 
 export interface AuthorView extends Author {

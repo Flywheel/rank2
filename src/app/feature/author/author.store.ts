@@ -17,7 +17,7 @@ export const AuthorStore = signalStore(
     authorIdSelected: '',
     authors: [authorInit],
     currentAuthorView: authorViewInit,
-    knownAuthors: [authorViewInit],
+    knownAuthorViews: [authorViewInit],
     isLoading: false,
     consentStatus: 'unknown' as string,
   }),
@@ -42,79 +42,101 @@ export const AuthorStore = signalStore(
 
     return {
       async setConsent(consentValue: string) {
-        updateState(store, '[Author] setConsent Pending', { isLoading: true });
+        updateState(store, '[Author] Read From Storage Start', { isLoading: true });
         store.readFromStorage();
-        updateState(store, '[Author] setConsent Success', { isLoading: false, consentStatus: consentValue });
+        if (environment.ianConfig.showLogs) console.log(' store.authorLoggedIn()', store.authorLoggedIn());
+        updateState(store, '[Author] Read From Storage Success', { isLoading: false, consentStatus: consentValue });
       },
 
       async authorAdd(author: Author) {
-        updateState(store, '[Author] authorAdd Pending', { isLoading: true });
+        updateState(store, '[Author] Add Start', { isLoading: true });
         dbAuthor
           .authorCreate(author)
           .pipe(
             exhaustMap(newAuthor => {
-              updateState(store, '[Author] authorAdd Success', {
+              updateState(store, '[Author] Add Success', {
                 authorLoggedIn: newAuthor,
                 authors: [...store.authors(), newAuthor],
                 isLoading: false,
               });
               store.authorStateToLocalStorage(newAuthor.id);
-              // store.writeToStorage();
               return of(newAuthor);
             }),
             catchError(error => {
               if (environment.ianConfig.showLogs) console.log('error', error);
-              updateState(store, '[Author] authorAdd Failure', { isLoading: false });
+              updateState(store, '[Author] Add Failure', { isLoading: false });
               return throwError(error);
             })
           )
           .subscribe();
       },
 
-      // async authorStateToLocalStorage() {
-      //   updateState(store, '[Author] authorStateToLocalStorage Start', { isLoading: true, authorIdSelected: 9876 });
-      //   store.writeToStorage();
-      //   updateState(store, '[Author] authorStateToLocalStorage Success', { isLoading: false });
-      // },
+      async authorLoggedInUpdate(authorId: string, updateData: Partial<Author>) {
+        updateState(store, '[Author-LoggedIn] Update Start', { isLoading: true });
+        const authorData: Partial<Author> = {
+          name: updateData.name,
+        };
+        dbAuthor
+          .authorUpdate(authorId, authorData)
+          .pipe(
+            exhaustMap(updatedAuthor => {
+              if (environment.ianConfig.showLogs) console.log('updatedAuthor ', updatedAuthor);
+              updateState(store, '[Author-LoggedIn] Update Success', {
+                authorLoggedIn: updatedAuthor,
+                authors: [...store.authors(), updatedAuthor],
+                isLoading: false,
+              });
+              store.writeToStorage();
+              return of(updatedAuthor);
+            }),
+            catchError(error => {
+              if (environment.ianConfig.showLogs) console.log('error', error);
+              updateState(store, '[Author] Update Failure', { isLoading: false });
+              return throwError(error);
+            })
+          )
+          .subscribe();
+      },
 
-      // loadAllAuthors: rxMethod<void>(
-      //   pipe(
-      //     tap(() => {
-      //       updateState(store, '[Author] getAllAuthors Start', { isLoading: true });
-      //     }),
-      //     exhaustMap(() => {
-      //       return dbAuthor.authorsGetAll().pipe(
-      //         tap({
-      //           next: (allAuthors: Author[]) => {
-      //             updateState(store, '[Author] getAllAuthors Success', value => ({
-      //               ...value,
-      //               authors: allAuthors,
-      //               knownAuthors: allAuthors as AuthorView[],
-      //               isLoading: false,
-      //             }));
-      //           },
-      //         })
-      //       );
-      //     })
-      //   )
-      // ),
+      async authorUpdatex(authorId: string, updateData: Partial<Author>) {
+        const authorData: Partial<Author> = {
+          name: updateData.name,
+        };
+        return dbAuthor.authorUpdate(authorId, authorData).pipe(
+          tap({
+            next: (updatedAuthor: Author) => {
+              updateState(store, '[Author] updateAuthor Success', {
+                authorLoggedIn: updatedAuthor,
+                isLoading: false,
+              });
+              store.writeToStorage();
+            },
+            error: error => {
+              updateState(store, `[Author] updateAuthor Failure ${error.message}`, {
+                isLoading: false,
+              });
+              return throwError(() => new Error('Failed to update author'));
+            },
+          })
+        );
+      },
 
       authorsLoad: rxMethod<void>(
         pipe(
           exhaustMap(() => {
-            updateState(store, '[Author] authorsLoad Start', { isLoading: true });
+            updateState(store, '[Author] Load Start', { isLoading: true });
             return dbAuthor.authorsGetAll().pipe(
               map((allAuthors: Author[]) => {
                 updateState(store, '[Author] authorsLoad Success', value => ({
                   ...value,
                   authors: allAuthors,
-                  knownAuthors: allAuthors as AuthorView[],
+                  knownAuthorViews: allAuthors as AuthorView[],
                   isLoading: false,
                 }));
                 return allAuthors;
               }),
               catchError(error => {
-                updateState(store, '[Author] authorsLoad Failure', {
+                updateState(store, '[Author] Load Failure', {
                   isLoading: false,
                   // error: error.message || 'An error occurred while loading folios',
                 });
@@ -125,123 +147,21 @@ export const AuthorStore = signalStore(
         )
       ),
 
-      // addAuthor3x: rxMethod<Author>(
-      //   pipe(
-      //     tap(() => {
-      //       updateState(store, '[Author] addAuthor Start', { isLoading: true });
-      //     }),
-      //     exhaustMap(author => {
-      //       return dbAuthor.authorCreate(author).pipe(
-      //         tap({
-      //           next: (newAuthor: Author) => {
-      //             updateState(store, '[Author] addAuthor Success', value => ({
-      //               ...value,
-      //               allAuthors: [...value.allAuthors, newAuthor],
-      //               isLoading: false,
-      //             }));
-      //           },
-      //           error: error => {
-      //             updateState(store, '[Author] addAuthor Failure', { isLoading: false });
-      //             return throwError(error);
-      //           },
-      //         })
-      //       );
-      //     })
-      //   )
-      // ),
-
-      addAuthor13(author: Author) {
-        updateState(store, '[Author] addAuthor Pending', { isLoading: true });
-        dbAuthor
-          .authorCreate(author)
-          .pipe(
-            tap({
-              next: (newAuthor: Author) => {
-                updateState(store, '[Author] createAuthor Success', {
-                  authorLoggedIn: newAuthor,
-                  authors: [...store.authors(), newAuthor],
-                  isLoading: false,
-                });
-              },
-              error: error => {
-                if (environment.ianConfig.showLogs) console.log('error', error);
-                updateState(store, '[Folio] addFolio Failed', { isLoading: false });
-              },
-            })
-          )
-          .subscribe();
-      },
-
-      // authorCreate: rxMethod<Author>(
-      //   pipe(
-      //     tap(x => {
-      //       if (environment.ianConfig.showLogs) console.log(x);
-      //       updateState(store, '[Author] createAuthor Start', { isLoading: true });
-      //     }),
-      //     exhaustMap(author => {
-      //       return dbAuthor.authorCreate(author).pipe(
-      //         tap({
-      //           next: (newAuthor: Author) => {
-      //             updateState(store, '[Author] createAuthor Success', {
-      //               loggedInAuthor: newAuthor,
-      //               allAuthors: [...store.allAuthors(), newAuthor],
-      //               isLoading: false,
-      //             });
-      //             if (environment.ianConfig.showLogs) console.log(` addNewAuthorId: ${newAuthor.id}`);
-      //             store.writeToStorage();
-      //           },
-      //           error: () => {
-      //             updateState(store, '[Author] createAuthor Error', { isLoading: false });
-      //           },
-      //         })
-      //       );
-      //     })
-      //   )
-      // ),
-
-      authorUpdate: rxMethod<Partial<Author>>(
+      authorByIdx: rxMethod<string>(
         pipe(
           tap(() => {
-            updateState(store, '[Author] updateAuthor Start', { isLoading: true });
-          }),
-          exhaustMap(authorData => {
-            const authorId = store.authorLoggedIn().id;
-            return dbAuthor.authorUpdate(authorId, authorData).pipe(
-              tap({
-                next: (updatedAuthor: Author) => {
-                  updateState(store, '[Author] updateAuthor Success', {
-                    authorLoggedIn: updatedAuthor,
-                    isLoading: false,
-                  });
-                  store.writeToStorage();
-                },
-              }),
-              catchError(error => {
-                updateState(store, `[Author] updateAuthor Failure ${error.message}`, {
-                  isLoading: false,
-                });
-                return throwError(() => new Error('Failed to update author'));
-              })
-            );
-          })
-        )
-      ),
-
-      authorById: rxMethod<string>(
-        pipe(
-          tap(() => {
-            updateState(store, '[Author] getAuthorById Start', { isLoading: true });
+            updateState(store, '[Author] GetById Start', { isLoading: true });
           }),
           switchMap(authorId => {
-            const existingAuthor = store.knownAuthors().find(author => author.id === authorId);
+            const existingAuthor = store.knownAuthorViews().find(author => author.id === authorId);
             if (existingAuthor) {
               return of(existingAuthor);
             } else {
               return dbAuthor.authorGetById(authorId).pipe(
                 tap({
                   next: (author: Author) => {
-                    updateState(store, '[Author] getAuthorById Success', {
-                      knownAuthors: [...store.knownAuthors(), author as AuthorView],
+                    updateState(store, '[Author] GetById Success', {
+                      knownAuthorViews: [...store.knownAuthorViews(), author as AuthorView],
                     });
                   },
                 })
@@ -249,11 +169,50 @@ export const AuthorStore = signalStore(
             }
           }),
           tap(author =>
-            updateState(store, '[Author] getAuthorById Success', {
+            updateState(store, '[Author] GetById Success', {
               authorLoggedIn: author,
               isLoading: false,
             })
           )
+        )
+      ),
+
+      authorById: rxMethod<string>(
+        pipe(
+          switchMap(authorId => {
+            updateState(store, '[Author] GetById Start', { isLoading: true });
+            const existingAuthor = store.knownAuthorViews().find(author => author.id === authorId);
+            if (existingAuthor) {
+              updateState(store, '[Author] GetById Success', {
+                currentAuthorView: existingAuthor,
+                authors: [...store.authors(), existingAuthor],
+                knownAuthorViews: [...store.knownAuthorViews(), existingAuthor],
+                isLoading: false,
+              });
+              return of(existingAuthor);
+            } else {
+              return dbAuthor.authorGetById(authorId).pipe(
+                map((author: Author) => {
+                  // Update knownAuthors with the new author
+                  updateState(store, '[Author] GetById Success', {
+                    currentAuthorView: author as AuthorView,
+                    knownAuthorViews: [...store.knownAuthorViews(), author as AuthorView],
+                    //   authorLoggedIn: author,
+                    isLoading: false,
+                  });
+                  return author;
+                }),
+                catchError(error => {
+                  // Handle error state
+                  updateState(store, `[Author] GetById Failure ${error.message}`, {
+                    isLoading: false,
+                  });
+                  // Propagate the error
+                  return throwError(() => new Error('Failed to get author'));
+                })
+              );
+            }
+          })
         )
       ),
 
@@ -263,7 +222,7 @@ export const AuthorStore = signalStore(
             updateState(store, '[Author] getAuthorViewById Start', { isLoading: true });
           }),
           switchMap(authorId => {
-            const existingAuthorView = store.knownAuthors().find(view => view.id === authorId);
+            const existingAuthorView = store.knownAuthorViews().find(view => view.id === authorId);
             if (existingAuthorView) {
               return of(existingAuthorView);
             } else {
@@ -271,7 +230,7 @@ export const AuthorStore = signalStore(
                 tap({
                   next: (authorView: AuthorView) => {
                     updateState(store, '[Author] Load AuthorViewById Success', {
-                      knownAuthors: [...store.knownAuthors(), authorView],
+                      knownAuthorViews: [...store.knownAuthorViews(), authorView],
                     });
                   },
                 })

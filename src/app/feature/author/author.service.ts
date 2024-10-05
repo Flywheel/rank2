@@ -25,7 +25,7 @@ export class AuthorService {
 
   authorCreate(author: Author): Observable<Author> {
     if (environment.ianConfig.showLogs) console.log(`authorCreate Start `);
-    return this.http.post<Author>(this.authorAPIUrl, { id: author.id, name: author.name, authenticatorId: author.authenticatorId, eventLog: [] }).pipe(
+    return this.http.post<Author>(this.authorAPIUrl, { id: author.id, name: author.name }).pipe(
       catchError(this.handleError),
       tap((newAuthor: Author) => {
         if (environment.ianConfig.showLogs) console.log(` addNewAuthorId: ${newAuthor.id}`);
@@ -34,14 +34,36 @@ export class AuthorService {
   }
 
   authorUpdate(authorId: string, authorData: Partial<Author>): Observable<Author> {
-    if (environment.ianConfig.showLogs) console.log(`authorUpdate Start authorId=${authorId}`);
-    return this.http.patch<Author>(`${this.authorAPIUrl}/${authorId}`, authorData).pipe(
+    if (environment.ianConfig.showLogs) {
+      console.log(`authorUpdate Start authorId=${authorId}`);
+      console.log(authorData);
+    }
+    const theAuthor = { id: authorId, ...authorData };
+    if (environment.ianConfig.showLogs) console.log(theAuthor);
+    return this.http.put<Author>(`${this.authorAPIUrl}/${authorId}`, theAuthor).pipe(
       catchError(this.handleError),
-      tap(() => {
-        if (environment.ianConfig.showLogs) console.log(`authorUpdate Success authorId=${authorId}`);
+      tap((updatedAuthor: Author) => {
+        if (environment.ianConfig.showLogs) console.log(`author result = ${updatedAuthor}`);
       })
     );
   }
+
+  //updateAuthor(author: Author): Promise<Author> {
+  // async authorUpdate(authorId: string, authorData: Partial<Author>): Promise<Author> {
+  //   const theAuthor = { id: authorId, ...authorData };
+  //   return new Promise((resolve, reject) => {
+  //     this.http.put<Author>(`${this.authorAPIUrl}/${authorId}`, theAuthor).subscribe({
+  //       next: data => {
+  //         if (environment.ianConfig.showLogs) console.log(`authorUpdate ${data}`);
+  //         resolve(data);
+  //       },
+  //       error: error => {
+  //         if (environment.ianConfig.showLogs) console.error('getAllAuthors Error:', error);
+  //         reject(error);
+  //       },
+  //     });
+  //   });
+  // }
 
   private handleError({ status }: HttpErrorResponse) {
     return throwError(() => `${status} Error occurred`);

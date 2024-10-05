@@ -8,6 +8,7 @@ import { AuthorConsentComponent } from '../author-consent/author-consent.compone
 import { environment } from '../../../../environments/environment';
 import { Author } from '../../../core/interfaces/interfaces';
 import { uuidv7 } from 'uuidv7';
+import { AUTHOR_DEFAULT_NAME } from '../../../core/interfaces/constants';
 
 @Component({
   selector: 'mh5-author-profile',
@@ -17,9 +18,12 @@ import { uuidv7 } from 'uuidv7';
   styleUrl: './author-profile.component.scss',
 })
 export class AuthorProfileComponent {
+  authorStore = inject(AuthorStore);
+  isRunSomethingVisible = signal<boolean>(true);
   channelName = signal<string>('');
   showConsentPopup = signal(false);
   localStorageService = inject(LocalStorageService);
+  authorDefaultName = AUTHOR_DEFAULT_NAME;
 
   isChannelNameOk = computed<boolean>(() => this.channelName().length >= 3 && this.channelName().length <= 15);
 
@@ -35,25 +39,28 @@ export class AuthorProfileComponent {
   }
 
   runSomething() {
-    const authorData: Author = {
-      id: uuidv7(),
-      name: this.channelName(),
-    };
-    this.authorStore.authorAdd(authorData);
+    // const authorData: Author = {
+    //   id: uuidv7(),
+    //   name: this.channelName(),
+    // };
+    // this.authorStore.authorAdd(authorData);
 
-    if (environment.ianConfig.showLogs) {
-      console.log(this.authorStore.authorLoggedIn());
-      console.log(this.authorStore.knownAuthors());
-    }
+    // if (environment.ianConfig.showLogs) {
+    //   console.log(this.authorStore.authorLoggedIn());
+    //   console.log(this.authorStore.knownAuthors());
+    // }
+    const xx = this.authorStore.authorLoggedIn();
+    if (environment.ianConfig.showLogs) console.log(xx);
+
     this.authorStore.authorViewByUid(this.authorStore.authorLoggedIn().id);
   }
-  authorStore = inject(AuthorStore);
-  isBackDoorOpen = signal<boolean>(true);
 
   initializeAuthorHandle() {
-    const authorData: Partial<Author> = {
-      name: this.channelName(),
-    };
-    this.authorStore.authorUpdate(authorData);
+    const currentAuthor = this.authorStore.authorLoggedIn();
+    if (environment.ianConfig.showLogs) console.log(currentAuthor);
+    const updatedAuthorData: Partial<Author> = { name: this.channelName() };
+
+    if (environment.ianConfig.showLogs) console.log(currentAuthor.id, updatedAuthorData);
+    this.authorStore.authorLoggedInUpdate(currentAuthor.id, updatedAuthorData);
   }
 }
