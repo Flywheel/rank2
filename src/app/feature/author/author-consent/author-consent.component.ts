@@ -29,14 +29,14 @@ export class AuthorConsentComponent implements OnInit {
 
   acceptCookies(): void {
     this.authorStore.authorAdd({ id: uuidv7(), name: '' });
-    this.setIt('accepted');
+    this.setConsent('accepted');
   }
 
   declineCookies(): void {
-    this.setIt('declined');
+    this.setConsent('declined');
   }
 
-  private setIt(setting: string) {
+  setConsent(setting: string) {
     localStorage.setItem(AUTHOR_CONSENT_KEY, setting);
     this.authorStore.setConsent(setting);
     this.consentValue.set(setting);

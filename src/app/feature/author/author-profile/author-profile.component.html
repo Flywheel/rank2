@@ -4,7 +4,7 @@
   @if (authorStore.authorLoggedIn().id.length === 0) {
     <div class="sectionContent">
       No account identifier found.
-      <button style="margin-left: 2em" (click)="ShowConsentDialog()">Initialize Identifier</button>
+      <button style="margin-left: 2em" (click)="showConsentDialog()">Initialize Identifier</button>
     </div>
   } @else {
     <div class="sectionContent">{{ authorStore.authorLoggedIn().id }}</div>
@@ -20,7 +20,7 @@
         class="newHandleInput"
         [ngModel]="channelName()"
         (ngModelChange)="channelName.set($event)"
-        (keyup.enter)="InitializeAuthorHandle()"
+        (keyup.enter)="initializeAuthorHandle()"
         placeholder="Awaiting entry" />
     </div>
 
@@ -33,7 +33,7 @@
     }
 
     <div class="sectionContent">
-      <button (click)="InitializeAuthorHandle()" style="margin-top: 10px">Initialize Handle</button>
+      <button (click)="initializeAuthorHandle()" style="margin-top: 10px">Initialize Handle</button>
     </div>
   }
 
@@ -62,8 +62,6 @@
   <div class="sectionContent"><a style="color: #ddd" [routerLink]="['/tos']">Privacy and Terms of Service</a></div>
 </div>
 
-@defer (when ShowConsentPopup() === true) {
-  @if (ShowConsentPopup()) {
-    <mh5-author-consent [forcePopup]="ShowConsentPopup()" (closeComponent)="CloseConsentDialog()" />
-  }
+@defer (when showConsentPopup() === true) {
+  <mh5-author-consent [forcePopup]="showConsentPopup()" (closeComponent)="closeConsentDialog()" />
 }

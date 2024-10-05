@@ -18,20 +18,20 @@ import { uuidv7 } from 'uuidv7';
 })
 export class AuthorProfileComponent {
   channelName = signal<string>('');
-  ShowConsentPopup = signal(false);
+  showConsentPopup = signal(false);
   localStorageService = inject(LocalStorageService);
 
   isChannelNameOk = computed<boolean>(() => this.channelName().length >= 3 && this.channelName().length <= 15);
 
-  ShowConsentDialog() {
-    if (environment.ianConfig.showLogs) console.log('ShowConsentDialog', this.ShowConsentPopup());
-    this.ShowConsentPopup.set(true);
+  showConsentDialog() {
+    if (environment.ianConfig.showLogs) console.log('ShowConsentDialog', this.showConsentPopup());
+    this.showConsentPopup.set(true);
   }
 
-  CloseConsentDialog() {
-    if (environment.ianConfig.showLogs) console.log('CloseConsentDialog', this.ShowConsentPopup());
-    this.ShowConsentPopup.set(false);
-    if (environment.ianConfig.showLogs) console.log('CloseConsentDialog', this.ShowConsentPopup());
+  closeConsentDialog() {
+    if (environment.ianConfig.showLogs) console.log('CloseConsentDialog', this.showConsentPopup());
+    this.showConsentPopup.set(false);
+    if (environment.ianConfig.showLogs) console.log('CloseConsentDialog', this.showConsentPopup());
   }
 
   runSomething() {
@@ -50,7 +50,7 @@ export class AuthorProfileComponent {
   authorStore = inject(AuthorStore);
   isBackDoorOpen = signal<boolean>(true);
 
-  InitializeAuthorHandle() {
+  initializeAuthorHandle() {
     const authorData: Partial<Author> = {
       name: this.channelName(),
     };
