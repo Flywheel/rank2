@@ -15,7 +15,7 @@ import {
 } from '../app/core/interfaces/interfaces';
 
 // Utility functions to generate incremental IDs
-let authorIdCounter = 1;
+
 const generateAuthorId = () => ''; //  authorIdCounter++;
 
 let folioIdCounter = 1;

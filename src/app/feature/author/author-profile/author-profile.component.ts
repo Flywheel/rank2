@@ -9,6 +9,7 @@ import { environment } from '../../../../environments/environment';
 import { Author } from '../../../core/interfaces/interfaces';
 // import { uuidv7 } from 'uuidv7';
 import { AUTHOR_DEFAULT_NAME } from '../../../core/interfaces/constants';
+import { AuthorService } from '../author.service';
 
 @Component({
   selector: 'mh5-author-profile',
@@ -63,9 +64,19 @@ export class AuthorProfileComponent {
   initializeAuthorHandle() {
     const currentAuthor = this.authorStore.authorLoggedIn();
     if (environment.ianConfig.showLogs) console.log(currentAuthor);
-    const updatedAuthorData: Partial<Author> = { name: this.channelName() };
-
+    const updatedAuthorData: Author = { id: currentAuthor.id, name: this.channelName() };
+    this.test3(currentAuthor.id);
     if (environment.ianConfig.showLogs) console.log(currentAuthor.id, updatedAuthorData);
     this.authorStore.authorLoggedInUpdate(currentAuthor.id, updatedAuthorData);
+  }
+
+  db = inject(AuthorService);
+  test3(theId: string) {
+    this.db.authorsGetAll().subscribe(data => {
+      console.log(data);
+    });
+    this.db.authorGetById(theId).subscribe(data => {
+      console.log(data);
+    });
   }
 }

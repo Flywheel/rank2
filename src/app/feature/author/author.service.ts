@@ -26,24 +26,27 @@ export class AuthorService {
   authorCreate(author: Author): Observable<Author> {
     if (environment.ianConfig.showLogs) console.log(`authorCreate Start `);
     return this.http.post<Author>(this.authorAPIUrl, { id: author.id, name: author.name }).pipe(
-      catchError(this.handleError),
-      tap((newAuthor: Author) => {
-        if (environment.ianConfig.showLogs) console.log(` addNewAuthorId: ${newAuthor.id}`);
+      tap(data => {
+        if (environment.ianConfig.showLogs) console.log('data', data);
+      }),
+      catchError(error => {
+        if (environment.ianConfig.showLogs) console.log('error', error);
+        return throwError(() => new Error('authorCreate failed'));
       })
     );
   }
 
-  authorUpdate(authorId: string, authorData: Partial<Author>): Observable<Author> {
-    if (environment.ianConfig.showLogs) {
-      console.log(`authorUpdate Start authorId=${authorId}`);
-      console.log(authorData);
-    }
-    const theAuthor = { id: authorId, ...authorData };
-    if (environment.ianConfig.showLogs) console.log(theAuthor);
-    return this.http.put<Author>(`${this.authorAPIUrl}/${authorId}`, theAuthor).pipe(
-      catchError(this.handleError),
-      tap((updatedAuthor: Author) => {
-        if (environment.ianConfig.showLogs) console.log(`author result = ${updatedAuthor}`);
+  authorUpdate(authorId: string, authorData: Author): Observable<Author> {
+    const endPoint = `${this.authorAPIUrl}/${authorId}`;
+
+    if (environment.ianConfig.showLogs) console.log(authorData);
+    return this.http.put<Author>(endPoint, authorData).pipe(
+      tap(data => {
+        if (environment.ianConfig.showLogs) console.log('data', data);
+      }),
+      catchError(error => {
+        if (environment.ianConfig.showLogs) console.log('error', error);
+        return throwError(() => new Error('authorUpdate failed'));
       })
     );
   }

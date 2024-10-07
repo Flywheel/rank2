@@ -3,7 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Contest, ContestView } from '../../core/interfaces/interfaces';
 import { catchError, Observable, tap, throwError } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
@@ -18,16 +17,16 @@ export class ContestService {
 
   contestsGetAll(): Observable<Contest[]> {
     if (environment.ianConfig.showLogs) console.log(`ballotsService.allContests() ${this.contestAPIUrl}`);
-    return this.http.get<Contest[]>(this.contestAPIUrl).pipe(takeUntilDestroyed());
+    return this.http.get<Contest[]>(this.contestAPIUrl);
   }
 
   contestGetById(id: number): Observable<Contest> {
-    return this.http.get<Contest>(`${this.contestAPIUrl}/${id}`).pipe(takeUntilDestroyed());
+    return this.http.get<Contest>(`${this.contestAPIUrl}/${id}`);
   }
 
   contestViewsGetAll(): Observable<ContestView[]> {
     if (environment.ianConfig.showLogs) console.log(`ballotsService.allContestViews() ${this.contestViewAPIUrl}`);
-    return this.http.get<ContestView[]>(this.contestViewAPIUrl).pipe(takeUntilDestroyed());
+    return this.http.get<ContestView[]>(this.contestViewAPIUrl);
   }
 
   contestViewGetById(id: number): Observable<ContestView> {
@@ -42,6 +41,19 @@ export class ContestService {
       catchError(error => {
         if (environment.ianConfig.showLogs) console.log('error', error);
         return throwError(() => new Error('ContestCreate failed'));
+      })
+    );
+  }
+
+  contestUpdateName(contestId: number, contest: Contest): Observable<Contest> {
+    const endPoint = `${this.contestAPIUrl}/${contestId}`;
+    return this.http.put<Contest>(endPoint, contest).pipe(
+      tap(data => {
+        if (environment.ianConfig.showLogs) console.log('data', data);
+      }),
+      catchError(error => {
+        if (environment.ianConfig.showLogs) console.log('error', error);
+        return throwError(() => new Error('ContestUpdateName failed'));
       })
     );
   }

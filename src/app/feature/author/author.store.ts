@@ -72,11 +72,9 @@ export const AuthorStore = signalStore(
           .subscribe();
       },
 
-      async authorLoggedInUpdate(authorId: string, updateData: Partial<Author>) {
+      async authorLoggedInUpdate(authorId: string, authorData: Author) {
         updateState(store, '[Author-LoggedIn] Update Start', { isLoading: true });
-        const authorData: Partial<Author> = {
-          name: updateData.name,
-        };
+
         if (environment.ianConfig.showLogs) console.log('updatedAuthor ', authorData);
         dbAuthor
           .authorUpdate(authorId, authorData)
