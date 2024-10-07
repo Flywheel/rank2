@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal, untracked } from '@angular/core';
 import { ContestView, SlateMemberView, SlateView } from '../../../core/interfaces/interfaces';
-import { BallotStore } from '../ballot.store';
+import { ContestStore } from '../contest.store';
 import { CdkDrag, CdkDragHandle, CdkDropList, CdkDropListGroup, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { environment } from '../../../../environments/environment';
 
@@ -14,7 +14,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class BodyComponent {
   authorId = signal<string>('');
-  ballotStore = inject(BallotStore);
+  ballotStore = inject(ContestStore);
 
   contest = computed<ContestView>(() => this.ballotStore.currentContestView());
   candidateList = computed(() => this.contest().slate.slateMemberViews);

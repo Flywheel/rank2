@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { AuthorStore } from '../../feature/author/author.store';
 import { FolioStore } from '../../feature/folio/folio.store';
-import { BallotStore } from '../../feature/ballot/ballot.store';
+import { ContestStore } from '../../feature/ballot/contest.store';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +9,7 @@ import { BallotStore } from '../../feature/ballot/ballot.store';
 export class LocalStorageService {
   private authorStore = inject(AuthorStore);
   private folioStore = inject(FolioStore);
-  private ballotStore = inject(BallotStore);
+  private ballotStore = inject(ContestStore);
 
   updateFromStorage(): void {
     this.authorStore.readFromStorage(); // reads the stored item from storage and patches the state

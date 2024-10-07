@@ -2,7 +2,6 @@ import { ApplicationConfig, isDevMode, provideZoneChangeDetection, importProvide
 import { provideRouter, withComponentInputBinding, withViewTransitions } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { routes } from './app.routes';
-import { provideClientHydration } from '@angular/platform-browser';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { DbService } from '../mocks/db.service';
 import { provideAnimations } from '@angular/platform-browser/animations';

@@ -1,6 +1,6 @@
 import { Component, inject, output } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BallotStore } from '../../ballot/ballot.store';
+import { ContestStore } from '../../ballot/contest.store';
 import { Contest } from '../../../core/interfaces/interfaces';
 import { environment } from '../../../../environments/environment';
 
@@ -12,7 +12,7 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './contest-new.component.scss',
 })
 export class ContestNewComponent {
-  ballotStore = inject(BallotStore);
+  ballotStore = inject(ContestStore);
 
   formGroup: FormGroup;
   closeNewContestEditor = output<boolean>();

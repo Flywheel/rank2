@@ -7,7 +7,7 @@ import { LocalStorageService } from '../../../core/services/local-storage.servic
 import { AuthorConsentComponent } from '../author-consent/author-consent.component';
 import { environment } from '../../../../environments/environment';
 import { Author } from '../../../core/interfaces/interfaces';
-import { uuidv7 } from 'uuidv7';
+// import { uuidv7 } from 'uuidv7';
 import { AUTHOR_DEFAULT_NAME } from '../../../core/interfaces/constants';
 
 @Component({
@@ -49,10 +49,15 @@ export class AuthorProfileComponent {
     //   console.log(this.authorStore.authorLoggedIn());
     //   console.log(this.authorStore.knownAuthors());
     // }
-    const xx = this.authorStore.authorLoggedIn();
-    if (environment.ianConfig.showLogs) console.log(xx);
-
-    this.authorStore.authorViewByUid(this.authorStore.authorLoggedIn().id);
+    const loggedInAuthorData = this.authorStore.authorLoggedIn();
+    if (environment.ianConfig.showLogs) console.log(loggedInAuthorData);
+    this.authorStore.authorById(loggedInAuthorData.id);
+    if (environment.ianConfig.showLogs) {
+      console.log(loggedInAuthorData);
+      console.log(this.authorStore.authorLoggedIn());
+      console.log(loggedInAuthorData.id, this.channelName());
+    }
+    //  this.authorStore.authorLoggedInUpdate(loggedInAuthorData.id, { name: 'this.channelName()' });
   }
 
   initializeAuthorHandle() {

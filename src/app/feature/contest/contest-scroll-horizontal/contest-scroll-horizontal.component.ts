@@ -1,6 +1,6 @@
 import { Component, inject, input, output } from '@angular/core';
 import { Contest } from '../../../core/interfaces/interfaces';
-import { BallotStore } from '../../ballot/ballot.store';
+import { ContestStore } from '../../ballot/contest.store';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -11,7 +11,7 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './contest-scroll-horizontal.component.scss',
 })
 export class ContestScrollHorizontalComponent {
-  ballotStore = inject(BallotStore);
+  ballotStore = inject(ContestStore);
   theContestsInput = input<Contest[]>();
   newContestEditorStateChange = output<boolean>();
   newPlacementEditorStateChange = output<boolean>();

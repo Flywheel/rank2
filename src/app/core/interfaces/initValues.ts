@@ -1,4 +1,4 @@
-import { Asset, AssetView, Placement, PlacementView, Folio, FolioView, Author, AuthorView } from './interfaces';
+import { Asset, AssetView, Placement, PlacementView, Folio, FolioView, Author, AuthorView, Contest, ContestView, SlateView } from './interfaces';
 
 export const authorInit: Author = {
   id: '',
@@ -63,4 +63,31 @@ export const folioViewInit: FolioView = {
   isDefault: false,
   folioName: '',
   placementViews: [],
+};
+
+export const slateViewInit: SlateView = {
+  id: 0,
+  contestId: 0,
+  authorId: '',
+  slateMemberViews: [],
+  isTopSlate: false,
+};
+
+export const contestInit: Contest = {
+  id: 0,
+  authorId: '',
+  opens: new Date('1922-01-03'),
+  closes: new Date('1922-01-04'),
+  contestTitle: '',
+  contestDescription: '',
+};
+export const contestViewInit: ContestView = {
+  id: 0,
+  authorId: '',
+  opens: new Date('1922-01-03'),
+  closes: new Date('1922-01-04'),
+  contestTitle: '',
+  contestDescription: '',
+  slateId: 0,
+  slate: slateViewInit,
 };

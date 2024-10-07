@@ -1,10 +1,10 @@
 import { inject } from '@angular/core';
 import { signalStore, withMethods, withState } from '@ngrx/signals';
-import { pipe, tap, switchMap, of, exhaustMap, catchError, throwError, map } from 'rxjs';
+import { pipe, switchMap, of, exhaustMap, catchError, throwError, map } from 'rxjs';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
 import { Author, AuthorView } from '../../core/interfaces/interfaces';
-import { authorInit, authorViewInit } from '../../core/interfaces/initValues';
+import { authorInit } from '../../core/interfaces/initValues';
 import { AuthorService } from './author.service';
 
 import { environment } from '../../../environments/environment';
@@ -16,8 +16,7 @@ export const AuthorStore = signalStore(
     authorLoggedIn: authorInit,
     authorIdSelected: '',
     authors: [authorInit],
-    currentAuthorView: authorViewInit,
-    knownAuthorViews: [authorViewInit],
+    //authorViewsKnown: [authorViewInit],
     isLoading: false,
     consentStatus: 'unknown' as string,
   }),
@@ -48,7 +47,7 @@ export const AuthorStore = signalStore(
         updateState(store, '[Author] Read From Storage Success', { isLoading: false, consentStatus: consentValue });
       },
 
-      async authorAdd(author: Author) {
+      async authorAddIdWithDefaultName(author: Author) {
         updateState(store, '[Author] Add Start', { isLoading: true });
         dbAuthor
           .authorCreate(author)
@@ -56,7 +55,9 @@ export const AuthorStore = signalStore(
             exhaustMap(newAuthor => {
               updateState(store, '[Author] Add Success', {
                 authorLoggedIn: newAuthor,
+                authorIdSelected: newAuthor.id,
                 authors: [...store.authors(), newAuthor],
+                //   authorViewsKnown: [...store.authorViewsKnown(), newAuthor as AuthorView],
                 isLoading: false,
               });
               store.authorStateToLocalStorage(newAuthor.id);
@@ -76,6 +77,7 @@ export const AuthorStore = signalStore(
         const authorData: Partial<Author> = {
           name: updateData.name,
         };
+        if (environment.ianConfig.showLogs) console.log('updatedAuthor ', authorData);
         dbAuthor
           .authorUpdate(authorId, authorData)
           .pipe(
@@ -84,6 +86,7 @@ export const AuthorStore = signalStore(
               updateState(store, '[Author-LoggedIn] Update Success', {
                 authorLoggedIn: updatedAuthor,
                 authors: [...store.authors(), updatedAuthor],
+                // authorViewsKnown: [...store.authorViewsKnown(), updatedAuthor as AuthorView],
                 isLoading: false,
               });
               store.writeToStorage();
@@ -98,28 +101,28 @@ export const AuthorStore = signalStore(
           .subscribe();
       },
 
-      async authorUpdatex(authorId: string, updateData: Partial<Author>) {
-        const authorData: Partial<Author> = {
-          name: updateData.name,
-        };
-        return dbAuthor.authorUpdate(authorId, authorData).pipe(
-          tap({
-            next: (updatedAuthor: Author) => {
-              updateState(store, '[Author] updateAuthor Success', {
-                authorLoggedIn: updatedAuthor,
-                isLoading: false,
-              });
-              store.writeToStorage();
-            },
-            error: error => {
-              updateState(store, `[Author] updateAuthor Failure ${error.message}`, {
-                isLoading: false,
-              });
-              return throwError(() => new Error('Failed to update author'));
-            },
-          })
-        );
-      },
+      // async authorUpdatex(authorId: string, updateData: Partial<Author>) {
+      //   const authorData: Partial<Author> = {
+      //     name: updateData.name,
+      //   };
+      //   return dbAuthor.authorUpdate(authorId, authorData).pipe(
+      //     tap({
+      //       next: (updatedAuthor: Author) => {
+      //         updateState(store, '[Author] updateAuthor Success', {
+      //           authorLoggedIn: updatedAuthor,
+      //           isLoading: false,
+      //         });
+      //         store.writeToStorage();
+      //       },
+      //       error: error => {
+      //         updateState(store, `[Author] updateAuthor Failure ${error.message}`, {
+      //           isLoading: false,
+      //         });
+      //         return throwError(() => new Error('Failed to update author'));
+      //       },
+      //     })
+      //   );
+      // },
 
       authorsLoad: rxMethod<void>(
         pipe(
@@ -130,7 +133,7 @@ export const AuthorStore = signalStore(
                 updateState(store, '[Author] authorsLoad Success', value => ({
                   ...value,
                   authors: allAuthors,
-                  knownAuthorViews: allAuthors as AuthorView[],
+                  authorViewsKnown: allAuthors as AuthorView[],
                   isLoading: false,
                 }));
                 return allAuthors;
@@ -147,57 +150,22 @@ export const AuthorStore = signalStore(
         )
       ),
 
-      authorByIdx: rxMethod<string>(
-        pipe(
-          tap(() => {
-            updateState(store, '[Author] GetById Start', { isLoading: true });
-          }),
-          switchMap(authorId => {
-            const existingAuthor = store.knownAuthorViews().find(author => author.id === authorId);
-            if (existingAuthor) {
-              return of(existingAuthor);
-            } else {
-              return dbAuthor.authorGetById(authorId).pipe(
-                tap({
-                  next: (author: Author) => {
-                    updateState(store, '[Author] GetById Success', {
-                      knownAuthorViews: [...store.knownAuthorViews(), author as AuthorView],
-                    });
-                  },
-                })
-              );
-            }
-          }),
-          tap(author =>
-            updateState(store, '[Author] GetById Success', {
-              authorLoggedIn: author,
-              isLoading: false,
-            })
-          )
-        )
-      ),
-
       authorById: rxMethod<string>(
         pipe(
           switchMap(authorId => {
             updateState(store, '[Author] GetById Start', { isLoading: true });
-            const existingAuthor = store.knownAuthorViews().find(author => author.id === authorId);
+            const existingAuthor = store.authors().find(author => author.id === authorId);
             if (existingAuthor) {
               updateState(store, '[Author] GetById Success', {
-                currentAuthorView: existingAuthor,
                 authors: [...store.authors(), existingAuthor],
-                knownAuthorViews: [...store.knownAuthorViews(), existingAuthor],
                 isLoading: false,
               });
               return of(existingAuthor);
             } else {
               return dbAuthor.authorGetById(authorId).pipe(
                 map((author: Author) => {
-                  // Update knownAuthors with the new author
                   updateState(store, '[Author] GetById Success', {
-                    currentAuthorView: author as AuthorView,
-                    knownAuthorViews: [...store.knownAuthorViews(), author as AuthorView],
-                    //   authorLoggedIn: author,
+                    authors: [...store.authors(), author],
                     isLoading: false,
                   });
                   return author;
@@ -216,37 +184,37 @@ export const AuthorStore = signalStore(
         )
       ),
 
-      authorViewByUid: rxMethod<string>(
-        pipe(
-          tap(() => {
-            updateState(store, '[Author] getAuthorViewById Start', { isLoading: true });
-          }),
-          switchMap(authorId => {
-            const existingAuthorView = store.knownAuthorViews().find(view => view.id === authorId);
-            if (existingAuthorView) {
-              return of(existingAuthorView);
-            } else {
-              const theAuthorView = dbAuthor.authorViewGetById(authorId).pipe(
-                tap({
-                  next: (authorView: AuthorView) => {
-                    updateState(store, '[Author] Load AuthorViewById Success', {
-                      knownAuthorViews: [...store.knownAuthorViews(), authorView],
-                    });
-                  },
-                })
-              );
-              return theAuthorView;
-            }
-          }),
-          tap(folioView =>
-            updateState(store, '[Author] getAuthorViewById Success', {
-              currentAuthorView: folioView,
-              //  folioSlate: store.allAuthorSlates().filter(a => a.authorId === folioView.id)[0] ?? slateViewInit,
-              isLoading: false,
-            })
-          )
-        )
-      ),
+      // authorViewByUid: rxMethod<string>(
+      //   pipe(
+      //     tap(() => {
+      //       updateState(store, '[Author] getAuthorViewById Start', { isLoading: true });
+      //     }),
+      //     switchMap(authorId => {
+      //       const existingAuthorView = store.authorViewsKnown().find(view => view.id === authorId);
+      //       if (existingAuthorView) {
+      //         return of(existingAuthorView);
+      //       } else {
+      //         const theAuthorView = dbAuthor.authorViewGetById(authorId).pipe(
+      //           tap({
+      //             next: (authorView: AuthorView) => {
+      //               updateState(store, '[Author] Load AuthorViewById Success', {
+      //                 authorViewsKnown: [...store.authorViewsKnown(), authorView],
+      //               });
+      //             },
+      //           })
+      //         );
+      //         return theAuthorView;
+      //       }
+      //     }),
+      //     tap(folioView =>
+      //       updateState(store, '[Author] getAuthorViewById Success', {
+      //         authorViewSelected: folioView,
+      //         //  folioSlate: store.allAuthorSlates().filter(a => a.authorId === folioView.id)[0] ?? slateViewInit,
+      //         isLoading: false,
+      //       })
+      //     )
+      //   )
+      // ),
     };
   })
 );
