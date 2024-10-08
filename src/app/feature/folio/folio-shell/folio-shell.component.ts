@@ -6,6 +6,7 @@ import { FolioNewComponent } from '../folio-new/folio-new.component';
 import { FolioPlacementNewComponent } from '../folio-placement-new/folio-placement-new.component';
 import { FolioPlacementListComponent } from '../folio-placement-list/folio-placement-list.component';
 import { environment } from '../../../../environments/environment';
+import { AuthorStore } from '../../author/author.store';
 
 @Component({
   selector: 'mh5-folio-shell',
@@ -15,17 +16,11 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './folio-shell.component.scss',
 })
 export class FolioShellComponent {
-  RunTest() {
-    if (environment.ianConfig.showLogs) {
-      //  console.log(this.folioStore.allFolios());
-      console.log(this.folioStore.allComputedFolioViews());
-      console.log(this.folioStore.allComputedFolioViews()[0].placementViews);
-    }
-  }
   folioStore = inject(FolioStore);
+  authorStore = inject(AuthorStore);
 
   showViewer = false;
-  theFolios = this.folioStore.allComputedFolioViews;
+  theFolios = this.authorStore.authorFolioViews;
   newFolio = signal(false);
   newPlacement = signal(false);
 
@@ -41,5 +36,9 @@ export class FolioShellComponent {
   }
   closeNewPlacement() {
     this.newPlacement.set(false);
+  }
+
+  RunTest() {
+    //
   }
 }

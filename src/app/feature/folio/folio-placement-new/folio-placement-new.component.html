@@ -1,9 +1,9 @@
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form-container">
   <div class="form-row">
     @if (formGroup.get('caption')?.invalid && formGroup.get('caption')?.touched) {
-      <label for="caption" class="warning">Contest Title is required</label>
+      <label for="caption" class="warning">Placement Capiion is required</label>
     } @else {
-      <label for="caption">Add Placement</label>
+      <label for="caption">Add Placement Caption</label>
     }
     <input id="caption" formControlName="caption" type="text" />
   </div>

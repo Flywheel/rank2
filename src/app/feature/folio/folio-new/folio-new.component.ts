@@ -30,7 +30,7 @@ export class FolioNewComponent {
         folioName: newFolioPrep.folioName.trim(),
       };
       if (environment.ianConfig.showLogs) console.log('Submitting new folio', newFolio);
-      this.folioStore.addFolio(newFolio);
+      this.folioStore.folioCreate(newFolio);
       this.closeNewFolioEditor.emit(false);
       this.folioStore.toggleFolioAdder(false);
     }

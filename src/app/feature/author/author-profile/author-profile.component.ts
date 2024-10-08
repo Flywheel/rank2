@@ -6,10 +6,11 @@ import { IconTimelineComponent } from '../../../core/svg/icon-timeline';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 import { AuthorConsentComponent } from '../author-consent/author-consent.component';
 import { environment } from '../../../../environments/environment';
-import { Author } from '../../../core/interfaces/interfaces';
+import { Author, Folio } from '../../../core/interfaces/interfaces';
 // import { uuidv7 } from 'uuidv7';
 import { AUTHOR_DEFAULT_NAME } from '../../../core/interfaces/constants';
 import { AuthorService } from '../author.service';
+import { FolioStore } from '../../folio/folio.store';
 
 @Component({
   selector: 'mh5-author-profile',
@@ -20,6 +21,7 @@ import { AuthorService } from '../author.service';
 })
 export class AuthorProfileComponent {
   authorStore = inject(AuthorStore);
+  folioStore = inject(FolioStore);
   isRunSomethingVisible = signal<boolean>(true);
   channelName = signal<string>('');
   showConsentPopup = signal(false);
@@ -63,11 +65,20 @@ export class AuthorProfileComponent {
 
   initializeAuthorHandle() {
     const currentAuthor = this.authorStore.authorLoggedIn();
-    if (environment.ianConfig.showLogs) console.log(currentAuthor);
     const updatedAuthorData: Author = { id: currentAuthor.id, name: this.channelName() };
-    this.test3(currentAuthor.id);
-    if (environment.ianConfig.showLogs) console.log(currentAuthor.id, updatedAuthorData);
     this.authorStore.authorLoggedInUpdate(currentAuthor.id, updatedAuthorData);
+    const newFolio: Folio = {
+      id: 0,
+      authorId: currentAuthor.id,
+      folioName: '@' + this.channelName(),
+      isDefault: true,
+    };
+    this.folioStore.folioCreate(newFolio);
+    if (environment.ianConfig.showLogs) {
+      console.log(currentAuthor);
+      console.log(updatedAuthorData);
+      console.log(newFolio);
+    }
   }
 
   db = inject(AuthorService);

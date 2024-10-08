@@ -6,7 +6,6 @@ import { FolioService } from './folio.service';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, exhaustMap, map, pipe, tap, throwError } from 'rxjs';
-import { environment } from '../../../environments/environment';
 
 export const FolioStore = signalStore(
   { providedIn: 'root' },
@@ -72,10 +71,20 @@ export const FolioStore = signalStore(
   }),
 
   withMethods(store => {
+    return {
+      async folioStateToLocalStorage() {
+        updateState(store, '[Author] WriteToLocalStorage Start', { isLoading: true });
+        store.writeToStorage();
+        updateState(store, '[Author] WriteToLocalStorage Success', { isLoading: false });
+      },
+    };
+  }),
+
+  withMethods(store => {
     const dbFolio = inject(FolioService);
     return {
       // #region Folio
-      loadAllFolios: rxMethod<void>(
+      foliosLoadAll: rxMethod<void>(
         pipe(
           exhaustMap(() => {
             updateState(store, '[Folio] getAllFolios Start', { isLoading: true });
@@ -108,21 +117,21 @@ export const FolioStore = signalStore(
         updateState(store, '[Folio] setFolioSelected', { folioIdSelected: folioId });
       },
 
-      addFolio(folio: Folio) {
-        if (environment.ianConfig.showLogs) console.log('addFolio', folio);
-        updateState(store, '[Folio] addFolio Pending', { isLoading: true });
+      folioCreate(folio: Folio) {
+        updateState(store, '[Folio] Create Start', { isLoading: true });
         dbFolio
           .folioCreate(folio)
           .pipe(
             map((newFolio: Folio) => {
-              updateState(store, '[Folio] addFolio Success', {
+              updateState(store, '[Folio] Create Success', {
                 folios: [...store.folios(), newFolio],
                 isLoading: false,
               });
+              store.writeToStorage();
               return newFolio;
             }),
             catchError(error => {
-              updateState(store, '[Folio] addFolio Failed', { isLoading: false });
+              updateState(store, '[Folio] Create Failed', { isLoading: false });
               return throwError(error);
             })
           )
@@ -133,7 +142,7 @@ export const FolioStore = signalStore(
 
       //#region Placement
 
-      loadAllPlacements: rxMethod<void>(
+      placementsLoadAll: rxMethod<void>(
         pipe(
           exhaustMap(() => {
             updateState(store, '[Placement] getAllPlacements Start', { isLoading: true });
@@ -158,22 +167,25 @@ export const FolioStore = signalStore(
         )
       ),
 
-      addPlacement(placement: Placement) {
-        if (environment.ianConfig.showLogs) console.log('addPlacement', placement);
-        updateState(store, '[Placement] addPlacement Pending', { isLoading: true });
+      placementCreate(placement: Placement) {
+        updateState(store, '[Placement] Create Start', { isLoading: true });
         dbFolio
           .placementCreate(placement)
-          .then(newPlacement => {
-            if (environment.ianConfig.showLogs) console.log('newPlacement', newPlacement);
-            updateState(store, '[Placement] addPlacement Success', {
-              placements: [...store.placements(), newPlacement],
-              isLoading: false,
-            });
-          })
-          .catch(error => {
-            if (environment.ianConfig.showLogs) console.log('error', error);
-            updateState(store, '[Placement] addPlacement Failed', { isLoading: false });
-          });
+          .pipe(
+            map((newPlacement: Placement) => {
+              updateState(store, '[Folio] Create Success', {
+                placements: [...store.placements(), newPlacement],
+                isLoading: false,
+              });
+              store.writeToStorage();
+              return newPlacement;
+            }),
+            catchError(error => {
+              updateState(store, '[Folio] Create Failed', { isLoading: false });
+              return throwError(error);
+            })
+          )
+          .subscribe();
       },
 
       //#endregion

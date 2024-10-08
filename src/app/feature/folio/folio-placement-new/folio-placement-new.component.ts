@@ -2,6 +2,7 @@ import { Component, inject, output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Placement } from '../../../core/interfaces/interfaces';
 import { FolioStore } from '../folio.store';
+import { AuthorStore } from '../../author/author.store';
 
 @Component({
   selector: 'mh5-folio-placement-new',
@@ -11,6 +12,7 @@ import { FolioStore } from '../folio.store';
   styleUrl: './folio-placement-new.component.scss',
 })
 export class FolioPlacementNewComponent {
+  authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
   fb = inject(FormBuilder);
 
@@ -25,13 +27,13 @@ export class FolioPlacementNewComponent {
       const folioId = this.folioStore.folioViewSelected().id;
       const newPlacement: Placement = {
         id: 0,
-        authorId: '',
+        authorId: this.authorStore.authorLoggedIn().id,
         folioId,
         assetId: 1,
         caption: this.formGroup.value.caption,
       };
 
-      this.folioStore.addPlacement(newPlacement);
+      this.folioStore.placementCreate(newPlacement);
 
       this.closeNewPlacementEditor.emit(false);
     }

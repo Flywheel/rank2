@@ -37,16 +37,13 @@
     </div>
   }
 
-  <div class="sectionMainTitle">
-    @if (authorStore.authorLoggedIn().id !== undefined) {
-      {{ authorStore.authorLoggedIn().id }} Activity
-    }
-  </div>
-  <div class="sectionContentTitle">Author Slates {{ authorStore.authors().length }}</div>
-  @for (author of authorStore.authors(); track $index) {
-    <div>{{ author.id }}: {{ author.name }}</div>
-  }
-  <div class="sectionContent"></div>
+  <div class="sectionMainTitle">Activity</div>
+  <div class="sectionContentTitle">Author Slates</div>
+
+  <div class="sectionContent">Author Folio Created {{ authorStore.authorLoggedInView().authorFolio.folioName }}</div>
+  <div class="sectionContent">Ballots Cast</div>
+  <div class="sectionContent">Placements Added {{ authorStore.authorLoggedInView().authorFolio.placementViews.length }}</div>
+  <div class="sectionContent">Contests Added</div>
 
   <div class="sectionMainTitle">Actions Available</div>
 

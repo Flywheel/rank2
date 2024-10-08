@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Asset, Folio, FolioView, Placement, PlacementView } from '../../core/interfaces/interfaces';
-import { catchError, exhaustMap, Observable, tap, throwError, map } from 'rxjs';
+import { catchError, exhaustMap, Observable, throwError, map } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { environment } from '../../../environments/environment';
 
@@ -13,8 +13,6 @@ export class FolioService {
 
   private folioAPIUrl = `api/folio`;
   private folioViewAPIUrl = `api/folioview`;
-  // private folioAPIUrl = `${environment.HOST_DOMAIN}/api/folio`;
-  // private folioViewAPIUrl = `${environment.HOST_DOMAIN}/api/folioview`;
 
   private placementAPIUrl = `api/placement`;
   private placementViewAPIUrl = `api/placementview`;
@@ -31,23 +29,6 @@ export class FolioService {
 
   folioViewGetById(id: number): Observable<FolioView> {
     return this.http.get<FolioView>(`${this.folioViewAPIUrl}/${id}`);
-  }
-
-  folioCreate1({ authorId, isDefault, folioName }: Folio): Observable<Folio> {
-    return this.http.post<Folio>(this.folioAPIUrl, { authorId, isDefault, folioName }).pipe(
-      tap(data => {
-        if (environment.ianConfig.showLogs) console.log('data', data);
-        this.http.post<FolioView>(this.folioViewAPIUrl, { authorId, isDefault, folioName, placementViews: [] }).subscribe({
-          next: data => {
-            if (environment.ianConfig.showLogs) console.log('data', data);
-          },
-        });
-      }),
-      catchError(error => {
-        if (environment.ianConfig.showLogs) console.log('error', error);
-        return throwError(() => new Error('FolioCreate failed'));
-      })
-    );
   }
 
   folioCreate({ authorId, isDefault, folioName }: Folio): Observable<Folio> {
@@ -78,21 +59,21 @@ export class FolioService {
     return this.http.get<PlacementView[]>(this.placementViewAPIUrl).pipe(takeUntilDestroyed());
   }
 
-  placementCreate({ authorId, assetId, folioId, caption }: Placement): Promise<Placement> {
-    if (environment.ianConfig.showLogs) console.log('input', caption);
-    if (environment.ianConfig.showLogs) console.log(this.folioAPIUrl);
-    return new Promise((resolve, reject) => {
-      this.http.post<Placement>(this.folioAPIUrl, { authorId, assetId, folioId, caption }).subscribe({
-        next: data => {
-          if (environment.ianConfig.showLogs) console.log('data', data);
-          resolve(data);
-        },
-        error: error => {
-          if (environment.ianConfig.showLogs) console.log('error', error);
-          reject(error);
-        },
-      });
-    });
+  placementCreate({ authorId, assetId, folioId, caption }: Placement): Observable<Placement> {
+    return this.http.post<Placement>(this.folioAPIUrl, { authorId, assetId, folioId, caption }).pipe(
+      exhaustMap(data => {
+        return this.http.post<Placement>(this.folioAPIUrl, { authorId, assetId, folioId, caption }).pipe(
+          map(folioViewData => {
+            if (environment.ianConfig.showLogs) console.log('folioViewData', folioViewData);
+            return data;
+          })
+        );
+      }),
+      catchError(error => {
+        if (environment.ianConfig.showLogs) console.log('error', error);
+        return throwError(() => new Error('FolioCreate failed'));
+      })
+    );
   }
 
   assetsGetAll(): Observable<Asset[]> {

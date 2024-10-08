@@ -1,13 +1,14 @@
-import { inject } from '@angular/core';
-import { signalStore, withMethods, withState } from '@ngrx/signals';
+import { computed, inject } from '@angular/core';
+import { signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { pipe, switchMap, of, exhaustMap, catchError, throwError, map } from 'rxjs';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
-import { Author, AuthorView } from '../../core/interfaces/interfaces';
-import { authorInit } from '../../core/interfaces/initValues';
+import { Author, AuthorView, FolioView } from '../../core/interfaces/interfaces';
+import { authorInit, authorViewInit, folioViewInit } from '../../core/interfaces/initValues';
 import { AuthorService } from './author.service';
 
 import { environment } from '../../../environments/environment';
+import { FolioStore } from '../folio/folio.store';
 
 export const AuthorStore = signalStore(
   { providedIn: 'root' },
@@ -16,7 +17,6 @@ export const AuthorStore = signalStore(
     authorLoggedIn: authorInit,
     authorIdSelected: '',
     authors: [authorInit],
-    //authorViewsKnown: [authorViewInit],
     isLoading: false,
     consentStatus: 'unknown' as string,
   }),
@@ -26,10 +26,41 @@ export const AuthorStore = signalStore(
     autoSync: false,
   }),
 
+  withComputed(store => {
+    const folioStore = inject(FolioStore);
+    return {
+      authorChannelViews: computed<AuthorView[]>(() => {
+        return store
+          .authors()
+          .filter(a => a.id.length > 0)
+          .map(author => {
+            const authorView: AuthorView = {
+              id: author.id,
+              name: author.name,
+              authorFolio: folioStore.allComputedFolioViews().filter(folio => folio.authorId === author.id && folio.isDefault)[0] ?? folioViewInit,
+            };
+            return authorView;
+          });
+      }),
+      authorFolioViews: computed<FolioView[]>(() => folioStore.allComputedFolioViews().filter(folio => folio.authorId === store.authorIdSelected())),
+    };
+  }),
+
+  withComputed(store => ({
+    authorSelectedView: computed<AuthorView>(() => store.authorChannelViews().find(author => author.id === store.authorIdSelected()) ?? authorViewInit),
+    authorLoggedInView: computed<AuthorView>(() => store.authorChannelViews().find(author => author.id === store.authorLoggedIn().id) ?? authorViewInit),
+  })),
+  // withComputed(store => (
+  //   const folioStore = inject(FolioStore);
+  //   return {
+
+  //   authorFolios: computed<FolioView[]>(() => folioStore.filter(folio => folio.authorId === store.authorIdSelected())),
+  // })),
+
   withMethods(store => {
     return {
-      async authorStateToLocalStorage(authorIdSelected: string) {
-        updateState(store, '[Author] WriteToLocalStorage Start', { isLoading: true, authorIdSelected });
+      async authorStateToLocalStorage() {
+        updateState(store, '[Author] WriteToLocalStorage Start', { isLoading: true });
         store.writeToStorage();
         updateState(store, '[Author] WriteToLocalStorage Success', { isLoading: false });
       },
@@ -60,7 +91,7 @@ export const AuthorStore = signalStore(
                 //   authorViewsKnown: [...store.authorViewsKnown(), newAuthor as AuthorView],
                 isLoading: false,
               });
-              store.authorStateToLocalStorage(newAuthor.id);
+              store.authorStateToLocalStorage();
               return of(newAuthor);
             }),
             catchError(error => {
@@ -83,7 +114,7 @@ export const AuthorStore = signalStore(
               if (environment.ianConfig.showLogs) console.log('updatedAuthor ', updatedAuthor);
               updateState(store, '[Author-LoggedIn] Update Success', {
                 authorLoggedIn: updatedAuthor,
-                authors: [...store.authors(), updatedAuthor],
+                authors: store.authors().map(author => (author.id === updatedAuthor.id ? updatedAuthor : author)),
                 isLoading: false,
               });
               store.writeToStorage();
@@ -154,7 +185,7 @@ export const AuthorStore = signalStore(
             const existingAuthor = store.authors().find(author => author.id === authorId);
             if (existingAuthor) {
               updateState(store, '[Author] GetById Success', {
-                authors: [...store.authors(), existingAuthor],
+                authorIdSelected: authorId,
                 isLoading: false,
               });
               return of(existingAuthor);

@@ -1,10 +1,12 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthorStore } from './feature/author/author.store';
-import { AUTHOR_CONSENT_KEY } from './core/interfaces/constants';
+import { AUTHOR_CONSENT_KEY, AUTHOR_DEFAULT_NAME } from './core/interfaces/constants';
 import { AuthorConsentComponent } from './feature/author/author-consent/author-consent.component';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
+import { FolioStore } from './feature/folio/folio.store';
+import { Folio } from './core/interfaces/interfaces';
 
 @Component({
   selector: 'mh5-root',
@@ -15,6 +17,7 @@ import { Subject } from 'rxjs';
 })
 export class AppComponent implements OnInit, OnDestroy {
   authorStore = inject(AuthorStore);
+  folioStore = inject(FolioStore);
   // swUpdate = inject(SwUpdate);
   title = 'MH - rank2';
   isIframe = false;
@@ -40,6 +43,15 @@ export class AppComponent implements OnInit, OnDestroy {
           const author = this.authorStore.authorById(authorId);
           if (!author) {
             this.authorStore.authorCreate(author);
+          }
+          if (this.authorStore.authorLoggedIn().name !== AUTHOR_DEFAULT_NAME) {
+            const folioDefault: Folio = {
+              id: 0,
+              authorId: authorId,
+              folioName: '@' + this.authorStore.authorLoggedIn().name,
+              isDefault: true,
+            };
+            this.folioStore.folioCreate(folioDefault);
           }
         }
       }
