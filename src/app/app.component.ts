@@ -35,6 +35,13 @@ export class AppComponent implements OnInit, OnDestroy {
       const consent = localStorage.getItem(AUTHOR_CONSENT_KEY);
       if (consent) {
         this.authorStore.setConsent(consent);
+        if (consent === 'accepted') {
+          const authorId = this.authorStore.authorLoggedIn().id;
+          const author = this.authorStore.authorById(authorId);
+          if (!author) {
+            this.authorStore.authorCreate(author);
+          }
+        }
       }
     }
   }

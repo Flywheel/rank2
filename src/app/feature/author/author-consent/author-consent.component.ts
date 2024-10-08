@@ -28,7 +28,7 @@ export class AuthorConsentComponent implements OnInit {
   }
 
   acceptCookies(): void {
-    this.authorStore.authorAddIdWithDefaultName({ id: uuidv7(), name: AUTHOR_DEFAULT_NAME });
+    this.authorStore.authorCreate({ id: uuidv7(), name: AUTHOR_DEFAULT_NAME });
     this.setConsent('accepted');
   }
 

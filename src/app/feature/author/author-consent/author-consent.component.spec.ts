@@ -7,13 +7,13 @@ import { AUTHOR_CONSENT_KEY } from '../../../core/interfaces/constants';
 fdescribe('AuthorConsentComponent', () => {
   let component: AuthorConsentComponent;
   let fixture: ComponentFixture<AuthorConsentComponent>;
-  let mockAuthorStore: { authorAdd: jasmine.Spy; setConsent: jasmine.Spy };
+  let mockAuthorStore: { authorCreate: jasmine.Spy; setConsent: jasmine.Spy };
 
   const mockStorage: Record<string, string> = {};
 
   beforeEach(async () => {
     mockAuthorStore = {
-      authorAdd: jasmine.createSpy('authorAdd'), //authorStateToLocalStorage
+      authorCreate: jasmine.createSpy('authorCreate'), //authorStateToLocalStorage
       setConsent: jasmine.createSpy('setConsent'),
     };
 
@@ -77,10 +77,10 @@ fdescribe('AuthorConsentComponent', () => {
   });
 
   describe('acceptCookies', () => {
-    it('should call authorStore.authorAdd and setConsent with "accepted"', () => {
+    it('should call authorStore.authorCreate and setConsent with "accepted"', () => {
       spyOn(component, 'setConsent');
       component.acceptCookies();
-      expect(mockAuthorStore.authorAdd).toHaveBeenCalledWith({ id: jasmine.any(String), name: '' });
+      expect(mockAuthorStore.authorCreate).toHaveBeenCalledWith({ id: jasmine.any(String), name: 'Default' });
       expect(component.setConsent).toHaveBeenCalledWith('accepted');
     });
   });

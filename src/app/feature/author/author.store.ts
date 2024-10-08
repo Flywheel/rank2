@@ -47,7 +47,7 @@ export const AuthorStore = signalStore(
         updateState(store, '[Author] Read From Storage Success', { isLoading: false, consentStatus: consentValue });
       },
 
-      async authorAddIdWithDefaultName(author: Author) {
+      async authorCreate(author: Author) {
         updateState(store, '[Author] Add Start', { isLoading: true });
         dbAuthor
           .authorCreate(author)
@@ -84,7 +84,6 @@ export const AuthorStore = signalStore(
               updateState(store, '[Author-LoggedIn] Update Success', {
                 authorLoggedIn: updatedAuthor,
                 authors: [...store.authors(), updatedAuthor],
-                // authorViewsKnown: [...store.authorViewsKnown(), updatedAuthor as AuthorView],
                 isLoading: false,
               });
               store.writeToStorage();
