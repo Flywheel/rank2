@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { HeaderComponent } from '../../../core/header/header.component';
 import { FolioStore } from '../folio.store';
 import { FolioScrollHorizontalComponent } from '../folio-scroll-horizontal/folio-scroll-horizontal.component';
@@ -7,11 +7,22 @@ import { FolioPlacementNewComponent } from '../folio-placement-new/folio-placeme
 import { FolioPlacementListComponent } from '../folio-placement-list/folio-placement-list.component';
 import { environment } from '../../../../environments/environment';
 import { AuthorStore } from '../../author/author.store';
+import { ChannelTreeComponent } from '../channel-tree/channel-tree.component';
+import { TreeNode } from '../../../core/interfaces/interfaces';
+import { NewPlacementComponent } from '../new-placement/new-placement.component';
 
 @Component({
   selector: 'mh5-folio-shell',
   standalone: true,
-  imports: [HeaderComponent, FolioScrollHorizontalComponent, FolioNewComponent, FolioPlacementListComponent, FolioPlacementNewComponent],
+  imports: [
+    HeaderComponent,
+    FolioScrollHorizontalComponent,
+    FolioNewComponent,
+    FolioPlacementListComponent,
+    FolioPlacementNewComponent,
+    ChannelTreeComponent,
+    NewPlacementComponent,
+  ],
   templateUrl: './folio-shell.component.html',
   styleUrl: './folio-shell.component.scss',
 })
@@ -23,6 +34,33 @@ export class FolioShellComponent {
   theFolios = this.authorStore.authorFolioViews;
   newFolio = signal(false);
   newPlacement = signal(false);
+
+  folioTreeData = computed<TreeNode[]>(() => {
+    const folios = this.theFolios();
+    return folios.map(folio => {
+      return {
+        name: folio.folioName,
+        children: folio.placementViews.map(placement => {
+          return {
+            name: placement.caption,
+          };
+        }),
+      };
+    });
+  });
+
+  treeData: TreeNode[] = [
+    {
+      name: 'Root',
+      children: [
+        { name: 'Child 1' },
+        {
+          name: 'Child 2',
+          children: [{ name: 'Grandchild 1' }, { name: 'Grandchild 2' }],
+        },
+      ],
+    },
+  ];
 
   openNewFolio() {
     this.newFolio.set(true);

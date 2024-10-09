@@ -5,6 +5,11 @@ export interface EventLog {
   eventDate: Date;
 }
 
+export interface TreeNode {
+  name: string;
+  children?: TreeNode[];
+}
+
 export interface Author {
   id: string;
   name: string;

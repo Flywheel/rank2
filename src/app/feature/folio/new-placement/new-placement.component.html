@@ -1,0 +1,106 @@
+<p>new-placement works!</p>
+<div class="placement-editor-container">
+  <h2>Add Placement for: {{ folioStore.folioViewSelected().folioName }}</h2>
+</div>
+<div>
+  <div style="height: 80px">
+    <div class="radio-container">
+      <button (click)="onSubmitPlacement()" [disabled]="allowPost()">Submit</button>
+      <button (click)="clearContainer()">Clear</button>
+      <label class="radio-label">
+        <input
+          type="radio"
+          name="entryType"
+          [ngModel]="selectedTextOrMediaOption()"
+          (ngModelChange)="selectedTextOrMediaOption.set($event)"
+          value="textEntry" />
+        Text Entry
+      </label>
+      <label class="radio-label">
+        <input type="radio" name="entryType" [ngModel]="selectedTextOrMediaOption()" (ngModelChange)="selectedTextOrMediaOption.set($event)" value="mediaUrl" />
+        Media URL
+      </label>
+    </div>
+    <!-- @if (selectedTextOrMediaOption() !== 'textEntry') {
+      <p>{{ parsedMedia().platformType }} {{ sourecIdLocator() }}</p>
+    } -->
+  </div>
+</div>
+
+<div class="horizontal-scroll">
+  <div class="content-panel" style="width: 75%">
+    @if (selectedTextOrMediaOption() !== 'textEntry') {
+      <div class="drop-container" style="border-width: 5pt; border-color: blueviolet; width: 90%">
+        <textarea
+          name="urlAdder"
+          id="urlAdder"
+          rows="5"
+          (paste)="onPaste($event)"
+          (drop)="onDrop($event)"
+          (input)="onInput($event)"
+          style="border: 1px solid rgb(212, 212, 178); padding: 1px">
+        </textarea>
+        <br />
+        <span style="color: salmon; padding-left: 5px">Paste media URL above.</span>
+      </div>
+
+      @if (allowViewerDisplay()) {
+        @if (contentEntityView().asset.mediaType === 'image') {
+          <img [src]="contentPlayer()" alt="Content Image" />
+        } @else {
+          <div class="container">
+            <iframe frameborder="4" scrolling="no" allowfullscreen [src]="contentPlayer()" allow="autoplay; encrypted-media"></iframe>
+            <p>
+              <input [ngModel]="caption()" (ngModelChange)="caption.set($event)" placeholder="Caption" style="padding-bottom: 5px" />
+              @if (isCaptionHere() !== true) {
+                <br />
+                <span style="color: salmon; padding-left: 5px">Add caption having at least 6 characters.</span>
+              }
+            </p>
+          </div>
+        }
+      }
+    } @else {
+      <p>
+        <input [ngModel]="caption()" (ngModelChange)="caption.set($event)" placeholder="Caption" style="padding: 10px; font-size: larger" />
+        @if (isCaptionHere() !== true) {
+          <br />
+          <span style="color: salmon; padding: 10px">Add text having at least 6 characters.</span>
+        }
+      </p>
+    }
+  </div>
+
+  <div class="control-panel" style="width: 25%">
+    <div>
+      @if (allowViewerDisplay()) {
+        <div></div>
+      } @else {
+        {{ selectedTextOrMediaOption() }}
+      }
+    </div>
+  </div>
+</div>
+
+<!-- <div>
+  @if (pitchStore.currentPitchView().topSlateId > 0) {
+    <input type="checkbox" [ngModel]="addToPitchChecked()" (ngModelChange)="addToPitchChecked.set($event)" />
+    PitchId/TopSlateId: {{ pitchStore.currentPitchId() }}/{{ pitchStore.currentPitchView().topSlateId }}
+  } @else {
+    No Pitch or Slate Selected
+  }
+</div>
+<div>
+   <select class="content-type-dropdown" [ngModel]="selectedContentTypeId()" (ngModelChange)="selectedContentTypeId.set($event)">
+      @for (type of contentStore.contentTypes(); track type.id) {
+      <option [value]="type.id">{{ type.name }}</option>
+      }
+    </select> -->
+<div><button style="padding-left: 6px" (click)="cancel()">Cancel</button></div>
+<div>
+  @for (topicMember of folioStore.folioViewSelected().placementViews; track $index) {
+    <div class="topicMember-list-item" tabindex="1">
+      {{ topicMember.caption }}
+    </div>
+  }
+</div>

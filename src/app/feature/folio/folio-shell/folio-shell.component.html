@@ -15,7 +15,8 @@
     </div>
     <div class="placement-info">
       @if (newPlacement()) {
-        <mh5-folio-placement-new (closeNewPlacementEditor)="closeNewPlacement()" />
+        <!-- <mh5-folio-placement-new (closeNewPlacementEditor)="closeNewPlacement()" /> -->
+        <mh5-new-placement (closeNewPlacementEditor)="closeNewPlacement()" />
       } @else {
         <div (click)="openNewPlacement()" (keydown)="openNewPlacement()" tabindex="1">
           Add Placement to <br />{{ folioStore.folioViewSelected().folioName }}
@@ -24,5 +25,7 @@
     </div>
   </div>
   <p class="folio-name">Current Folio: {{ folioStore.folioViewSelected().folioName }}</p>
+
+  <mh5-channel-tree [nodes]="treeData" />
   <button class="btn btn-primary" (click)="RunTest()">Run Test</button>
 }
