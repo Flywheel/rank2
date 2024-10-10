@@ -1,9 +1,7 @@
-<p>channel-tree works!</p>
-<p>{{ nodes().length }}</p>
 <ul>
   @for (node of nodes(); track $index) {
     <li>
-      <span (click)="toggleChildren(node)" (keydown)="toggleChildren(node)" tabindex="9"> {{ node.name }}nodes </span>
+      <span (click)="toggleChildren(node)" (keydown)="toggleChildren(node)" tabindex="9"> {{ node.name }}</span>
       @if (node.children) {
         <ul>
           <mh5-channel-tree [nodes]="node.children"></mh5-channel-tree>

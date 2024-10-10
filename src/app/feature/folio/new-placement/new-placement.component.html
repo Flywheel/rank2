@@ -1,35 +1,10 @@
-<p>new-placement works!</p>
 <div class="placement-editor-container">
-  <h2>Add Placement for: {{ folioStore.folioViewSelected().folioName }}</h2>
-</div>
-<div>
-  <div style="height: 80px">
-    <div class="radio-container">
-      <button (click)="onSubmitPlacement()" [disabled]="allowPost()">Submit</button>
-      <button (click)="clearContainer()">Clear</button>
-      <label class="radio-label">
-        <input
-          type="radio"
-          name="entryType"
-          [ngModel]="selectedTextOrMediaOption()"
-          (ngModelChange)="selectedTextOrMediaOption.set($event)"
-          value="textEntry" />
-        Text Entry
-      </label>
-      <label class="radio-label">
-        <input type="radio" name="entryType" [ngModel]="selectedTextOrMediaOption()" (ngModelChange)="selectedTextOrMediaOption.set($event)" value="mediaUrl" />
-        Media URL
-      </label>
-    </div>
-    <!-- @if (selectedTextOrMediaOption() !== 'textEntry') {
-      <p>{{ parsedMedia().platformType }} {{ sourecIdLocator() }}</p>
-    } -->
-  </div>
+  <h3>Add to {{ folioStore.folioViewSelected().folioName }}</h3>
 </div>
 
 <div class="horizontal-scroll">
   <div class="content-panel" style="width: 75%">
-    @if (selectedTextOrMediaOption() !== 'textEntry') {
+    @if (radioOption() !== 'textEntry') {
       <div class="drop-container" style="border-width: 5pt; border-color: blueviolet; width: 90%">
         <textarea
           name="urlAdder"
@@ -76,7 +51,7 @@
       @if (allowViewerDisplay()) {
         <div></div>
       } @else {
-        {{ selectedTextOrMediaOption() }}
+        {{ radioOption() }}
       }
     </div>
   </div>
@@ -96,11 +71,23 @@
       <option [value]="type.id">{{ type.name }}</option>
       }
     </select> -->
-<div><button style="padding-left: 6px" (click)="cancel()">Cancel</button></div>
+
 <div>
-  @for (topicMember of folioStore.folioViewSelected().placementViews; track $index) {
-    <div class="topicMember-list-item" tabindex="1">
-      {{ topicMember.caption }}
+  <div style="height: 80px">
+    <div class="radio-container">
+      <button (click)="cancel()">Cancel</button>
+      <button (click)="onSubmitPlacement()" [disabled]="allowPost()">Submit</button>
+      <button (click)="clearContainer()">Clear</button>
+      <label class="radio-label">
+        <input type="radio" name="entryType" [ngModel]="radioOption()" (ngModelChange)="radioOption.set($event)" captionOnly="textEntry" />
+      </label>
+      <label class="radio-label">
+        <input type="radio" name="entryType" [ngModel]="radioOption()" (ngModelChange)="radioOption.set($event)" captionOnly="mediaUrl" />
+        Media URL
+      </label>
     </div>
-  }
+    <!-- @if (selectedTextOrMediaOption() !== 'textEntry') {
+          <p>{{ parsedMedia().platformType }} {{ sourecIdLocator() }}</p>
+        } -->
+  </div>
 </div>

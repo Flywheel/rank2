@@ -110,7 +110,7 @@ export const FolioStore = signalStore(
       ),
 
       toggleFolioAdder(state: boolean) {
-        updateState(store, '[Folio] toggleFolioAdder', { isAddingFolio: state });
+        updateState(store, `[Folio] Is Adding  ${state}`, { isAddingFolio: state });
       },
 
       setFolioSelected(folioId: number) {
@@ -131,6 +131,29 @@ export const FolioStore = signalStore(
               return newFolio;
             }),
             catchError(error => {
+              updateState(store, '[Folio] Create Failed', { isLoading: false });
+              return throwError(error);
+            })
+          )
+          .subscribe();
+      },
+
+      folioCreateWithParent(folioData: Partial<Folio>, parentFolioId: number) {
+        updateState(store, '[Folio] Create Start', { isLoading: true });
+        dbFolio
+          .folioCreateWithParent(parentFolioId, folioData)
+          .pipe(
+            map((newFolio: Folio) => {
+              updateState(store, '[Folio] Create Success', {
+                folios: [...store.folios(), newFolio],
+                isLoading: false,
+                folioIdSelected: newFolio.id,
+              });
+              store.writeToStorage();
+              return newFolio;
+            }),
+            catchError(error => {
+              console.error('FolioStore creation failed', error);
               updateState(store, '[Folio] Create Failed', { isLoading: false });
               return throwError(error);
             })
@@ -173,7 +196,7 @@ export const FolioStore = signalStore(
           .placementCreate(placement)
           .pipe(
             map((newPlacement: Placement) => {
-              updateState(store, '[Folio] Create Success', {
+              updateState(store, '[Placement] Create Success', {
                 placements: [...store.placements(), newPlacement],
                 isLoading: false,
               });
@@ -181,11 +204,15 @@ export const FolioStore = signalStore(
               return newPlacement;
             }),
             catchError(error => {
-              updateState(store, '[Folio] Create Failed', { isLoading: false });
+              updateState(store, '[Placement] Create Failed', { isLoading: false });
               return throwError(error);
             })
           )
           .subscribe();
+      },
+
+      togglePlacementAdder(state: boolean) {
+        updateState(store, `[Placement] Is Adding = ${state}`, { isAddingPlacement: state });
       },
 
       //#endregion
@@ -212,6 +239,28 @@ export const FolioStore = signalStore(
           })
         )
       ),
+
+      assetCreate(asset: Asset) {
+        updateState(store, '[Asset] Create Start', { isLoading: true });
+        dbFolio
+          .assetCreate(asset)
+          .pipe(
+            map((newAsset: Asset) => {
+              updateState(store, '[Asset] Create Success', {
+                assets: [...store.assets(), newAsset],
+                isLoading: false,
+              });
+              store.writeToStorage();
+              return newAsset;
+            }),
+            catchError(error => {
+              updateState(store, '[Asset] Create Failed', { isLoading: false });
+              return throwError(error);
+            })
+          )
+          .subscribe();
+      },
+
       //#endregion
     };
   }),

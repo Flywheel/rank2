@@ -10,6 +10,7 @@ import { AuthorStore } from '../../author/author.store';
 import { ChannelTreeComponent } from '../channel-tree/channel-tree.component';
 import { TreeNode } from '../../../core/interfaces/interfaces';
 import { NewPlacementComponent } from '../new-placement/new-placement.component';
+import { IconPlusComponent } from '../../../core/svg/icon-plus';
 
 @Component({
   selector: 'mh5-folio-shell',
@@ -22,6 +23,7 @@ import { NewPlacementComponent } from '../new-placement/new-placement.component'
     FolioPlacementNewComponent,
     ChannelTreeComponent,
     NewPlacementComponent,
+    IconPlusComponent,
   ],
   templateUrl: './folio-shell.component.html',
   styleUrl: './folio-shell.component.scss',
@@ -56,7 +58,12 @@ export class FolioShellComponent {
         { name: 'Child 1' },
         {
           name: 'Child 2',
-          children: [{ name: 'Grandchild 1' }, { name: 'Grandchild 2' }],
+          children: [
+            { name: 'Grandchild 1' },
+
+            { name: 'Grandchild 2', children: [{ name: 'Great Grandchild1' }, { name: 'Great Grandchild 2' }] },
+            { name: 'Grandchild 3' },
+          ],
         },
       ],
     },

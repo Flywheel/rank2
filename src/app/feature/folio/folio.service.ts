@@ -48,6 +48,35 @@ export class FolioService {
       })
     );
   }
+  folioCreateWithParent(parentFolioId: number, folioData: Partial<Folio>): Observable<Folio> {
+    folioData.isDefault = false;
+    return this.http.post<Folio>(this.folioAPIUrl, folioData).pipe(
+      exhaustMap((newFolio: Folio) => {
+        const newAsset: Asset = {
+          id: 0,
+          mediaType: 'folio',
+          sourceId: newFolio.id.toString(),
+          authorId: folioData.authorId!,
+        };
+        return this.assetCreate(newAsset).pipe(
+          exhaustMap((createdAsset: Asset) => {
+            const placement: Placement = {
+              id: 0,
+              folioId: parentFolioId,
+              caption: folioData.folioName?.trim() || 'New Folio',
+              assetId: createdAsset.id,
+              authorId: folioData.authorId!,
+            };
+            return this.placementCreate(placement).pipe(map(() => newFolio));
+          })
+        );
+      }),
+      catchError(error => {
+        console.error('Folio creation failed', error);
+        return throwError(() => new Error('Folio creation failed'));
+      })
+    );
+  }
 
   placementsGetAll(): Observable<Placement[]> {
     if (environment.ianConfig.showLogs) console.log(`folioService.allPlacements() ${this.placementAPIUrl}`);
@@ -79,5 +108,22 @@ export class FolioService {
   assetsGetAll(): Observable<Asset[]> {
     if (environment.ianConfig.showLogs) console.log(`folioService.allAssets() ${this.assetAPIUrl}`);
     return this.http.get<Asset[]>(this.assetAPIUrl).pipe(takeUntilDestroyed());
+  }
+
+  assetCreate({ authorId, mediaType, sourceId }: Asset): Observable<Asset> {
+    return this.http.post<Asset>(this.folioAPIUrl, { authorId, mediaType, sourceId }).pipe(
+      exhaustMap(data => {
+        return this.http.post<Asset>(this.folioAPIUrl, { authorId, mediaType, sourceId }).pipe(
+          map(newAsset => {
+            if (environment.ianConfig.showLogs) console.log('newAsset ', newAsset);
+            return data;
+          })
+        );
+      }),
+      catchError(error => {
+        if (environment.ianConfig.showLogs) console.log('error', error);
+        return throwError(() => new Error('newAsset Create failed'));
+      })
+    );
   }
 }

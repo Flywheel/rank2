@@ -24,7 +24,7 @@ export class NewPlacementComponent {
     caption: ['', Validators.required],
   });
 
-  selectedTextOrMediaOption = signal('textEntry');
+  radioOption = signal('textEntry');
 
   closeNewPlacementEditor = output<boolean>();
   emptyPlatform = {} as MediaPlatform;
@@ -56,10 +56,12 @@ export class NewPlacementComponent {
 
       this.folioStore.placementCreate(newPlacement);
 
+      this.folioStore.togglePlacementAdder(false);
       this.closeNewPlacementEditor.emit(false);
     }
   }
   cancel() {
+    this.folioStore.togglePlacementAdder(false);
     this.closeNewPlacementEditor.emit(false);
   }
 

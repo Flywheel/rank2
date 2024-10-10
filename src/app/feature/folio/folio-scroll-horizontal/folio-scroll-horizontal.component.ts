@@ -50,4 +50,8 @@ export class FolioScrollHorizontalComponent {
     this.folioStore.toggleFolioAdder(true);
     this.newFolioEditorStateChange.emit(true);
   }
+  newPlacement() {
+    this.folioStore.togglePlacementAdder(true);
+    this.newPlacementEditorStateChange.emit(true);
+  }
 }

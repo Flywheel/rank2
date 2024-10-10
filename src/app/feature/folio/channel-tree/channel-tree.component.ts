@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
 import { TreeNode } from '../../../core/interfaces/interfaces';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'mh5-channel-tree',
@@ -12,6 +13,7 @@ export class ChannelTreeComponent {
   nodes = input<TreeNode[]>([]);
 
   toggleChildren(node: TreeNode): void {
+    if (environment.ianConfig.showLogs) console.log(node);
     this.nodes()
       .filter(n => n !== node)
       .forEach(n => {
