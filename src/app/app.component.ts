@@ -39,24 +39,30 @@ export class AppComponent implements OnInit, OnDestroy {
       if (consent) {
         this.authorStore.setConsent(consent);
         if (consent === 'accepted') {
-          const authorId = this.authorStore.authorLoggedIn().id;
-          const author = this.authorStore.authorById(authorId);
-          if (!author) {
-            this.authorStore.authorCreate(author);
-          }
-          if (this.authorStore.authorLoggedIn().name !== AUTHOR_DEFAULT_NAME) {
-            const folioDefault: Folio = {
-              id: 0,
-              authorId: authorId,
-              folioName: '@' + this.authorStore.authorLoggedIn().name,
-              isDefault: true,
-            };
-            this.folioStore.folioCreate(folioDefault);
-          }
+          this.loadForDemo_NoBackend();
         }
       }
     }
   }
+
+  private loadForDemo_NoBackend() {
+    const authorId = this.authorStore.authorLoggedIn().id;
+    const author = this.authorStore.authorById(authorId);
+    if (!author) {
+      this.authorStore.authorCreate(author);
+    }
+    if (this.authorStore.authorLoggedIn().name !== AUTHOR_DEFAULT_NAME) {
+      const folioDefault: Folio = {
+        id: 0,
+        authorId: authorId,
+        folioName: '@' + this.authorStore.authorLoggedIn().name,
+        isDefault: true,
+        parentFolioId: undefined,
+      };
+      this.folioStore.folioCreateForNewAuthor(folioDefault);
+    }
+  }
+
   ngOnDestroy(): void {
     this._destroying$.next(undefined);
     this._destroying$.complete();

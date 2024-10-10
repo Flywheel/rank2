@@ -73,7 +73,7 @@ export class AuthorProfileComponent {
       folioName: '@' + this.channelName(),
       isDefault: true,
     };
-    this.folioStore.folioCreate(newFolio);
+    this.folioStore.folioCreateForNewAuthor(newFolio);
     if (environment.ianConfig.showLogs) {
       console.log(currentAuthor);
       console.log(updatedAuthorData);

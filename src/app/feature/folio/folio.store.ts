@@ -117,7 +117,7 @@ export const FolioStore = signalStore(
         updateState(store, '[Folio] setFolioSelected', { folioIdSelected: folioId });
       },
 
-      folioCreate(folio: Folio) {
+      folioCreateForNewAuthor(folio: Folio) {
         updateState(store, '[Folio] Create Start', { isLoading: true });
         dbFolio
           .folioCreate(folio)

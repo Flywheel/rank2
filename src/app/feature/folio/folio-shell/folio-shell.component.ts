@@ -2,7 +2,6 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { HeaderComponent } from '../../../core/header/header.component';
 import { FolioStore } from '../folio.store';
 import { FolioScrollHorizontalComponent } from '../folio-scroll-horizontal/folio-scroll-horizontal.component';
-import { FolioNewComponent } from '../folio-new/folio-new.component';
 import { FolioPlacementNewComponent } from '../folio-placement-new/folio-placement-new.component';
 import { FolioPlacementListComponent } from '../folio-placement-list/folio-placement-list.component';
 import { environment } from '../../../../environments/environment';
@@ -18,7 +17,6 @@ import { IconPlusComponent } from '../../../core/svg/icon-plus';
   imports: [
     HeaderComponent,
     FolioScrollHorizontalComponent,
-    FolioNewComponent,
     FolioPlacementListComponent,
     FolioPlacementNewComponent,
     ChannelTreeComponent,
