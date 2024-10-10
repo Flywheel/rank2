@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Asset, Folio, FolioView, Placement, PlacementView } from '../../core/interfaces/interfaces';
+import { Asset, Folio, FolioView, Placement, PlacementView } from '../../core/models/interfaces';
 import { catchError, exhaustMap, Observable, throwError, map } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { environment } from '../../../environments/environment';

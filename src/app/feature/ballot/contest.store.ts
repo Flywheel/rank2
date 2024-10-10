@@ -1,13 +1,13 @@
 import { signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
-import { Contest, ContestView, SlateMember, SlateView } from '../../core/interfaces/interfaces';
+import { Contest, ContestView, SlateMember, SlateView } from '../../core/models/interfaces';
 import { ContestService } from './contest.service';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, of, pipe, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { environment } from '../../../environments/environment';
-import { contestInit, contestViewInit, placementInit, slateViewInit } from '../../core/interfaces/initValues';
+import { contestInit, contestViewInit, placementInit, slateViewInit } from '../../core/models/initValues';
 
 export const ContestStore = signalStore(
   { providedIn: 'root' },

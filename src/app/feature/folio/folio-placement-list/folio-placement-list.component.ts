@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { FolioStore } from '../folio.store';
-import { PlacementView } from '../../../core/interfaces/interfaces';
+import { PlacementView } from '../../../core/models/interfaces';
 
 @Component({
   selector: 'mh5-folio-placement-list',

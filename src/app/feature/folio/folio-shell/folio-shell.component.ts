@@ -7,7 +7,7 @@ import { FolioPlacementListComponent } from '../folio-placement-list/folio-place
 import { environment } from '../../../../environments/environment';
 import { AuthorStore } from '../../author/author.store';
 import { ChannelTreeComponent } from '../channel-tree/channel-tree.component';
-import { TreeNode } from '../../../core/interfaces/interfaces';
+import { TreeNode } from '../../../core/models/interfaces';
 import { NewPlacementComponent } from '../new-placement/new-placement.component';
 import { IconPlusComponent } from '../../../core/svg/icon-plus';
 import { env } from 'process';

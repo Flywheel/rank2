@@ -1,12 +1,12 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthorStore } from './feature/author/author.store';
-import { AUTHOR_CONSENT_KEY, AUTHOR_DEFAULT_NAME } from './core/interfaces/constants';
+import { AUTHOR_CONSENT_KEY, AUTHOR_DEFAULT_NAME } from './core/models/constants';
 import { AuthorConsentComponent } from './feature/author/author-consent/author-consent.component';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { FolioStore } from './feature/folio/folio.store';
-import { Folio } from './core/interfaces/interfaces';
+import { Folio } from './core/models/interfaces';
 
 @Component({
   selector: 'mh5-root',

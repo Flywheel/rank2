@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { TreeNode } from '../../../core/interfaces/interfaces';
+import { TreeNode } from '../../../core/models/interfaces';
 import { environment } from '../../../../environments/environment';
 
 @Component({

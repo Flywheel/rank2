@@ -12,7 +12,7 @@ import {
   SlateMember,
   FolioView,
   AssetView,
-} from '../app/core/interfaces/interfaces';
+} from '../app/core/models/interfaces';
 
 // Utility functions to generate incremental IDs
 

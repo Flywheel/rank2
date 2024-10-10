@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AuthorConsentComponent } from './author-consent.component';
 import { AuthorStore } from '../author.store';
 import { CommonModule } from '@angular/common';
-import { AUTHOR_CONSENT_KEY } from '../../../core/interfaces/constants';
+import { AUTHOR_CONSENT_KEY } from '../../../core/models/constants';
 
 fdescribe('AuthorConsentComponent', () => {
   let component: AuthorConsentComponent;

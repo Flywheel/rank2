@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, input, output, untracked } from '@angular/core';
 import { FolioStore } from '../folio.store';
-import { FolioView } from '../../../core/interfaces/interfaces';
+import { FolioView } from '../../../core/models/interfaces';
 import { environment } from '../../../../environments/environment';
 import { IconPlusComponent } from '../../../core/svg/icon-plus';
 import { IconProfileComponent } from '../../../core/svg/icon-profile';

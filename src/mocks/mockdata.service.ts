@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { contestList, contestViewList, folioList, folioViewList, assetList, assetViewList, placementList, placementViewList } from './mockdata4';
-import { Asset, AssetView, Contest, ContestView, Folio, FolioView, Placement, PlacementView } from '../app/core/interfaces/interfaces';
+import { Asset, AssetView, Contest, ContestView, Folio, FolioView, Placement, PlacementView } from '../app/core/models/interfaces';
 @Injectable({
   providedIn: 'root',
 })

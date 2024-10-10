@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 
 import { ContestService } from '../../ballot/contest.service';
-import { Contest } from '../../../core/interfaces/interfaces';
+import { Contest } from '../../../core/models/interfaces';
 
 @Component({
   selector: 'mh5-direct',

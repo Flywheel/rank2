@@ -1,12 +1,12 @@
 import { Component, computed, inject, output, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
-import { Placement, PlacementView } from '../../../core/interfaces/interfaces';
+import { Placement, PlacementView } from '../../../core/models/interfaces';
 import { AuthorStore } from '../../author/author.store';
 import { FolioStore } from '../folio.store';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { MediaPlatform } from '../../../core/interfaces/mediatypes';
+import { MediaPlatform } from '../../../core/models/mediatypes';
 import { DomSanitizer } from '@angular/platform-browser';
-import { placementViewInit } from '../../../core/interfaces/initValues';
+import { placementViewInit } from '../../../core/models/initValues';
 
 @Component({
   selector: 'mh5-new-placement',

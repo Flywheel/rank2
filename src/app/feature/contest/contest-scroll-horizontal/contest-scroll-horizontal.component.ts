@@ -1,5 +1,5 @@
 import { Component, inject, input, output } from '@angular/core';
-import { Contest } from '../../../core/interfaces/interfaces';
+import { Contest } from '../../../core/models/interfaces';
 import { ContestStore } from '../../ballot/contest.store';
 import { environment } from '../../../../environments/environment';
 

@@ -1,7 +1,7 @@
 import { signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
-import { Asset, AssetView, Folio, FolioView, Placement, PlacementView } from '../../core/interfaces/interfaces';
-import { assetInit, assetViewInit, folioInit, folioViewInit, placementInit, placementViewInit } from '../../core/interfaces/initValues';
+import { Asset, AssetView, Folio, FolioView, Placement, PlacementView } from '../../core/models/interfaces';
+import { assetInit, assetViewInit, folioInit, folioViewInit, placementInit, placementViewInit } from '../../core/models/initValues';
 import { FolioService } from './folio.service';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
