@@ -31,11 +31,11 @@ export class FolioService {
     return this.http.get<FolioView>(`${this.folioViewAPIUrl}/${id}`);
   }
 
-  folioCreate({ authorId, isDefault, folioName }: Folio): Observable<Folio> {
-    return this.http.post<Folio>(this.folioAPIUrl, { authorId, isDefault, folioName }).pipe(
+  folioCreate({ authorId, folioName }: Folio): Observable<Folio> {
+    return this.http.post<Folio>(this.folioAPIUrl, { authorId, folioName }).pipe(
       exhaustMap(data => {
         if (environment.ianConfig.showLogs) console.log('data', data);
-        return this.http.post<FolioView>(this.folioViewAPIUrl, { authorId, isDefault, folioName, placementViews: [] }).pipe(
+        return this.http.post<FolioView>(this.folioViewAPIUrl, { authorId, folioName, placementViews: [] }).pipe(
           map(folioViewData => {
             if (environment.ianConfig.showLogs) console.log('folioViewData', folioViewData);
             return data;
@@ -48,21 +48,55 @@ export class FolioService {
       })
     );
   }
-  folioCreateWithParent(parentFolioId: number, folioData: Partial<Folio>): Observable<Folio> {
-    folioData.isDefault = false;
+
+  folioCreateWithParent(folioData: Partial<Folio>): Observable<{ newFolio: Folio; newAsset: Asset; newPlacement: Placement }> {
+    return this.http.post<Folio>(this.folioAPIUrl, folioData).pipe(
+      exhaustMap((newFolio: Folio) => {
+        const newAsset: Asset = {
+          id: 0, // Assuming backend assigns the ID
+          mediaType: 'folio',
+          sourceId: folioData.parentFolioId?.toString() || '0',
+          authorId: folioData.authorId!,
+        };
+        return this.assetCreate(newAsset).pipe(
+          exhaustMap((createdAsset: Asset) => {
+            const placement: Placement = {
+              id: 0, // Assuming backend assigns the ID
+              folioId: folioData.parentFolioId!,
+              caption: folioData.folioName?.trim() || 'New Folio',
+              assetId: createdAsset.id,
+              authorId: folioData.authorId!,
+            };
+            return this.placementCreate(placement).pipe(
+              map(() => ({
+                newFolio,
+                newAsset: createdAsset,
+                newPlacement: placement,
+              }))
+            );
+          })
+        );
+      }),
+      catchError(error => {
+        console.error('Folio creation failed', error);
+        return throwError(() => new Error('Folio creation failed'));
+      })
+    );
+  }
+  folioCreateWithParent2(folioData: Partial<Folio>): Observable<Folio> {
     return this.http.post<Folio>(this.folioAPIUrl, folioData).pipe(
       exhaustMap((newFolio: Folio) => {
         const newAsset: Asset = {
           id: 0,
           mediaType: 'folio',
-          sourceId: newFolio.id.toString(),
+          sourceId: folioData.parentFolioId!.toString(),
           authorId: folioData.authorId!,
         };
         return this.assetCreate(newAsset).pipe(
           exhaustMap((createdAsset: Asset) => {
             const placement: Placement = {
               id: 0,
-              folioId: parentFolioId,
+              folioId: folioData.parentFolioId!,
               caption: folioData.folioName?.trim() || 'New Folio',
               assetId: createdAsset.id,
               authorId: folioData.authorId!,
@@ -88,7 +122,23 @@ export class FolioService {
     return this.http.get<PlacementView[]>(this.placementViewAPIUrl).pipe(takeUntilDestroyed());
   }
 
+  placementCreate3(placement: Placement): Observable<Placement> {
+    return this.http.post<Placement>(this.placementAPIUrl, placement).pipe(
+      catchError(error => {
+        if (environment.ianConfig.showLogs) console.log('error', error);
+        return throwError(() => new Error('Placement Create failed'));
+      })
+    );
+  }
   placementCreate({ authorId, assetId, folioId, caption }: Placement): Observable<Placement> {
+    return this.http.post<Placement>(this.placementAPIUrl, { authorId, assetId, folioId, caption }).pipe(
+      catchError(error => {
+        if (environment.ianConfig.showLogs) console.log('error', error);
+        return throwError(() => new Error('Placement Create failed'));
+      })
+    );
+  }
+  placementCreate2({ authorId, assetId, folioId, caption }: Placement): Observable<Placement> {
     return this.http.post<Placement>(this.folioAPIUrl, { authorId, assetId, folioId, caption }).pipe(
       exhaustMap(data => {
         return this.http.post<Placement>(this.folioAPIUrl, { authorId, assetId, folioId, caption }).pipe(
@@ -110,19 +160,28 @@ export class FolioService {
     return this.http.get<Asset[]>(this.assetAPIUrl).pipe(takeUntilDestroyed());
   }
 
-  assetCreate({ authorId, mediaType, sourceId }: Asset): Observable<Asset> {
-    return this.http.post<Asset>(this.folioAPIUrl, { authorId, mediaType, sourceId }).pipe(
-      exhaustMap(data => {
-        return this.http.post<Asset>(this.folioAPIUrl, { authorId, mediaType, sourceId }).pipe(
-          map(newAsset => {
-            if (environment.ianConfig.showLogs) console.log('newAsset ', newAsset);
-            return data;
-          })
-        );
-      }),
+  // assetCreate2({ authorId, mediaType, sourceId }: Asset): Observable<Asset> {
+  //   return this.http.post<Asset>(this.folioAPIUrl, { authorId, mediaType, sourceId }).pipe(
+  //     exhaustMap(data => {
+  //       return this.http.post<Asset>(this.folioAPIUrl, { authorId, mediaType, sourceId }).pipe(
+  //         map(newAsset => {
+  //           if (environment.ianConfig.showLogs) console.log('newAsset ', newAsset);
+  //           return data;
+  //         })
+  //       );
+  //     }),
+  //     catchError(error => {
+  //       if (environment.ianConfig.showLogs) console.log('error', error);
+  //       return throwError(() => new Error('newAsset Create failed'));
+  //     })
+  //   );
+  // }
+
+  assetCreate(asset: Asset): Observable<Asset> {
+    return this.http.post<Asset>(this.assetAPIUrl, asset).pipe(
       catchError(error => {
         if (environment.ianConfig.showLogs) console.log('error', error);
-        return throwError(() => new Error('newAsset Create failed'));
+        return throwError(() => new Error('Asset Create failed'));
       })
     );
   }

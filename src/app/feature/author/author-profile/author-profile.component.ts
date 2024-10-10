@@ -71,7 +71,6 @@ export class AuthorProfileComponent {
       id: 0,
       authorId: currentAuthor.id,
       folioName: '@' + this.channelName(),
-      isDefault: true,
     };
     this.folioStore.folioCreateForNewAuthor(newFolio);
     if (environment.ianConfig.showLogs) {

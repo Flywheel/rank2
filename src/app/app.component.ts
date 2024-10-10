@@ -56,7 +56,6 @@ export class AppComponent implements OnInit, OnDestroy {
         id: 0,
         authorId: authorId,
         folioName: '@' + this.authorStore.authorLoggedIn().name,
-        isDefault: true,
         parentFolioId: undefined,
       };
       this.folioStore.folioCreateForNewAuthor(folioDefault);

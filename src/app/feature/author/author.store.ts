@@ -37,12 +37,13 @@ export const AuthorStore = signalStore(
             const authorView: AuthorView = {
               id: author.id,
               name: author.name,
-              authorFolio: folioStore.allComputedFolioViews().filter(folio => folio.authorId === author.id && folio.isDefault)[0] ?? folioViewInit,
+              authorFolio:
+                folioStore.folioViewsComputed().filter(folio => folio.authorId === author.id && folio.parentFolioId === undefined)[0] ?? folioViewInit,
             };
             return authorView;
           });
       }),
-      authorFolioViews: computed<FolioView[]>(() => folioStore.allComputedFolioViews().filter(folio => folio.authorId === store.authorIdSelected())),
+      authorFolioViews: computed<FolioView[]>(() => folioStore.folioViewsComputed().filter(folio => folio.authorId === store.authorIdSelected())),
     };
   }),
 

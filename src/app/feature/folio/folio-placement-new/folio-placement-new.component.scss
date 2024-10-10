@@ -1,6 +1,8 @@
 .radio-container {
   display: flex;
-  gap: 1px;
+  gap: 1.5rem;
+  margin-top: 0.75rem;
+  margin-bottom: 1.2rem;
 }
 
 .radio-label {
@@ -12,4 +14,32 @@
 
 .radio-label input[type='radio'] {
   margin-right: 8px;
+}
+
+.form-container {
+  .form-row {
+    label {
+      grid-column: 2 / 3;
+      text-align: left;
+      margin-left: 1.5rem;
+      color: #ddd;
+    }
+
+    input,
+    button {
+      //
+    }
+    div {
+      grid-column: 1 / 2;
+    }
+    .col1 {
+      grid-column: 1 / 2;
+    }
+    .col2 {
+      grid-column: 2 / 3;
+    }
+    .colsBoth {
+      grid-column: 1 / 3;
+    }
+  }
 }

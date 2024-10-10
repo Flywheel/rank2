@@ -10,6 +10,7 @@ import { ChannelTreeComponent } from '../channel-tree/channel-tree.component';
 import { TreeNode } from '../../../core/interfaces/interfaces';
 import { NewPlacementComponent } from '../new-placement/new-placement.component';
 import { IconPlusComponent } from '../../../core/svg/icon-plus';
+import { env } from 'process';
 
 @Component({
   selector: 'mh5-folio-shell',
@@ -108,13 +109,6 @@ export class FolioShellComponent {
     },
   ];
 
-  openNewFolio() {
-    this.newFolio.set(true);
-  }
-  closeNewFolio() {
-    this.newFolio.set(false);
-    if (environment.ianConfig.showLogs) console.log(this.theFolios());
-  }
   openNewPlacement() {
     this.newPlacement.set(true);
   }
@@ -122,7 +116,7 @@ export class FolioShellComponent {
     this.newPlacement.set(false);
   }
 
-  RunTest() {
-    //
+  runLog() {
+    if (environment.ianConfig.showLogs) console.log(this.folioTreeData());
   }
 }

@@ -34,9 +34,8 @@ export interface AssetView extends Asset {
 export interface Folio {
   id: number;
   authorId: string;
-  isDefault: boolean;
   folioName: string;
-  parentFolioId?: number;
+  parentFolioId?: number | null;
 }
 
 export interface Placement {

@@ -11,17 +11,16 @@ export const authorViewInit: AuthorView = {
   authorFolio: {
     id: 0,
     authorId: '',
-    isDefault: false,
     folioName: '',
     placementViews: [],
   },
 };
 
 export const assetInit: Asset = {
-  id: 0,
-  authorId: '',
-  mediaType: '',
-  sourceId: '',
+  id: 1,
+  authorId: 'xxxx-xxxx',
+  mediaType: 'Caption',
+  sourceId: 'Caption',
 };
 
 export const assetViewInit: AssetView = {
@@ -53,14 +52,12 @@ export const placementViewInit: PlacementView = {
 export const folioInit: Folio = {
   id: 0,
   authorId: '',
-  isDefault: false,
   folioName: '',
 };
 
 export const folioViewInit: FolioView = {
   id: 0,
   authorId: '',
-  isDefault: false,
   folioName: '',
   placementViews: [],
 };

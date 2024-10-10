@@ -1,33 +1,33 @@
-<form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form-container">
-  <div class="form-row">
-    @if (formGroup.get('caption')?.invalid && formGroup.get('caption')?.touched) {
-      <label for="caption" class="warning">Caption is required</label>
-    } @else {
-      <label for="caption">Add Placement Caption</label>
-    }
-    <input id="caption" formControlName="caption" type="text" />
-
-    <div>
-      <button type="submit" [disabled]="formGroup.invalid">Add {{ radioOption() }}</button>
-    </div>
-
-    <div><button class="cancelButton" (click)="cancel()">Cancel/Close</button></div>
-    <div><button class="cancelButton" (click)="test()">Test</button></div>
-  </div>
-</form>
-
 <div class="radio-container">
   <label class="radio-label">
-    <input type="radio" name="entryType" [ngModel]="radioOption()" (ngModelChange)="radioOption.set($event)" value="Caption Only" />
-    Text
-  </label>
-  <br />
-  <label class="radio-label">
-    <input type="radio" name="entryType" [ngModel]="radioOption()" (ngModelChange)="radioOption.set($event)" value="Folio" />
-    Folio
+    <input type="radio" name="entryType" [ngModel]="newPlacementType()" (ngModelChange)="newPlacementType.set($event)" value="Caption" />
+    Caption
   </label>
   <label class="radio-label">
-    <input disabled="true" type="radio" name="entryType" [ngModel]="radioOption()" (ngModelChange)="radioOption.set($event)" value="MediaUrl" />
+    <input type="radio" name="entryType" [ngModel]="newPlacementType()" (ngModelChange)="newPlacementType.set($event)" value="MediaUrl" />
     Media URL
   </label>
+  <label class="radio-label">
+    <input type="radio" name="entryType" [ngModel]="newPlacementType()" (ngModelChange)="newPlacementType.set($event)" value="Folio" />
+    Folio
+  </label>
 </div>
+
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form-container">
+  <div class="form-row">
+    <input class="col1" id="caption" formControlName="caption" type="text" />
+    <div class="col2">
+      @if (formGroup.get('caption')?.invalid && formGroup.get('caption')?.touched) {
+        <label for="caption" class="warning">Entry is required</label>
+      } @else {
+        <label for="caption">Enter {{ newPlacementType() }} </label>
+      }
+    </div>
+
+    <div class="colsBoth">
+      <button type="submit" [disabled]="formGroup.invalid">Add {{ newPlacementType() }} to folio {{ folioStore.folioViewSelected().folioName }}</button>
+    </div>
+    <button class="col1" (click)="test()">Test</button>
+    <button class="col2" (click)="cancel()">Cancel / Close</button>
+  </div>
+</form>

@@ -16,7 +16,7 @@ export class FolioPlacementNewComponent {
   authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
   fb = inject(FormBuilder);
-  radioOption = signal('Caption Only');
+  newPlacementType = signal('Caption');
 
   formGroup: FormGroup = this.fb.group({
     caption: ['', Validators.required],
@@ -27,8 +27,8 @@ export class FolioPlacementNewComponent {
   onSubmit() {
     const parentFolioId = this.folioStore.folioViewSelected().id;
     const authorId = this.authorStore.authorLoggedIn().id;
-    switch (this.radioOption()) {
-      case 'Caption Only':
+    switch (this.newPlacementType()) {
+      case 'Caption':
         if (this.formGroup.valid) {
           const newPlacement: Placement = {
             id: 0,
@@ -47,8 +47,9 @@ export class FolioPlacementNewComponent {
           const folioData: Partial<Folio> = {
             folioName: this.formGroup.value.caption.trim(),
             authorId: this.authorStore.authorLoggedIn().id,
+            parentFolioId,
           };
-          this.folioStore.folioCreateWithParent(folioData, parentFolioId);
+          this.folioStore.folioCreateWithParent(folioData);
           this.folioStore.toggleFolioAdder(false);
         }
         break;
@@ -63,7 +64,8 @@ export class FolioPlacementNewComponent {
   }
   test() {
     if (environment.ianConfig.showLogs) {
-      console.log(this.folioStore.allComputedFolioViews());
+      console.log(this.folioStore.placementViewsComputed());
+      console.log(this.folioStore.folioViewsComputed());
       console.log(this.authorStore.authorLoggedInView());
     }
   }

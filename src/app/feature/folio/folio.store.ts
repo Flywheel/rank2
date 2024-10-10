@@ -1,7 +1,7 @@
 import { signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
 import { Asset, AssetView, Folio, FolioView, Placement, PlacementView } from '../../core/interfaces/interfaces';
-import { assetInit, assetViewInit, folioInit, folioViewInit, placementInit } from '../../core/interfaces/initValues';
+import { assetInit, assetViewInit, folioInit, folioViewInit, placementInit, placementViewInit } from '../../core/interfaces/initValues';
 import { FolioService } from './folio.service';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -18,6 +18,7 @@ export const FolioStore = signalStore(
     isLoading: false,
     isAddingFolio: false,
     isAddingPlacement: false,
+    placementViews: [placementViewInit],
   }),
 
   withStorageSync({
@@ -27,7 +28,7 @@ export const FolioStore = signalStore(
 
   withComputed(store => {
     return {
-      allAssetViews: computed<AssetView[]>(() =>
+      assetViewsComputed: computed<AssetView[]>(() =>
         store.assets().map(asset => ({
           ...asset,
           url: '',
@@ -39,10 +40,10 @@ export const FolioStore = signalStore(
 
   withComputed(store => {
     return {
-      allPlacementViews: computed<PlacementView[]>(() =>
+      placementViewsComputed: computed<PlacementView[]>(() =>
         store.placements().map(placement => ({
           ...placement,
-          asset: store.allAssetViews().find(a => a.id === placement.assetId) ?? assetViewInit,
+          asset: store.assetViewsComputed().find(a => a.id === placement.assetId) ?? assetViewInit,
         }))
       ),
     };
@@ -50,9 +51,9 @@ export const FolioStore = signalStore(
 
   withComputed(store => {
     return {
-      allComputedFolioViews: computed<FolioView[]>(() =>
+      folioViewsComputed: computed<FolioView[]>(() =>
         store.folios().map(folio => {
-          const placementViews = store.allPlacementViews().filter(placement => placement.folioId === folio.id);
+          const placementViews = store.placementViewsComputed().filter(placement => placement.folioId === folio.id);
           return {
             ...folio,
             placementViews,
@@ -65,7 +66,7 @@ export const FolioStore = signalStore(
   withComputed(store => {
     return {
       folioViewSelected: computed<FolioView>(() => {
-        return store.allComputedFolioViews().find(folio => folio.id === store.folioIdSelected()) ?? folioViewInit;
+        return store.folioViewsComputed().find(folio => folio.id === store.folioIdSelected()) ?? folioViewInit;
       }),
     };
   }),
@@ -138,16 +139,24 @@ export const FolioStore = signalStore(
           .subscribe();
       },
 
-      folioCreateWithParent(folioData: Partial<Folio>, parentFolioId: number) {
+      folioCreateWithParent(folioData: Partial<Folio>) {
         updateState(store, '[Folio] Create Start', { isLoading: true });
         dbFolio
-          .folioCreateWithParent(parentFolioId, folioData)
+          .folioCreateWithParent(folioData)
           .pipe(
-            map((newFolio: Folio) => {
+            map(({ newFolio, newAsset, newPlacement }) => {
               updateState(store, '[Folio] Create Success', {
                 folios: [...store.folios(), newFolio],
                 isLoading: false,
                 folioIdSelected: newFolio.id,
+              });
+              updateState(store, '[Asset] Create Success', {
+                assets: [...store.assets(), newAsset],
+              });
+
+              // Update Placements
+              updateState(store, '[Placement] Create Success', {
+                placements: [...store.placements(), newPlacement],
               });
               store.writeToStorage();
               return newFolio;
