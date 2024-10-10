@@ -1,6 +1,6 @@
 import { Component, inject, output, signal } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { Asset, Folio, Placement } from '../../../core/interfaces/interfaces';
+import { Folio, Placement } from '../../../core/interfaces/interfaces';
 import { FolioStore } from '../folio.store';
 import { AuthorStore } from '../../author/author.store';
 import { environment } from '../../../../environments/environment';
@@ -25,18 +25,18 @@ export class FolioPlacementNewComponent {
   closeNewPlacementEditor = output<boolean>();
 
   onSubmit() {
+    const parentFolioId = this.folioStore.folioViewSelected().id;
+    const authorId = this.authorStore.authorLoggedIn().id;
     switch (this.radioOption()) {
       case 'Caption Only':
         if (this.formGroup.valid) {
-          const folioId = this.folioStore.folioViewSelected().id;
           const newPlacement: Placement = {
             id: 0,
-            authorId: this.authorStore.authorLoggedIn().id,
-            folioId,
+            authorId,
+            folioId: parentFolioId,
             assetId: 1,
             caption: this.formGroup.value.caption,
           };
-
           this.folioStore.placementCreate(newPlacement);
           this.folioStore.togglePlacementAdder(false);
         }
@@ -48,37 +48,12 @@ export class FolioPlacementNewComponent {
             folioName: this.formGroup.value.caption.trim(),
             authorId: this.authorStore.authorLoggedIn().id,
           };
-          const parentFolioId = this.folioStore.folioViewSelected().id;
-
           this.folioStore.folioCreateWithParent(folioData, parentFolioId);
-
           this.folioStore.toggleFolioAdder(false);
         }
         break;
     }
     this.formGroup.controls['caption'].reset();
-  }
-
-  addTopic() {
-    const newFolio: Folio = { id: 0, folioName: this.formGroup.value.caption, authorId: this.authorStore.authorLoggedIn().id, isDefault: false };
-    this.folioStore.folioCreate(newFolio);
-
-    const newAsset: Asset = {
-      id: 0,
-      mediaType: 'folio',
-      sourceId: '0', // newFolio.id.toString(),
-      authorId: this.authorStore.authorLoggedIn().id,
-    };
-    this.folioStore.assetCreate(newAsset);
-
-    const placement: Placement = {
-      id: 0,
-      folioId: this.folioStore.folioViewSelected().id,
-      caption: this.formGroup.value.caption,
-      assetId: 0, // new placementId,
-      authorId: this.authorStore.authorLoggedIn().id,
-    };
-    this.folioStore.placementCreate(placement);
   }
 
   cancel() {

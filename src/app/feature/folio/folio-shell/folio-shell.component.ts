@@ -51,6 +51,47 @@ export class FolioShellComponent {
     });
   });
 
+  // folioTreeData2 = computed<TreeNode[]>(() => {
+  //   const folios = this.theFolios();
+  //   const treeData: TreeNode[] = [];
+
+  //   folios.forEach(folio => {
+  //     if (!folio.parentFolioId) { // Assuming folios have a parentFolioId property
+  //       const node: TreeNode = {
+  //         name: folio.folioName,
+  //         children: this.getChildPlacements(folio.id, folios),
+  //       };
+  //       treeData.push(node);
+  //     }
+  //   });
+
+  //   return treeData;
+  // });
+
+  // private getChildPlacements(parentFolioId: number, folios: Folio[]): TreeNode[] {
+  //   return folios
+  //     .filter(folio => folio.parentFolioId === parentFolioId)
+  //     .map(folio => ({
+  //       name: folio.folioName,
+  //       children: this.getChildPlacements(folio.id, folios),
+  //     }));
+  // }
+
+  // folioTreeData = computed<TreeNode[]>(() => {
+  //   const folios = this.theFolios();
+  //   const rootFolios = folios.filter(folio => !folio.parentFolioId);
+
+  //   return rootFolios.map(rootFolio => this.buildTreeNode(rootFolio, folios));
+  // });
+
+  // private buildTreeNode(folio: Folio, allFolios: Folio[]): TreeNode {
+  //   const children = allFolios.filter(child => child.parentFolioId === folio.id);
+  //   return {
+  //     name: folio.folioName,
+  //     children: children.map(childFolio => this.buildTreeNode(childFolio, allFolios)),
+  //   };
+  // }
+
   treeData: TreeNode[] = [
     {
       name: 'Root',

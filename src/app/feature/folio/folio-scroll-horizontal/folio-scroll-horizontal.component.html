@@ -8,3 +8,20 @@
     <div class="menu-item" (click)="newPlacement()" (keydown)="newPlacement()" tabindex="0">Add New</div>
   }
 </div>
+
+<!-- <div class="horizontal-scroll">
+  @for (folio of theFoliosInput(); track $index) {
+    <div class="menu-item" (click)="selectFolio(folio.id)" (keydown)="selectFolio(folio.id)" tabindex="$index">
+      {{ folio.folioName }}
+    </div>
+    @if (folio.children && folio.children.length > 0) {
+      <div class="child-menu">
+        @for (child of folio.children; track $index) {
+          <div class="menu-item" (click)="selectFolio(child.id)" (keydown)="selectFolio(child.id)" tabindex="$index">
+            {{ child.folioName }}
+          </div>
+        }
+      </div>
+    }
+  }
+</div> -->
