@@ -16,7 +16,6 @@
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form-container">
   <div class="form-row">
     <input class="col1" id="caption" formControlName="caption" type="text" />
-
     <div class="col2">
       @if (formGroup.get('caption')?.invalid && formGroup.get('caption')?.touched) {
         <label for="caption" class="warning">Entry is required</label>
@@ -28,7 +27,6 @@
     @if (newPlacementType() === 'MediaUrl') {
       <div class="form-row">
         <textarea class="col1" formControlName="urlAdder" name="urlAdder" id="urlAdder" rows="5" (drop)="onDrop($event)" (input)="onInput($event)"> </textarea>
-
         <div class="col2">
           <label for="urlAdder">Drop or paste URL </label>
         </div>

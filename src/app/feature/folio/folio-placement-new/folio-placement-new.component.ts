@@ -4,10 +4,9 @@ import { Asset, AssetView, Folio, Placement } from '../../../core/models/interfa
 import { FolioStore } from '../folio.store';
 import { AuthorStore } from '../../author/author.store';
 import { environment } from '../../../../environments/environment';
-import { mediaPlatforms, MediaService } from '../../../core/services/media.service';
+import { MediaService } from '../../../core/services/media.service';
 import { FolioPlacementMediaComponent } from '../folio-placement-media/folio-placement-media.component';
 import { assetViewInit } from '../../../core/models/initValues';
-import { MediaPlatform } from '../../../core/models/mediatypes';
 
 @Component({
   selector: 'mh5-folio-placement-new',
@@ -97,36 +96,11 @@ export class FolioPlacementNewComponent {
   }
 
   mediaService = inject(MediaService);
-  parsedMedia = signal<MediaPlatform>({} as MediaPlatform);
-
-  private displayMedia(input: string) {
-    let match: RegExpExecArray | null;
-    this.parsedMedia.set({} as MediaPlatform);
-    console.log(this.parsedMedia());
-    for (const [key, value] of Object.entries(mediaPlatforms)) {
-      match = value.regex.exec(input);
-      console.log(match);
-      if (match) {
-        const result = value.parse(match);
-        if (result !== null) {
-          this.parsedMedia.set(result);
-          const assetView: Asset = {
-            mediaType: this.parsedMedia().mediaType,
-            sourceId: match ? match[1] : '',
-            authorId: '1',
-            id: 0,
-          };
-          this.assetViewPrepared.set(assetView);
-          console.log(result);
-        }
-        //   if (this.logger.enabled) console.log(`${key}: ${this.parsedMedia().platformType} ${this.sourecIdLocator()}  ${JSON.stringify(result)}`);
-      } else {
-        //   if (this.logger.enabled) console.log('No match for ', key, ' in ', value);
-      }
-    }
-  }
 
   assetViewPrepared = signal<Asset | AssetView>(assetViewInit);
+  displayMedia(input: string) {
+    this.assetViewPrepared.set(this.mediaService.castUrlToAsset(input));
+  }
 
   test() {
     if (environment.ianConfig.showLogs) {

@@ -2,11 +2,33 @@ import { Injectable } from '@angular/core';
 import { Asset, AssetView } from '../models/interfaces';
 import { environment } from '../../../environments/environment';
 import { MediaPlatform } from '../models/mediatypes';
+import { assetInit } from '../models/initValues';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MediaService {
+  public castUrlToAsset(input: string): Asset {
+    let match: RegExpExecArray | null;
+    // console.log(this.parsedMedia());
+    for (const [key, value] of Object.entries(mediaPlatforms)) {
+      match = value.regex.exec(input);
+      console.log(match);
+      if (match) {
+        const result = value.parse(match);
+        if (result !== null) {
+          return {
+            mediaType: result.mediaType,
+            sourceId: match ? match[1] : '',
+            authorId: '1',
+            id: 0,
+          } as Asset;
+        }
+      }
+    }
+    return assetInit;
+  }
+
   public parseMedia(content: Asset | AssetView): string {
     if (environment.ianConfig.showLogs) console.log(content);
     const mediaType = content.mediaType;

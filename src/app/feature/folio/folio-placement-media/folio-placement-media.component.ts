@@ -14,13 +14,11 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 export class FolioPlacementMediaComponent {
   assetView = input.required<Asset | AssetView>();
   sanitizer = inject(DomSanitizer);
-
-  paddingBottom = '56.25%';
   mediaService = inject(MediaService);
   mediaURL = computed(() => {
-    const assetView = this.assetView();
-    return assetView ? this.mediaService.parseMedia(assetView) : '';
+    return this.mediaService.parseMedia(this.assetView()) ?? '';
   });
+
   contentPlayer = computed(() => this.sanitizer.bypassSecurityTrustResourceUrl(this.mediaURL()));
   runTest() {
     console.log(this.assetView());
