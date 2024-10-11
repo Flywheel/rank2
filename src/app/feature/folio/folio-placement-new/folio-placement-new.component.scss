@@ -25,9 +25,22 @@
       color: #ddd;
     }
 
-    input,
-    button {
-      //
+    // input,
+    // button,
+    textarea {
+      padding: 0rem;
+      font-size: xx-small;
+      grid-column: 1 / 2;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 100%;
+      box-sizing: border-box;
+      margin-right: 0rem;
+    }
+
+    textarea {
+      resize: vertical;
+      // min-height: 100px;
     }
     div {
       grid-column: 1 / 2;

@@ -1,7 +1,7 @@
 <ul>
   @for (node of nodes(); track $index) {
-    <li>
-      <span (click)="toggleChildren(node)" (keydown)="toggleChildren(node)" tabindex="9"> {{ node.name }}</span>
+    <li (click)="selectNode(node)" (keydown)="selectNode(node)" tabindex="9">
+      <span class="node-item" [ngClass]="{ selected: node.isSelected }"> {{ node.name }}</span>
       @if (node.children) {
         <ul>
           <mh5-channel-tree [nodes]="node.children"></mh5-channel-tree>

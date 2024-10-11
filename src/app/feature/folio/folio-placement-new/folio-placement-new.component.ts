@@ -1,25 +1,31 @@
 import { Component, inject, output, signal } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { Folio, Placement } from '../../../core/models/interfaces';
+import { Asset, AssetView, Folio, Placement } from '../../../core/models/interfaces';
 import { FolioStore } from '../folio.store';
 import { AuthorStore } from '../../author/author.store';
 import { environment } from '../../../../environments/environment';
+import { mediaPlatforms, MediaService } from '../../../core/services/media.service';
+import { FolioPlacementMediaComponent } from '../folio-placement-media/folio-placement-media.component';
+import { assetViewInit } from '../../../core/models/initValues';
+import { MediaPlatform } from '../../../core/models/mediatypes';
 
 @Component({
   selector: 'mh5-folio-placement-new',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule],
+  imports: [ReactiveFormsModule, FormsModule, FolioPlacementMediaComponent],
   templateUrl: './folio-placement-new.component.html',
   styleUrl: './folio-placement-new.component.scss',
 })
 export class FolioPlacementNewComponent {
   authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
+
   fb = inject(FormBuilder);
   newPlacementType = signal('Caption');
 
   formGroup: FormGroup = this.fb.group({
     caption: ['', Validators.required],
+    urlAdder: [''],
   });
 
   closeNewPlacementEditor = output<boolean>();
@@ -53,15 +59,75 @@ export class FolioPlacementNewComponent {
           this.folioStore.toggleFolioAdder(false);
         }
         break;
+      case 'MediaURL':
+        if (this.formGroup.valid) {
+          if (environment.ianConfig.showLogs) console.log(this.formGroup.value.urlAdder);
+          // const media: Partial<Asset> = {
+          //   folioName: this.formGroup.value.caption.trim(),
+          //   authorId: this.authorStore.authorLoggedIn().id,
+          //   parentFolioId,
+          // };
+          // this.folioStore.assetCreate();
+          // this.folioStore.toggleFolioAdder(false);
+        }
+        break;
     }
     this.formGroup.controls['caption'].reset();
   }
 
   cancel() {
     this.folioStore.togglePlacementAdder(false);
-
     this.closeNewPlacementEditor.emit(false);
   }
+
+  onPaste(event: ClipboardEvent): void {
+    const text = event.clipboardData?.getData('text') || '';
+    this.displayMedia(text);
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    const text = event.dataTransfer?.getData('text') || '';
+    this.displayMedia(text);
+    this.formGroup.get('urlAdder')?.setValue(text);
+  }
+  onInput(event: Event) {
+    const text = (event.target as HTMLInputElement).value;
+    this.displayMedia(text);
+  }
+
+  mediaService = inject(MediaService);
+  parsedMedia = signal<MediaPlatform>({} as MediaPlatform);
+
+  private displayMedia(input: string) {
+    let match: RegExpExecArray | null;
+    this.parsedMedia.set({} as MediaPlatform);
+    console.log(this.parsedMedia());
+    for (const [key, value] of Object.entries(mediaPlatforms)) {
+      match = value.regex.exec(input);
+      console.log(match);
+      if (match) {
+        const result = value.parse(match);
+        if (result !== null) {
+          this.parsedMedia.set(result);
+          const assetView: Asset = {
+            mediaType: this.parsedMedia().mediaType,
+            sourceId: match ? match[1] : '',
+            authorId: '1',
+            id: 0,
+          };
+          this.assetViewPrepared.set(assetView);
+          console.log(result);
+        }
+        //   if (this.logger.enabled) console.log(`${key}: ${this.parsedMedia().platformType} ${this.sourecIdLocator()}  ${JSON.stringify(result)}`);
+      } else {
+        //   if (this.logger.enabled) console.log('No match for ', key, ' in ', value);
+      }
+    }
+  }
+
+  assetViewPrepared = signal<Asset | AssetView>(assetViewInit);
+
   test() {
     if (environment.ianConfig.showLogs) {
       console.log(this.folioStore.placementViewsComputed());

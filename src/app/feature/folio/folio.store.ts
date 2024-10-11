@@ -150,14 +150,15 @@ export const FolioStore = signalStore(
                 isLoading: false,
                 folioIdSelected: newFolio.id,
               });
+              updateState(store, '[Placement] Create Success', {
+                placements: [...store.placements(), newPlacement],
+              });
               updateState(store, '[Asset] Create Success', {
                 assets: [...store.assets(), newAsset],
               });
 
               // Update Placements
-              updateState(store, '[Placement] Create Success', {
-                placements: [...store.placements(), newPlacement],
-              });
+
               store.writeToStorage();
               return newFolio;
             }),

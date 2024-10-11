@@ -8,6 +8,7 @@ export interface EventLog {
 export interface TreeNode {
   name: string;
   children?: TreeNode[];
+  isSelected?: boolean;
 }
 
 export interface Author {
@@ -28,7 +29,7 @@ export interface Asset {
 
 export interface AssetView extends Asset {
   url: string;
-  paddingBottom: string;
+  styling?: string;
 }
 
 export interface Folio {

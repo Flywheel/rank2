@@ -1,8 +1,20 @@
 ul {
   list-style: none;
-  padding-left: 20px;
+  padding-left: 3px;
 }
 
 li {
   cursor: pointer;
+}
+
+.node-item {
+  font-size: x-small;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  &.selected {
+    border-bottom: 2px solid azure;
+  }
+  &:hover {
+    border-bottom: 2px dotted grey;
+  }
 }

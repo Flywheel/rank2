@@ -7,10 +7,9 @@ import { FolioPlacementListComponent } from '../folio-placement-list/folio-place
 import { environment } from '../../../../environments/environment';
 import { AuthorStore } from '../../author/author.store';
 import { ChannelTreeComponent } from '../channel-tree/channel-tree.component';
-import { TreeNode } from '../../../core/models/interfaces';
+import { FolioView, TreeNode } from '../../../core/models/interfaces';
 import { NewPlacementComponent } from '../new-placement/new-placement.component';
 import { IconPlusComponent } from '../../../core/svg/icon-plus';
-import { env } from 'process';
 
 @Component({
   selector: 'mh5-folio-shell',
@@ -42,54 +41,62 @@ export class FolioShellComponent {
       return {
         name: folio.folioName,
         children: folio.placementViews.map(placement => {
-          return {
-            name: placement.caption,
-          };
+          if (environment.ianConfig.showLogs) console.log(placement);
+          if (placement.asset.mediaType === 'folio ') {
+            return {
+              name: `+ {{ placement.caption}}`,
+            };
+          } else {
+            return {
+              name: placement.caption,
+            };
+          }
         }),
       };
     });
   });
 
-  // folioTreeData2 = computed<TreeNode[]>(() => {
-  //   const folios = this.theFolios();
-  //   const treeData: TreeNode[] = [];
+  folioTreeData2 = computed<TreeNode[]>(() => {
+    const folios = this.theFolios();
+    const treeData: TreeNode[] = [];
 
-  //   folios.forEach(folio => {
-  //     if (!folio.parentFolioId) { // Assuming folios have a parentFolioId property
-  //       const node: TreeNode = {
-  //         name: folio.folioName,
-  //         children: this.getChildPlacements(folio.id, folios),
-  //       };
-  //       treeData.push(node);
-  //     }
-  //   });
+    folios.forEach(folio => {
+      if (!folio.parentFolioId) {
+        // Assuming folios have a parentFolioId property
+        const node: TreeNode = {
+          name: folio.folioName,
+          children: this.getChildPlacements(folio.id, folios),
+        };
+        treeData.push(node);
+      }
+    });
 
-  //   return treeData;
-  // });
+    return treeData;
+  });
 
-  // private getChildPlacements(parentFolioId: number, folios: Folio[]): TreeNode[] {
-  //   return folios
-  //     .filter(folio => folio.parentFolioId === parentFolioId)
-  //     .map(folio => ({
-  //       name: folio.folioName,
-  //       children: this.getChildPlacements(folio.id, folios),
-  //     }));
-  // }
+  private getChildPlacements(parentFolioId: number, folios: FolioView[]): TreeNode[] {
+    return folios
+      .filter(folio => folio.parentFolioId === parentFolioId)
+      .map(folio => ({
+        name: folio.folioName,
+        children: this.getChildPlacements(folio.id, folios),
+      }));
+  }
 
-  // folioTreeData = computed<TreeNode[]>(() => {
-  //   const folios = this.theFolios();
-  //   const rootFolios = folios.filter(folio => !folio.parentFolioId);
+  folioTreeData3 = computed<TreeNode[]>(() => {
+    const folios = this.theFolios();
+    const rootFolios = folios.filter(folio => !folio.parentFolioId);
 
-  //   return rootFolios.map(rootFolio => this.buildTreeNode(rootFolio, folios));
-  // });
+    return rootFolios.map(rootFolio => this.buildTreeNode(rootFolio, folios));
+  });
 
-  // private buildTreeNode(folio: Folio, allFolios: Folio[]): TreeNode {
-  //   const children = allFolios.filter(child => child.parentFolioId === folio.id);
-  //   return {
-  //     name: folio.folioName,
-  //     children: children.map(childFolio => this.buildTreeNode(childFolio, allFolios)),
-  //   };
-  // }
+  private buildTreeNode(folio: FolioView, allFolios: FolioView[]): TreeNode {
+    const children = allFolios.filter(child => child.parentFolioId === folio.id);
+    return {
+      name: folio.folioName,
+      children: children.map(childFolio => this.buildTreeNode(childFolio, allFolios)),
+    };
+  }
 
   treeData: TreeNode[] = [
     {
@@ -118,5 +125,7 @@ export class FolioShellComponent {
 
   runLog() {
     if (environment.ianConfig.showLogs) console.log(this.folioTreeData());
+    if (environment.ianConfig.showLogs) console.log(this.folioTreeData2());
+    if (environment.ianConfig.showLogs) console.log(this.folioTreeData3());
   }
 }

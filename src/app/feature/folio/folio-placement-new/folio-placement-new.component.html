@@ -16,13 +16,24 @@
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form-container">
   <div class="form-row">
     <input class="col1" id="caption" formControlName="caption" type="text" />
+
     <div class="col2">
       @if (formGroup.get('caption')?.invalid && formGroup.get('caption')?.touched) {
         <label for="caption" class="warning">Entry is required</label>
       } @else {
-        <label for="caption">Enter {{ newPlacementType() }} </label>
+        <label for="caption">Enter Caption </label>
       }
     </div>
+
+    @if (newPlacementType() === 'MediaUrl') {
+      <div class="form-row">
+        <textarea class="col1" formControlName="urlAdder" name="urlAdder" id="urlAdder" rows="5" (drop)="onDrop($event)" (input)="onInput($event)"> </textarea>
+
+        <div class="col2">
+          <label for="urlAdder">Drop or paste URL </label>
+        </div>
+      </div>
+    }
 
     <div class="colsBoth">
       <button type="submit" [disabled]="formGroup.invalid">Add {{ newPlacementType() }} to folio {{ folioStore.folioViewSelected().folioName }}</button>
@@ -31,3 +42,7 @@
     <button class="col2" (click)="cancel()">Cancel / Close</button>
   </div>
 </form>
+
+@if (newPlacementType() === 'MediaUrl') {
+  <mh5-folio-placement-media [assetView]="assetViewPrepared()" />
+}

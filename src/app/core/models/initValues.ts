@@ -29,7 +29,7 @@ export const assetViewInit: AssetView = {
   mediaType: '1',
   sourceId: '',
   url: '',
-  paddingBottom: '',
+  styling: '',
 };
 
 export const placementInit: Placement = {
