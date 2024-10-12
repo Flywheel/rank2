@@ -7,9 +7,9 @@
     }
 
     @case ('folio') {
-      <a (click)="openPage('/author')" (keydown)="openPage('/author')" tabindex="0" aria-label="demoText"> <mh5-icon-profile /> </a>
-      <div class="title">Mini Herald</div>
       <a (click)="openPage('/contest')" (keydown)="openPage('/contest')" tabindex="0" aria-label="demoText"> <mh5-icon-mh /> </a>
+      <div class="title">Mini Herald - Author Channel</div>
+      <a (click)="openPage('/author')" (keydown)="openPage('/author')" tabindex="0" aria-label="demoText"> <mh5-icon-profile /> </a>
     }
 
     @case ('author') {

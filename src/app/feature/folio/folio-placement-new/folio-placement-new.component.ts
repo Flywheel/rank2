@@ -58,16 +58,17 @@ export class FolioPlacementNewComponent {
           this.folioStore.toggleFolioAdder(false);
         }
         break;
-      case 'MediaURL':
+      case 'MediaUrl':
         if (this.formGroup.valid) {
-          if (environment.ianConfig.showLogs) console.log(this.formGroup.value.urlAdder);
-          // const media: Partial<Asset> = {
-          //   folioName: this.formGroup.value.caption.trim(),
-          //   authorId: this.authorStore.authorLoggedIn().id,
-          //   parentFolioId,
-          // };
-          // this.folioStore.assetCreate();
-          // this.folioStore.toggleFolioAdder(false);
+          this.folioStore.togglePlacementAdder(true);
+          const media: Asset = {
+            id: 0,
+            mediaType: this.assetViewPrepared().mediaType,
+            sourceId: this.assetViewPrepared().sourceId,
+            authorId: this.authorStore.authorLoggedIn().id,
+          };
+          this.folioStore.assetCreateWithPlacement(media, this.formGroup.value.caption);
+          this.folioStore.togglePlacementAdder(false);
         }
         break;
     }

@@ -39,6 +39,12 @@ export interface Folio {
   parentFolioId?: number | null;
 }
 
+export interface FolioLister {
+  id: number;
+  folioName: string;
+  level: number;
+}
+
 export interface Placement {
   id: number;
   authorId: string;
@@ -53,6 +59,7 @@ export interface PlacementView extends Placement {
 
 export interface FolioView extends Folio {
   placementViews: PlacementView[];
+  level?: number;
 }
 
 export interface Contest {

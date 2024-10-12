@@ -24,7 +24,11 @@ export class ChannelTreeComponent {
       });
   }
   selectNode(node: TreeNode): void {
-    if (environment.ianConfig.showLogs) console.log(node);
+    if (environment.ianConfig.showLogs) {
+      console.log(node);
+      console.log(this.nodes());
+    }
+
     this.nodes().forEach(node => (node.isSelected = false));
     node.isSelected = true;
   }

@@ -55,7 +55,7 @@ export class FolioService {
         const newAsset: Asset = {
           id: 0, // Assuming backend assigns the ID
           mediaType: 'folio',
-          sourceId: folioData.parentFolioId?.toString() || '0',
+          sourceId: newFolio.id.toString() || '0',
           authorId: folioData.authorId!,
         };
         return this.assetCreate(newAsset).pipe(
@@ -115,5 +115,34 @@ export class FolioService {
         return throwError(() => new Error('Asset Create failed'));
       })
     );
+  }
+
+  assetCreateWithPlacement(assetData: Asset, folio: Folio, caption: string): Observable<{ newAsset: Asset; newPlacement: Placement }> {
+    if (environment.ianConfig.showLogs) {
+      console.log('Asset Data:', assetData, ' ', caption);
+    }
+    // return this.http.post<Asset>(this.folioAPIUrl, assetData).pipe(
+    return this.assetCreate(assetData).pipe(
+      exhaustMap((createdAsset: Asset) => {
+        const placement: Placement = {
+          id: 0, // Assuming backend assigns the ID
+          folioId: folio.id,
+          caption: caption,
+          assetId: createdAsset.id,
+          authorId: assetData.authorId!,
+        };
+        return this.placementCreate(placement).pipe(
+          map(() => ({
+            newAsset: createdAsset,
+            newPlacement: placement,
+          }))
+        );
+      })
+    );
+
+    catchError(error => {
+      console.error('Folio creation failed', error);
+      return throwError(() => new Error('Folio creation failed'));
+    });
   }
 }

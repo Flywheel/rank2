@@ -1,0 +1,3 @@
+@for (item of lister(); track $index) {
+  <p (click)="showPlacements(item.id)" (keydown)="showPlacements(item.id)" tabindex="">{{ item.folioName }} {{ item.level }}</p>
+}

@@ -4,8 +4,9 @@
 
 <div class="horizontal-scroll">
   <div class="placement-list">
-    <button (click)="runLog()">Run Log</button>
+    <button (click)="runLog()">Run Folio Shell Log</button>
     <mh5-channel-tree [nodes]="folioTreeData()" />
+    <mh5-channel-assets [lister]="folioList()" />
   </div>
   <div class="placement-info">
     @if (newPlacement()) {

@@ -6,6 +6,7 @@ import { FolioService } from './folio.service';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, exhaustMap, map, pipe, tap, throwError } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export const FolioStore = signalStore(
   { providedIn: 'root' },
@@ -156,11 +157,7 @@ export const FolioStore = signalStore(
               updateState(store, '[Asset] Create Success', {
                 assets: [...store.assets(), newAsset],
               });
-
-              // Update Placements
-
               store.writeToStorage();
-              return newFolio;
             }),
             catchError(error => {
               console.error('FolioStore creation failed', error);
@@ -265,6 +262,33 @@ export const FolioStore = signalStore(
             }),
             catchError(error => {
               updateState(store, '[Asset] Create Failed', { isLoading: false });
+              return throwError(error);
+            })
+          )
+          .subscribe();
+      },
+
+      assetCreateWithPlacement(assetData: Asset, caption: string) {
+        if (environment.ianConfig.showLogs) {
+          console.log('Asset Data:', assetData, ' ', caption);
+        }
+        updateState(store, '[Asset-Media] Create Start', { isLoading: true });
+        dbFolio
+          .assetCreateWithPlacement(assetData, store.folioViewSelected(), caption)
+          .pipe(
+            map(({ newAsset, newPlacement }) => {
+              updateState(store, '[Placement] Create Success', {
+                placements: [...store.placements(), newPlacement],
+              });
+              updateState(store, '[Asset] Create Success', {
+                assets: [...store.assets(), newAsset],
+              });
+
+              store.writeToStorage();
+            }),
+            catchError(error => {
+              console.error('FolioStore creation failed', error);
+              updateState(store, '[Folio] Create Failed', { isLoading: false });
               return throwError(error);
             })
           )
