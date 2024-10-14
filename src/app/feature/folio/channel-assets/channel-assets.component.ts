@@ -1,5 +1,6 @@
-import { Component, input } from '@angular/core';
-import { FolioView } from '../../../core/models/interfaces';
+import { Component, computed, inject, input, signal } from '@angular/core';
+import { FolioView, PlacementView } from '../../../core/models/interfaces';
+import { FolioStore } from '../folio.store';
 
 @Component({
   selector: 'mh5-channel-assets',
@@ -9,9 +10,25 @@ import { FolioView } from '../../../core/models/interfaces';
   styleUrl: './channel-assets.component.scss',
 })
 export class ChannelAssetsComponent {
+  folioStore = inject(FolioStore);
+  lister = input<FolioView[]>([]);
+  selectedFolioId = signal(0);
+
+  placementsBySelectedFolio = computed<PlacementView[]>(() => {
+    return this.lister()[0].placementViews ?? [];
+  });
+
   showPlacements(folioID: number) {
     console.log(folioID);
+    console.log(this.lister());
+    console.log(this.placementsBySelectedFolio());
   }
 
-  lister = input<FolioView[]>([]);
+  displayAsset(placement: PlacementView) {
+    console.log(placement.asset.mediaType);
+  }
+
+  save() {
+    this.folioStore.folioStateToLocalStorage();
+  }
 }

@@ -10,29 +10,31 @@
   }
 </div>
 
-<div>
+<div class="assetPanel">
   @switch (selectedTab.name) {
     @case ('Assets') {
-      <div class="horizontal-scroll">
-        <div class="placement-list">
-          <mh5-channel-tree [nodes]="authorStore.folioTreeData()" />
-
-          <mh5-channel-assets [lister]="authorStore.authorFolioViewList()" />
-        </div>
-        <div class="placement-info">
-          @if (newPlacement()) {
-            <mh5-folio-placement-new (closeNewPlacementEditor)="closeNewPlacement()" />
-          } @else {
-            <mh5-icon-plus (click)="openNewPlacement()" (keydown)="openNewPlacement()" tabindex="1" />
-          }
-        </div>
+      <div>
+        <!-- <mh5-channel-tree [nodes]="authorStore.folioTreeData()" /> -->
+        <mh5-channel-assets [lister]="authorStore.authorFolioViewList()" />
       </div>
     }
+
     @case ('Pitches') {
-      <div></div>
+      <div class="horizontal-scroll">
+        <div class="placement-list">
+          <mh5-channel-pitches />
+        </div>
+      </div>
     }
     @case ('Slates') {
       <div></div>
     }
   }
+  <div>
+    @if (newPlacement()) {
+      <mh5-folio-placement-new (closeNewPlacementEditor)="closeNewPlacement()" />
+    } @else {
+      <mh5-icon-plus (click)="openNewPlacement()" (keydown)="openNewPlacement()" tabindex="1" />
+    }
+  </div>
 </div>

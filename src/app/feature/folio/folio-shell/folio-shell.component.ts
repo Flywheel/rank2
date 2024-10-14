@@ -8,9 +8,9 @@ import { environment } from '../../../../environments/environment';
 import { AuthorStore } from '../../author/author.store';
 import { ChannelTreeComponent } from '../channel-tree/channel-tree.component';
 import { TabList } from '../../../core/models/interfaces';
-import { NewPlacementComponent } from '../new-placement/new-placement.component';
 import { IconPlusComponent } from '../../../core/svg/icon-plus';
 import { ChannelAssetsComponent } from '../channel-assets/channel-assets.component';
+import { ChannelPitchesComponent } from '../channel-pitches/channel-pitches.component';
 
 @Component({
   selector: 'mh5-folio-shell',
@@ -21,9 +21,9 @@ import { ChannelAssetsComponent } from '../channel-assets/channel-assets.compone
     FolioPlacementListComponent,
     FolioPlacementNewComponent,
     ChannelTreeComponent,
-    NewPlacementComponent,
     IconPlusComponent,
     ChannelAssetsComponent,
+    ChannelPitchesComponent,
   ],
   templateUrl: './folio-shell.component.html',
   styleUrl: './folio-shell.component.scss',

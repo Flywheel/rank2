@@ -132,9 +132,9 @@ export class FolioService {
           authorId: assetData.authorId!,
         };
         return this.placementCreate(placement).pipe(
-          map(() => ({
+          map((createdPlacement: Placement) => ({
             newAsset: createdAsset,
-            newPlacement: placement,
+            newPlacement: createdPlacement,
           }))
         );
       })
