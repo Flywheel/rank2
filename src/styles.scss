@@ -134,3 +134,40 @@ body {
 .warning {
   color: salmon;
 }
+
+.streamHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #999;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: #001;
+}
+
+.streamHeaderText {
+  color: #84a8c9;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  border-radius: 2px;
+}
+.streamButton {
+  background-color: #bb8;
+  color: #002;
+  height: 25px;
+  font-weight: bold;
+  border: 1px solid gray;
+  padding-left: 15px;
+  padding-right: 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 8px 2px;
+  cursor: pointer;
+  border-radius: 25px;
+  width: 180px;
+}

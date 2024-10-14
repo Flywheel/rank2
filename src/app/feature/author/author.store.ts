@@ -3,7 +3,7 @@ import { signalStore, withComputed, withMethods, withState } from '@ngrx/signals
 import { pipe, switchMap, of, exhaustMap, catchError, throwError, map } from 'rxjs';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
-import { Author, AuthorView, FolioView } from '../../core/models/interfaces';
+import { Author, AuthorView, FolioView, TreeNode } from '../../core/models/interfaces';
 import { authorInit, authorViewInit, folioViewInit } from '../../core/models/initValues';
 import { AuthorService } from './author.service';
 
@@ -50,13 +50,43 @@ export const AuthorStore = signalStore(
   withComputed(store => ({
     authorSelectedView: computed<AuthorView>(() => store.authorChannelViews().find(author => author.id === store.authorIdSelected()) ?? authorViewInit),
     authorLoggedInView: computed<AuthorView>(() => store.authorChannelViews().find(author => author.id === store.authorLoggedIn().id) ?? authorViewInit),
-  })),
-  // withComputed(store => (
-  //   const folioStore = inject(FolioStore);
-  //   return {
+    authorFolioViewList: computed<FolioView[]>(() => {
+      const folios = store.authorFolioViews;
+      const retval: FolioView[] = [];
 
-  //   authorFolios: computed<FolioView[]>(() => folioStore.filter(folio => folio.authorId === store.authorIdSelected())),
-  // })),
+      const traverseFolios = (folio: FolioView, depth: number, path: number[] = []) => {
+        if (path.includes(folio.id)) {
+          // Avoid cycles
+          return;
+        }
+        const newPath = [...path, folio.id];
+
+        folio.level = depth;
+        retval.push(folio);
+        folio.placementViews.forEach(placement => {
+          if (placement.asset.mediaType === 'folio') {
+            const childFolio = folios().find(folio => folio.id === Number(placement.asset.sourceId));
+            if (childFolio) {
+              traverseFolios(childFolio, depth + 1, newPath);
+            }
+          }
+        });
+      };
+      folios()
+        .filter(folio => !folio.parentFolioId)
+        .forEach(folio => {
+          traverseFolios(folio, 0);
+        });
+
+      return retval;
+    }),
+    folioTreeData: computed<TreeNode[]>(() => {
+      const folios = store.authorFolioViews;
+      return folios()
+        .filter(folio => !folio.parentFolioId) // Start with root folios (no parent)
+        .map(folio => buildTreeNode(folio, 0, folios()));
+    }),
+  })),
 
   withMethods(store => {
     return {
@@ -247,3 +277,39 @@ export const AuthorStore = signalStore(
     };
   })
 );
+function buildTreeNode(folioView: FolioView, depth: number, allFolios: FolioView[], path: number[] = []): TreeNode {
+  if (path.includes(folioView.id)) {
+    return {
+      name: `f ${'-'.repeat(depth)} ${folioView.folioName} (cycle detected)`,
+      children: [],
+      isSelected: false,
+    };
+  }
+
+  const newPath = [...path, folioView.id];
+  const levelIndicator = '-'.repeat(depth);
+  const node: TreeNode = {
+    name: `${levelIndicator} ${folioView.folioName}`,
+    children: [],
+    isSelected: false,
+  };
+
+  folioView.placementViews.forEach(placement => {
+    if (placement.asset.mediaType === 'folio') {
+      // const referencedFolio = this.getFolioById(Number(placement.asset.sourceId), allFolios);
+      const referencedFolio = allFolios.find(folio => folio.id === Number(placement.asset.sourceId));
+      if (referencedFolio) {
+        node.children?.push(buildTreeNode(referencedFolio, depth + 1, allFolios, newPath));
+      }
+    } else {
+      // Include non-folio placements with level indicators
+      node.children?.push({
+        name: `${placement.caption}`,
+        children: [],
+        isSelected: false,
+      });
+    }
+  });
+
+  return node;
+}

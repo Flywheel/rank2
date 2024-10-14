@@ -2,11 +2,20 @@
 
 <mh5-folio-scroll-horizontal [theFoliosInput]="theFolios()" (newPlacementEditorStateChange)="openNewPlacement()" />
 
+<div class="tabs streamHeader">
+  @for (tab of tabs; track $index) {
+    <button (click)="selectedTab = tab" class="streamButton" [class.selected]="selectedTab === tab">
+      {{ tab.title }}
+    </button>
+  }
+</div>
+
 <div class="horizontal-scroll">
   <div class="placement-list">
     <button (click)="runLog()">Run Folio Shell Log</button>
-    <mh5-channel-tree [nodes]="folioTreeData()" />
-    <mh5-channel-assets [lister]="folioList()" />
+    <mh5-channel-tree [nodes]="authorStore.folioTreeData()" />
+
+    <mh5-channel-assets [lister]="authorStore.authorFolioViewList()" />
   </div>
   <div class="placement-info">
     @if (newPlacement()) {

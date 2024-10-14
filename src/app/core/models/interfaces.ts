@@ -5,6 +5,10 @@ export interface EventLog {
   eventDate: Date;
 }
 
+export interface TabList {
+  name: string;
+  title: string;
+}
 export interface TreeNode {
   name: string;
   children?: TreeNode[];

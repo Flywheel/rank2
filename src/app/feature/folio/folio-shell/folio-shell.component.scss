@@ -34,3 +34,22 @@
     }
   }
 }
+
+.streamHeader {
+  border-bottom: #aac solid 2px;
+  margin-bottom: 2px;
+}
+.streamButton {
+  text-emphasis: bold;
+  background-color: #bb8;
+}
+.streamButton.selected {
+  background-color: #bb5;
+  color: black;
+  border-bottom-left-radius: 1px;
+  border-bottom-right-radius: 1px;
+}
+.assetPanel {
+  background-color: #334;
+  flex-grow: 1;
+}
