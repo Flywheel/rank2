@@ -12,6 +12,11 @@ const commonProviders = [
   provideHttpClient(withFetch()),
   provideZoneChangeDetection({ eventCoalescing: true }),
   provideRouter(routes, withViewTransitions(), withComponentInputBinding()),
+
+  provideServiceWorker('ngsw-worker.js', {
+    enabled: !isDevMode(),
+    registrationStrategy: 'registerWhenStable:20000',
+  }),
   //provideClientHydration(),
   provideAnimationsAsync(),
   provideAnimations(),
@@ -22,8 +27,5 @@ const inMemoryDbProvidersForProd = [
 ];
 
 export const appConfig: ApplicationConfig = {
-  providers: [...commonProviders, ...(isDevMode() ? inMemoryDbProvidersForProd : inMemoryDbProvidersForProd), provideServiceWorker('ngsw-worker.js', {
-            enabled: !isDevMode(),
-            registrationStrategy: 'registerWhenStable:30000'
-          })],
+  providers: [...commonProviders, ...(isDevMode() ? inMemoryDbProvidersForProd : inMemoryDbProvidersForProd)],
 };
