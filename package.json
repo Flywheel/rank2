@@ -24,6 +24,7 @@
     "@angular/platform-browser-dynamic": "^18.2.6",
     "@angular/platform-server": "^18.2.6",
     "@angular/router": "^18.2.6",
+    "@angular/service-worker": "^18.2.6",
     "@angular/ssr": "^18.2.6",
     "@ngrx/signals": "^18.0.0",
     "angular-in-memory-web-api": "^0.18.0",

@@ -6,6 +6,7 @@ import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { DbService } from '../mocks/db.service';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideServiceWorker } from '@angular/service-worker';
 
 const commonProviders = [
   provideHttpClient(withFetch()),
@@ -21,5 +22,8 @@ const inMemoryDbProvidersForProd = [
 ];
 
 export const appConfig: ApplicationConfig = {
-  providers: [...commonProviders, ...(isDevMode() ? inMemoryDbProvidersForProd : inMemoryDbProvidersForProd)],
+  providers: [...commonProviders, ...(isDevMode() ? inMemoryDbProvidersForProd : inMemoryDbProvidersForProd), provideServiceWorker('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            registrationStrategy: 'registerWhenStable:30000'
+          })],
 };
