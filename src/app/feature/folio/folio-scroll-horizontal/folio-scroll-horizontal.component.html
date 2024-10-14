@@ -1,5 +1,5 @@
 <div class="horizontal-scroll">
   @for (folio of theFoliosInput(); track $index) {
-    <div class="menu-item" (click)="selectFolio(folio.id)" (keydown)="selectFolio(folio.id)" tabindex="$index">{{ folio.folioName }}</div>
+    <div class="channel-item" (click)="selectFolio(folio.id)" (keydown)="selectFolio(folio.id)" tabindex="$index">{{ folio.folioName }}</div>
   }
 </div>
