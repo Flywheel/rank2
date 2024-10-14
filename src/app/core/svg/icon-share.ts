@@ -21,7 +21,7 @@ export class IconShareComponent {
   async share() {
     this.shareService.share(
       'Hi!  Mini Herald is a new kind of ranked choice straw poll. Interested in beta testing? Sign up here:  ',
-      `https://mh3.netlify.app/`
+      `https://mh5.netlify.app/`
     );
   }
 }
