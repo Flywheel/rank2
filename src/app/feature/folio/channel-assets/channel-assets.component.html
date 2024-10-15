@@ -1,7 +1,7 @@
 <div class="horizontal-scroll">
   <div class="">
     @for (item of lister(); track $index) {
-      <p (click)="showPlacements(item.id)" (keydown)="showPlacements(item.id)" tabindex="">{{ item.folioName }} {{ item.level }}</p>
+      <p (click)="showPlacements(item.id)" (keydown)="showPlacements(item.id)" tabindex="">{{ '-'.repeat(item.level ?? 0) }}{{ item.folioName }}</p>
     }
   </div>
   <div class="">

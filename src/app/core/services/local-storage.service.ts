@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { AuthorStore } from '../../feature/author/author.store';
 import { FolioStore } from '../../feature/folio/folio.store';
 import { ContestStore } from '../../feature/ballot/contest.store';
-import { theData } from './data-from-store.service';
+import { theData } from '../../../mocks/data-from-store.service';
 import { Folio } from '../models/interfaces';
 
 @Injectable({
@@ -38,7 +38,7 @@ export class LocalStorageService {
 
     const theFolios: Folio[] = theData.folios;
     theFolios.forEach(folio => {
-      console.log(folio);
+      //console.log(folio);
       const parentId = folio.parentFolioId;
       if (parentId !== undefined) {
         this.folioStore.folioCreateWithParent(folio);

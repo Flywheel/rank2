@@ -160,29 +160,6 @@ export const AuthorStore = signalStore(
           .subscribe();
       },
 
-      // async authorUpdatex(authorId: string, updateData: Partial<Author>) {
-      //   const authorData: Partial<Author> = {
-      //     name: updateData.name,
-      //   };
-      //   return dbAuthor.authorUpdate(authorId, authorData).pipe(
-      //     tap({
-      //       next: (updatedAuthor: Author) => {
-      //         updateState(store, '[Author] updateAuthor Success', {
-      //           authorLoggedIn: updatedAuthor,
-      //           isLoading: false,
-      //         });
-      //         store.writeToStorage();
-      //       },
-      //       error: error => {
-      //         updateState(store, `[Author] updateAuthor Failure ${error.message}`, {
-      //           isLoading: false,
-      //         });
-      //         return throwError(() => new Error('Failed to update author'));
-      //       },
-      //     })
-      //   );
-      // },
-
       authorsLoad: rxMethod<void>(
         pipe(
           exhaustMap(() => {
@@ -242,38 +219,6 @@ export const AuthorStore = signalStore(
           })
         )
       ),
-
-      // authorViewByUid: rxMethod<string>(
-      //   pipe(
-      //     tap(() => {
-      //       updateState(store, '[Author] getAuthorViewById Start', { isLoading: true });
-      //     }),
-      //     switchMap(authorId => {
-      //       const existingAuthorView = store.authorViewsKnown().find(view => view.id === authorId);
-      //       if (existingAuthorView) {
-      //         return of(existingAuthorView);
-      //       } else {
-      //         const theAuthorView = dbAuthor.authorViewGetById(authorId).pipe(
-      //           tap({
-      //             next: (authorView: AuthorView) => {
-      //               updateState(store, '[Author] Load AuthorViewById Success', {
-      //                 authorViewsKnown: [...store.authorViewsKnown(), authorView],
-      //               });
-      //             },
-      //           })
-      //         );
-      //         return theAuthorView;
-      //       }
-      //     }),
-      //     tap(folioView =>
-      //       updateState(store, '[Author] getAuthorViewById Success', {
-      //         authorViewSelected: folioView,
-      //         //  folioSlate: store.allAuthorSlates().filter(a => a.authorId === folioView.id)[0] ?? slateViewInit,
-      //         isLoading: false,
-      //       })
-      //     )
-      //   )
-      // ),
     };
   })
 );
