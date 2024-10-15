@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, OnInit, signal, untracked } from '@angular/core';
 import { FolioView, PlacementView } from '../../../core/models/interfaces';
 import { FolioStore } from '../folio.store';
 
@@ -11,17 +11,24 @@ import { FolioStore } from '../folio.store';
 })
 export class ChannelAssetsComponent {
   folioStore = inject(FolioStore);
-  lister = input<FolioView[]>([]);
-  selectedFolioId = signal(0);
+  folioList = input<FolioView[]>([]);
+
+  selectedFolioView = signal<FolioView>({} as FolioView);
 
   placementsBySelectedFolio = computed<PlacementView[]>(() => {
-    return this.lister()[0].placementViews ?? [];
+    return this.selectedFolioView().placementViews ?? [];
   });
 
-  showPlacements(folioID: number) {
-    console.log(folioID);
-    console.log(this.lister());
-    console.log(this.placementsBySelectedFolio());
+  firstFolioId = computed<number>(() => this.folioList()?.[0]?.id ?? 0);
+
+  constructor() {
+    effect(() => {
+      const folioId = this.firstFolioId();
+      if (folioId > 0) {
+        const xx = this.folioList().filter(f => f.id === folioId)[0];
+        untracked(() => this.selectedFolioView.set(xx));
+      }
+    });
   }
 
   displayAsset(placement: PlacementView) {

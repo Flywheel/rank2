@@ -1,12 +1,25 @@
-<div class="horizontal-scroll">
-  <div class="">
-    @for (item of lister(); track $index) {
-      <p (click)="showPlacements(item.id)" (keydown)="showPlacements(item.id)" tabindex="">{{ '-'.repeat(item.level ?? 0) }}{{ item.folioName }}</p>
-    }
+<div style="display: flex; justify-content: space-between">
+  <div class="topic-panel">
+    <div class="topic-list">
+      @for (folioItem of folioList(); track $index) {
+        <div
+          class="topic-list-item"
+          (click)="selectedFolioView.set(folioItem)"
+          (keydown)="selectedFolioView.set(folioItem)"
+          tabindex="0"
+          [class.selected]="folioItem === selectedFolioView()">
+          {{ ' '.repeat(folioItem.level ?? 0) }}{{ '-'.repeat(folioItem.level ?? 0) }} {{ folioItem.folioName }}
+        </div>
+      }
+    </div>
   </div>
-  <div class="">
-    @for (item of placementsBySelectedFolio(); track $index) {
-      <p (click)="displayAsset(item)" (keydown)="displayAsset(item)" tabindex="0">{{ item.caption }}</p>
-    }
+  <div class="placement-panel">
+    <div class="placement-list">
+      @for (item of placementsBySelectedFolio(); track $index) {
+        <div class="placement-list-item" (click)="displayAsset(item)" (keydown)="displayAsset(item)" tabindex="0">
+          {{ item.asset.mediaType === 'folio' ? '- ' : '' }} {{ item.caption }}
+        </div>
+      }
+    </div>
   </div>
 </div>

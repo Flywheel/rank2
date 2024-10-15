@@ -19,24 +19,14 @@ export class FolioScrollHorizontalComponent {
   newFolioEditorStateChange = output<boolean>();
   newPlacementEditorStateChange = output<boolean>();
 
-  firstFolioId = computed<number>(() => {
-    const z = this.theFoliosInput();
-    if (z !== undefined) {
-      const x = z.length ?? 0;
-      return x > 0 ? z[0].id : 0;
-    }
-    return 0;
-  });
+  firstFolioId = computed<number>(() => this.theFoliosInput()?.[0]?.id ?? 0);
 
   constructor() {
     effect(() => {
-      const a = this.firstFolioId();
-      console.log(a);
-      untracked(() => {
-        if (a > 0) {
-          this.selectFolio(a);
-        }
-      });
+      const folioId = this.firstFolioId();
+      if (folioId > 0) {
+        untracked(() => this.selectFolio(folioId));
+      }
     });
   }
 

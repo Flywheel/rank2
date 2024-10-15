@@ -33,6 +33,7 @@ export class FolioShellComponent {
   folioStore = inject(FolioStore);
   authorStore = inject(AuthorStore);
   localStorageService = inject(LocalStorageService);
+  isHydrated = false;
 
   tabs: TabList[] = [
     { name: 'Assets', title: 'Assets' },
@@ -54,10 +55,15 @@ export class FolioShellComponent {
   }
 
   runLog() {
-    this.localStorageService.hydarateStuff();
-    // if (environment.ianConfig.showLogs) {
-    //   console.log(this.authorStore.folioTreeData());
-    // }
+    if (!this.isHydrated) {
+      this.localStorageService.hydarateStuff();
+      this.isHydrated = true;
+    }
+
+    if (environment.ianConfig.showLogs) {
+      console.log(this.theFolios());
+      console.log(this.authorStore.folioTreeData());
+    }
   }
 }
 // treeData: TreeNode[] = [

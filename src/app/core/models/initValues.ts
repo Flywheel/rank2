@@ -18,9 +18,9 @@ export const authorViewInit: AuthorView = {
 
 export const assetInit: Asset = {
   id: 1,
-  authorId: 'xxxx-xxxx',
+  authorId: '',
   mediaType: 'Caption',
-  sourceId: 'Caption',
+  sourceId: '',
 };
 
 export const assetViewInit: AssetView = {
