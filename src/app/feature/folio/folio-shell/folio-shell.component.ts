@@ -11,6 +11,7 @@ import { TabList } from '../../../core/models/interfaces';
 import { IconPlusComponent } from '../../../core/svg/icon-plus';
 import { ChannelAssetsComponent } from '../channel-assets/channel-assets.component';
 import { ChannelPitchesComponent } from '../channel-pitches/channel-pitches.component';
+import { LocalStorageService } from '../../../core/services/local-storage.service';
 
 @Component({
   selector: 'mh5-folio-shell',
@@ -31,6 +32,7 @@ import { ChannelPitchesComponent } from '../channel-pitches/channel-pitches.comp
 export class FolioShellComponent {
   folioStore = inject(FolioStore);
   authorStore = inject(AuthorStore);
+  localStorageService = inject(LocalStorageService);
 
   tabs: TabList[] = [
     { name: 'Assets', title: 'Assets' },
@@ -52,9 +54,10 @@ export class FolioShellComponent {
   }
 
   runLog() {
-    if (environment.ianConfig.showLogs) {
-      console.log(this.authorStore.folioTreeData());
-    }
+    this.localStorageService.hydarateStuff();
+    // if (environment.ianConfig.showLogs) {
+    //   console.log(this.authorStore.folioTreeData());
+    // }
   }
 }
 // treeData: TreeNode[] = [

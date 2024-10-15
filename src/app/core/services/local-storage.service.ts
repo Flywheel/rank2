@@ -2,6 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { AuthorStore } from '../../feature/author/author.store';
 import { FolioStore } from '../../feature/folio/folio.store';
 import { ContestStore } from '../../feature/ballot/contest.store';
+import { theData } from './data-from-store.service';
+import { Folio } from '../models/interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -27,5 +29,26 @@ export class LocalStorageService {
     this.authorStore.clearStorage(); // clears the stored item in storage
     this.folioStore.clearStorage();
     this.ballotStore.clearStorage();
+  }
+
+  public async hydarateStuff(): Promise<void> {
+    theData.assets.forEach(asset => {
+      this.folioStore.assetCreate(asset);
+    });
+
+    const theFolios: Folio[] = theData.folios;
+    theFolios.forEach(folio => {
+      console.log(folio);
+      const parentId = folio.parentFolioId;
+      if (parentId !== undefined) {
+        this.folioStore.folioCreateWithParent(folio);
+      } else {
+        this.folioStore.folioCreateForNewAuthor(folio);
+      }
+    });
+
+    theData.placements.forEach(placement => {
+      this.folioStore.placementCreate(placement);
+    });
   }
 }
