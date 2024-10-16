@@ -1,4 +1,4 @@
-import { Component, inject, output, signal } from '@angular/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Asset, AssetView, Folio, Placement } from '../../../core/models/interfaces';
 import { FolioStore } from '../folio.store';
@@ -7,24 +7,41 @@ import { environment } from '../../../../environments/environment';
 import { MediaService } from '../../../core/services/media.service';
 import { FolioPlacementMediaComponent } from '../folio-placement-media/folio-placement-media.component';
 import { assetViewInit } from '../../../core/models/initValues';
+import { ContestNewComponent } from '../../contest/contest-new/contest-new.component';
 
 @Component({
   selector: 'mh5-folio-placement-new',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, FolioPlacementMediaComponent],
+  imports: [ReactiveFormsModule, FormsModule, FolioPlacementMediaComponent, ContestNewComponent],
   templateUrl: './folio-placement-new.component.html',
   styleUrl: './folio-placement-new.component.scss',
 })
 export class FolioPlacementNewComponent {
   authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
-
   fb = inject(FormBuilder);
-  newPlacementType = signal('Caption');
-  newPlacement = signal(false);
+
+  forcePopup = input<boolean>(false);
+
+  showPopup = computed<boolean>(() => this.forcePopup());
+
+  //newPlacement = signal(false);
   newMedia = signal(false);
   newFolio = signal(false);
   newPitch = signal(false);
+
+  newPlacementType = computed(() => {
+    if (this.newPitch() === true) {
+      return 'Pitch';
+    }
+    if (this.newFolio() === true) {
+      return 'Folio';
+    }
+    if (this.newMedia() === true) {
+      return 'MediaUrl';
+    }
+    return 'Caption';
+  });
 
   formGroup: FormGroup = this.fb.group({
     caption: ['', Validators.required],

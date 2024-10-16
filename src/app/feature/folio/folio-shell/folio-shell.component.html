@@ -32,7 +32,7 @@
   }
   <div>
     @if (newPlacement()) {
-      <mh5-folio-placement-new (closeNewPlacementEditor)="closeNewPlacement()" />
+      <mh5-folio-placement-new (closeNewPlacementEditor)="closeNewPlacement()" [forcePopup]="true" />
     } @else {
       <mh5-icon-plus (click)="openNewPlacement()" (keydown)="openNewPlacement()" tabindex="1" />
     }

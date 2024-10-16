@@ -88,10 +88,10 @@ export const FolioStore = signalStore(
       foliosLoadAll: rxMethod<void>(
         pipe(
           exhaustMap(() => {
-            updateState(store, '[Folio] getAllFolios Start', { isLoading: true });
+            updateState(store, '[Folio] Load All Start', { isLoading: true });
             return dbFolio.foliosGetAll().pipe(
               map((allFolios: Folio[]) => {
-                updateState(store, '[Folio] getAllFolios Success', value => ({
+                updateState(store, '[Folio] Load All Success', value => ({
                   ...value,
                   folios: allFolios,
                   isLoading: false,
@@ -115,7 +115,7 @@ export const FolioStore = signalStore(
       },
 
       setFolioSelected(folioId: number) {
-        updateState(store, '[Folio] setFolioSelected', { folioIdSelected: folioId });
+        updateState(store, `[Folio] Select By Id  ${folioId}`, { folioIdSelected: folioId });
       },
 
       folioCreateForNewAuthor(folio: Folio) {
@@ -148,7 +148,6 @@ export const FolioStore = signalStore(
               updateState(store, '[Folio] Create Success', {
                 folios: [...store.folios(), newFolio],
                 isLoading: false,
-                folioIdSelected: newFolio.id,
               });
               updateState(store, '[Placement] Create Success', {
                 placements: [...store.placements(), newPlacement],
@@ -174,10 +173,10 @@ export const FolioStore = signalStore(
       placementsLoadAll: rxMethod<void>(
         pipe(
           exhaustMap(() => {
-            updateState(store, '[Placement] getAllPlacements Start', { isLoading: true });
+            updateState(store, '[Placement] Placements Load Start', { isLoading: true });
             return dbFolio.placementsGetAll().pipe(
               map((allPlacements: Placement[]) => {
-                updateState(store, '[Placement] getAllPlacements Success', value => ({
+                updateState(store, '[Placement] Placements Load Success', value => ({
                   ...value,
                   placements: allPlacements,
                   isLoading: false,

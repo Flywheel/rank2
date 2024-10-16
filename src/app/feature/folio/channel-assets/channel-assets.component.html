@@ -4,10 +4,10 @@
       @for (folioItem of folioList(); track $index) {
         <div
           class="folio-list-item"
-          (click)="selectedFolioView.set(folioItem)"
-          (keydown)="selectedFolioView.set(folioItem)"
+          (click)="selectFolioView(folioItem)"
+          (keydown)="selectFolioView(folioItem)"
           tabindex="0"
-          [class.selected]="folioItem === selectedFolioView()">
+          [class.selected]="folioItem === folioStore.folioViewSelected()">
           {{ ' '.repeat(folioItem.level ?? 0) }}{{ '-'.repeat(folioItem.level ?? 0) }} {{ folioItem.folioName }}
         </div>
       }
