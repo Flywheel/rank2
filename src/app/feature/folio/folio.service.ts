@@ -69,10 +69,10 @@ export class FolioService {
               authorId: folioData.authorId!,
             };
             return this.placementCreate(placement).pipe(
-              map(() => ({
+              map((newPlacement: Placement) => ({
                 newFolio,
                 newAsset: createdAsset,
-                newPlacement: placement,
+                newPlacement,
               }))
             );
           })
@@ -96,13 +96,23 @@ export class FolioService {
   }
 
   placementCreate({ authorId, assetId, folioId, caption }: Placement): Observable<Placement> {
-    return this.http.post<Placement>(this.placementAPIUrl, { authorId, assetId, folioId, caption }).pipe(
+    const id = undefined;
+    return this.http.post<Placement>(this.placementAPIUrl, { id, authorId, assetId, folioId, caption }).pipe(
       catchError(error => {
         if (environment.ianConfig.showLogs) console.log('error', error);
         return throwError(() => new Error('Placement Create failed'));
       })
     );
   }
+
+  // placementCreate(placement: Placement): Observable<Placement> {
+  //   return this.http.post<Placement>(this.placementAPIUrl, placement).pipe(
+  //     catchError(error => {
+  //       if (environment.ianConfig.showLogs) console.error('Placement Create failed', error);
+  //       return throwError(() => new Error('Placement Create failed'));
+  //     })
+  //   );
+  // }
 
   assetsGetAll(): Observable<Asset[]> {
     if (environment.ianConfig.showLogs) console.log(`folioService.allAssets() ${this.assetAPIUrl}`);
@@ -118,7 +128,7 @@ export class FolioService {
     );
   }
 
-  assetCreateWithPlacement(assetData: Asset, folio: Folio, caption: string): Observable<{ newAsset: Asset; newPlacement: Placement }> {
+  assetCreateWithPlacement(assetData: Asset, folioId: number, caption: string): Observable<{ newAsset: Asset; newPlacement: Placement }> {
     if (environment.ianConfig.showLogs) {
       console.log('Asset Data:', assetData, ' ', caption);
     }
@@ -126,7 +136,7 @@ export class FolioService {
       exhaustMap((createdAsset: Asset) => {
         const placement: Placement = {
           id: 0, // Assuming backend assigns the ID
-          folioId: folio.id,
+          folioId: folioId,
           caption: caption,
           assetId: createdAsset.id,
           authorId: assetData.authorId!,

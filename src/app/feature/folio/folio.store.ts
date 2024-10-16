@@ -5,7 +5,7 @@ import { assetInit, assetViewInit, folioInit, folioViewInit, placementInit } fro
 import { FolioService } from './folio.service';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { catchError, exhaustMap, map, pipe, tap, throwError } from 'rxjs';
+import { catchError, exhaustMap, firstValueFrom, map, pipe, tap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 export const FolioStore = signalStore(
@@ -139,32 +139,59 @@ export const FolioStore = signalStore(
           .subscribe();
       },
 
-      folioCreateWithParent(folioData: Partial<Folio>) {
+      async folioCreateWithParent(folioData: Partial<Folio>): Promise<{ newFolio: Folio; newAsset: Asset; newPlacement: Placement }> {
         updateState(store, '[Folio] Create Start', { isLoading: true });
-        dbFolio
-          .folioCreateWithParent(folioData)
-          .pipe(
-            map(({ newFolio, newAsset, newPlacement }) => {
-              updateState(store, '[Folio] Create Success', {
-                folios: [...store.folios(), newFolio],
-                isLoading: false,
-              });
-              updateState(store, '[Placement] Create Success', {
-                placements: [...store.placements(), newPlacement],
-              });
-              updateState(store, '[Asset] Create Success', {
-                assets: [...store.assets(), newAsset],
-              });
-              store.writeToStorage();
-            }),
+
+        const { newFolio, newAsset, newPlacement } = await firstValueFrom(
+          dbFolio.folioCreateWithParent(folioData).pipe(
             catchError(error => {
               console.error('FolioStore creation failed', error);
               updateState(store, '[Folio] Create Failed', { isLoading: false });
               return throwError(error);
             })
           )
-          .subscribe();
+        );
+        console.log(newPlacement);
+        updateState(store, '[Folio] Create Success', {
+          folios: [...store.folios(), newFolio],
+          isLoading: false,
+        });
+        updateState(store, '[Placement] Create Success', {
+          placements: [...store.placements(), newPlacement],
+        });
+        updateState(store, '[Asset] Create Success', {
+          assets: [...store.assets(), newAsset],
+        });
+        store.writeToStorage();
+
+        return { newFolio, newAsset, newPlacement };
       },
+      // folioCreateWithParent(folioData: Partial<Folio>) {
+      //   updateState(store, '[Folio] Create Start', { isLoading: true });
+      //   dbFolio
+      //     .folioCreateWithParent(folioData)
+      //     .pipe(
+      //       map(({ newFolio, newAsset, newPlacement }) => {
+      //         updateState(store, '[Folio] Create Success', {
+      //           folios: [...store.folios(), newFolio],
+      //           isLoading: false,
+      //         });
+      //         updateState(store, '[Placement] Create Success', {
+      //           placements: [...store.placements(), newPlacement],
+      //         });
+      //         updateState(store, '[Asset] Create Success', {
+      //           assets: [...store.assets(), newAsset],
+      //         });
+      //         store.writeToStorage();
+      //       }),
+      //       catchError(error => {
+      //         console.error('FolioStore creation failed', error);
+      //         updateState(store, '[Folio] Create Failed', { isLoading: false });
+      //         return throwError(error);
+      //       })
+      //     )
+      //     .subscribe();
+      // },
 
       //#endregion Folio
 
@@ -272,7 +299,7 @@ export const FolioStore = signalStore(
         }
         updateState(store, '[Asset-Media] Create Start', { isLoading: true });
         dbFolio
-          .assetCreateWithPlacement(assetData, store.folioViewSelected(), caption)
+          .assetCreateWithPlacement(assetData, store.folioViewSelected().id, caption)
           .pipe(
             map(({ newAsset, newPlacement }) => {
               updateState(store, '[Placement] Create Success', {

@@ -102,3 +102,14 @@ export interface ContestView extends Pitch {
   slateId: number;
   slate: SlateView;
 }
+
+export interface AssetImporter {
+  folioName: string;
+  caption: string;
+  mediaType: string;
+  sourceId: string;
+}
+export interface FolioImporter {
+  folioName: string;
+  parentFolioName: string;
+}

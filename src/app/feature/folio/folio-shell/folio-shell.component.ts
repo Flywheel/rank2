@@ -56,12 +56,14 @@ export class FolioShellComponent {
 
   runLog() {
     if (!this.isHydrated) {
-      this.localStorageService.hydarateStuff();
+      this.localStorageService.hydrateStuff();
       this.isHydrated = true;
     }
 
     if (environment.ianConfig.showLogs) {
       console.log(this.theFolios());
+      console.log(this.folioStore.placementViewsComputed());
+      console.log(this.folioStore.placements());
       console.log(this.authorStore.folioTreeData());
     }
   }

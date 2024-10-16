@@ -2,8 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { AuthorStore } from '../../feature/author/author.store';
 import { FolioStore } from '../../feature/folio/folio.store';
 import { ContestStore } from '../../feature/contest/contest.store';
-import { theData } from '../../../mocks/data-from-store.service';
-import { Folio } from '../models/interfaces';
+import { theData } from '../../../mocks/data-from-store3';
+import { Asset, AssetImporter, Folio, FolioImporter, Placement } from '../models/interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -31,24 +31,48 @@ export class LocalStorageService {
     this.pitchStore.clearStorage();
   }
 
-  public async hydarateStuff(): Promise<void> {
-    theData.assets.forEach(asset => {
-      this.folioStore.assetCreate(asset);
-    });
+  public async hydrateStuff(): Promise<void> {
+    const authorId = this.authorStore.authorLoggedIn().id;
+    const rootFolioId = this.authorStore.authorChannelViews().filter(f => f.id === authorId)[0].authorFolio.id;
+    const assetsToImport: AssetImporter[] = theData.assets;
 
-    const theFolios: Folio[] = theData.folios;
-    theFolios.forEach(folio => {
-      //console.log(folio);
-      const parentId = folio.parentFolioId;
-      if (parentId !== undefined) {
-        this.folioStore.folioCreateWithParent(folio);
-      } else {
-        this.folioStore.folioCreateForNewAuthor(folio);
+    const foliosToImport: FolioImporter[] = theData.folios;
+    for (const folio of foliosToImport) {
+      const subFolioId = this.folioStore.folioViewsComputed().find(f => f.folioName === folio.parentFolioName)?.id;
+      const parentFolioId = subFolioId ? subFolioId : rootFolioId;
+      const folioData: Partial<Folio> = {
+        authorId,
+        folioName: folio.folioName,
+        parentFolioId: parentFolioId,
+      };
+
+      const { newFolio, newAsset, newPlacement } = await this.folioStore.folioCreateWithParent(folioData);
+      this.folioStore.setFolioSelected(newFolio.id!);
+
+      const folioAssets: AssetImporter[] = assetsToImport.filter(a => a.folioName === folioData.folioName);
+
+      for (const placement of folioAssets) {
+        if (placement.folioName === folioData.folioName) {
+          if (placement.mediaType === 'Caption') {
+            const placementData: Placement = {
+              caption: placement.caption,
+              folioId: newFolio.id,
+              authorId,
+              assetId: 1,
+              id: 0,
+            };
+            await this.folioStore.placementCreate(placementData);
+          } else {
+            const assetData: Asset = {
+              ...placement,
+              authorId,
+
+              id: 0,
+            };
+            await this.folioStore.assetCreateWithPlacement(assetData, placement.caption);
+          }
+        }
       }
-    });
-
-    theData.placements.forEach(placement => {
-      this.folioStore.placementCreate(placement);
-    });
+    }
   }
 }
