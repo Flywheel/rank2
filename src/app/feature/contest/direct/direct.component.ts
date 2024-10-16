@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 
-import { ContestService } from '../../ballot/contest.service';
-import { Contest } from '../../../core/models/interfaces';
+import { ContestService } from '../contest.service';
+import { Pitch } from '../../../core/models/interfaces';
 
 @Component({
   selector: 'mh5-direct',
@@ -21,7 +21,7 @@ export class DirectComponent {
   }
 
   test2() {
-    const contest: Contest = {
+    const contest: Pitch = {
       id: 4,
       closes: new Date(),
       opens: new Date(),

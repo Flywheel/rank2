@@ -21,6 +21,10 @@ export class FolioPlacementNewComponent {
 
   fb = inject(FormBuilder);
   newPlacementType = signal('Caption');
+  newPlacement = signal(false);
+  newMedia = signal(false);
+  newFolio = signal(false);
+  newPitch = signal(false);
 
   formGroup: FormGroup = this.fb.group({
     caption: ['', Validators.required],

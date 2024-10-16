@@ -1,7 +1,7 @@
 import { signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
-import { Contest, ContestView, SlateMember, SlateView } from '../../core/models/interfaces';
-import { ContestService } from './contest.service';
+import { Pitch, ContestView, SlateMember, SlateView } from '../../core/models/interfaces';
+import { ContestService } from '../contest/contest.service';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, of, pipe, switchMap, tap } from 'rxjs';
@@ -43,7 +43,7 @@ export const ContestStore = signalStore(
             return dbContest.contestsGetAll().pipe(
               takeUntilDestroyed(),
               tap({
-                next: (allContests: Contest[]) => {
+                next: (allContests: Pitch[]) => {
                   updateState(store, '[Contest] getAllContests Success', value => ({
                     ...value,
                     allContests,
@@ -129,14 +129,14 @@ export const ContestStore = signalStore(
         });
       },
 
-      addContest(contest: Contest) {
+      addContest(contest: Pitch) {
         if (environment.ianConfig.showLogs) console.log('addContest', contest);
         updateState(store, '[Contest] addContest Pending', { isLoading: true });
         dbContest
           .contestCreate(contest)
           .pipe(
             tap({
-              next: (newContest: Contest) => {
+              next: (newContest: Pitch) => {
                 if (environment.ianConfig.showLogs) console.log('newContest', newContest);
                 updateState(store, '[Contest] addContest Success', {
                   allContests: [...store.allContests(), newContest],

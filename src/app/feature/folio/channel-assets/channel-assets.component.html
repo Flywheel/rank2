@@ -1,9 +1,9 @@
 <div style="display: flex; justify-content: space-between">
-  <div class="topic-panel">
-    <div class="topic-list">
+  <div class="folio-panel">
+    <div class="folio-list">
       @for (folioItem of folioList(); track $index) {
         <div
-          class="topic-list-item"
+          class="folio-list-item"
           (click)="selectedFolioView.set(folioItem)"
           (keydown)="selectedFolioView.set(folioItem)"
           tabindex="0"

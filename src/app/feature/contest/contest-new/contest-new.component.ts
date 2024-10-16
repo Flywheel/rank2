@@ -1,7 +1,7 @@
 import { Component, inject, output } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ContestStore } from '../../ballot/contest.store';
-import { Contest } from '../../../core/models/interfaces';
+import { ContestStore } from '../../contest/contest.store';
+import { Pitch } from '../../../core/models/interfaces';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -35,7 +35,7 @@ export class ContestNewComponent {
 
   onSubmit() {
     if (this.formGroup.valid) {
-      const newContest: Contest = this.formGroup.value;
+      const newContest: Pitch = this.formGroup.value;
       if (environment.ianConfig.showLogs) console.log('Submitting new contest', newContest);
       this.ballotStore.addContest(newContest);
       this.closeNewContestEditor.emit(false);

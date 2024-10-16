@@ -1,6 +1,5 @@
-import { Component, computed, effect, inject, input, OnInit, signal, untracked } from '@angular/core';
+import { Component, computed, effect, input, signal, untracked } from '@angular/core';
 import { FolioView, PlacementView } from '../../../core/models/interfaces';
-import { FolioStore } from '../folio.store';
 
 @Component({
   selector: 'mh5-channel-assets',
@@ -10,7 +9,6 @@ import { FolioStore } from '../folio.store';
   styleUrl: './channel-assets.component.scss',
 })
 export class ChannelAssetsComponent {
-  folioStore = inject(FolioStore);
   folioList = input<FolioView[]>([]);
 
   selectedFolioView = signal<FolioView>({} as FolioView);
@@ -25,17 +23,13 @@ export class ChannelAssetsComponent {
     effect(() => {
       const folioId = this.firstFolioId();
       if (folioId > 0) {
-        const xx = this.folioList().filter(f => f.id === folioId)[0];
-        untracked(() => this.selectedFolioView.set(xx));
+        const fv = this.folioList().filter(f => f.id === folioId)[0];
+        untracked(() => this.selectedFolioView.set(fv));
       }
     });
   }
 
   displayAsset(placement: PlacementView) {
     console.log(placement.asset.mediaType);
-  }
-
-  save() {
-    this.folioStore.folioStateToLocalStorage();
   }
 }

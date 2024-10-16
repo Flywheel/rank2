@@ -3,7 +3,7 @@ import {
   Author,
   Folio,
   Placement,
-  Contest,
+  Pitch,
   SlateMemberView,
   ContestView,
   SlateView,
@@ -113,7 +113,7 @@ const contestsData = [
   { contestTitle: 'AimsPoll 2024', contestDescription: 'Top Issues for the 2024 Election' },
 ];
 
-export const contestList: Contest[] = contestsData.map(data => ({
+export const contestList: Pitch[] = contestsData.map(data => ({
   id: generateContestId(),
   authorId: authorList[0].id,
   opens: new Date('2024-01-01'),

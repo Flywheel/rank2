@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Contest, ContestView } from '../../core/models/interfaces';
+import { Pitch, ContestView } from '../../core/models/interfaces';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
@@ -15,13 +15,13 @@ export class ContestService {
   // private contestAPIUrl = `${environment.HOST_DOMAIN}/api/contest`;
   // private contestViewAPIUrl = `${environment.HOST_DOMAIN}/api/contestview`;
 
-  contestsGetAll(): Observable<Contest[]> {
+  contestsGetAll(): Observable<Pitch[]> {
     if (environment.ianConfig.showLogs) console.log(`ballotsService.allContests() ${this.contestAPIUrl}`);
-    return this.http.get<Contest[]>(this.contestAPIUrl);
+    return this.http.get<Pitch[]>(this.contestAPIUrl);
   }
 
-  contestGetById(id: number): Observable<Contest> {
-    return this.http.get<Contest>(`${this.contestAPIUrl}/${id}`);
+  contestGetById(id: number): Observable<Pitch> {
+    return this.http.get<Pitch>(`${this.contestAPIUrl}/${id}`);
   }
 
   contestViewsGetAll(): Observable<ContestView[]> {
@@ -33,8 +33,8 @@ export class ContestService {
     return this.http.get<ContestView>(`${this.contestViewAPIUrl}/${id}`);
   }
 
-  contestCreate({ closes, opens, contestTitle, contestDescription, authorId }: Contest): Observable<Contest> {
-    return this.http.post<Contest>(this.contestAPIUrl, { closes, opens, contestTitle, contestDescription, authorId }).pipe(
+  contestCreate({ closes, opens, contestTitle, contestDescription, authorId }: Pitch): Observable<Pitch> {
+    return this.http.post<Pitch>(this.contestAPIUrl, { closes, opens, contestTitle, contestDescription, authorId }).pipe(
       tap(data => {
         if (environment.ianConfig.showLogs) console.log('data', data);
       }),
@@ -45,9 +45,9 @@ export class ContestService {
     );
   }
 
-  contestUpdateName(contestId: number, contest: Contest): Observable<Contest> {
+  contestUpdateName(contestId: number, contest: Pitch): Observable<Pitch> {
     const endPoint = `${this.contestAPIUrl}/${contestId}`;
-    return this.http.put<Contest>(endPoint, contest).pipe(
+    return this.http.put<Pitch>(endPoint, contest).pipe(
       tap(data => {
         if (environment.ianConfig.showLogs) console.log('data', data);
       }),

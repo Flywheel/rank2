@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { HeaderComponent } from '../../../core/header/header.component';
 import { BodyComponent } from '../body/body.component';
 import { ViewerComponent } from '../viewer/viewer.component';
-import { ContestStore } from '../contest.store';
+import { ContestStore } from '../../contest/contest.store';
 import { ContestNewComponent } from '../../contest/contest-new/contest-new.component';
 import { ContestScrollHorizontalComponent } from '../../contest/contest-scroll-horizontal/contest-scroll-horizontal.component';
 import { FolioPlacementNewComponent } from '../../folio/folio-placement-new/folio-placement-new.component';

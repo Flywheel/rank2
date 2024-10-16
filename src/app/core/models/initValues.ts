@@ -1,4 +1,4 @@
-import { Asset, AssetView, Placement, PlacementView, Folio, FolioView, Author, AuthorView, Contest, ContestView, SlateView } from './interfaces';
+import { Asset, AssetView, Placement, PlacementView, Folio, FolioView, Author, AuthorView, Pitch, ContestView, SlateView } from './interfaces';
 
 export const authorInit: Author = {
   id: '',
@@ -70,7 +70,7 @@ export const slateViewInit: SlateView = {
   isTopSlate: false,
 };
 
-export const contestInit: Contest = {
+export const contestInit: Pitch = {
   id: 0,
   authorId: '',
   opens: new Date('1922-01-03'),

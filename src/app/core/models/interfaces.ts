@@ -66,7 +66,7 @@ export interface FolioView extends Folio {
   level?: number;
 }
 
-export interface Contest {
+export interface Pitch {
   id: number;
   contestTitle: string;
   contestDescription: string;
@@ -98,7 +98,7 @@ export interface SlateView extends Slate {
   slateMemberViews: SlateMemberView[];
 }
 
-export interface ContestView extends Contest {
+export interface ContestView extends Pitch {
   slateId: number;
   slate: SlateView;
 }

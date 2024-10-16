@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { InMemoryDbService, ResponseOptions } from 'angular-in-memory-web-api';
-import { Asset, Author, Contest, ContestView, Folio, FolioView, Placement, PlacementView } from '../app/core/models/interfaces';
+import { Asset, Author, Pitch, ContestView, Folio, FolioView, Placement, PlacementView } from '../app/core/models/interfaces';
 import { MockdataService } from './mockdata.service';
 import { Observable } from 'rxjs';
 
@@ -16,7 +16,7 @@ export class DbService implements InMemoryDbService {
 
   author: Author[] = [];
   contestview: ContestView[] = this.mockData.contestViewList;
-  contest: Contest[] = this.mockData.contestList;
+  contest: Pitch[] = this.mockData.contestList;
   folio: Folio[] = this.mockData.folioList;
   folioview: FolioView[] = this.mockData.folioViewList;
   placement: Placement[] = this.mockData.placementList;

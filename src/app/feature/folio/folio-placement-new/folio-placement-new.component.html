@@ -1,15 +1,19 @@
-<div class="radio-container">
-  <label class="radio-label">
-    <input type="radio" name="entryType" [ngModel]="newPlacementType()" (ngModelChange)="newPlacementType.set($event)" value="Caption" />
+<div class="checkbox-container">
+  <label class="checkbox-label">
+    <input type="checkbox" name="entryType" [ngModel]="newPlacement()" (ngModelChange)="newPlacement.set($event)" value="Caption" />
     Caption
   </label>
-  <label class="radio-label">
-    <input type="radio" name="entryType" [ngModel]="newPlacementType()" (ngModelChange)="newPlacementType.set($event)" value="MediaUrl" />
-    Media URL
+  <label class="checkbox-label">
+    <input type="checkbox" name="entryType" [ngModel]="newMedia()" (ngModelChange)="newMedia.set($event)" value="true" />
+    Media
   </label>
-  <label class="radio-label">
-    <input type="radio" name="entryType" [ngModel]="newPlacementType()" (ngModelChange)="newPlacementType.set($event)" value="Folio" />
+  <label class="checkbox-label">
+    <input type="checkbox" name="entryType" [ngModel]="newFolio()" (ngModelChange)="newFolio.set($event)" value="true" />
     Folio
+  </label>
+  <label class="checkbox-label">
+    <input type="checkbox" name="entryType" [ngModel]="newPitch()" (ngModelChange)="newPitch.set($event)" value="true" />
+    Pitch
   </label>
 </div>
 
@@ -24,7 +28,7 @@
       }
     </div>
 
-    @if (newPlacementType() === 'MediaUrl') {
+    @if (newMedia() === true) {
       <div class="form-row">
         <textarea class="col1" formControlName="urlAdder" name="urlAdder" id="urlAdder" rows="5" (drop)="onDrop($event)" (input)="onInput($event)"> </textarea>
         <div class="col2">
@@ -41,6 +45,6 @@
   </div>
 </form>
 
-@if (newPlacementType() === 'MediaUrl') {
+@if (newPlacement() === true) {
   <mh5-folio-placement-media [assetView]="assetViewPrepared()" />
 }
