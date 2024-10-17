@@ -22,7 +22,6 @@ export class FolioPlacementNewComponent {
   fb = inject(FormBuilder);
 
   forcePopup = input<boolean>(false);
-
   showPopup = computed<boolean>(() => this.forcePopup());
 
   //newPlacement = signal(false);

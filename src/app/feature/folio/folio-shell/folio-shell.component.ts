@@ -1,6 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
 import { HeaderComponent } from '../../../core/header/header.component';
-import { FolioStore } from '../folio.store';
 import { FolioScrollHorizontalComponent } from '../folio-scroll-horizontal/folio-scroll-horizontal.component';
 import { FolioPlacementNewComponent } from '../folio-placement-new/folio-placement-new.component';
 import { FolioPlacementListComponent } from '../folio-placement-list/folio-placement-list.component';
@@ -12,6 +11,7 @@ import { IconPlusComponent } from '../../../core/svg/icon-plus';
 import { ChannelAssetsComponent } from '../channel-assets/channel-assets.component';
 import { ChannelPitchesComponent } from '../channel-pitches/channel-pitches.component';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
+import { ContestNewComponent } from '../../contest/contest-new/contest-new.component';
 
 @Component({
   selector: 'mh5-folio-shell',
@@ -25,12 +25,12 @@ import { LocalStorageService } from '../../../core/services/local-storage.servic
     IconPlusComponent,
     ChannelAssetsComponent,
     ChannelPitchesComponent,
+    ContestNewComponent,
   ],
   templateUrl: './folio-shell.component.html',
   styleUrl: './folio-shell.component.scss',
 })
 export class FolioShellComponent {
-  folioStore = inject(FolioStore);
   authorStore = inject(AuthorStore);
   localStorageService = inject(LocalStorageService);
   isHydrated = false;
@@ -44,7 +44,8 @@ export class FolioShellComponent {
 
   showViewer = false;
   theFolios = this.authorStore.authorFolioViews;
-  newFolio = signal(false);
+  // //  thePitches  = this.authorStore.authorPitchViews;
+  newPitch = signal(false);
   newPlacement = signal(false);
 
   openNewPlacement() {
@@ -53,6 +54,12 @@ export class FolioShellComponent {
   closeNewPlacement() {
     this.newPlacement.set(false);
   }
+  openNewPitch() {
+    this.newPitch.set(true);
+  }
+  closeNewPitch() {
+    this.newPitch.set(false);
+  }
 
   runLog() {
     if (!this.isHydrated) {
@@ -60,12 +67,13 @@ export class FolioShellComponent {
       this.isHydrated = true;
     }
 
-    if (environment.ianConfig.showLogs) {
-      console.log(this.theFolios());
-      console.log(this.folioStore.placementViewsComputed());
-      console.log(this.folioStore.placements());
-      console.log(this.authorStore.folioTreeData());
-    }
+    //     if (environment.ianConfig.showLogs) {
+    //  //     console.log(this.theFolios());
+    //    //   console.log(this.folioStore.placementViewsComputed());
+    //    //   console.log(this.con());
+    //       // console.log(this.folioStore.placements());
+    //       // console.log(this.authorStore.folioTreeData());
+    //     }
   }
 }
 // treeData: TreeNode[] = [

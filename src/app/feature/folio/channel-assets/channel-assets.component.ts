@@ -1,6 +1,8 @@
 import { Component, computed, effect, inject, input, untracked } from '@angular/core';
-import { FolioView, PlacementView } from '../../../core/models/interfaces';
+import { ContestView, FolioView, PlacementView } from '../../../core/models/interfaces';
 import { FolioStore } from '../folio.store';
+import { ContestStore } from '../../contest/contest.store';
+import { AuthorStore } from '../../author/author.store';
 
 @Component({
   selector: 'mh5-channel-assets',
@@ -10,11 +12,18 @@ import { FolioStore } from '../folio.store';
   styleUrl: './channel-assets.component.scss',
 })
 export class ChannelAssetsComponent {
+  authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
+  pitchStore = inject(ContestStore);
   folioList = input<FolioView[]>([]);
+  tabSelected = input<string>('');
 
   placementsBySelectedFolio = computed<PlacementView[]>(() => {
     return this.folioStore.folioViewSelected().placementViews ?? [];
+  });
+
+  pitchesBySelectedFolio = computed<ContestView[]>(() => {
+    return this.pitchStore.allContestViews().filter(a => a.authorId === this.authorStore.authorLoggedIn().id) ?? [];
   });
 
   firstFolioId = computed<number>(() => this.folioList()?.[0]?.id ?? 0);

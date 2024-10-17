@@ -100,7 +100,7 @@ export interface SlateView extends Slate {
 
 export interface ContestView extends Pitch {
   slateId: number;
-  slate: SlateView;
+  slateView: SlateView;
 }
 
 export interface AssetImporter {

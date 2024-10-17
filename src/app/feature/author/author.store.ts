@@ -3,12 +3,13 @@ import { signalStore, withComputed, withMethods, withState } from '@ngrx/signals
 import { pipe, switchMap, of, exhaustMap, catchError, throwError, map } from 'rxjs';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
-import { Author, AuthorView, FolioView, TreeNode } from '../../core/models/interfaces';
+import { Author, AuthorView, ContestView, FolioView, TreeNode } from '../../core/models/interfaces';
 import { authorInit, authorViewInit, folioViewInit } from '../../core/models/initValues';
 import { AuthorService } from './author.service';
 
 import { environment } from '../../../environments/environment';
 import { FolioStore } from '../folio/folio.store';
+import { ContestStore } from '../contest/contest.store';
 
 export const AuthorStore = signalStore(
   { providedIn: 'root' },
@@ -28,6 +29,7 @@ export const AuthorStore = signalStore(
 
   withComputed(store => {
     const folioStore = inject(FolioStore);
+    const pitchStore = inject(ContestStore);
     return {
       authorChannelViews: computed<AuthorView[]>(() => {
         return store
@@ -38,18 +40,50 @@ export const AuthorStore = signalStore(
               id: author.id,
               name: author.name,
               authorFolio:
-                folioStore.folioViewsComputed().filter(folio => folio.authorId === author.id && folio.parentFolioId === undefined)[0] ?? folioViewInit,
+                folioStore.folioViewsComputed().filter(folio => folio.authorId === author.id && folio.parentFolioId === undefined)[0] ??
+                folioViewInit,
             };
             return authorView;
           });
       }),
-      authorFolioViews: computed<FolioView[]>(() => folioStore.folioViewsComputed().filter(folio => folio.authorId === store.authorIdSelected())),
+      authorFolioViews: computed<FolioView[]>(() =>
+        folioStore.folioViewsComputed().filter(folio => folio.authorId === store.authorIdSelected())
+      ),
+
+      authorPitchViews: computed<ContestView[]>(() =>
+        pitchStore.pitchViewsComputed().filter(folio => folio.authorId === store.authorIdSelected())
+      ),
     };
   }),
 
+  // withComputed(store => {
+  //   const folioStore = inject(ContestStore);
+  //   return {
+  //     authorChannelPitches: computed<ContestView[]>(() => {
+  //       return store
+  //         .authors()
+  //         .filter(a => a.id.length > 0)
+  //         .map(author => {
+  //           const authorView: AuthorView = {
+  //             id: author.id,
+  //             name: author.name,
+  //             authorFolio:
+  //               folioStore.folioViewsComputed().filter(folio => folio.authorId === author.id && folio.parentFolioId === undefined)[0] ?? folioViewInit,
+  //           };
+  //           return authorView;
+  //         });
+  //     }),
+  //     authorFolioViews: computed<FolioView[]>(() => folioStore.folioViewsComputed().filter(folio => folio.authorId === store.authorIdSelected())),
+  //   };
+  // }),
+
   withComputed(store => ({
-    authorSelectedView: computed<AuthorView>(() => store.authorChannelViews().find(author => author.id === store.authorIdSelected()) ?? authorViewInit),
-    authorLoggedInView: computed<AuthorView>(() => store.authorChannelViews().find(author => author.id === store.authorLoggedIn().id) ?? authorViewInit),
+    authorSelectedView: computed<AuthorView>(
+      () => store.authorChannelViews().find(author => author.id === store.authorIdSelected()) ?? authorViewInit
+    ),
+    authorLoggedInView: computed<AuthorView>(
+      () => store.authorChannelViews().find(author => author.id === store.authorLoggedIn().id) ?? authorViewInit
+    ),
     authorFolioViewList: computed<FolioView[]>(() => {
       const folios = store.authorFolioViews;
       const retval: FolioView[] = [];

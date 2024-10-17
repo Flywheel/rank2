@@ -1,7 +1,15 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal, untracked } from '@angular/core';
 import { ContestView, SlateMemberView, SlateView } from '../../../core/models/interfaces';
 import { ContestStore } from '../../contest/contest.store';
-import { CdkDrag, CdkDragHandle, CdkDropList, CdkDropListGroup, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import {
+  CdkDrag,
+  CdkDragHandle,
+  CdkDropList,
+  CdkDropListGroup,
+  CdkDragDrop,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -17,12 +25,12 @@ export class BodyComponent {
   ballotStore = inject(ContestStore);
 
   contest = computed<ContestView>(() => this.ballotStore.currentContestView());
-  candidateList = computed(() => this.contest().slate.slateMemberViews);
+  candidateList = computed(() => this.contest().slateView.slateMemberViews);
   selectedCandidateId = signal<number>(0);
 
   candidatesAvailable = signal<SlateMemberView[]>([]);
   candidatesRanked = signal<SlateMemberView[]>([]);
-  isTopSlate = computed<boolean>(() => this.contest().slate.isTopSlate);
+  isTopSlate = computed<boolean>(() => this.contest().slateView.isTopSlate);
   preparedBallot = signal<SlateView>({
     id: 0,
     contestId: this.contest().id,
@@ -45,12 +53,13 @@ export class BodyComponent {
   }
 
   setAvailableCandidates() {
-    if (environment.ianConfig.showLogs) console.log('setAvailableCandidates');
     this.candidatesAvailable.set(this.candidateList());
     if (this.ballotStore.voterSlate()?.slateMemberViews) {
       this.candidatesRanked.set(
         this.ballotStore.voterSlate().slateMemberViews.reduce((acc: SlateMemberView[], slateMemberView: SlateMemberView) => {
-          const candidate = this.candidateList().find((candidate: SlateMemberView) => candidate.placementId === slateMemberView.placementId);
+          const candidate = this.candidateList().find(
+            (candidate: SlateMemberView) => candidate.placementId === slateMemberView.placementId
+          );
           return candidate ? [...acc, candidate] : acc;
         }, [])
       );

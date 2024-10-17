@@ -52,7 +52,6 @@ export class FolioService {
   folioCreateWithParent(folioData: Partial<Folio>): Observable<{ newFolio: Folio; newAsset: Asset; newPlacement: Placement }> {
     return this.http.post<Folio>(this.folioAPIUrl, folioData).pipe(
       exhaustMap((newFolio: Folio) => {
-        if (environment.ianConfig.showLogs) console.log(newFolio);
         const newAsset: Asset = {
           id: 0, // Assuming backend assigns the ID
           mediaType: 'folio',
@@ -129,9 +128,6 @@ export class FolioService {
   }
 
   assetCreateWithPlacement(assetData: Asset, folioId: number, caption: string): Observable<{ newAsset: Asset; newPlacement: Placement }> {
-    if (environment.ianConfig.showLogs) {
-      console.log('Asset Data:', assetData, ' ', caption);
-    }
     return this.assetCreate(assetData).pipe(
       exhaustMap((createdAsset: Asset) => {
         const placement: Placement = {

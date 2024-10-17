@@ -141,7 +141,6 @@ export const FolioStore = signalStore(
 
       async folioCreateWithParent(folioData: Partial<Folio>): Promise<{ newFolio: Folio; newAsset: Asset; newPlacement: Placement }> {
         updateState(store, '[Folio] Create Start', { isLoading: true });
-
         const { newFolio, newAsset, newPlacement } = await firstValueFrom(
           dbFolio.folioCreateWithParent(folioData).pipe(
             catchError(error => {
@@ -151,47 +150,20 @@ export const FolioStore = signalStore(
             })
           )
         );
-        console.log(newPlacement);
         updateState(store, '[Folio] Create Success', {
           folios: [...store.folios(), newFolio],
           isLoading: false,
         });
-        updateState(store, '[Placement] Create Success', {
+        updateState(store, '[Folio Placement] Create Success', {
           placements: [...store.placements(), newPlacement],
         });
-        updateState(store, '[Asset] Create Success', {
+        updateState(store, '[Folio Asset] Create Success', {
           assets: [...store.assets(), newAsset],
         });
         store.writeToStorage();
 
         return { newFolio, newAsset, newPlacement };
       },
-      // folioCreateWithParent(folioData: Partial<Folio>) {
-      //   updateState(store, '[Folio] Create Start', { isLoading: true });
-      //   dbFolio
-      //     .folioCreateWithParent(folioData)
-      //     .pipe(
-      //       map(({ newFolio, newAsset, newPlacement }) => {
-      //         updateState(store, '[Folio] Create Success', {
-      //           folios: [...store.folios(), newFolio],
-      //           isLoading: false,
-      //         });
-      //         updateState(store, '[Placement] Create Success', {
-      //           placements: [...store.placements(), newPlacement],
-      //         });
-      //         updateState(store, '[Asset] Create Success', {
-      //           assets: [...store.assets(), newAsset],
-      //         });
-      //         store.writeToStorage();
-      //       }),
-      //       catchError(error => {
-      //         console.error('FolioStore creation failed', error);
-      //         updateState(store, '[Folio] Create Failed', { isLoading: false });
-      //         return throwError(error);
-      //       })
-      //     )
-      //     .subscribe();
-      // },
 
       //#endregion Folio
 
@@ -294,26 +266,22 @@ export const FolioStore = signalStore(
       },
 
       assetCreateWithPlacement(assetData: Asset, caption: string) {
-        if (environment.ianConfig.showLogs) {
-          console.log('Asset Data:', assetData, ' ', caption);
-        }
         updateState(store, '[Asset-Media] Create Start', { isLoading: true });
         dbFolio
           .assetCreateWithPlacement(assetData, store.folioViewSelected().id, caption)
           .pipe(
             map(({ newAsset, newPlacement }) => {
-              updateState(store, '[Placement] Create Success', {
+              updateState(store, '[Asset-Media] Placement Create Success', {
                 placements: [...store.placements(), newPlacement],
               });
-              updateState(store, '[Asset] Create Success', {
+              updateState(store, '[Asset-Media] Asset Create Success', {
                 assets: [...store.assets(), newAsset],
               });
-
               store.writeToStorage();
             }),
             catchError(error => {
               console.error('FolioStore creation failed', error);
-              updateState(store, '[Folio] Create Failed', { isLoading: false });
+              updateState(store, '[Asset-Media] Create Failed', { isLoading: false });
               return throwError(error);
             })
           )

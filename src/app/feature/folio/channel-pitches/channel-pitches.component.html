@@ -1,1 +1,26 @@
 <mh5-contest-new />
+<!-- <div style="display: flex; justify-content: space-between">
+  <div class="left-panel">
+    <div class="folio-list">
+      @for (folioItem of folioList(); track $index) {
+        <div
+          class="folio-list-item"
+          (click)="selectFolioView(folioItem)"
+          (keydown)="selectFolioView(folioItem)"
+          tabindex="0"
+          [class.selected]="folioItem === folioStore.folioViewSelected()">
+          {{ ' '.repeat(folioItem.level ?? 0) }}{{ '-'.repeat(folioItem.level ?? 0) }} {{ folioItem.folioName }}
+        </div>
+      }
+    </div>
+  </div>
+  <div class="right-panel">
+    <div class="placement-list">
+      @for (item of placementsBySelectedFolio(); track $index) {
+        <div class="placement-list-item" (click)="displayAsset(item)" (keydown)="displayAsset(item)" tabindex="0">
+          {{ item.asset.mediaType === 'folio' ? '- ' : '' }} {{ item.caption }}
+        </div>
+      }
+    </div>
+  </div>
+</div> -->

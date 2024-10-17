@@ -173,6 +173,6 @@ export const contestViewList: ContestView[] = contestList.map(contest => {
   return {
     ...contest,
     slateId: slate?.id ?? 0,
-    slate: slate!,
+    slateView: slate!,
   };
 });

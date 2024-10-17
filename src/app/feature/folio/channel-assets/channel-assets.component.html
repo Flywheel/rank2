@@ -1,5 +1,5 @@
 <div style="display: flex; justify-content: space-between">
-  <div class="folio-panel">
+  <div class="left-panel">
     <div class="folio-list">
       @for (folioItem of folioList(); track $index) {
         <div
@@ -13,13 +13,23 @@
       }
     </div>
   </div>
-  <div class="placement-panel">
-    <div class="placement-list">
-      @for (item of placementsBySelectedFolio(); track $index) {
-        <div class="placement-list-item" (click)="displayAsset(item)" (keydown)="displayAsset(item)" tabindex="0">
-          {{ item.asset.mediaType === 'folio' ? '- ' : '' }} {{ item.caption }}
-        </div>
-      }
-    </div>
+  <div class="right-panel">
+    @if (tabSelected() === 'Assets') {
+      <div class="placement-list">
+        @for (item of placementsBySelectedFolio(); track $index) {
+          <div class="placement-list-item" (click)="displayAsset(item)" (keydown)="displayAsset(item)" tabindex="0">
+            {{ item.asset.mediaType === 'folio' ? '- ' : '' }} {{ item.caption }}
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="pitch-list">
+        @for (pitch of pitchesBySelectedFolio(); track $index) {
+          <div class="pitch-list-item" tabindex="0">
+            {{ pitch.contestTitle }}
+          </div>
+        }
+      </div>
+    }
   </div>
 </div>

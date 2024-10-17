@@ -1,4 +1,19 @@
-import { Asset, AssetView, Placement, PlacementView, Folio, FolioView, Author, AuthorView, Pitch, ContestView, SlateView } from './interfaces';
+import {
+  Asset,
+  AssetView,
+  Placement,
+  PlacementView,
+  Folio,
+  FolioView,
+  Author,
+  AuthorView,
+  Pitch,
+  ContestView,
+  SlateView,
+  SlateMember,
+  Slate,
+  SlateMemberView,
+} from './interfaces';
 
 export const authorInit: Author = {
   id: '',
@@ -62,6 +77,30 @@ export const folioViewInit: FolioView = {
   placementViews: [],
 };
 
+export const slateInit: Slate = {
+  id: 0,
+  authorId: '',
+  contestId: 0,
+  isTopSlate: false,
+};
+
+export const slateMemberInit: SlateMember = {
+  id: 0,
+  authorId: '',
+  slateId: 0,
+  placementId: 0,
+  rankOrder: 0,
+};
+
+export const slateMemberViewInit: SlateMemberView = {
+  id: 0,
+  authorId: '',
+  slateId: 0,
+  placementId: 0,
+  rankOrder: 0,
+  placementView: placementViewInit,
+};
+
 export const slateViewInit: SlateView = {
   id: 0,
   contestId: 0,
@@ -70,7 +109,7 @@ export const slateViewInit: SlateView = {
   isTopSlate: false,
 };
 
-export const contestInit: Pitch = {
+export const pitchInit: Pitch = {
   id: 0,
   authorId: '',
   opens: new Date('1922-01-03'),
@@ -86,5 +125,5 @@ export const contestViewInit: ContestView = {
   contestTitle: '',
   contestDescription: '',
   slateId: 0,
-  slate: slateViewInit,
+  slateView: slateViewInit,
 };

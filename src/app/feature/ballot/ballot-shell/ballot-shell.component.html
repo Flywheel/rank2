@@ -1,7 +1,7 @@
 <mh5-header callerPage="contest"></mh5-header>
 @if (newContest()) {
   <mh5-contest-scroll-horizontal />
-  <mh5-contest-new (closeNewContestEditor)="closeNewContest()" />
+  <mh5-contest-new (closeNewPitchEditor)="closeNewContest()" />
 } @else {
   @if (newPlacement()) {
     <mh5-contest-scroll-horizontal />

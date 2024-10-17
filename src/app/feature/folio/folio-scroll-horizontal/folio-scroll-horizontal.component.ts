@@ -32,9 +32,6 @@ export class FolioScrollHorizontalComponent {
 
   selectFolio(id: number) {
     this.folioStore.setFolioSelected(id);
-    if (environment.ianConfig.showLogs) {
-      console.log('folioViewSelected', this.folioStore.folioViewSelected());
-    }
   }
   newFolio() {
     this.folioStore.toggleFolioAdder(true);

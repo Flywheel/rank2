@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ContestStore } from '../../contest/contest.store';
 import { Pitch } from '../../../core/models/interfaces';
@@ -12,10 +12,13 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './contest-new.component.scss',
 })
 export class ContestNewComponent {
-  ballotStore = inject(ContestStore);
+  pichStore = inject(ContestStore);
 
   formGroup: FormGroup;
-  closeNewContestEditor = output<boolean>();
+  closeNewPitchEditor = output<boolean>();
+
+  forcePopup = input<boolean>(false);
+  showPopup = computed<boolean>(() => this.forcePopup());
 
   constructor(private fb: FormBuilder) {
     const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
@@ -36,12 +39,13 @@ export class ContestNewComponent {
   onSubmit() {
     if (this.formGroup.valid) {
       const newContest: Pitch = this.formGroup.value;
-      if (environment.ianConfig.showLogs) console.log('Submitting new contest', newContest);
-      this.ballotStore.addContest(newContest);
-      this.closeNewContestEditor.emit(false);
+      // if (environment.ianConfig.showLogs) console.log('Submitting new contest', newContest);
+      this.pichStore.contestAdd(newContest);
+      this.closeNewPitchEditor.emit(false);
     }
   }
   cancel() {
-    this.closeNewContestEditor.emit(false);
+    //this.pichStore.togglePitchAdder(false);
+    this.closeNewPitchEditor.emit(false);
   }
 }
