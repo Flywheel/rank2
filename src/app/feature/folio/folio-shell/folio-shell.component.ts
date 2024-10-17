@@ -67,29 +67,8 @@ export class FolioShellComponent {
       this.isHydrated = true;
     }
 
-    //     if (environment.ianConfig.showLogs) {
-    //  //     console.log(this.theFolios());
-    //    //   console.log(this.folioStore.placementViewsComputed());
-    //    //   console.log(this.con());
-    //       // console.log(this.folioStore.placements());
-    //       // console.log(this.authorStore.folioTreeData());
-    //     }
+    if (environment.ianConfig.showLogs) {
+      console.log(this.authorStore.folioTreeData());
+    }
   }
 }
-// treeData: TreeNode[] = [
-//   {
-//     name: 'Root',
-//     children: [
-//       { name: 'Child 1' },
-//       {
-//         name: 'Child 2',
-//         children: [
-//           { name: 'Grandchild 1' },
-
-//           { name: 'Grandchild 2', children: [{ name: 'Great Grandchild1' }, { name: 'Great Grandchild 2' }] },
-//           { name: 'Grandchild 3' },
-//         ],
-//       },
-//     ],
-//   },
-// ];

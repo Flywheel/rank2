@@ -10,7 +10,12 @@
     <div class="candidate-list ranked">
       @for (ranked of candidatesRanked(); track ranked.id) {
         <div cdkDrag class="candidate" id="cand-{{ ranked.placementId }}" [attr.tabindex]="ranked.placementId">
-          <span class="move-candidate-up" cdkDragHandle (click)="moveUpOnePosition(ranked)" (keydown)="moveUpOnePosition(ranked)" tabindex="1">
+          <span
+            class="move-candidate-up"
+            cdkDragHandle
+            (click)="moveUpOnePosition(ranked)"
+            (keydown)="moveUpOnePosition(ranked)"
+            tabindex="1">
             @if ($index !== 0) {
               &#8593;
             }
@@ -43,12 +48,17 @@
     (cdkDropListDropped)="drop($event)">
     <div class="candidate-list available">
       @for (unranked of candidatesAvailable(); track unranked; let theCount = $count) {
-        <div cdkDrag class="candidate" (click)="moveToSelected(unranked)" (keydown)="moveToSelected(unranked)" [attr.tabindex]="unranked.placementId">
+        <div
+          cdkDrag
+          class="candidate"
+          (click)="moveToSelected(unranked)"
+          (keydown)="moveToSelected(unranked)"
+          [attr.tabindex]="unranked.placementId">
           <a class="candidate-unranked">{{ unranked.placementView.caption }}</a>
           <span class="add-candidate"></span>
         </div>
       } @empty {
-        Finished all {{ ballotStore.contestSlate().slateMemberViews.length }} candidates for {{ contest().contestTitle }}.
+        Finished all {{ pitchStore.slateView().slateMemberViews.length }} candidates for {{ contest().contestTitle }}.
       }
     </div>
   </div>

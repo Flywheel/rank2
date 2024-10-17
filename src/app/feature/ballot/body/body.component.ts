@@ -22,9 +22,9 @@ import { environment } from '../../../../environments/environment';
 })
 export class BodyComponent {
   authorId = signal<string>('');
-  ballotStore = inject(ContestStore);
+  pitchStore = inject(ContestStore);
 
-  contest = computed<ContestView>(() => this.ballotStore.currentContestView());
+  contest = computed<ContestView>(() => this.pitchStore.currentContestView());
   candidateList = computed(() => this.contest().slateView.slateMemberViews);
   selectedCandidateId = signal<number>(0);
 
@@ -54,9 +54,9 @@ export class BodyComponent {
 
   setAvailableCandidates() {
     this.candidatesAvailable.set(this.candidateList());
-    if (this.ballotStore.voterSlate()?.slateMemberViews) {
+    if (this.pitchStore.voterSlate()?.slateMemberViews) {
       this.candidatesRanked.set(
-        this.ballotStore.voterSlate().slateMemberViews.reduce((acc: SlateMemberView[], slateMemberView: SlateMemberView) => {
+        this.pitchStore.voterSlate().slateMemberViews.reduce((acc: SlateMemberView[], slateMemberView: SlateMemberView) => {
           const candidate = this.candidateList().find(
             (candidate: SlateMemberView) => candidate.placementId === slateMemberView.placementId
           );
@@ -140,6 +140,6 @@ export class BodyComponent {
       isTopSlate: this.isTopSlate(),
       slateMemberViews: preparedSlateMemberViews,
     });
-    this.ballotStore.updateVoterSlate(this.preparedBallot());
+    this.pitchStore.updateVoterSlate(this.preparedBallot());
   }
 }

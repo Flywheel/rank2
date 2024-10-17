@@ -18,6 +18,7 @@ export class FolioService {
   private placementViewAPIUrl = `api/placementview`;
 
   private assetAPIUrl = `api/asset`;
+  private assetViewAPIUrl = `api/assetview`;
 
   foliosGetAll(): Observable<Folio[]> {
     return this.http.get<Folio[]>(this.folioAPIUrl);
@@ -31,14 +32,14 @@ export class FolioService {
     return this.http.get<FolioView>(`${this.folioViewAPIUrl}/${id}`);
   }
 
-  folioCreate({ authorId, folioName }: Folio): Observable<Folio> {
+  folioCreateForNewAuthor_PostingView({ authorId, folioName }: Folio): Observable<Folio> {
     return this.http.post<Folio>(this.folioAPIUrl, { authorId, folioName }).pipe(
-      exhaustMap(data => {
-        if (environment.ianConfig.showLogs) console.log('data', data);
+      exhaustMap(newFolio => {
+        if (environment.ianConfig.showLogs) console.log('data', newFolio);
         return this.http.post<FolioView>(this.folioViewAPIUrl, { authorId, folioName, placementViews: [] }).pipe(
           map(folioViewData => {
             if (environment.ianConfig.showLogs) console.log('folioViewData', folioViewData);
-            return data;
+            return newFolio;
           })
         );
       }),
@@ -49,28 +50,28 @@ export class FolioService {
     );
   }
 
-  folioCreateWithParent(folioData: Partial<Folio>): Observable<{ newFolio: Folio; newAsset: Asset; newPlacement: Placement }> {
-    return this.http.post<Folio>(this.folioAPIUrl, folioData).pipe(
+  folioCreateWithParent(folioPrep: Partial<Folio>): Observable<{ newFolio: Folio; newAsset: Asset; newPlacement: Placement }> {
+    return this.http.post<Folio>(this.folioAPIUrl, folioPrep).pipe(
       exhaustMap((newFolio: Folio) => {
         const newAsset: Asset = {
           id: 0, // Assuming backend assigns the ID
           mediaType: 'folio',
           sourceId: newFolio.id.toString() || '0',
-          authorId: folioData.authorId!,
+          authorId: folioPrep.authorId!,
         };
         return this.assetCreate(newAsset).pipe(
-          exhaustMap((createdAsset: Asset) => {
-            const placement: Placement = {
+          exhaustMap((newAsset: Asset) => {
+            const placementPrep: Placement = {
               id: 0, // Assuming backend assigns the ID
-              folioId: folioData.parentFolioId!,
-              caption: folioData.folioName?.trim() || 'New Folio',
-              assetId: createdAsset.id,
-              authorId: folioData.authorId!,
+              folioId: folioPrep.parentFolioId!,
+              caption: folioPrep.folioName?.trim() || 'New Folio',
+              assetId: newAsset.id,
+              authorId: folioPrep.authorId!,
             };
-            return this.placementCreate(placement).pipe(
+            return this.placementCreate(placementPrep).pipe(
               map((newPlacement: Placement) => ({
                 newFolio,
-                newAsset: createdAsset,
+                newAsset,
                 newPlacement,
               }))
             );

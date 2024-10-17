@@ -16,17 +16,18 @@ import {
   slateMemberInit,
   placementViewInit,
 } from '../../core/models/initValues';
-import { slateMembers } from '../../../mocks/mockdata4';
 import { FolioStore } from '../folio/folio.store';
 
 export const ContestStore = signalStore(
   { providedIn: 'root' },
   withDevtools('contests'),
   withState({
-    pitchIdSeleected: 0,
+    pitchIdSelected: 0,
     pitches: [pitchInit],
     slates: [slateInit],
     slateMembers: [slateMemberInit],
+
+    slateView: slateViewInit,
 
     isLoading: false,
     isAddingPitch: false,
@@ -36,10 +37,10 @@ export const ContestStore = signalStore(
     currentContestView: contestViewInit,
     allContestViews: [contestViewInit],
     allContests: [pitchInit],
-    allPlacements: [placementInit],
-    contestSlate: slateViewInit,
+    // allPlacements: [placementInit],
+
     voterSlates: [slateViewInit],
-    pitchedSlates: [slateViewInit],
+    // pitchedSlates: [slateViewInit],
     voterSlate: slateViewInit,
   }),
   withStorageSync({
@@ -134,6 +135,10 @@ export const ContestStore = signalStore(
         )
       ),
 
+      setPitchSelected(pitchId: number) {
+        updateState(store, `[Pitch] Select By Id  ${pitchId}`, { pitchIdSelected: pitchId });
+      },
+
       setCurrentContestView: rxMethod<number>(
         pipe(
           tap(() => {
@@ -159,13 +164,14 @@ export const ContestStore = signalStore(
           tap(contestView =>
             updateState(store, '[ContestView] -- From Cache --Load By Id Success', {
               currentContestView: contestView,
-              contestSlate: store.allContestSlates().filter(a => a.contestId === contestView.id)[0] ?? slateViewInit,
+              slateView: store.allContestSlates().filter(a => a.contestId === contestView.id)[0] ?? slateViewInit,
               isLoading: false,
             })
           )
         )
       ),
 
+      //#region Ballot
       async updateVoterSlate(ballot: SlateView) {
         updateState(store, `[Slate] Update Start`, {
           isLoading: true,
@@ -184,6 +190,8 @@ export const ContestStore = signalStore(
         });
       },
 
+      //#endregion Ballot
+
       contestAdd(contest: Pitch) {
         if (environment.ianConfig.showLogs) console.log('addContest', contest);
         updateState(store, '[Contest] Add Start', { isLoading: true });
@@ -195,6 +203,32 @@ export const ContestStore = signalStore(
                 if (environment.ianConfig.showLogs) console.log('newContest', newContest);
                 updateState(store, '[Contest] Add Success', {
                   allContests: [...store.allContests(), newContest],
+                  isLoading: false,
+                });
+              },
+              error: error => {
+                if (environment.ianConfig.showLogs) console.log('error', error);
+                updateState(store, '[Contest] Add Failed', { isLoading: false });
+              },
+            })
+          )
+          .subscribe();
+      },
+
+      contestAddWithSlate(contest: Pitch) {
+        if (environment.ianConfig.showLogs) console.log('addContest', contest);
+        updateState(store, '[Contest] Add Start', { isLoading: true });
+        dbContest
+          .contestCreateWithSlate(contest)
+          .pipe(
+            tap({
+              next: ({ newPitch, newSlate }) => {
+                if (environment.ianConfig.showLogs) {
+                  console.log(newPitch);
+                  console.log(newSlate);
+                }
+                updateState(store, '[Contest] Add Success', {
+                  allContests: [...store.allContests(), newPitch],
                   isLoading: false,
                 });
               },
@@ -235,53 +269,6 @@ export const ContestStore = signalStore(
         //   });
         // });
       },
-
-      // async getAllSlateMembers() {
-      //   // updateState(store, '[Contest] getAllSlateMembers Start', { isLoading: true });
-      //   // const slateMembers: SlateMemberView[] = await dbContest.getAllContestViews();
-      //   // updateState(store, '[Contest] getAllSlateMembers Success', value => ({
-      //   //   ...value,
-      //   //   allContests: contests,
-      //   //   isLoading: false,
-      //   // }));
-      // },
-
-      // async getVoterSlateByContestId(contestId: number) {
-      //   const voterSlates: SlateView[] = store.voterSlates() ?? [];
-      //   const currentVoterSlate: SlateView = voterSlates.filter(a => a.contestId === contestId)[0] ?? emptySlateView;
-      //   updateState(store, `[Contest] getCurrentVoterSlateByContestId Success`, {
-      //     voterSlate: currentVoterSlate,
-      //     voterSlates: voterSlates,
-      //   });
-      // },
-
-      // setCurrentContestView2: rxMethod<number>(
-      //   pipe(
-      //     tap(() => {
-      //       updateState(store, '[Contest] getContestViewById Start', { isLoading: true });
-      //     }),
-      //     switchMap((contestId: number) => {
-      //       return dbContest.allContestViews().pipe(
-      //         takeUntilDestroyed(),
-      //         tap(() => {
-      //           updateState(store, `[Contest] getContestSlateByContestId Success`, {
-      //             currentContestView: store.allContestViews().filter(a => a.id === contestId)[0] ?? contestViewInit,
-      //             contestSlate: store.allContestSlates().filter(a => a.contestId === contestId)[0] ?? emptySlateView,
-      //           });
-      //         })
-      //       );
-      //     })
-      //   )
-      // ),
-      // async addContestOld(contest: Contest) {
-      //   updateState(store, '[Contest] addContest Pending', { isLoading: true });
-      //   return await dbContest.ContestCreateOld(contest).then((newContest: Contest) => {
-      //     updateState(store, '[Contest] addContest Success', {
-      //       allContests: [...store.allContests(), newContest],
-      //       isLoading: false,
-      //     });
-      //   });
-      // },
     };
   }),
 

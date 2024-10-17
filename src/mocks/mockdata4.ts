@@ -134,7 +134,7 @@ const slateMembersMapping: Record<string, string[]> = {
   '@miniherald': ['US President 2024', 'AimsPoll'],
 };
 
-export const slateMembers: SlateMember[] = [];
+export const slateMemberList: SlateMember[] = [];
 
 Object.entries(slateMembersMapping).forEach(([contestTitle, placementCaptions]) => {
   const contest = contestList.find(c => c.contestTitle === contestTitle);
@@ -148,11 +148,11 @@ Object.entries(slateMembersMapping).forEach(([contestTitle, placementCaptions]) 
       placementId: placement?.id ?? 0,
       rankOrder: index + 1,
     };
-    slateMembers.push(slateMember);
+    slateMemberList.push(slateMember);
   });
 });
 
-export const slateMemberViewList: SlateMemberView[] = slateMembers.map(member => {
+export const slateMemberViewList: SlateMemberView[] = slateMemberList.map(member => {
   const placementView = placementViewList.find(pv => pv.id === member.placementId);
   return {
     ...member,

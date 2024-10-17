@@ -9,6 +9,7 @@ import { FolioPlacementNewComponent } from '../../folio/folio-placement-new/foli
 
 import { environment } from '../../../../environments/environment';
 import { DirectComponent } from '../../contest/direct/direct.component';
+import { FolioStore } from '../../folio/folio.store';
 
 @Component({
   selector: 'mh5-ballot-shell',
@@ -28,6 +29,7 @@ import { DirectComponent } from '../../contest/direct/direct.component';
 })
 export class BallotShellComponent {
   ballotStore = inject(ContestStore);
+  folioStore = inject(FolioStore);
   showViewer = false;
   theContests = this.ballotStore.allContests;
   newContest = signal(false);
@@ -50,9 +52,21 @@ export class BallotShellComponent {
   runLog() {
     if (environment.ianConfig.showLogs) {
       console.log('Environment:', environment);
+      console.log(this.folioStore.assetViewsComputed());
+      console.log(this.folioStore.placementViewsComputed());
+      console.log(this.folioStore.folioViewsComputed());
+
+      console.log(this.ballotStore.slateMembers());
+      console.log(this.ballotStore.slates());
+      console.log(this.ballotStore.pitchViewsComputed());
+
+      console.log(this.ballotStore.slateMemberViewsComputed());
+      console.log(this.ballotStore.slateViewsComputed());
+      console.log(this.ballotStore.pitchViewsComputed());
+
       console.log(this.ballotStore.allContests());
-      console.log(this.ballotStore.allContestViews());
       console.log(this.ballotStore.allContestSlates());
+      console.log(this.ballotStore.allContestViews());
     }
   }
 }

@@ -11,17 +11,18 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './contest-scroll-horizontal.component.scss',
 })
 export class ContestScrollHorizontalComponent {
-  ballotStore = inject(ContestStore);
+  pitchStore = inject(ContestStore);
   theContestsInput = input<Pitch[]>();
   newContestEditorStateChange = output<boolean>();
   newPlacementEditorStateChange = output<boolean>();
 
   selectContest(id: number) {
-    this.ballotStore.setCurrentContestView(id);
+    this.pitchStore.setCurrentContestView(id);
+    this.pitchStore.setPitchSelected(id);
     if (environment.ianConfig.showLogs) {
       console.log('selectContest', id);
-      console.log('allContestViews', this.ballotStore.allContestViews());
-      console.log('allContests', this.ballotStore.allContests());
+      console.log('allContestViews', this.pitchStore.allContestViews());
+      console.log('allContests', this.pitchStore.allContests());
       //  console.log('allContests', this.ballotStore.allFolioView());
     }
     // const theContest = this.ballotStore.allContestViews().filter(c => c.id === id);

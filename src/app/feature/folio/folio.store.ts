@@ -29,11 +29,14 @@ export const FolioStore = signalStore(
   withComputed(store => {
     return {
       assetViewsComputed: computed<AssetView[]>(() =>
-        store.assets().map(asset => ({
-          ...asset,
-          url: '',
-          paddingBottom: '',
-        }))
+        store
+          .assets()
+          .filter(a => a.id > 0)
+          .map(asset => ({
+            ...asset,
+            url: '',
+            paddingBottom: '',
+          }))
       ),
     };
   }),
@@ -41,10 +44,13 @@ export const FolioStore = signalStore(
   withComputed(store => {
     return {
       placementViewsComputed: computed<PlacementView[]>(() =>
-        store.placements().map(placement => ({
-          ...placement,
-          asset: store.assetViewsComputed().find(a => a.id === placement.assetId) ?? assetViewInit,
-        }))
+        store
+          .placements()
+          .filter(a => a.id > 0)
+          .map(placement => ({
+            ...placement,
+            asset: store.assetViewsComputed().find(a => a.id === placement.assetId) ?? assetViewInit,
+          }))
       ),
     };
   }),
@@ -52,13 +58,16 @@ export const FolioStore = signalStore(
   withComputed(store => {
     return {
       folioViewsComputed: computed<FolioView[]>(() =>
-        store.folios().map(folio => {
-          const placementViews = store.placementViewsComputed().filter(placement => placement.folioId === folio.id);
-          return {
-            ...folio,
-            placementViews,
-          };
-        })
+        store
+          .folios()
+          .filter(a => a.id > 0)
+          .map(folio => {
+            const placementViews = store.placementViewsComputed().filter(placement => placement.folioId === folio.id);
+            return {
+              ...folio,
+              placementViews,
+            };
+          })
       ),
     };
   }),
@@ -121,7 +130,7 @@ export const FolioStore = signalStore(
       folioCreateForNewAuthor(folio: Folio) {
         updateState(store, '[Folio] Create Start', { isLoading: true });
         dbFolio
-          .folioCreate(folio)
+          .folioCreateForNewAuthor_PostingView(folio)
           .pipe(
             map((newFolio: Folio) => {
               updateState(store, '[Folio] Create Success', {

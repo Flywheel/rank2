@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Pitch, ContestView } from '../../core/models/interfaces';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { Pitch, ContestView, FolioView, Slate } from '../../core/models/interfaces';
+import { catchError, exhaustMap, map, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +12,8 @@ export class ContestService {
 
   private contestAPIUrl = `api/contest`;
   private contestViewAPIUrl = `api/contestview`;
+  private slateAPIUrl = `api/slate`;
+  private slateViewAPIUrl = `api/slateview`;
   // private contestAPIUrl = `${environment.HOST_DOMAIN}/api/contest`;
   // private contestViewAPIUrl = `${environment.HOST_DOMAIN}/api/contestview`;
 
@@ -35,12 +37,42 @@ export class ContestService {
 
   contestCreate({ closes, opens, contestTitle, contestDescription, authorId }: Pitch): Observable<Pitch> {
     return this.http.post<Pitch>(this.contestAPIUrl, { closes, opens, contestTitle, contestDescription, authorId }).pipe(
-      tap(data => {
-        if (environment.ianConfig.showLogs) console.log('data', data);
+      catchError(error => {
+        if (environment.ianConfig.showLogs) console.log('error', error);
+        return throwError(() => new Error('FolioCreate failed'));
+      })
+    );
+  }
+
+  slateCreateForContest({ contestId, authorId, isTopSlate }: Slate): Observable<Slate> {
+    return this.http.post<Slate>(this.contestAPIUrl, { contestId, authorId, isTopSlate }).pipe(
+      catchError(error => {
+        if (environment.ianConfig.showLogs) console.log('error', error);
+        return throwError(() => new Error('FolioCreate failed'));
+      })
+    );
+  }
+
+  contestCreateWithSlate(contestPrep: Partial<Pitch>): Observable<{ newPitch: Pitch; newSlate: Slate }> {
+    return this.http.post<Pitch>(this.contestAPIUrl, contestPrep).pipe(
+      exhaustMap((newPitch: Pitch) => {
+        const slatePrep: Partial<Slate> = {
+          id: 0, // Assuming backend assigns the ID
+          contestId: newPitch.id,
+          authorId: contestPrep.authorId!,
+          isTopSlate: true,
+        };
+        if (environment.ianConfig.showLogs) console.log(newPitch);
+        return this.http.post<Slate>(this.slateAPIUrl, {slatePrep.contestId}).pipe(
+          map(newSlate => {
+            if (environment.ianConfig.showLogs) console.log(newSlate);
+            return { newPitch, newSlate: newSlate };
+          })
+        );
       }),
       catchError(error => {
         if (environment.ianConfig.showLogs) console.log('error', error);
-        return throwError(() => new Error('ContestCreate failed'));
+        return throwError(() => new Error('FolioCreate failed'));
       })
     );
   }

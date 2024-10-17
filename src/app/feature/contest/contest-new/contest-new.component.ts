@@ -3,6 +3,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { ContestStore } from '../../contest/contest.store';
 import { Pitch } from '../../../core/models/interfaces';
 import { environment } from '../../../../environments/environment';
+import { AuthorStore } from '../../author/author.store';
 
 @Component({
   selector: 'mh5-contest-new',
@@ -12,6 +13,7 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './contest-new.component.scss',
 })
 export class ContestNewComponent {
+  authorStore = inject(AuthorStore);
   pichStore = inject(ContestStore);
 
   formGroup: FormGroup;
@@ -31,8 +33,7 @@ export class ContestNewComponent {
       contestDescription: ['', Validators.required],
       opens: [today, Validators.required],
       closes: [nextWeekDate, Validators.required],
-      authorId: [1, Validators.required], // Default value for authorId
-      topSlateId: [1, Validators.required], // Default value for topSlateId
+      authorId: [this.authorStore.authorLoggedIn().id, Validators.required], // Default value for authorId
     });
   }
 
@@ -40,7 +41,7 @@ export class ContestNewComponent {
     if (this.formGroup.valid) {
       const newContest: Pitch = this.formGroup.value;
       // if (environment.ianConfig.showLogs) console.log('Submitting new contest', newContest);
-      this.pichStore.contestAdd(newContest);
+      this.pichStore.contestAddWithSlate(newContest);
       this.closeNewPitchEditor.emit(false);
     }
   }
