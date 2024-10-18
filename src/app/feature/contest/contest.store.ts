@@ -7,15 +7,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, of, pipe, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { environment } from '../../../environments/environment';
-import {
-  pitchInit,
-  contestViewInit,
-  placementInit,
-  slateViewInit,
-  slateInit,
-  slateMemberInit,
-  placementViewInit,
-} from '../../core/models/initValues';
+import { pitchInit, contestViewInit, slateViewInit, slateInit, slateMemberInit, placementViewInit } from '../../core/models/initValues';
 import { FolioStore } from '../folio/folio.store';
 
 export const ContestStore = signalStore(
@@ -49,7 +41,7 @@ export const ContestStore = signalStore(
   }),
   withComputed(store => {
     return {
-      allContestSlates: computed<SlateView[]>(() => store.allContestViews().map(c => c.slateView)),
+      allContestSlateViewsComputed: computed<SlateView[]>(() => store.allContestViews().map(c => c.slateView)),
     };
   }),
 
@@ -164,7 +156,7 @@ export const ContestStore = signalStore(
           tap(contestView =>
             updateState(store, '[ContestView] -- From Cache --Load By Id Success', {
               currentContestView: contestView,
-              slateView: store.allContestSlates().filter(a => a.contestId === contestView.id)[0] ?? slateViewInit,
+              slateView: store.allContestSlateViewsComputed().filter(a => a.contestId === contestView.id)[0] ?? slateViewInit,
               isLoading: false,
             })
           )
@@ -229,6 +221,7 @@ export const ContestStore = signalStore(
                 }
                 updateState(store, '[Contest] Add Success', {
                   allContests: [...store.allContests(), newPitch],
+                  slates: [...store.slates(), newSlate],
                   isLoading: false,
                 });
               },

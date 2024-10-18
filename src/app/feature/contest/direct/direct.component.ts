@@ -35,14 +35,25 @@ export class DirectComponent {
   }
 
   test3() {
-    this.db.contestGetById(4).subscribe(data => {
+    this.db.contestsGetAll().subscribe(data => {
+      console.log(data);
+    });
+    // this.db.contestGetById(4).subscribe(data => {
+    //   console.log(data);
+    // });
+    this.db.slateGetAll().subscribe(data => {
+      console.log(data);
+    });
+
+    this.db.slateCreate({ contestId: 4, authorId: '1', isTopSlate: true }).subscribe(data => {
       console.log(data);
     });
   }
-
-  // test4() {
-  //   this.db.contestUpdateName3(4, 'New Title').subscribe(data => {
-  //     console.log(data);
-  //   });
-  // }
 }
+
+// test4() {
+//   this.db.contestUpdateName3(4, 'New Title').subscribe(data => {
+//     console.log(data);
+//   });
+// }
+//}

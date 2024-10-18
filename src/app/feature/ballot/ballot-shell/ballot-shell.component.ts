@@ -52,20 +52,24 @@ export class BallotShellComponent {
   runLog() {
     if (environment.ianConfig.showLogs) {
       console.log('Environment:', environment);
+      console.log('Asset-Placement-Folio');
       console.log(this.folioStore.assetViewsComputed());
       console.log(this.folioStore.placementViewsComputed());
       console.log(this.folioStore.folioViewsComputed());
 
+      console.log('SlateMember-Slate-Pitch-Contest');
       console.log(this.ballotStore.slateMembers());
       console.log(this.ballotStore.slates());
-      console.log(this.ballotStore.pitchViewsComputed());
+      console.log(this.ballotStore.pitches());
+      console.log(this.ballotStore.allContests());
 
+      console.log('SlateMember-Slate-Pitch : Computed Views');
       console.log(this.ballotStore.slateMemberViewsComputed());
       console.log(this.ballotStore.slateViewsComputed());
       console.log(this.ballotStore.pitchViewsComputed());
 
-      console.log(this.ballotStore.allContests());
-      console.log(this.ballotStore.allContestSlates());
+      console.log('ContestSlateViewsComputed : Contest Views');
+      console.log(this.ballotStore.allContestSlateViewsComputed());
       console.log(this.ballotStore.allContestViews());
     }
   }
