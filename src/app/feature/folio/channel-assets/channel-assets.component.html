@@ -23,12 +23,14 @@
         }
       </div>
     } @else {
+      == Pitch List
       <div class="pitch-list">
-        @for (pitch of pitchesBySelectedFolio(); track $index) {
+        <mh5-channel-pitches />
+        <!-- @for (pitch of pitchesBySelectedFolio(); track $index) {
           <div class="pitch-list-item" tabindex="0">
             {{ pitch.contestTitle }}
           </div>
-        }
+        } -->
       </div>
     }
   </div>

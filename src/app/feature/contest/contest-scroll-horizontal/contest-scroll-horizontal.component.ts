@@ -22,7 +22,7 @@ export class ContestScrollHorizontalComponent {
     if (environment.ianConfig.showLogs) {
       console.log('selectContest', id);
       console.log('allContestViews', this.pitchStore.allContestViews());
-      console.log('allContests', this.pitchStore.allContests());
+      console.log('allContests', this.pitchStore.pitches());
       //  console.log('allContests', this.ballotStore.allFolioView());
     }
     // const theContest = this.ballotStore.allContestViews().filter(c => c.id === id);

@@ -28,11 +28,8 @@ export const ContestStore = signalStore(
 
     currentContestView: contestViewInit,
     allContestViews: [contestViewInit],
-    allContests: [pitchInit],
-    // allPlacements: [placementInit],
 
     voterSlates: [slateViewInit],
-    // pitchedSlates: [slateViewInit],
     voterSlate: slateViewInit,
   }),
   withStorageSync({
@@ -79,6 +76,13 @@ export const ContestStore = signalStore(
       ),
     };
   }),
+  withComputed(store => {
+    return {
+      pitchViewSelected: computed<ContestView>(
+        () => store.pitchViewsComputed().filter(p => p.id === store.pitchIdSelected())[0] ?? contestViewInit
+      ),
+    };
+  }),
 
   withMethods(store => {
     const dbContest = inject(ContestService);
@@ -95,7 +99,7 @@ export const ContestStore = signalStore(
                 next: (allContests: Pitch[]) => {
                   updateState(store, '[Contest] Load Success', value => ({
                     ...value,
-                    allContests,
+                    pitches: allContests,
                     isLoading: false,
                   }));
                 },
@@ -194,7 +198,7 @@ export const ContestStore = signalStore(
               next: (newContest: Pitch) => {
                 if (environment.ianConfig.showLogs) console.log('newContest', newContest);
                 updateState(store, '[Contest] Add Success', {
-                  allContests: [...store.allContests(), newContest],
+                  pitches: [...store.pitches(), newContest],
                   isLoading: false,
                 });
               },
@@ -220,7 +224,7 @@ export const ContestStore = signalStore(
                   console.log(newSlate);
                 }
                 updateState(store, '[Contest] Add Success', {
-                  allContests: [...store.allContests(), newPitch],
+                  pitches: [...store.pitches(), newPitch],
                   slates: [...store.slates(), newSlate],
                   isLoading: false,
                 });

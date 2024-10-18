@@ -10,8 +10,9 @@ import { TabList } from '../../../core/models/interfaces';
 import { IconPlusComponent } from '../../../core/svg/icon-plus';
 import { ChannelAssetsComponent } from '../channel-assets/channel-assets.component';
 import { ChannelPitchesComponent } from '../channel-pitches/channel-pitches.component';
-import { LocalStorageService } from '../../../core/services/local-storage.service';
+import { HydrationService } from '../../../core/services/hydration.service';
 import { ContestNewComponent } from '../../contest/contest-new/contest-new.component';
+import { DirectComponent } from '../../contest/direct/direct.component';
 
 @Component({
   selector: 'mh5-folio-shell',
@@ -26,13 +27,14 @@ import { ContestNewComponent } from '../../contest/contest-new/contest-new.compo
     ChannelAssetsComponent,
     ChannelPitchesComponent,
     ContestNewComponent,
+    DirectComponent,
   ],
   templateUrl: './folio-shell.component.html',
   styleUrl: './folio-shell.component.scss',
 })
 export class FolioShellComponent {
   authorStore = inject(AuthorStore);
-  localStorageService = inject(LocalStorageService);
+  localStorageService = inject(HydrationService);
   isHydrated = false;
 
   tabs: TabList[] = [

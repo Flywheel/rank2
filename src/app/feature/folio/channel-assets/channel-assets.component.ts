@@ -3,11 +3,12 @@ import { ContestView, FolioView, PlacementView } from '../../../core/models/inte
 import { FolioStore } from '../folio.store';
 import { ContestStore } from '../../contest/contest.store';
 import { AuthorStore } from '../../author/author.store';
+import { ChannelPitchesComponent } from '../channel-pitches/channel-pitches.component';
 
 @Component({
   selector: 'mh5-channel-assets',
   standalone: true,
-  imports: [],
+  imports: [ChannelPitchesComponent],
   templateUrl: './channel-assets.component.html',
   styleUrl: './channel-assets.component.scss',
 })

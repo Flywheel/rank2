@@ -27,10 +27,10 @@
     }
 
     @case ('Pitches') {
-      <mh5-channel-assets [folioList]="authorStore.authorFolioViewList()" [tabSelected]="selectedTab.name" />
+      <mh5-channel-assets style="font-size: xx-small" [folioList]="authorStore.authorFolioViewList()" [tabSelected]="selectedTab.name" />
+
       @if (newPitch()) {
         <mh5-contest-new (closeNewPitchEditor)="closeNewPitch()" [forcePopup]="true" />
-
       } @else {
         <mh5-icon-plus (click)="openNewPitch()" (keydown)="openNewPitch()" tabindex="1" />
       }
@@ -41,3 +41,4 @@
   }
   <div></div>
 </div>
+<mh5-direct />

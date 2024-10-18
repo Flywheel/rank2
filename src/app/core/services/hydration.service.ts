@@ -8,7 +8,7 @@ import { Asset, AssetImporter, Folio, FolioImporter, Placement } from '../models
 @Injectable({
   providedIn: 'root',
 })
-export class LocalStorageService {
+export class HydrationService {
   private authorStore = inject(AuthorStore);
   private folioStore = inject(FolioStore);
   private pitchStore = inject(ContestStore);

@@ -2,6 +2,9 @@ import { Component, computed, inject } from '@angular/core';
 
 import { ContestService } from '../contest.service';
 import { Pitch } from '../../../core/models/interfaces';
+import { ContestStore } from '../contest.store';
+import { environment } from '../../../../environments/environment';
+import { FolioStore } from '../../folio/folio.store';
 
 @Component({
   selector: 'mh5-direct',
@@ -11,6 +14,8 @@ import { Pitch } from '../../../core/models/interfaces';
   styleUrl: './direct.component.scss',
 })
 export class DirectComponent {
+  pitchStore = inject(ContestStore);
+  folioStore = inject(FolioStore);
   db = inject(ContestService);
   contestObservable = computed(() => this.db.contestsGetAll());
 
@@ -34,7 +39,7 @@ export class DirectComponent {
     });
   }
 
-  test3() {
+  testService() {
     this.db.contestsGetAll().subscribe(data => {
       console.log(data);
     });
@@ -45,9 +50,32 @@ export class DirectComponent {
       console.log(data);
     });
 
-    this.db.slateCreate({ contestId: 4, authorId: '1', isTopSlate: true }).subscribe(data => {
-      console.log(data);
-    });
+    // this.db.slateCreate({ contestId: 4, authorId: '1', isTopSlate: true }).subscribe(data => {
+    //   console.log(data);
+    // });
+  }
+  testStore() {
+    if (environment.ianConfig.showLogs) {
+      console.log('Environment:', environment);
+      console.log('Asset-Placement-Folio');
+      console.log(this.folioStore.assetViewsComputed());
+      console.log(this.folioStore.placementViewsComputed());
+      console.log(this.folioStore.folioViewsComputed());
+
+      console.log('SlateMember-Slate-Piitch : Stores');
+      console.log(this.pitchStore.slateMembers());
+      console.log(this.pitchStore.slates());
+      console.log(this.pitchStore.pitches());
+
+      console.log('SlateMember-Slate-Pitch : Computed Views');
+      console.log(this.pitchStore.slateMemberViewsComputed());
+      console.log(this.pitchStore.slateViewsComputed());
+      console.log(this.pitchStore.pitchViewsComputed());
+
+      console.log('ContestSlateViewsComputed : Contest Views');
+      console.log(this.pitchStore.allContestSlateViewsComputed());
+      console.log(this.pitchStore.allContestViews());
+    }
   }
 }
 

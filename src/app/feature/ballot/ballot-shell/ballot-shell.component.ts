@@ -31,7 +31,7 @@ export class BallotShellComponent {
   ballotStore = inject(ContestStore);
   folioStore = inject(FolioStore);
   showViewer = false;
-  theContests = this.ballotStore.allContests;
+  theContests = this.ballotStore.pitches;
   newContest = signal(false);
   newPlacement = signal(false);
   headerOption = 'contest';
@@ -48,29 +48,5 @@ export class BallotShellComponent {
   }
   closeNewPlacement() {
     this.newPlacement.set(false);
-  }
-  runLog() {
-    if (environment.ianConfig.showLogs) {
-      console.log('Environment:', environment);
-      console.log('Asset-Placement-Folio');
-      console.log(this.folioStore.assetViewsComputed());
-      console.log(this.folioStore.placementViewsComputed());
-      console.log(this.folioStore.folioViewsComputed());
-
-      console.log('SlateMember-Slate-Pitch-Contest');
-      console.log(this.ballotStore.slateMembers());
-      console.log(this.ballotStore.slates());
-      console.log(this.ballotStore.pitches());
-      console.log(this.ballotStore.allContests());
-
-      console.log('SlateMember-Slate-Pitch : Computed Views');
-      console.log(this.ballotStore.slateMemberViewsComputed());
-      console.log(this.ballotStore.slateViewsComputed());
-      console.log(this.ballotStore.pitchViewsComputed());
-
-      console.log('ContestSlateViewsComputed : Contest Views');
-      console.log(this.ballotStore.allContestSlateViewsComputed());
-      console.log(this.ballotStore.allContestViews());
-    }
   }
 }

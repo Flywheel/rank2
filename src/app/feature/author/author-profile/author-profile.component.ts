@@ -3,7 +3,7 @@ import { AuthorStore } from '../author.store';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { IconTimelineComponent } from '../../../core/svg/icon-timeline';
-import { LocalStorageService } from '../../../core/services/local-storage.service';
+import { HydrationService } from '../../../core/services/hydration.service';
 import { AuthorConsentComponent } from '../author-consent/author-consent.component';
 import { environment } from '../../../../environments/environment';
 import { Author, Folio } from '../../../core/models/interfaces';
@@ -25,7 +25,7 @@ export class AuthorProfileComponent {
   isRunSomethingVisible = signal<boolean>(true);
   channelName = signal<string>('');
   showConsentPopup = signal(false);
-  localStorageService = inject(LocalStorageService);
+  localStorageService = inject(HydrationService);
   authorDefaultName = AUTHOR_DEFAULT_NAME;
 
   isChannelNameOk = computed<boolean>(() => this.channelName().length >= 3 && this.channelName().length <= 15);
