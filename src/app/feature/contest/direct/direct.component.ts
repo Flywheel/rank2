@@ -28,10 +28,11 @@ export class DirectComponent {
   test2() {
     const contest: Pitch = {
       id: 4,
+      folioId: 1,
       closes: new Date(),
       opens: new Date(),
-      contestTitle: 'New Title',
-      contestDescription: 'New Description',
+      title: 'New Title',
+      description: 'New Description',
       authorId: '1',
     };
     this.db.contestUpdateName(contest.id, contest).subscribe(data => {

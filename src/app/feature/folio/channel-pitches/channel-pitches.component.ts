@@ -3,7 +3,7 @@ import { ContestNewComponent } from '../../contest/contest-new/contest-new.compo
 import { AuthorStore } from '../../author/author.store';
 import { ContestStore } from '../../contest/contest.store';
 import { FolioStore } from '../folio.store';
-import { ContestView, Pitch, Placement, PlacementView, SlateMember, SlateMemberView } from '../../../core/models/interfaces';
+import { PitchView, Pitch, Placement, PlacementView, SlateMember, SlateMemberView } from '../../../core/models/interfaces';
 
 @Component({
   selector: 'mh5-channel-pitches',
@@ -21,7 +21,7 @@ export class ChannelPitchesComponent {
   folioMembers = computed<PlacementView[]>(() => this.folioStore.folioViewSelected().placementViews);
 
   thePitchId = computed<number>(() => this.pitchStore.pitchIdSelected());
-  pitch = computed<ContestView>(() => this.pitchStore.pitchViewSelected());
+  pitch = computed<PitchView>(() => this.pitchStore.pitchViewSelected());
 
   slateMembers = computed<Partial<SlateMemberView[]>>(() => {
     return this.folioMembers().map(folioMember => {

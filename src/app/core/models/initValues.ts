@@ -8,7 +8,7 @@ import {
   Author,
   AuthorView,
   Pitch,
-  ContestView,
+  PitchView,
   SlateView,
   SlateMember,
   Slate,
@@ -112,18 +112,20 @@ export const slateViewInit: SlateView = {
 export const pitchInit: Pitch = {
   id: 0,
   authorId: '',
+  folioId: 0,
   opens: new Date('1922-01-03'),
   closes: new Date('1922-01-04'),
-  contestTitle: '',
-  contestDescription: '',
+  title: '',
+  description: '',
 };
-export const contestViewInit: ContestView = {
+export const contestViewInit: PitchView = {
   id: 0,
   authorId: '',
+  folioId: 0,
   opens: new Date('1922-01-03'),
   closes: new Date('1922-01-04'),
-  contestTitle: '',
-  contestDescription: '',
+  title: '',
+  description: '',
   slateId: 0,
   slateView: slateViewInit,
 };

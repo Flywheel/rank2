@@ -1,20 +1,20 @@
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form-container">
   <div class="form-row">
-    @if (formGroup.get('contestTitle')?.invalid && formGroup.get('contestTitle')?.touched) {
-      <label for="contestTitle" class="warning">Contest Title is required</label>
+    @if (formGroup.get('title')?.invalid && formGroup.get('title')?.touched) {
+      <label for="title" class="warning">Contest Title is required</label>
     } @else {
-      <label for="contestTitle">Contest Title</label>
+      <label for="title">Contest Title</label>
     }
-    <input id="contestTitle" formControlName="contestTitle" type="text" />
+    <input id="title" formControlName="title" type="text" />
   </div>
 
   <div class="form-row">
-    @if (formGroup.get('contestDescription')?.invalid && formGroup.get('contestDescription')?.touched) {
-      <label for="contestDescription" class="warning">Contest Description is required</label>
+    @if (formGroup.get('description')?.invalid && formGroup.get('description')?.touched) {
+      <label for="description" class="warning">Contest Description is required</label>
     } @else {
-      <label for="contestDescription">Contest Description</label>
+      <label for="description">Contest Description</label>
     }
-    <input id="contestDescription" formControlName="contestDescription" type="text" />
+    <input id="description" formControlName="description" type="text" />
   </div>
 
   <div class="form-row">

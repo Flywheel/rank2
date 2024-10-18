@@ -68,8 +68,9 @@ export interface FolioView extends Folio {
 
 export interface Pitch {
   id: number;
-  contestTitle: string;
-  contestDescription: string;
+  folioId: number;
+  title: string;
+  description: string;
   opens: Date;
   closes: Date;
   authorId: string;
@@ -98,7 +99,7 @@ export interface SlateView extends Slate {
   slateMemberViews: SlateMemberView[];
 }
 
-export interface ContestView extends Pitch {
+export interface PitchView extends Pitch {
   slateId: number;
   slateView: SlateView;
 }

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Pitch, ContestView, FolioView, Slate, SlateView } from '../../core/models/interfaces';
+import { Pitch, PitchView, Slate, SlateView } from '../../core/models/interfaces';
 import { catchError, exhaustMap, map, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
@@ -15,8 +15,6 @@ export class ContestService {
 
   private slateAPIUrl = `api/slate`;
   private slateViewAPIUrl = `api/slateview`;
-  // private contestAPIUrl = `${environment.HOST_DOMAIN}/api/contest`;
-  // private contestViewAPIUrl = `${environment.HOST_DOMAIN}/api/contestview`;
 
   //#region Contest
   contestsGetAll(): Observable<Pitch[]> {
@@ -27,22 +25,13 @@ export class ContestService {
     return this.http.get<Pitch>(`${this.contestAPIUrl}/${id}`);
   }
 
-  contestViewsGetAll(): Observable<ContestView[]> {
+  contestViewsGetAll(): Observable<PitchView[]> {
     if (environment.ianConfig.showLogs) console.log(`ballotsService.allContestViews() ${this.contestViewAPIUrl}`);
-    return this.http.get<ContestView[]>(this.contestViewAPIUrl);
+    return this.http.get<PitchView[]>(this.contestViewAPIUrl);
   }
 
-  contestViewGetById(id: number): Observable<ContestView> {
-    return this.http.get<ContestView>(`${this.contestViewAPIUrl}/${id}`);
-  }
-
-  contestCreate({ closes, opens, contestTitle, contestDescription, authorId }: Pitch): Observable<Pitch> {
-    return this.http.post<Pitch>(this.contestAPIUrl, { closes, opens, contestTitle, contestDescription, authorId }).pipe(
-      catchError(error => {
-        if (environment.ianConfig.showLogs) console.log('error', error);
-        return throwError(() => new Error('FolioCreate failed'));
-      })
-    );
+  contestViewGetById(id: number): Observable<PitchView> {
+    return this.http.get<PitchView>(`${this.contestViewAPIUrl}/${id}`);
   }
 
   contestCreateWithSlate(contestPrep: Partial<Pitch>): Observable<{ newPitch: Pitch; newSlate: Slate }> {
@@ -183,11 +172,11 @@ export class ContestService {
 //   });
 // }
 
-// ContestCreateOld({ closes, opens, contestTitle, contestDescription, authorId, topSlateId }: Contest): Promise<Contest> {
-//   if (environment.ianConfig.showLogs) console.log('input', contestTitle);
+// ContestCreateOld({ closes, opens, title, description, authorId, topSlateId }: Contest): Promise<Contest> {
+//   if (environment.ianConfig.showLogs) console.log('input', title);
 //   if (environment.ianConfig.showLogs) console.log(this.contestAPIUrl);
 //   return new Promise((resolve, reject) => {
-//     this.http.post<Contest>(this.contestAPIUrl, { closes, opens, contestTitle, contestDescription, authorId, topSlateId }).subscribe({
+//     this.http.post<Contest>(this.contestAPIUrl, { closes, opens, title, description, authorId, topSlateId }).subscribe({
 //       next: data => {
 //         if (environment.ianConfig.showLogs) console.log('data', data);
 //         resolve(data);
@@ -198,4 +187,12 @@ export class ContestService {
 //       },
 //     });
 //   });
+// }
+// contestCreate({ closes, opens, folioId, title, description, authorId }: Pitch): Observable<Pitch> {
+//   return this.http.post<Pitch>(this.contestAPIUrl, { closes, opens, folioId, title, description, authorId }).pipe(
+//     catchError(error => {
+//       if (environment.ianConfig.showLogs) console.log('error', error);
+//       return throwError(() => new Error('FolioCreate failed'));
+//     })
+//   );
 // }

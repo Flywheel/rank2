@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal, untracked } from '@angular/core';
-import { ContestView, SlateMemberView, SlateView } from '../../../core/models/interfaces';
+import { PitchView, SlateMemberView, SlateView } from '../../../core/models/interfaces';
 import { ContestStore } from '../../contest/contest.store';
 import {
   CdkDrag,
@@ -24,7 +24,7 @@ export class BodyComponent {
   authorId = signal<string>('');
   pitchStore = inject(ContestStore);
 
-  contest = computed<ContestView>(() => this.pitchStore.currentContestView());
+  contest = computed<PitchView>(() => this.pitchStore.currentContestView());
   candidateList = computed(() => this.contest().slateView.slateMemberViews);
   selectedCandidateId = signal<number>(0);
 

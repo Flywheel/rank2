@@ -3,7 +3,7 @@ import { signalStore, withComputed, withMethods, withState } from '@ngrx/signals
 import { pipe, switchMap, of, exhaustMap, catchError, throwError, map } from 'rxjs';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
-import { Author, AuthorView, ContestView, FolioView, TreeNode } from '../../core/models/interfaces';
+import { Author, AuthorView, PitchView, FolioView, TreeNode } from '../../core/models/interfaces';
 import { authorInit, authorViewInit, folioViewInit } from '../../core/models/initValues';
 import { AuthorService } from './author.service';
 
@@ -50,7 +50,7 @@ export const AuthorStore = signalStore(
         folioStore.folioViewsComputed().filter(folio => folio.authorId === store.authorIdSelected())
       ),
 
-      authorPitchViews: computed<ContestView[]>(() =>
+      authorPitchViews: computed<PitchView[]>(() =>
         pitchStore.pitchViewsComputed().filter(folio => folio.authorId === store.authorIdSelected())
       ),
     };

@@ -1,10 +1,10 @@
 import { signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
-import { Pitch, ContestView, SlateMember, SlateView, SlateMemberView } from '../../core/models/interfaces';
+import { Pitch, PitchView, SlateMember, SlateView, SlateMemberView } from '../../core/models/interfaces';
 import { ContestService } from '../contest/contest.service';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { exhaustMap, of, pipe, switchMap, tap } from 'rxjs';
+import { exhaustMap, map, of, pipe, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { environment } from '../../../environments/environment';
 import { pitchInit, contestViewInit, slateViewInit, slateInit, slateMemberInit, placementViewInit } from '../../core/models/initValues';
@@ -67,7 +67,7 @@ export const ContestStore = signalStore(
 
   withComputed(store => {
     return {
-      pitchViewsComputed: computed<ContestView[]>(() =>
+      pitchViewsComputed: computed<PitchView[]>(() =>
         store.pitches().map(pitch => ({
           ...pitch,
           slateId: store.slateViewsComputed().find(s => s.id === pitch.id)?.contestId ?? 0,
@@ -77,8 +77,15 @@ export const ContestStore = signalStore(
     };
   }),
   withComputed(store => {
+    const folioStore = inject(FolioStore);
     return {
-      pitchViewSelected: computed<ContestView>(
+      pitchViewsByFolio: computed<PitchView[]>(() => store.pitchViewsComputed().filter(p => p.folioId === folioStore.folioIdSelected())),
+    };
+  }),
+
+  withComputed(store => {
+    return {
+      pitchViewSelected: computed<PitchView>(
         () => store.pitchViewsComputed().filter(p => p.id === store.pitchIdSelected())[0] ?? contestViewInit
       ),
     };
@@ -89,20 +96,16 @@ export const ContestStore = signalStore(
     return {
       Contests: rxMethod<void>(
         pipe(
-          tap(() => {
-            updateState(store, '[Contest] Load Start', { isLoading: true });
-          }),
           exhaustMap(() => {
+            updateState(store, '[Contest] Load Start', { isLoading: true });
             return dbContest.contestsGetAll().pipe(
-              takeUntilDestroyed(),
-              tap({
-                next: (allContests: Pitch[]) => {
-                  updateState(store, '[Contest] Load Success', value => ({
-                    ...value,
-                    pitches: allContests,
-                    isLoading: false,
-                  }));
-                },
+              map((allContests: Pitch[]) => {
+                updateState(store, '[Contest] Load Success', value => ({
+                  ...value,
+                  pitches: allContests,
+                  isLoading: false,
+                }));
+                return allContests;
               })
             );
           })
@@ -118,7 +121,7 @@ export const ContestStore = signalStore(
             return dbContest.contestViewsGetAll().pipe(
               takeUntilDestroyed(),
               tap({
-                next: (allContestViews: ContestView[]) => {
+                next: (allContestViews: PitchView[]) => {
                   updateState(store, '[ContestView] Load Success', value => ({
                     ...value,
                     allContestViews,
@@ -147,7 +150,7 @@ export const ContestStore = signalStore(
             } else {
               const theContestView = dbContest.contestViewGetById(contestId).pipe(
                 tap({
-                  next: (contestView: ContestView) => {
+                  next: (contestView: PitchView) => {
                     updateState(store, '[ContestView] Load By Id Success', {
                       allContestViews: [...store.allContestViews(), contestView],
                     });
@@ -187,29 +190,6 @@ export const ContestStore = signalStore(
       },
 
       //#endregion Ballot
-
-      contestAdd(contest: Pitch) {
-        if (environment.ianConfig.showLogs) console.log('addContest', contest);
-        updateState(store, '[Contest] Add Start', { isLoading: true });
-        dbContest
-          .contestCreate(contest)
-          .pipe(
-            tap({
-              next: (newContest: Pitch) => {
-                if (environment.ianConfig.showLogs) console.log('newContest', newContest);
-                updateState(store, '[Contest] Add Success', {
-                  pitches: [...store.pitches(), newContest],
-                  isLoading: false,
-                });
-              },
-              error: error => {
-                if (environment.ianConfig.showLogs) console.log('error', error);
-                updateState(store, '[Contest] Add Failed', { isLoading: false });
-              },
-            })
-          )
-          .subscribe();
-      },
 
       contestAddWithSlate(contest: Pitch) {
         if (environment.ianConfig.showLogs) console.log('addContest', contest);
@@ -272,8 +252,51 @@ export const ContestStore = signalStore(
   withHooks({
     onInit(store) {
       store.Contests();
-      // store.ContestViews();
       store.setCurrentContestView(1);
     },
   })
 );
+
+// contestAdd(contest: Pitch) {
+//   if (environment.ianConfig.showLogs) console.log('addContest', contest);
+//   updateState(store, '[Contest] Add Start', { isLoading: true });
+//   dbContest
+//     .contestCreate(contest)
+//     .pipe(
+//       tap({
+//         next: (newContest: Pitch) => {
+//           if (environment.ianConfig.showLogs) console.log('newContest', newContest);
+//           updateState(store, '[Contest] Add Success', {
+//             pitches: [...store.pitches(), newContest],
+//             isLoading: false,
+//           });
+//         },
+//         error: error => {
+//           if (environment.ianConfig.showLogs) console.log('error', error);
+//           updateState(store, '[Contest] Add Failed', { isLoading: false });
+//         },
+//       })
+//     )
+//     .subscribe();
+// },
+// Contests2: rxMethod<void>(
+//   pipe(
+//     tap(() => {
+//       updateState(store, '[Contest] Load Start', { isLoading: true });
+//     }),
+//     exhaustMap(() => {
+//       return dbContest.contestsGetAll().pipe(
+//         takeUntilDestroyed(),
+//         tap({
+//           next: (allContests: Pitch[]) => {
+//             updateState(store, '[Contest] Load Success', value => ({
+//               ...value,
+//               pitches: allContests,
+//               isLoading: false,
+//             }));
+//           },
+//         })
+//       );
+//     })
+//   )
+// ),

@@ -5,7 +5,7 @@ import {
   Placement,
   Pitch,
   SlateMemberView,
-  ContestView,
+  PitchView,
   SlateView,
   PlacementView,
   Slate,
@@ -108,13 +108,14 @@ export const folioViewList: FolioView[] = folioList.map(folio => {
 });
 
 const contestsData = [
-  { contestTitle: '@miniherald', contestDescription: '@miniherald' },
-  { contestTitle: 'US President 2024', contestDescription: 'Candidate for President of the United States' },
-  { contestTitle: 'AimsPoll 2024', contestDescription: 'Top Issues for the 2024 Election' },
+  { title: '@miniherald', description: '@miniherald' },
+  { title: 'US President 2024', description: 'Candidate for President of the United States' },
+  { title: 'AimsPoll 2024', description: 'Top Issues for the 2024 Election' },
 ];
 
 export const contestList: Pitch[] = contestsData.map(data => ({
   id: generateContestId(),
+  folioId: folioList.find(f => f.folioName === data.title)?.id ?? 0,
   authorId: authorList[0].id,
   opens: new Date('2024-01-01'),
   closes: new Date('2024-11-01'),
@@ -136,8 +137,8 @@ const slateMembersMapping: Record<string, string[]> = {
 
 export const slateMemberList: SlateMember[] = [];
 
-Object.entries(slateMembersMapping).forEach(([contestTitle, placementCaptions]) => {
-  const contest = contestList.find(c => c.contestTitle === contestTitle);
+Object.entries(slateMembersMapping).forEach(([title, placementCaptions]) => {
+  const contest = contestList.find(c => c.title === title);
   const slate = slateList.find(s => s.contestId === contest?.id);
   placementCaptions.forEach((caption, index) => {
     const placement = placementList.find(p => p.caption === caption);
@@ -168,7 +169,7 @@ export const slateListView: SlateView[] = slateList.map(slate => {
   };
 });
 
-export const contestViewList: ContestView[] = contestList.map(contest => {
+export const contestViewList: PitchView[] = contestList.map(contest => {
   const slate = slateListView.find(s => s.contestId === contest.id);
   return {
     ...contest,

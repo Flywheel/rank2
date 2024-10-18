@@ -16,7 +16,7 @@ import {
   Asset,
   AssetView,
   Pitch,
-  ContestView,
+  PitchView,
   Folio,
   FolioView,
   Placement,
@@ -29,7 +29,7 @@ import {
 })
 export class MockdataService {
   public contestList: Pitch[] = contestList;
-  public contestViewList: ContestView[] = contestViewList;
+  public contestViewList: PitchView[] = contestViewList;
   public slateList: Slate[] = slateList;
   public slateMemberList: SlateMember[] = slateMemberList;
   public folioList: Folio[] = folioList;

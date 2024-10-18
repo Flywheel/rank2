@@ -4,7 +4,7 @@ import {
   Asset,
   Author,
   Pitch,
-  ContestView,
+  PitchView,
   Folio,
   FolioView,
   Placement,
@@ -26,7 +26,7 @@ export class DbService implements InMemoryDbService {
   }
 
   author: Author[] = [];
-  contestview: ContestView[] = this.mockData.contestViewList;
+  contestview: PitchView[] = this.mockData.contestViewList;
   contest: Pitch[] = this.mockData.contestList;
   slate: Slate[] = this.mockData.slateList;
   slatemember: SlateMember[] = this.mockData.slateMemberList;

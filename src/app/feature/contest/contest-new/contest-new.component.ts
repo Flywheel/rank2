@@ -29,11 +29,12 @@ export class ContestNewComponent {
     const nextWeekDate = nextWeek.toISOString().split('T')[0]; // Get next week's date in YYYY-MM-DD format
 
     this.formGroup = this.fb.group({
-      contestTitle: ['', Validators.required],
-      contestDescription: ['', Validators.required],
+      title: ['', Validators.required],
+      description: ['', Validators.required],
       opens: [today, Validators.required],
       closes: [nextWeekDate, Validators.required],
-      authorId: [this.authorStore.authorLoggedIn().id, Validators.required], // Default value for authorId
+      authorId: [this.authorStore.authorLoggedIn().id, Validators.required],
+      folioId: [this.authorStore.authorSelectedView().authorFolio.id, Validators.required],
     });
   }
 
