@@ -57,8 +57,15 @@ export interface Placement {
   caption: string;
 }
 
+export interface PlacementCaptions {
+  placementId: string;
+  extendedCaption?: string;
+  shortCode?: string;
+}
+
 export interface PlacementView extends Placement {
   asset: AssetView;
+  extendedCaptions?: PlacementCaptions[];
 }
 
 export interface FolioView extends Folio {

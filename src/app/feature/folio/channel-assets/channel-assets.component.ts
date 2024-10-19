@@ -19,7 +19,7 @@ export class ChannelAssetsComponent {
   folioList = input<FolioView[]>([]);
   tabSelected = input<string>('');
 
-  placementsBySelectedFolio = computed<PlacementView[]>(() => {
+  folioMembers = computed<PlacementView[]>(() => {
     return this.folioStore.folioViewSelected().placementViews ?? [];
   });
 

@@ -4,6 +4,7 @@ import { FolioStore } from '../../feature/folio/folio.store';
 import { ContestStore } from '../../feature/contest/contest.store';
 import { theData } from '../../../mocks/data-from-store3';
 import { Asset, AssetImporter, Folio, FolioImporter, Placement } from '../models/interfaces';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -47,6 +48,11 @@ export class HydrationService {
       };
 
       const { newFolio, newAsset, newPlacement } = await this.folioStore.folioCreateWithParent(folioData);
+      if (environment.ianConfig.showLogs) {
+        console.log('newFolio', newFolio);
+        console.log('newAsset', newAsset);
+        console.log('newPlacement', newPlacement);
+      }
       this.folioStore.setFolioSelected(newFolio.id!);
 
       const folioAssets: AssetImporter[] = assetsToImport.filter(a => a.folioName === folioData.folioName);
@@ -66,7 +72,8 @@ export class HydrationService {
             const assetData: Asset = {
               ...placement,
               authorId,
-
+              mediaType: placement.mediaType,
+              sourceId: placement.sourceId,
               id: 0,
             };
             await this.folioStore.assetCreateWithPlacement(assetData, placement.caption);

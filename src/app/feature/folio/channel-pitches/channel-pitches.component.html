@@ -1,11 +1,75 @@
 PichId {{ thePitchId() }}
-<div class="">
-  @for (item of pitchStore.pitchViewsComputed(); track $index) {
-    {{ item.title }} {{ item.id }}
-  }
-</div>
+
+<br />
 <div class="">
   @for (item of slateMembers(); track $index) {
-    {{ item?.placementView?.caption }} {{ item?.placementView?.asset?.mediaType }}
+    <div>{{ item!.placementView!.caption }} {{ item!.placementView!.asset!.mediaType }} {{ item!.placementView!.asset!.sourceId }}</div>
   }
+</div>
+
+<div class="slatePortion" style="padding-top: 5px">
+  <div class="horizontal-scroll">
+    <div style="width: 45%">
+      TopicId: {{ folioStore.folioIdSelected() }}; Members Available = {{ placementsLocal().length }}
+
+      <div class="slatePlacementContent">
+        <div
+          cdkDropList
+          #availableList="cdkDropList"
+          id="availableDropList"
+          [cdkDropListData]="slateMembersAvailable()"
+          [cdkDropListConnectedTo]="[rankedList]"
+          (cdkDropListDropped)="drop($event)">
+          <div class="folio-list">
+            @for (candidate of slateMembersAvailable(); track candidate) {
+              <div
+                cdkDrag
+                class="folio"
+                (click)="moveFolioPlacementToPitch(candidate)"
+                (keydown)="moveFolioPlacementToPitch(candidate)"
+                [attr.tabindex]="candidate.placementView.caption">
+                <a class="folio-unranked" [routerLink]="false ? ['/content', candidate.placementView.caption] : null">
+                  {{ candidate.placementView.caption }}
+                  {{ candidate.id }}:
+                  {{ candidate.placementView.id }}
+                </a>
+                <span class="lastCol-member">+</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="width: 45%; padding-left: 5px">
+      PitchId: {{ pitchStore.currentContestView().slateView.contestId }}; SlateID: {{ pitchStore.currentContestView().slateId }}; Members
+      Added =
+      {{ pitchedCandidatesOnList().length }}
+
+      <div class="folio-container">
+        <div
+          cdkDropList
+          #rankedList="cdkDropList"
+          id="rankedDropList"
+          [class.border-on-empty]="pitchedCandidatesOnList().length === 0"
+          [cdkDropListData]="pitchedCandidatesOnList()"
+          [cdkDropListConnectedTo]="[availableList]"
+          (cdkDropListDropped)="drop($event)">
+          <div class="folio-list ranked">
+            @for (slateMember of pitchedCandidatesOnList(); track slateMember.id) {
+              <div cdkDrag class="folio" id="cand-{{ slateMember.placementView.id }}" [attr.tabindex]="slateMember.placementView.id">
+                <span class="folio-index" cdkDragHandle>{{ $index + 1 }}</span>
+                <span class="folio-name" cdkDragHandle>
+                  {{ slateMember.placementView.caption }}
+                  {{ slateMember.id }}:{{ slateMember.placementId }}:{{ slateMember.placementView.id }}:
+                  {{ slateMember.placementView.asset.sourceId }}:
+                  {{ slateMember.placementView.extendedCaptions?.[0]?.shortCode ?? '--' }}
+                </span>
+                <!-- <button class="lastCol-member" [routerLink]="['/content', slateMember.contentEntity.id]">&#8594;</button> -->
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

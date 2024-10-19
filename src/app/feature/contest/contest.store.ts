@@ -7,7 +7,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, map, of, pipe, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { environment } from '../../../environments/environment';
-import { pitchInit, contestViewInit, slateViewInit, slateInit, slateMemberInit, placementViewInit } from '../../core/models/initValues';
+import { pitchInit, pitchViewInit, slateViewInit, slateInit, slateMemberInit, placementViewInit } from '../../core/models/initValues';
 import { FolioStore } from '../folio/folio.store';
 
 export const ContestStore = signalStore(
@@ -26,8 +26,8 @@ export const ContestStore = signalStore(
     isAddingSlate: false,
     isAddingSlateMember: false,
 
-    currentContestView: contestViewInit,
-    allContestViews: [contestViewInit],
+    currentContestView: pitchViewInit,
+    allContestViews: [pitchViewInit],
 
     voterSlates: [slateViewInit],
     voterSlate: slateViewInit,
@@ -86,7 +86,7 @@ export const ContestStore = signalStore(
   withComputed(store => {
     return {
       pitchViewSelected: computed<PitchView>(
-        () => store.pitchViewsComputed().filter(p => p.id === store.pitchIdSelected())[0] ?? contestViewInit
+        () => store.pitchViewsComputed().filter(p => p.id === store.pitchIdSelected())[0] ?? pitchViewInit
       ),
     };
   }),

@@ -118,7 +118,7 @@ export const pitchInit: Pitch = {
   title: '',
   description: '',
 };
-export const contestViewInit: PitchView = {
+export const pitchViewInit: PitchView = {
   id: 0,
   authorId: '',
   folioId: 0,
