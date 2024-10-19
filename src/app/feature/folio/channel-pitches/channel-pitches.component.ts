@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
 import { ContestNewComponent } from '../../contest/contest-new/contest-new.component';
 import { AuthorStore } from '../../author/author.store';
 import { ContestStore } from '../../contest/contest.store';
@@ -26,26 +26,26 @@ import { RouterLink } from '@angular/router';
   templateUrl: './channel-pitches.component.html',
   styleUrl: './channel-pitches.component.scss',
 })
-export class ChannelPitchesComponent {
+export class ChannelPitchesComponent implements OnInit {
   authorStore = inject(AuthorStore);
   pitchStore = inject(ContestStore);
   folioStore = inject(FolioStore);
   author = this.authorStore.authorLoggedIn();
 
-  folioMembers = computed<PlacementView[]>(() => this.folioStore.folioViewSelected().placementViews);
+  folioMembersx = computed<PlacementView[]>(() => this.folioStore.folioViewSelected().placementViews);
+  folioMembers = input.required<PlacementView[]>();
+  pitchViews = input<PitchView[]>();
+
+  folioIdSelected = computed<number>(() => this.folioStore.folioIdSelected());
 
   thePitchId = computed<number>(() => this.pitchStore.pitchIdSelected());
   thePitch = computed<PitchView>(() => this.pitchStore.pitchViewSelected());
 
-  slateMembersAvailable = signal<SlateMemberView[]>([]);
-
-  pitchedCandidatesInStore = computed<SlateMemberView[]>(() => this.pitchStore.pitchViewSelected().slateView.slateMemberViews);
-
-  pitchedCandidatesOnList = signal<SlateMemberView[]>([]);
-
   placementsLocal = signal<Placement[]>([]);
 
-  slateMembers = computed<Partial<SlateMemberView[]>>(() => {
+  slateMembersAvailable = signal<SlateMemberView[]>([]);
+  slateMembersAdded = signal<SlateMemberView[]>([]);
+  slateMembersCastFromFolio = computed<SlateMemberView[]>(() => {
     return this.folioMembers().map(folioMember => {
       return {
         id: 0,
@@ -68,7 +68,27 @@ export class ChannelPitchesComponent {
     });
   });
 
-  moveFolioPlacementToPitch(virtualSlateMemberView: SlateMemberView) {
+  closeEditor = output<boolean>();
+
+  ngOnInit(): void {
+    this.setAvailableCandidates();
+  }
+  cancel() {
+    this.closeEditor.emit(false);
+  }
+
+  setAvailableCandidates() {
+    console.log(this.pitchStore.currentPitchView().slateView.slateMemberViews);
+    this.slateMembersAdded.set(this.pitchStore.currentPitchView().slateView.slateMemberViews);
+    const rankedCandidatesIds = new Set(
+      this.pitchStore.currentPitchView().slateView.slateMemberViews.map(candidate => candidate.placementView.id)
+    );
+    this.slateMembersAvailable.set(
+      this.slateMembersCastFromFolio().filter(candidate => !rankedCandidatesIds.has(candidate.placementView.id))
+    );
+  }
+
+  addPlacementToPitch(virtualSlateMemberView: SlateMemberView) {
     //  const contentEntity = this.contentStore.allContentViews().find((c) => c.id === virtualSlateMemberView.contentEntity.id);
 
     //if (contentEntity !== undefined) {
@@ -77,11 +97,11 @@ export class ChannelPitchesComponent {
       authorId: this.author.id,
       slateId: this.thePitch().slateId,
       placementId: virtualSlateMemberView.id,
-      rankOrder: this.pitchedCandidatesOnList().length + 1,
+      rankOrder: this.slateMembersAdded().length + 1,
       placementView: virtualSlateMemberView.placementView,
     };
     console.log(slateMemberView);
-    this.pitchedCandidatesOnList.set([...this.pitchedCandidatesOnList(), slateMemberView]);
+    this.slateMembersAdded.set([...this.slateMembersAdded(), slateMemberView]);
     this.slateMembersAvailable.set(this.slateMembersAvailable().filter(t => t.placementId !== virtualSlateMemberView.placementId));
     // }
   }

@@ -27,6 +27,13 @@ export class ChannelAssetsComponent {
     return this.pitchStore.allContestViews().filter(a => a.authorId === this.authorStore.authorLoggedIn().id) ?? [];
   });
 
+  pitchesOnFolio = computed<PitchView[]>(() => {
+    return this.pitchStore.allContestViews().filter(p => p.folioId === this.folioStore.folioIdSelected()) ?? [];
+  });
+  pitchesOnFolioCount = computed<number>(() => {
+    return this.pitchesOnFolio()?.length ?? 0;
+  });
+
   firstFolioId = computed<number>(() => this.folioList()?.[0]?.id ?? 0);
 
   // constructor() {
@@ -42,7 +49,6 @@ export class ChannelAssetsComponent {
   // }
 
   selectFolioView(folio: FolioView) {
-    //this.selectedFolioView.set(folio);
     this.folioStore.setFolioSelected(folio.id);
     this.pitchStore.setPitchSelected(folio.id);
   }

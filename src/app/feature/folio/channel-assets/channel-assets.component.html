@@ -18,14 +18,13 @@
       <div class="placement-list">
         @for (item of folioMembers(); track $index) {
           <div class="placement-list-item" (click)="displayAsset(item)" (keydown)="displayAsset(item)" tabindex="0">
-            {{ item.asset.mediaType === 'folio' ? '- ' : '' }} {{ item.caption }} -- {{ item.asset.mediaType }}
+            {{ item.asset.mediaType === 'folio' ? '- ' : '' }} {{ item.caption }}
           </div>
         }
       </div>
     } @else {
-      == Pitch List
       <div class="pitch-list">
-        <mh5-channel-pitches />
+        <mh5-channel-pitches [folioMembers]="folioMembers()" />
       </div>
     }
   </div>

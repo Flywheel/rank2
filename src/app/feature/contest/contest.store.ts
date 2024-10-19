@@ -26,7 +26,7 @@ export const ContestStore = signalStore(
     isAddingSlate: false,
     isAddingSlateMember: false,
 
-    currentContestView: pitchViewInit,
+    currentPitchView: pitchViewInit,
     allContestViews: [pitchViewInit],
 
     voterSlates: [slateViewInit],
@@ -70,7 +70,7 @@ export const ContestStore = signalStore(
       pitchViewsComputed: computed<PitchView[]>(() =>
         store.pitches().map(pitch => ({
           ...pitch,
-          slateId: store.slateViewsComputed().find(s => s.id === pitch.id)?.contestId ?? 0,
+          slateId: store.slateViewsComputed().find(s => s.id === pitch.id)?.pitchId ?? 0,
           slateView: store.slateViewsComputed().find(s => s.id === pitch.id) ?? slateViewInit,
         }))
       ),
@@ -162,8 +162,8 @@ export const ContestStore = signalStore(
           }),
           tap(contestView =>
             updateState(store, '[ContestView] -- From Cache --Load By Id Success', {
-              currentContestView: contestView,
-              slateView: store.allContestSlateViewsComputed().filter(a => a.contestId === contestView.id)[0] ?? slateViewInit,
+              currentPitchView: contestView,
+              slateView: store.allContestSlateViewsComputed().filter(a => a.pitchId === contestView.id)[0] ?? slateViewInit,
               isLoading: false,
             })
           )
@@ -176,9 +176,9 @@ export const ContestStore = signalStore(
           isLoading: true,
         });
         let updatedAuthorSlates = store.voterSlates();
-        const slateExists = updatedAuthorSlates.some(b => b.contestId === ballot.contestId);
+        const slateExists = updatedAuthorSlates.some(b => b.pitchId === ballot.pitchId);
         if (slateExists) {
-          updatedAuthorSlates = updatedAuthorSlates.map(b => (b.contestId === ballot.contestId ? ballot : b));
+          updatedAuthorSlates = updatedAuthorSlates.map(b => (b.pitchId === ballot.pitchId ? ballot : b));
         } else {
           updatedAuthorSlates = [...updatedAuthorSlates, ballot];
         }

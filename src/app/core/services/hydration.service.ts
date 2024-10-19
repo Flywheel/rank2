@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { AuthorStore } from '../../feature/author/author.store';
 import { FolioStore } from '../../feature/folio/folio.store';
 import { ContestStore } from '../../feature/contest/contest.store';
-import { theData } from '../../../mocks/data-from-store3';
+import { theData } from '../../../mocks/mockdataForHydration';
 import { Asset, AssetImporter, Folio, FolioImporter, Placement } from '../models/interfaces';
 import { environment } from '../../../environments/environment';
 

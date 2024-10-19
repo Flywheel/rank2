@@ -125,7 +125,7 @@ export const contestList: Pitch[] = contestsData.map(data => ({
 export const slateList: Slate[] = contestList.map((contest, index) => ({
   id: generateSlateId(),
   authorId: contest.authorId,
-  contestId: contest.id,
+  pitchId: contest.id,
   isTopSlate: index === 0, // First contest has top slate
 }));
 
@@ -139,7 +139,7 @@ export const slateMemberList: SlateMember[] = [];
 
 Object.entries(slateMembersMapping).forEach(([title, placementCaptions]) => {
   const contest = contestList.find(c => c.title === title);
-  const slate = slateList.find(s => s.contestId === contest?.id);
+  const slate = slateList.find(s => s.pitchId === contest?.id);
   placementCaptions.forEach((caption, index) => {
     const placement = placementList.find(p => p.caption === caption);
     const slateMember: SlateMember = {
@@ -170,7 +170,7 @@ export const slateListView: SlateView[] = slateList.map(slate => {
 });
 
 export const contestViewList: PitchView[] = contestList.map(contest => {
-  const slate = slateListView.find(s => s.contestId === contest.id);
+  const slate = slateListView.find(s => s.pitchId === contest.id);
   return {
     ...contest,
     slateId: slate?.id ?? 0,

@@ -80,7 +80,7 @@ export const folioViewInit: FolioView = {
 export const slateInit: Slate = {
   id: 0,
   authorId: '',
-  contestId: 0,
+  pitchId: 0,
   isTopSlate: false,
 };
 
@@ -103,7 +103,7 @@ export const slateMemberViewInit: SlateMemberView = {
 
 export const slateViewInit: SlateView = {
   id: 0,
-  contestId: 0,
+  pitchId: 0,
   authorId: '',
   slateMemberViews: [],
   isTopSlate: false,

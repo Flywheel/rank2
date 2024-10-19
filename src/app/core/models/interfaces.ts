@@ -86,7 +86,7 @@ export interface Pitch {
 export interface Slate {
   id: number;
   authorId: string;
-  contestId: number;
+  pitchId: number;
   isTopSlate: boolean;
 }
 

@@ -1,17 +1,9 @@
-PichId {{ thePitchId() }}
-
-<br />
-<div class="">
-  @for (item of slateMembers(); track $index) {
-    <div>{{ item!.placementView!.caption }} {{ item!.placementView!.asset!.mediaType }} {{ item!.placementView!.asset!.sourceId }}</div>
-  }
-</div>
+PitchId {{ thePitchId() }}
 
 <div class="slatePortion" style="padding-top: 5px">
   <div class="horizontal-scroll">
     <div style="width: 45%">
-      TopicId: {{ folioStore.folioIdSelected() }}; Members Available = {{ placementsLocal().length }}
-
+      <div class="pitch-maker-header">TopicId: {{ folioStore.folioIdSelected() }}; Members Available = {{ placementsLocal().length }}</div>
       <div class="slatePlacementContent">
         <div
           cdkDropList
@@ -25,8 +17,8 @@ PichId {{ thePitchId() }}
               <div
                 cdkDrag
                 class="folio"
-                (click)="moveFolioPlacementToPitch(candidate)"
-                (keydown)="moveFolioPlacementToPitch(candidate)"
+                (click)="addPlacementToPitch(candidate)"
+                (keydown)="addPlacementToPitch(candidate)"
                 [attr.tabindex]="candidate.placementView.caption">
                 <a class="folio-unranked" [routerLink]="false ? ['/content', candidate.placementView.caption] : null">
                   {{ candidate.placementView.caption }}
@@ -41,21 +33,22 @@ PichId {{ thePitchId() }}
       </div>
     </div>
     <div style="width: 45%; padding-left: 5px">
-      PitchId: {{ pitchStore.currentContestView().slateView.contestId }}; SlateID: {{ pitchStore.currentContestView().slateId }}; Members
-      Added =
-      {{ pitchedCandidatesOnList().length }}
+      <div class="pitch-maker-header">
+        PitchId: {{ pitchStore.currentPitchView().slateView.pitchId }}; SlateID: {{ pitchStore.currentPitchView().slateId }}; Members Added
+        = {{ slateMembersAdded().length }}
+      </div>
 
       <div class="folio-container">
         <div
           cdkDropList
           #rankedList="cdkDropList"
           id="rankedDropList"
-          [class.border-on-empty]="pitchedCandidatesOnList().length === 0"
-          [cdkDropListData]="pitchedCandidatesOnList()"
+          [class.border-on-empty]="slateMembersAdded().length === 0"
+          [cdkDropListData]="slateMembersAdded()"
           [cdkDropListConnectedTo]="[availableList]"
           (cdkDropListDropped)="drop($event)">
           <div class="folio-list ranked">
-            @for (slateMember of pitchedCandidatesOnList(); track slateMember.id) {
+            @for (slateMember of slateMembersAdded(); track slateMember.id) {
               <div cdkDrag class="folio" id="cand-{{ slateMember.placementView.id }}" [attr.tabindex]="slateMember.placementView.id">
                 <span class="folio-index" cdkDragHandle>{{ $index + 1 }}</span>
                 <span class="folio-name" cdkDragHandle>

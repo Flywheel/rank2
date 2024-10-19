@@ -24,7 +24,7 @@ export class BodyComponent {
   authorId = signal<string>('');
   pitchStore = inject(ContestStore);
 
-  contest = computed<PitchView>(() => this.pitchStore.currentContestView());
+  contest = computed<PitchView>(() => this.pitchStore.currentPitchView());
   candidateList = computed(() => this.contest().slateView.slateMemberViews);
   selectedCandidateId = signal<number>(0);
 
@@ -33,7 +33,7 @@ export class BodyComponent {
   isTopSlate = computed<boolean>(() => this.contest().slateView.isTopSlate);
   preparedBallot = signal<SlateView>({
     id: 0,
-    contestId: this.contest().id,
+    pitchId: this.contest().id,
     authorId: this.authorId(),
     isTopSlate: this.isTopSlate(),
     slateMemberViews: [],
@@ -135,7 +135,7 @@ export class BodyComponent {
     });
     this.preparedBallot.set({
       id: this.contest().id,
-      contestId: this.contest().id,
+      pitchId: this.contest().id,
       authorId: '',
       isTopSlate: this.isTopSlate(),
       slateMemberViews: preparedSlateMemberViews,

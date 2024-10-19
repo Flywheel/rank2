@@ -1,9 +1,14 @@
 export const theData = {
   folios: [
     {
+      folioName: 'US Pres 2024',
+      parentFolioName: '',
+    },
+    {
       folioName: 'AimsPoll',
       parentFolioName: '',
     },
+
     {
       folioName: 'Border Integrity',
       parentFolioName: 'AimsPoll',
@@ -14,11 +19,6 @@ export const theData = {
     },
     {
       folioName: 'Oscars 2024',
-      parentFolioName: '',
-    },
-
-    {
-      folioName: 'US Pres 2024',
       parentFolioName: '',
     },
   ],
@@ -35,9 +35,92 @@ export const theData = {
       caption: 'Barbie',
       sourceId: 'pBk4NYhWNMM',
     },
+    {
+      folioName: 'Oscars 2024',
+      mediaType: 'youtube',
+      caption: 'The Holdovers',
+      sourceId: 'AhKLpJmHhIg',
+    },
+    {
+      folioName: 'Oscars 2024',
+      mediaType: 'youtube',
+      caption: 'Killers of the Flower Moon',
+      sourceId: 'EP34Yoxs3FQ',
+    },
+    {
+      folioName: 'Oscars 2024',
+      mediaType: 'youtube',
+      caption: 'Maestro',
+      sourceId: 'gJP2QblqLA0',
+    },
+    {
+      folioName: 'Oscars 2024',
+      mediaType: 'youtube',
+      caption: 'Oppenheimer',
+      sourceId: 'bK6ldnjE3Y0',
+    },
+    {
+      folioName: 'Oscars 2024',
+      mediaType: 'youtube',
+      caption: 'Poor Things',
+      sourceId: 'vjm0udI77KU',
+    },
+    {
+      folioName: 'Oscars 2024',
+      mediaType: 'youtube',
+      caption: 'The Zone of Interest',
+      sourceId: 'r-vfg3KkV54',
+    },
+    {
+      folioName: 'Border Integrity',
+      mediaType: 'Caption',
+      caption: 'Facts',
+      sourceId: '',
+    },
+    {
+      folioName: 'Border Integrity',
+      mediaType: 'Caption',
+      caption: 'Values',
+      sourceId: '',
+    },
+    {
+      folioName: 'Border Integrity',
+      mediaType: 'Caption',
+      caption: 'Propositions',
+      sourceId: '',
+    },
+    {
+      folioName: 'AimsPoll',
+      mediaType: 'Caption',
+      caption: 'Budget Control',
+      sourceId: '',
+    },
+    {
+      folioName: 'AimsPoll',
+      mediaType: 'Caption',
+      caption: 'Foreign Policy',
+      sourceId: '',
+    },
+    {
+      folioName: 'AimsPoll',
+      mediaType: 'Caption',
+      caption: 'Reproductive Health',
+      sourceId: '',
+    },
+    {
+      folioName: 'AimsPoll',
+      mediaType: 'Caption',
+      caption: 'Gun Plague',
+      sourceId: '',
+    },
+
     { folioName: 'Border Integrity', mediaType: 'Caption', caption: 'Facts', sourceId: '' },
     { folioName: 'Border Integrity', mediaType: 'Caption', caption: 'Values', sourceId: '' },
     { folioName: 'Border Integrity', mediaType: 'Caption', caption: 'Propositions', sourceId: '' },
+    { folioName: 'Minimum Wage', mediaType: 'Caption', caption: 'Facts', sourceId: '' },
+    { folioName: 'Minimum Wage', mediaType: 'Caption', caption: 'Values', sourceId: '' },
+    { folioName: 'Minimum Wage', mediaType: 'Caption', caption: 'Propositions', sourceId: '' },
+
     { folioName: 'AimsPoll', mediaType: 'Caption', caption: 'Budget Control', sourceId: '' },
     { folioName: 'AimsPoll', mediaType: 'Caption', caption: 'Foreign Policy', sourceId: '' },
     { folioName: 'AimsPoll', mediaType: 'Caption', caption: 'Reproductive Health', sourceId: '' },

@@ -38,7 +38,7 @@ export class ContestService {
     return this.http.post<Pitch>(this.contestAPIUrl, contestPrep).pipe(
       exhaustMap((newPitch: Pitch) => {
         const slatePrep: Partial<Slate> = {
-          contestId: newPitch.id,
+          pitchId: newPitch.id,
           authorId: contestPrep.authorId!,
           isTopSlate: true,
         };
@@ -109,7 +109,7 @@ export class ContestService {
       })
     );
   }
-  slateCreateForContest2({ contestId, authorId, isTopSlate }: Slate): Observable<Slate> {
+  slateCreateForContest2({ pitchId: contestId, authorId, isTopSlate }: Slate): Observable<Slate> {
     return this.http.post<Slate>(this.slateAPIUrl, { contestId, authorId, isTopSlate }).pipe(
       catchError(error => {
         if (environment.ianConfig.showLogs) console.log('error', error);
