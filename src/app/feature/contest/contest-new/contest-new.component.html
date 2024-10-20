@@ -1,38 +1,44 @@
-<form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form-container">
-  <div class="form-row">
-    @if (formGroup.get('title')?.invalid && formGroup.get('title')?.touched) {
-      <label for="title" class="warning">Contest Title is required</label>
-    } @else {
-      <label for="title">Contest Title</label>
-    }
-    <input id="title" formControlName="title" type="text" />
-  </div>
+@if (showPopup()) {
+  <div class="modal-overlay">
+    <div class="modal">
+      <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form-container">
+        <div class="form-row">
+          @if (formGroup.get('title')?.invalid && formGroup.get('title')?.touched) {
+            <label for="title" class="warning">Contest Title is required</label>
+          } @else {
+            <label for="title">Contest Title</label>
+          }
+          <input id="title" formControlName="title" type="text" />
+        </div>
 
-  <div class="form-row">
-    @if (formGroup.get('description')?.invalid && formGroup.get('description')?.touched) {
-      <label for="description" class="warning">Contest Description is required</label>
-    } @else {
-      <label for="description">Contest Description</label>
-    }
-    <input id="description" formControlName="description" type="text" />
-  </div>
+        <div class="form-row">
+          @if (formGroup.get('description')?.invalid && formGroup.get('description')?.touched) {
+            <label for="description" class="warning">Contest Description is required</label>
+          } @else {
+            <label for="description">Contest Description</label>
+          }
+          <input id="description" formControlName="description" type="text" />
+        </div>
 
-  <div class="form-row">
-    <label for="opens">Opens</label>
-    <input id="opens" formControlName="opens" type="date" />
-    @if (formGroup.get('opens')?.invalid && formGroup.get('opens')?.touched) {
-      <div>Opening date is required.</div>
-    }
-  </div>
+        <div class="form-row">
+          <label for="opens">Opens</label>
+          <input id="opens" formControlName="opens" type="date" />
+          @if (formGroup.get('opens')?.invalid && formGroup.get('opens')?.touched) {
+            <div>Opening date is required.</div>
+          }
+        </div>
 
-  <div class="form-row">
-    <label for="closes">Closes</label>
-    <input id="closes" formControlName="closes" type="date" />
-    @if (formGroup.get('closes')?.invalid && formGroup.get('closes')?.touched) {
-      <div>Closing date is required.</div>
-    }
-  </div>
+        <div class="form-row">
+          <label for="closes">Closes</label>
+          <input id="closes" formControlName="closes" type="date" />
+          @if (formGroup.get('closes')?.invalid && formGroup.get('closes')?.touched) {
+            <div>Closing date is required.</div>
+          }
+        </div>
 
-  <button class="col1" type="submit" [disabled]="formGroup.invalid">Add Contest</button>
-  <button class="col2" (click)="cancel()">Cancel</button>
-</form>
+        <button class="col1" type="submit" [disabled]="formGroup.invalid">Add Contest</button>
+        <button class="col2" (click)="cancel()">Cancel</button>
+      </form>
+    </div>
+  </div>
+}

@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, untracked } from '@angular/core';
+import { Component, computed, effect, inject, input, signal, untracked } from '@angular/core';
 import { PitchView, FolioView, PlacementView } from '../../../core/models/interfaces';
 import { FolioStore } from '../folio.store';
 import { ContestStore } from '../../contest/contest.store';
@@ -18,6 +18,7 @@ export class ChannelAssetsComponent {
   pitchStore = inject(ContestStore);
   folioList = input<FolioView[]>([]);
   tabSelected = input<string>('');
+  showPitchMananger = signal<boolean>(false);
 
   folioMembers = computed<PlacementView[]>(() => {
     return this.folioStore.folioViewSelected().placementViews ?? [];
@@ -28,7 +29,7 @@ export class ChannelAssetsComponent {
   });
 
   pitchesOnFolio = computed<PitchView[]>(() => {
-    return this.pitchStore.allContestViews().filter(p => p.folioId === this.folioStore.folioIdSelected()) ?? [];
+    return this.pitchStore.pitchViewsComputed().filter(p => p.folioId === this.folioStore.folioIdSelected()) ?? [];
   });
   pitchesOnFolioCount = computed<number>(() => {
     return this.pitchesOnFolio()?.length ?? 0;
@@ -55,5 +56,8 @@ export class ChannelAssetsComponent {
 
   displayAsset(placement: PlacementView) {
     console.log(placement.asset.mediaType);
+  }
+  editPitch(pitch: PitchView) {
+    this.showPitchMananger.set(true);
   }
 }

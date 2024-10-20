@@ -34,7 +34,7 @@ export class ContestService {
     return this.http.get<PitchView>(`${this.contestViewAPIUrl}/${id}`);
   }
 
-  contestCreateWithSlate(contestPrep: Partial<Pitch>): Observable<{ newPitch: Pitch; newSlate: Slate }> {
+  pitchCreate(contestPrep: Partial<Pitch>): Observable<{ newPitch: Pitch; newSlate: Slate }> {
     return this.http.post<Pitch>(this.contestAPIUrl, contestPrep).pipe(
       exhaustMap((newPitch: Pitch) => {
         const slatePrep: Partial<Slate> = {

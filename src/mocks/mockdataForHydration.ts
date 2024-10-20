@@ -71,48 +71,6 @@ export const theData = {
       caption: 'The Zone of Interest',
       sourceId: 'r-vfg3KkV54',
     },
-    {
-      folioName: 'Border Integrity',
-      mediaType: 'Caption',
-      caption: 'Facts',
-      sourceId: '',
-    },
-    {
-      folioName: 'Border Integrity',
-      mediaType: 'Caption',
-      caption: 'Values',
-      sourceId: '',
-    },
-    {
-      folioName: 'Border Integrity',
-      mediaType: 'Caption',
-      caption: 'Propositions',
-      sourceId: '',
-    },
-    {
-      folioName: 'AimsPoll',
-      mediaType: 'Caption',
-      caption: 'Budget Control',
-      sourceId: '',
-    },
-    {
-      folioName: 'AimsPoll',
-      mediaType: 'Caption',
-      caption: 'Foreign Policy',
-      sourceId: '',
-    },
-    {
-      folioName: 'AimsPoll',
-      mediaType: 'Caption',
-      caption: 'Reproductive Health',
-      sourceId: '',
-    },
-    {
-      folioName: 'AimsPoll',
-      mediaType: 'Caption',
-      caption: 'Gun Plague',
-      sourceId: '',
-    },
 
     { folioName: 'Border Integrity', mediaType: 'Caption', caption: 'Facts', sourceId: '' },
     { folioName: 'Border Integrity', mediaType: 'Caption', caption: 'Values', sourceId: '' },

@@ -40,4 +40,7 @@ $highlight-background-color: #002;
   a {
     color: aliceblue;
   }
+  &:hover {
+    text-decoration: underline;
+  }
 }

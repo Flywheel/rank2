@@ -4,7 +4,7 @@ import { Pitch, PitchView, SlateMember, SlateView, SlateMemberView } from '../..
 import { ContestService } from '../contest/contest.service';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { exhaustMap, map, of, pipe, switchMap, tap } from 'rxjs';
+import { catchError, exhaustMap, map, of, pipe, switchMap, tap, throwError } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { environment } from '../../../environments/environment';
 import { pitchInit, pitchViewInit, slateViewInit, slateInit, slateMemberInit, placementViewInit } from '../../core/models/initValues';
@@ -91,6 +91,15 @@ export const ContestStore = signalStore(
     };
   }),
 
+  withMethods(store => {
+    return {
+      async pitchStateToLocalStorage() {
+        updateState(store, '[Pitch] WriteToLocalStorage Start', { isLoading: true });
+        store.writeToStorage();
+        updateState(store, '[Pitch] WriteToLocalStorage Success', { isLoading: false });
+      },
+    };
+  }),
   withMethods(store => {
     const dbContest = inject(ContestService);
     return {
@@ -191,11 +200,11 @@ export const ContestStore = signalStore(
 
       //#endregion Ballot
 
-      contestAddWithSlate(contest: Pitch) {
-        if (environment.ianConfig.showLogs) console.log('addContest', contest);
-        updateState(store, '[Contest] Add Start', { isLoading: true });
+      pitchCreate(pitch: Pitch) {
+        if (environment.ianConfig.showLogs) console.log(pitch);
+        updateState(store, '[Pitch] Add Start', { isLoading: true });
         dbContest
-          .contestCreateWithSlate(contest)
+          .pitchCreate(pitch)
           .pipe(
             tap({
               next: ({ newPitch, newSlate }) => {
@@ -203,15 +212,16 @@ export const ContestStore = signalStore(
                   console.log(newPitch);
                   console.log(newSlate);
                 }
-                updateState(store, '[Contest] Add Success', {
+                updateState(store, '[Pitch] Add Success', {
                   pitches: [...store.pitches(), newPitch],
                   slates: [...store.slates(), newSlate],
                   isLoading: false,
                 });
+                store.writeToStorage();
               },
               error: error => {
                 if (environment.ianConfig.showLogs) console.log('error', error);
-                updateState(store, '[Contest] Add Failed', { isLoading: false });
+                updateState(store, '[Pitch] Add Failed', { isLoading: false });
               },
             })
           )

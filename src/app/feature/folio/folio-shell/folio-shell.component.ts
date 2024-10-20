@@ -34,8 +34,6 @@ import { DirectComponent } from '../../contest/direct/direct.component';
 })
 export class FolioShellComponent {
   authorStore = inject(AuthorStore);
-  localStorageService = inject(HydrationService);
-  isHydrated = false;
 
   tabs: TabList[] = [
     { name: 'Assets', title: 'Assets' },
@@ -46,7 +44,7 @@ export class FolioShellComponent {
 
   showViewer = false;
   theFolios = this.authorStore.authorFolioViews;
-  // //  thePitches  = this.authorStore.authorPitchViews;
+  thePitches = this.authorStore.authorPitchViews;
   newPitch = signal(false);
   newPlacement = signal(false);
 
@@ -63,14 +61,14 @@ export class FolioShellComponent {
     this.newPitch.set(false);
   }
 
-  runLog() {
-    if (!this.isHydrated) {
-      this.localStorageService.hydrateStuff();
-      this.isHydrated = true;
-    }
+  // runLog() {
+  //   if (!this.isHydrated) {
+  //     this.localStorageService.hydrateStuff();
+  //     this.isHydrated = true;
+  //   }
 
-    if (environment.ianConfig.showLogs) {
-      console.log(this.authorStore.folioTreeData());
-    }
-  }
+  //   if (environment.ianConfig.showLogs) {
+  //     console.log(this.authorStore.folioTreeData());
+  //   }
+  // }
 }

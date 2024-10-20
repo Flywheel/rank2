@@ -5,6 +5,8 @@ import { Pitch } from '../../../core/models/interfaces';
 import { ContestStore } from '../contest.store';
 import { environment } from '../../../../environments/environment';
 import { FolioStore } from '../../folio/folio.store';
+import { HydrationService } from '../../../core/services/hydration.service';
+import { AuthorStore } from '../../author/author.store';
 
 @Component({
   selector: 'mh5-direct',
@@ -14,11 +16,24 @@ import { FolioStore } from '../../folio/folio.store';
   styleUrl: './direct.component.scss',
 })
 export class DirectComponent {
+  authorStore = inject(AuthorStore);
   pitchStore = inject(ContestStore);
   folioStore = inject(FolioStore);
   db = inject(ContestService);
   contestObservable = computed(() => this.db.contestsGetAll());
 
+  localStorageService = inject(HydrationService);
+  isHydrated = false;
+  runLog() {
+    if (!this.isHydrated) {
+      this.localStorageService.hydrateStuff();
+      this.isHydrated = true;
+    }
+
+    if (environment.ianConfig.showLogs) {
+      console.log(this.authorStore.folioTreeData());
+    }
+  }
   test1() {
     this.db.contestsGetAll().subscribe(data => {
       console.log(data);

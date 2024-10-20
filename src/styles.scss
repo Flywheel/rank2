@@ -199,3 +199,13 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   z-index: 1001;
 }
+
+.adminButton {
+  background-color: #bb8;
+  width: 30%;
+  color: #334;
+  border-radius: 4px;
+  padding: 4px;
+  margin: 4px;
+  cursor: pointer;
+}

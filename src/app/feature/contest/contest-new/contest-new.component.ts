@@ -4,6 +4,7 @@ import { ContestStore } from '../../contest/contest.store';
 import { Pitch } from '../../../core/models/interfaces';
 import { environment } from '../../../../environments/environment';
 import { AuthorStore } from '../../author/author.store';
+import { FolioStore } from '../../folio/folio.store';
 
 @Component({
   selector: 'mh5-contest-new',
@@ -14,6 +15,7 @@ import { AuthorStore } from '../../author/author.store';
 })
 export class ContestNewComponent {
   authorStore = inject(AuthorStore);
+  folioStore = inject(FolioStore);
   pichStore = inject(ContestStore);
 
   formGroup: FormGroup;
@@ -29,12 +31,12 @@ export class ContestNewComponent {
     const nextWeekDate = nextWeek.toISOString().split('T')[0]; // Get next week's date in YYYY-MM-DD format
 
     this.formGroup = this.fb.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required],
+      title: [this.folioStore.folioViewSelected().folioName, Validators.required],
+      description: [this.folioStore.folioViewSelected().folioName, Validators.required],
       opens: [today, Validators.required],
       closes: [nextWeekDate, Validators.required],
       authorId: [this.authorStore.authorLoggedIn().id, Validators.required],
-      folioId: [this.authorStore.authorSelectedView().authorFolio.id, Validators.required],
+      folioId: [this.folioStore.folioIdSelected(), Validators.required],
     });
   }
 
@@ -42,7 +44,7 @@ export class ContestNewComponent {
     if (this.formGroup.valid) {
       const newContest: Pitch = this.formGroup.value;
       // if (environment.ianConfig.showLogs) console.log('Submitting new contest', newContest);
-      this.pichStore.contestAddWithSlate(newContest);
+      this.pichStore.pitchCreate(newContest);
       this.closeNewPitchEditor.emit(false);
     }
   }

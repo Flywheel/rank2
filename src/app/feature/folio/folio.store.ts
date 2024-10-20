@@ -83,9 +83,9 @@ export const FolioStore = signalStore(
   withMethods(store => {
     return {
       async folioStateToLocalStorage() {
-        updateState(store, '[Author] WriteToLocalStorage Start', { isLoading: true });
+        updateState(store, '[Folio] WriteToLocalStorage Start', { isLoading: true });
         store.writeToStorage();
-        updateState(store, '[Author] WriteToLocalStorage Success', { isLoading: false });
+        updateState(store, '[Folio] WriteToLocalStorage Success', { isLoading: false });
       },
     };
   }),
