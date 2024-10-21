@@ -17,9 +17,9 @@
     <div class="right-panel">
       @if (tabSelected() === 'Assets') {
         <div class="placement-list">
-          @for (item of folioMembers(); track $index) {
+          @for (item of placements(); track $index) {
             <div class="placement-list-item" (click)="displayAsset(item)" (keydown)="displayAsset(item)" tabindex="0">
-              {{ item.asset.mediaType === 'folio' ? '- ' : '' }} {{ item.caption }}
+              {{ item.assetView.mediaType === 'folio' ? '- ' : '' }} {{ item.caption }}
             </div>
           }
         </div>
@@ -39,5 +39,8 @@
     </div>
   </div>
 } @else {
-  <mh5-channel-pitches [folioMembers]="folioMembers()" />
+  <mh5-channel-pitches [folioMembers]="placements()" />
+}
+@if (!hidePlacementDisplay()) {
+  <mh5-viewer [placementView]="placementToDisplay()" />
 }

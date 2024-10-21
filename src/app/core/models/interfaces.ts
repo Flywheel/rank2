@@ -64,7 +64,7 @@ export interface PlacementCaptions {
 }
 
 export interface PlacementView extends Placement {
-  asset: AssetView;
+  assetView: AssetView;
   extendedCaptions?: PlacementCaptions[];
 }
 

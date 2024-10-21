@@ -4,11 +4,13 @@ import { FolioStore } from '../folio.store';
 import { ContestStore } from '../../contest/contest.store';
 import { AuthorStore } from '../../author/author.store';
 import { ChannelPitchesComponent } from '../channel-pitches/channel-pitches.component';
+import { pitchViewInit, placementViewInit } from '../../../core/models/initValues';
+import { ViewerComponent } from '../../../core/viewer/viewer/viewer.component';
 
 @Component({
   selector: 'mh5-channel-assets',
   standalone: true,
-  imports: [ChannelPitchesComponent],
+  imports: [ChannelPitchesComponent, ViewerComponent],
   templateUrl: './channel-assets.component.html',
   styleUrl: './channel-assets.component.scss',
 })
@@ -20,7 +22,7 @@ export class ChannelAssetsComponent {
   tabSelected = input<string>('');
   showPitchMananger = signal<boolean>(false);
 
-  folioMembers = computed<PlacementView[]>(() => {
+  placements = computed<PlacementView[]>(() => {
     return this.folioStore.folioViewSelected().placementViews ?? [];
   });
 
@@ -54,10 +56,25 @@ export class ChannelAssetsComponent {
     this.pitchStore.setPitchSelected(folio.id);
   }
 
+  hidePlacementDisplay = signal<boolean>(true);
+  placementToDisplay = signal<PlacementView>(placementViewInit);
+
   displayAsset(placement: PlacementView) {
-    console.log(placement.asset.mediaType);
+    if (placement) {
+      this.hidePlacementDisplay.set(false);
+      this.placementToDisplay.set(placement);
+    } else {
+      this.hidePlacementDisplay.set(true);
+      this.placementToDisplay.set(placementViewInit);
+    }
+    console.log(placement.assetView.mediaType);
+
+    //create event for logging placement seen
   }
+
+  pitchToDisplay = signal<PitchView>(pitchViewInit);
   editPitch(pitch: PitchView) {
     this.showPitchMananger.set(true);
+    this.pitchToDisplay.set(pitch);
   }
 }

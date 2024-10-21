@@ -98,8 +98,8 @@ export const AuthorStore = signalStore(
         folio.level = depth;
         retval.push(folio);
         folio.placementViews.forEach(placement => {
-          if (placement.asset.mediaType === 'folio') {
-            const childFolio = folios().find(folio => folio.id === Number(placement.asset.sourceId));
+          if (placement.assetView.mediaType === 'folio') {
+            const childFolio = folios().find(folio => folio.id === Number(placement.assetView.sourceId));
             if (childFolio) {
               traverseFolios(childFolio, depth + 1, newPath);
             }
@@ -274,9 +274,9 @@ function buildTreeNode(folioView: FolioView, depth: number, allFolios: FolioView
   };
 
   folioView.placementViews.forEach(placement => {
-    if (placement.asset.mediaType === 'folio') {
+    if (placement.assetView.mediaType === 'folio') {
       // const referencedFolio = this.getFolioById(Number(placement.asset.sourceId), allFolios);
-      const referencedFolio = allFolios.find(folio => folio.id === Number(placement.asset.sourceId));
+      const referencedFolio = allFolios.find(folio => folio.id === Number(placement.assetView.sourceId));
       if (referencedFolio) {
         node.children?.push(buildTreeNode(referencedFolio, depth + 1, allFolios, newPath));
       }

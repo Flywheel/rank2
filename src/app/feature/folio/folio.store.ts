@@ -49,7 +49,7 @@ export const FolioStore = signalStore(
           .filter(a => a.id > 0)
           .map(placement => ({
             ...placement,
-            asset: store.assetViewsComputed().find(a => a.id === placement.assetId) ?? assetViewInit,
+            assetView: store.assetViewsComputed().find(a => a.id === placement.assetId) ?? assetViewInit,
           }))
       ),
     };

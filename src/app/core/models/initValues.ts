@@ -61,7 +61,7 @@ export const placementViewInit: PlacementView = {
   assetId: 0,
   folioId: 0,
   caption: '',
-  asset: assetViewInit,
+  assetView: assetViewInit,
 };
 
 export const folioInit: Folio = {

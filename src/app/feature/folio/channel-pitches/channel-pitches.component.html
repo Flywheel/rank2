@@ -54,7 +54,7 @@ PitchId {{ thePitchId() }}
                 <span class="folio-name" cdkDragHandle>
                   {{ slateMember.placementView.caption }}
                   {{ slateMember.id }}:{{ slateMember.placementId }}:{{ slateMember.placementView.id }}:
-                  {{ slateMember.placementView.asset.sourceId }}:
+                  {{ slateMember.placementView.assetView.sourceId }}:
                   {{ slateMember.placementView.extendedCaptions?.[0]?.shortCode ?? '--' }}
                 </span>
                 <!-- <button class="lastCol-member" [routerLink]="['/content', slateMember.contentEntity.id]">&#8594;</button> -->

@@ -58,10 +58,10 @@ export class ChannelPitchesComponent implements OnInit {
           folioId: folioMember.folioId,
           assetId: folioMember.assetId,
           caption: folioMember.caption,
-          asset: {
+          assetView: {
             id: 0,
-            mediaType: folioMember.asset.mediaType,
-            sourceId: folioMember.asset.sourceId,
+            mediaType: folioMember.assetView.mediaType,
+            sourceId: folioMember.assetView.sourceId,
           },
         },
       } as SlateMemberView;

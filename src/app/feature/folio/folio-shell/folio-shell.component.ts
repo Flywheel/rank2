@@ -3,14 +3,12 @@ import { HeaderComponent } from '../../../core/header/header.component';
 import { FolioScrollHorizontalComponent } from '../folio-scroll-horizontal/folio-scroll-horizontal.component';
 import { FolioPlacementNewComponent } from '../folio-placement-new/folio-placement-new.component';
 import { FolioPlacementListComponent } from '../folio-placement-list/folio-placement-list.component';
-import { environment } from '../../../../environments/environment';
 import { AuthorStore } from '../../author/author.store';
 import { ChannelTreeComponent } from '../channel-tree/channel-tree.component';
 import { TabList } from '../../../core/models/interfaces';
 import { IconPlusComponent } from '../../../core/svg/icon-plus';
 import { ChannelAssetsComponent } from '../channel-assets/channel-assets.component';
 import { ChannelPitchesComponent } from '../channel-pitches/channel-pitches.component';
-import { HydrationService } from '../../../core/services/hydration.service';
 import { ContestNewComponent } from '../../contest/contest-new/contest-new.component';
 import { DirectComponent } from '../../contest/direct/direct.component';
 

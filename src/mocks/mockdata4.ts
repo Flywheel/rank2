@@ -96,7 +96,7 @@ export const placementList: Placement[] = initialAssetPlacementData.map((data, i
 
 export const placementViewList: PlacementView[] = placementList.map(placement => ({
   ...placement,
-  asset: assetViewList.find(asset => asset.id === placement.assetId)!,
+  assetView: assetViewList.find(asset => asset.id === placement.assetId)!,
 }));
 
 export const folioViewList: FolioView[] = folioList.map(folio => {

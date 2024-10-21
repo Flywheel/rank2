@@ -40,7 +40,7 @@ export class BodyComponent {
   });
   contentParams = computed<string>(() => {
     const selected = this.candidateList().filter(candidate => candidate.id === this.selectedCandidateId())[0];
-    return selected ? selected.placementView.asset.mediaType + '..i..' + selected.placementView.asset.sourceId : '';
+    return selected ? selected.placementView.assetView.mediaType + '..i..' + selected.placementView.assetView.sourceId : '';
   });
 
   constructor() {
