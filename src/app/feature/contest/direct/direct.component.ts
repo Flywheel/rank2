@@ -56,13 +56,7 @@ export class DirectComponent {
   }
 
   testService() {
-    this.db.contestsGetAll().subscribe(data => {
-      console.log(data);
-    });
-    // this.db.contestGetById(4).subscribe(data => {
-    //   console.log(data);
-    // });
-    this.db.slateGetAll().subscribe(data => {
+    this.db.addSlateMember({ id: 0, slateId: 4, placementId: 36, rankOrder: 1 }).subscribe(data => {
       console.log(data);
     });
 
@@ -78,7 +72,7 @@ export class DirectComponent {
       console.log(this.folioStore.placementViewsComputed());
       console.log(this.folioStore.folioViewsComputed());
 
-      console.log('SlateMember-Slate-Piitch : Stores');
+      console.log('SlateMember-Slate-Pitch : Stores');
       console.log(this.pitchStore.slateMembers());
       console.log(this.pitchStore.slates());
       console.log(this.pitchStore.pitches());
@@ -88,9 +82,8 @@ export class DirectComponent {
       console.log(this.pitchStore.slateViewsComputed());
       console.log(this.pitchStore.pitchViewsComputed());
 
-      console.log('ContestSlateViewsComputed : Contest Views');
-      console.log(this.pitchStore.allContestSlateViewsComputed());
-      console.log(this.pitchStore.allContestViews());
+      console.log('pitchViewSelected');
+      console.log(this.pitchStore.pitchViewSelected());
     }
   }
 }

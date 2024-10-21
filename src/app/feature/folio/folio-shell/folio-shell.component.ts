@@ -58,15 +58,4 @@ export class FolioShellComponent {
   closeNewPitch() {
     this.newPitch.set(false);
   }
-
-  // runLog() {
-  //   if (!this.isHydrated) {
-  //     this.localStorageService.hydrateStuff();
-  //     this.isHydrated = true;
-  //   }
-
-  //   if (environment.ianConfig.showLogs) {
-  //     console.log(this.authorStore.folioTreeData());
-  //   }
-  // }
 }

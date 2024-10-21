@@ -92,7 +92,6 @@ export interface Slate {
 
 export interface SlateMember {
   id: number;
-  authorId: string;
   slateId: number;
   placementId: number;
   rankOrder: number;

@@ -144,7 +144,6 @@ Object.entries(slateMembersMapping).forEach(([title, placementCaptions]) => {
     const placement = placementList.find(p => p.caption === caption);
     const slateMember: SlateMember = {
       id: generateSlateMemberId(),
-      authorId: authorList[0].id,
       slateId: slate?.id ?? 0,
       placementId: placement?.id ?? 0,
       rankOrder: index + 1,

@@ -26,8 +26,8 @@ export const ContestStore = signalStore(
     isAddingSlate: false,
     isAddingSlateMember: false,
 
-    currentPitchView: pitchViewInit,
-    allContestViews: [pitchViewInit],
+    //  currentPitchView: pitchViewInit,
+    //  allContestViews: [pitchViewInit],
 
     voterSlates: [slateViewInit],
     voterSlate: slateViewInit,
@@ -36,11 +36,11 @@ export const ContestStore = signalStore(
     key: 'contests',
     autoSync: false,
   }),
-  withComputed(store => {
-    return {
-      allContestSlateViewsComputed: computed<SlateView[]>(() => store.allContestViews().map(c => c.slateView)),
-    };
-  }),
+  // withComputed(store => {
+  //   return {
+  //     allContestSlateViewsComputed: computed<SlateView[]>(() => store.allContestViews().map(c => c.slateView)),
+  //   };
+  // }),
 
   withComputed(store => {
     const folioStore = inject(FolioStore);
@@ -147,40 +147,40 @@ export const ContestStore = signalStore(
         updateState(store, `[Pitch] Select By Id  ${pitchId}`, { pitchIdSelected: pitchId });
       },
 
-      setCurrentContestView: rxMethod<number>(
-        pipe(
-          tap(() => {
-            updateState(store, '[ContestView] Load By Id Start', { isLoading: true });
-          }),
-          switchMap(contestId => {
-            const existingContestView = store.allContestViews().find(view => view.id === contestId);
-            if (existingContestView) {
-              return of(existingContestView);
-            } else {
-              const theContestView = dbContest.contestViewGetById(contestId).pipe(
-                tap({
-                  next: (contestView: PitchView) => {
-                    updateState(store, '[ContestView] Load By Id Success', {
-                      allContestViews: [...store.allContestViews(), contestView],
-                    });
-                  },
-                })
-              );
-              return theContestView;
-            }
-          }),
-          tap(contestView =>
-            updateState(store, '[ContestView] -- From Cache --Load By Id Success', {
-              currentPitchView: contestView,
-              slateView: store.allContestSlateViewsComputed().filter(a => a.pitchId === contestView.id)[0] ?? slateViewInit,
-              isLoading: false,
-            })
-          )
-        )
-      ),
+      // setCurrentContestView: rxMethod<number>(
+      //   pipe(
+      //     tap(() => {
+      //       updateState(store, '[ContestView] Load By Id Start', { isLoading: true });
+      //     }),
+      //     switchMap(contestId => {
+      //       const existingContestView = store.allContestViews().find(view => view.id === contestId);
+      //       if (existingContestView) {
+      //         return of(existingContestView);
+      //       } else {
+      //         const theContestView = dbContest.contestViewGetById(contestId).pipe(
+      //           tap({
+      //             next: (contestView: PitchView) => {
+      //               updateState(store, '[ContestView] Load By Id Success', {
+      //                 allContestViews: [...store.allContestViews(), contestView],
+      //               });
+      //             },
+      //           })
+      //         );
+      //         return theContestView;
+      //       }
+      //     }),
+      //     tap(contestView =>
+      //       updateState(store, '[ContestView] -- From Cache --Load By Id Success', {
+      //         currentPitchView: contestView,
+      //         slateView: store.allContestSlateViewsComputed().filter(a => a.pitchId === contestView.id)[0] ?? slateViewInit,
+      //         isLoading: false,
+      //       })
+      //     )
+      //   )
+      // ),
 
       //#region Ballot
-      async updateVoterSlate(ballot: SlateView) {
+      async updateBallot(ballot: SlateView) {
         updateState(store, `[Slate] Update Start`, {
           isLoading: true,
         });
@@ -246,24 +246,42 @@ export const ContestStore = signalStore(
       //     });
       // },
 
-      async addSlateMember(SlateMemberView: SlateMember) {
-        updateState(store, '[Contest] addContest Pending', { isLoading: true });
-        if (environment.ianConfig.showLogs) console.log('addSlateMember', SlateMemberView);
-        // return await dbContest.ContestsCreate(contest).then((newContest: Contest) => {
-        //   updateState(store, '[Contest] addContest Success', {
-        //     allContests: [...store.allContests(), newContest],
-        //     isLoading: false,
-        //   });
-        // });
+      addSlateMembers(slateMembers: SlateMember[]) {
+        updateState(store, '[SlateMember] Add Start', { isLoading: true });
+        if (environment.ianConfig.showLogs) console.log('addSlateMember', slateMembers);
+        const xx = slateMembers.map(slateMember => ({
+          id: 0,
+          placementId: slateMember.placementId,
+          slateId: slateMember.slateId,
+          rankOrder: slateMember.rankOrder,
+        }));
+        dbContest
+          .addSlateMembers(xx)
+          .pipe(
+            tap({
+              next: newMembers => {
+                if (environment.ianConfig.showLogs) console.log('newSlateMember', newMembers);
+                updateState(store, '[SlateMember] Add Success', {
+                  slateMembers: [...store.slateMembers(), ...newMembers],
+                  isLoading: false,
+                });
+              },
+              error: error => {
+                if (environment.ianConfig.showLogs) console.log('error', error);
+                updateState(store, '[SlateMember] Add Failed', { isLoading: false });
+              },
+            })
+          )
+          .subscribe();
       },
     };
   }),
 
   withHooks({
-    onInit(store) {
-      store.Contests();
-      store.setCurrentContestView(1);
-    },
+    // onInit(store) {
+    //   // store.Contests();
+    //   // store.setCurrentContestView(1);
+    // },
   })
 );
 

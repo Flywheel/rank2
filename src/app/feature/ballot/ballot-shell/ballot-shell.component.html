@@ -7,10 +7,7 @@
     <mh5-contest-scroll-horizontal />
     <mh5-folio-placement-new (closeNewPlacementEditor)="closeNewPlacement()" />
   } @else {
-    <mh5-contest-scroll-horizontal
-      [theContestsInput]="theContests()"
-      (newContestEditorStateChange)="openNewContest()"
-      (newPlacementEditorStateChange)="openNewPlacement()" />
+    <mh5-contest-scroll-horizontal (newContestEditorStateChange)="openNewContest()" (newPlacementEditorStateChange)="openNewPlacement()" />
     <mh5-body />
   }
 }

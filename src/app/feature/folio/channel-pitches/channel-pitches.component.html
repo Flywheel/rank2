@@ -1,9 +1,8 @@
-PitchId {{ thePitchId() }}
-
+Pitch: {{ pitchStore.pitchViewSelected().title }}
 <div class="slatePortion" style="padding-top: 5px">
   <div class="horizontal-scroll">
     <div style="width: 45%">
-      <div class="pitch-maker-header">TopicId: {{ folioStore.folioIdSelected() }}; Members Available = {{ placementsLocal().length }}</div>
+      <div class="pitch-maker-header">Available: {{ slateMembersAvailable().length }}</div>
       <div class="slatePlacementContent">
         <div
           cdkDropList
@@ -22,8 +21,6 @@ PitchId {{ thePitchId() }}
                 [attr.tabindex]="candidate.placementView.caption">
                 <a class="folio-unranked" [routerLink]="false ? ['/content', candidate.placementView.caption] : null">
                   {{ candidate.placementView.caption }}
-                  {{ candidate.id }}:
-                  {{ candidate.placementView.id }}
                 </a>
                 <span class="lastCol-member">+</span>
               </div>
@@ -33,10 +30,7 @@ PitchId {{ thePitchId() }}
       </div>
     </div>
     <div style="width: 45%; padding-left: 5px">
-      <div class="pitch-maker-header">
-        PitchId: {{ pitchStore.currentPitchView().slateView.pitchId }}; SlateID: {{ pitchStore.currentPitchView().slateId }}; Members Added
-        = {{ slateMembersAdded().length }}
-      </div>
+      <div class="pitch-maker-header">Added: {{ slateMembersAdded().length }}</div>
 
       <div class="folio-container">
         <div
@@ -48,14 +42,11 @@ PitchId {{ thePitchId() }}
           [cdkDropListConnectedTo]="[availableList]"
           (cdkDropListDropped)="drop($event)">
           <div class="folio-list ranked">
-            @for (slateMember of slateMembersAdded(); track slateMember.id) {
+            @for (slateMember of slateMembersAdded(); track $index) {
               <div cdkDrag class="folio" id="cand-{{ slateMember.placementView.id }}" [attr.tabindex]="slateMember.placementView.id">
                 <span class="folio-index" cdkDragHandle>{{ $index + 1 }}</span>
                 <span class="folio-name" cdkDragHandle>
                   {{ slateMember.placementView.caption }}
-                  {{ slateMember.id }}:{{ slateMember.placementId }}:{{ slateMember.placementView.id }}:
-                  {{ slateMember.placementView.assetView.sourceId }}:
-                  {{ slateMember.placementView.extendedCaptions?.[0]?.shortCode ?? '--' }}
                 </span>
                 <!-- <button class="lastCol-member" [routerLink]="['/content', slateMember.contentEntity.id]">&#8594;</button> -->
               </div>
@@ -66,3 +57,4 @@ PitchId {{ thePitchId() }}
     </div>
   </div>
 </div>
+<button class="adminButtin" (click)="submitSlate()">Submit Slate</button>

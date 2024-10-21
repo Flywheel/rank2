@@ -86,7 +86,6 @@ export const slateInit: Slate = {
 
 export const slateMemberInit: SlateMember = {
   id: 0,
-  authorId: '',
   slateId: 0,
   placementId: 0,
   rankOrder: 0,
@@ -94,7 +93,6 @@ export const slateMemberInit: SlateMember = {
 
 export const slateMemberViewInit: SlateMemberView = {
   id: 0,
-  authorId: '',
   slateId: 0,
   placementId: 0,
   rankOrder: 0,

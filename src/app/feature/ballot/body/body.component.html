@@ -8,7 +8,7 @@
     [cdkDropListConnectedTo]="[availableList]"
     (cdkDropListDropped)="drop($event)">
     <div class="candidate-list ranked">
-      @for (ranked of candidatesRanked(); track ranked.id) {
+      @for (ranked of candidatesRanked(); track $index) {
         <div cdkDrag class="candidate" id="cand-{{ ranked.placementId }}" [attr.tabindex]="ranked.placementId">
           <span
             class="move-candidate-up"

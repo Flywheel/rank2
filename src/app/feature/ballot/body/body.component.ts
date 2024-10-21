@@ -10,7 +10,6 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
-import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'mh5-body',
@@ -24,7 +23,7 @@ export class BodyComponent {
   authorId = signal<string>('');
   pitchStore = inject(ContestStore);
 
-  contest = computed<PitchView>(() => this.pitchStore.currentPitchView());
+  contest = computed<PitchView>(() => this.pitchStore.pitchViewSelected());
   candidateList = computed(() => this.contest().slateView.slateMemberViews);
   selectedCandidateId = signal<number>(0);
 
@@ -38,10 +37,10 @@ export class BodyComponent {
     isTopSlate: this.isTopSlate(),
     slateMemberViews: [],
   });
-  contentParams = computed<string>(() => {
-    const selected = this.candidateList().filter(candidate => candidate.id === this.selectedCandidateId())[0];
-    return selected ? selected.placementView.assetView.mediaType + '..i..' + selected.placementView.assetView.sourceId : '';
-  });
+  // contentParams = computed<string>(() => {
+  //   const selected = this.candidateList().filter(candidate => candidate.placementId === this.selectedCandidateId())[0];
+  //   return selected ? selected.placementView.assetView.mediaType + '..i..' + selected.placementView.assetView.sourceId : '';
+  // });
 
   constructor() {
     effect(() => {
@@ -125,7 +124,6 @@ export class BodyComponent {
     const preparedSlateMemberViews: SlateMemberView[] = this.candidatesRanked().map((slateMember, index: number) => {
       return {
         id: slateMember.id,
-        authorId: slateMember.authorId,
         slateId: slateMember.slateId,
         contestId: this.contest().id,
         placementId: slateMember.placementId,
@@ -140,6 +138,6 @@ export class BodyComponent {
       isTopSlate: this.isTopSlate(),
       slateMemberViews: preparedSlateMemberViews,
     });
-    this.pitchStore.updateVoterSlate(this.preparedBallot());
+    this.pitchStore.updateBallot(this.preparedBallot());
   }
 }

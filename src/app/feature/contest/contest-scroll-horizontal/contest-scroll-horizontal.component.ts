@@ -1,5 +1,5 @@
-import { Component, inject, input, output } from '@angular/core';
-import { Pitch } from '../../../core/models/interfaces';
+import { Component, computed, inject, output } from '@angular/core';
+import { PitchView } from '../../../core/models/interfaces';
 import { ContestStore } from '../../contest/contest.store';
 import { environment } from '../../../../environments/environment';
 
@@ -12,16 +12,17 @@ import { environment } from '../../../../environments/environment';
 })
 export class ContestScrollHorizontalComponent {
   pitchStore = inject(ContestStore);
-  theContestsInput = input<Pitch[]>();
+  pitchViews = computed<PitchView[]>(() => this.pitchStore.pitchViewsComputed());
+  // theContestsInput = input<Pitch[]>();
   newContestEditorStateChange = output<boolean>();
   newPlacementEditorStateChange = output<boolean>();
 
   selectContest(id: number) {
-    this.pitchStore.setCurrentContestView(id);
+    //  this.pitchStore.setCurrentContestView(id);
     this.pitchStore.setPitchSelected(id);
     if (environment.ianConfig.showLogs) {
       console.log('selectContest', id);
-      console.log('allContestViews', this.pitchStore.allContestViews());
+      //   console.log('allContestViews', this.pitchStore.allContestViews());
       console.log('allContests', this.pitchStore.pitches());
       //  console.log('allContests', this.ballotStore.allFolioView());
     }
