@@ -37,6 +37,7 @@ export class ContestService {
   }
 
   pitchCreate(contestPrep: Partial<Pitch>): Observable<{ newPitch: Pitch; newSlate: Slate }> {
+    if (environment.ianConfig.showLogs) console.log(contestPrep);
     return this.http.post<Pitch>(this.contestAPIUrl, contestPrep).pipe(
       exhaustMap((newPitch: Pitch) => {
         const slatePrep: Partial<Slate> = {
@@ -54,7 +55,7 @@ export class ContestService {
       }),
       catchError(error => {
         if (environment.ianConfig.showLogs) console.log('error', error);
-        return throwError(() => new Error('FolioCreate failed'));
+        return throwError(() => new Error('Pitch Create failed'));
       })
     );
   }

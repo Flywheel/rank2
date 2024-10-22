@@ -31,6 +31,7 @@ export class ChannelPitchesComponent implements OnInit {
   author = this.authorStore.authorLoggedIn();
 
   folioMembers = input.required<PlacementView[]>();
+
   slateMembersCastFromFolio = computed<SlateMemberView[]>(() =>
     this.folioMembers().map(({ id, folioId, assetId, caption, assetView }) => ({
       id: 0,

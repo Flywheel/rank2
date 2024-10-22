@@ -22,11 +22,11 @@ export class DirectComponent {
   db = inject(ContestService);
   contestObservable = computed(() => this.db.contestsGetAll());
 
-  localStorageService = inject(HydrationService);
+  hydrationService = inject(HydrationService);
   isHydrated = false;
-  runLog() {
+  import() {
     if (!this.isHydrated) {
-      this.localStorageService.hydrateStuff();
+      this.hydrationService.hydrateFolios();
       this.isHydrated = true;
     }
 
@@ -34,7 +34,9 @@ export class DirectComponent {
       console.log(this.authorStore.folioTreeData());
     }
   }
-  test1() {
+  hydrateSlates() {
+    this.hydrationService.hydrateSlates();
+
     this.db.contestsGetAll().subscribe(data => {
       console.log(data);
     });
@@ -67,7 +69,11 @@ export class DirectComponent {
   testStore() {
     if (environment.ianConfig.showLogs) {
       console.log('Environment:', environment);
-      console.log('Asset-Placement-Folio');
+      // console.log('Asset Placement Folio Store');
+      // console.log(this.folioStore.assets());
+      // console.log(this.folioStore.placements());
+      // console.log(this.folioStore.folios());
+      console.log('Asset Placement Folio Computed');
       console.log(this.folioStore.assetViewsComputed());
       console.log(this.folioStore.placementViewsComputed());
       console.log(this.folioStore.folioViewsComputed());

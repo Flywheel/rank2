@@ -1,13 +1,13 @@
-import { signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
+import { signalStore, withState, withComputed, withMethods, withHooks } from '@ngrx/signals';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
 import { Pitch, PitchView, SlateMember, SlateView, SlateMemberView } from '../../core/models/interfaces';
+import { pitchInit, pitchViewInit, slateViewInit, slateInit, slateMemberInit, placementViewInit } from '../../core/models/initValues';
 import { ContestService } from '../contest/contest.service';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { catchError, exhaustMap, map, of, pipe, switchMap, tap, throwError } from 'rxjs';
+import { pipe, tap, map, exhaustMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { environment } from '../../../environments/environment';
-import { pitchInit, pitchViewInit, slateViewInit, slateInit, slateMemberInit, placementViewInit } from '../../core/models/initValues';
 import { FolioStore } from '../folio/folio.store';
 
 export const ContestStore = signalStore(
@@ -228,35 +228,17 @@ export const ContestStore = signalStore(
           .subscribe();
       },
 
-      // addPlacement(placement: Placement) {
-      //   if (environment.ianConfig.showLogs) console.log('addPlacement', placement);
-      //   updateState(store, '[Placement] addPlacement Pending', { isLoading: true });
-      //   dbContest
-      //     .placementCreate(placement)
-      //     .then(newPlacement => {
-      //       if (environment.ianConfig.showLogs) console.log('newPlacement', newPlacement);
-      //       updateState(store, '[Placement] addPlacement Success', {
-      //         allPlacements: [...store.allPlacements(), newPlacement],
-      //         isLoading: false,
-      //       });
-      //     })
-      //     .catch(error => {
-      //       if (environment.ianConfig.showLogs) console.log('error', error);
-      //       updateState(store, '[Placement] addPlacement Failed', { isLoading: false });
-      //     });
-      // },
-
       addSlateMembers(slateMembers: SlateMember[]) {
         updateState(store, '[SlateMember] Add Start', { isLoading: true });
         if (environment.ianConfig.showLogs) console.log('addSlateMember', slateMembers);
-        const xx = slateMembers.map(slateMember => ({
+        const members = slateMembers.map(slateMember => ({
           id: 0,
           placementId: slateMember.placementId,
           slateId: slateMember.slateId,
           rankOrder: slateMember.rankOrder,
         }));
         dbContest
-          .addSlateMembers(xx)
+          .addSlateMembers(members)
           .pipe(
             tap({
               next: newMembers => {

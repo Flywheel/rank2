@@ -43,7 +43,7 @@ export class ContestNewComponent {
   onSubmit() {
     if (this.formGroup.valid) {
       const newContest: Pitch = this.formGroup.value;
-      // if (environment.ianConfig.showLogs) console.log('Submitting new contest', newContest);
+      if (environment.ianConfig.showLogs) console.log('Submitting new contest', newContest);
       this.pichStore.pitchCreate(newContest);
       this.closeNewPitchEditor.emit(false);
     }

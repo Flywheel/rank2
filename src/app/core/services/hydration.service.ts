@@ -3,7 +3,7 @@ import { AuthorStore } from '../../feature/author/author.store';
 import { FolioStore } from '../../feature/folio/folio.store';
 import { ContestStore } from '../../feature/contest/contest.store';
 import { theData } from '../../../mocks/mockdataForHydration';
-import { Asset, AssetImporter, Folio, FolioImporter, Placement } from '../models/interfaces';
+import { Asset, AssetImporter, Folio, FolioImporter, Pitch, PitchView, Placement, SlateMember } from '../models/interfaces';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -13,6 +13,7 @@ export class HydrationService {
   private authorStore = inject(AuthorStore);
   private folioStore = inject(FolioStore);
   private pitchStore = inject(ContestStore);
+  authorLoggedIn = this.authorStore.authorLoggedIn();
 
   updateFromStorage(): void {
     this.authorStore.readFromStorage(); // reads the stored item from storage and patches the state
@@ -32,12 +33,23 @@ export class HydrationService {
     this.pitchStore.clearStorage();
   }
 
-  public async hydrateStuff(): Promise<void> {
-    const authorId = this.authorStore.authorLoggedIn().id;
+  slateMembersCastFromFolio(placements: Placement[], pitch: PitchView): SlateMember[] {
+    return placements.map(({ id }, index) => ({
+      id: 0,
+      placementId: id,
+      rankOrder: index + 1,
+      slateId: pitch.slateId,
+    }));
+  }
+
+  public async hydrateFolios(): Promise<void> {
+    const authorId = this.authorLoggedIn.id;
     const rootFolioId = this.authorStore.authorChannelViews().filter(f => f.id === authorId)[0].authorFolio.id;
     const assetsToImport: AssetImporter[] = theData.assets;
-
     const foliosToImport: FolioImporter[] = theData.folios;
+    // const placementPrepared: Placement = placementInit;
+    const foliosPrepared: Folio[] = [];
+
     for (const folio of foliosToImport) {
       const subFolioId = this.folioStore.folioViewsComputed().find(f => f.folioName === folio.parentFolioName)?.id;
       const parentFolioId = subFolioId ? subFolioId : rootFolioId;
@@ -49,9 +61,7 @@ export class HydrationService {
 
       const { newFolio, newAsset, newPlacement } = await this.folioStore.folioCreateWithParent(folioData);
       if (environment.ianConfig.showLogs) {
-        console.log('newFolio', newFolio);
-        console.log('newAsset', newAsset);
-        console.log('newPlacement', newPlacement);
+        console.log(newFolio.id, ' ', newAsset.id, ' ', newPlacement.id);
       }
       this.folioStore.setFolioSelected(newFolio.id!);
 
@@ -80,6 +90,49 @@ export class HydrationService {
           }
         }
       }
+      foliosPrepared.push(this.folioStore.folioViewSelected());
     }
+    console.log(foliosPrepared);
+    console.log(this.folioStore.folioViewsComputed());
+    this.hydratePitches();
+  }
+
+  hydratePitches() {
+    const authorId = this.authorLoggedIn.id;
+    const folioViews = this.folioStore.folioViewsComputed();
+    folioViews.forEach(f => {
+      const pitchPrep = {
+        title: f.folioName,
+        description: f.folioName,
+        authorId,
+        folioId: f.id,
+        opens: new Date(),
+        closes: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+      };
+      const newPitch = pitchPrep as Pitch; // cast with no ID to create new pitch
+      this.pitchStore.pitchCreate(newPitch);
+    });
+  }
+
+  public hydrateSlates() {
+    const pitches = this.pitchStore.pitchViewsComputed().filter(p => p.id > 0);
+    const folios = this.folioStore.folioViewsComputed();
+
+    pitches.forEach(pitch => {
+      const hasFolio = folios.filter(folio => folio.id === pitch.folioId)[0];
+      const members = hasFolio.placementViews;
+      const newMembers: SlateMember[] = [];
+      const theSlateMembersPrep = this.slateMembersCastFromFolio(members, pitch);
+      theSlateMembersPrep.forEach(slateMember => {
+        const member = {
+          slateId: slateMember.slateId,
+          placementId: slateMember.placementId,
+          rankOrder: slateMember.rankOrder,
+        } as SlateMember;
+        newMembers.push(member);
+      });
+
+      this.pitchStore.addSlateMembers(newMembers);
+    });
   }
 }
