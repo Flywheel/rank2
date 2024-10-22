@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal, untracked } from '@angular/core';
 import { PitchView, SlateMemberView, SlateView } from '../../../core/models/interfaces';
-import { ContestStore } from '../../contest/contest.store';
+import { PitchStore } from '../../contest/pitch.store';
 import {
   CdkDrag,
   CdkDragHandle,
@@ -11,6 +11,7 @@ import {
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { DirectComponent } from '../../contest/direct/direct.component';
+import { BallotStore } from '../ballot.store';
 
 @Component({
   selector: 'mh5-body',
@@ -22,18 +23,19 @@ import { DirectComponent } from '../../contest/direct/direct.component';
 })
 export class BodyComponent {
   authorId = signal<string>('');
-  pitchStore = inject(ContestStore);
+  pitchStore = inject(PitchStore);
+  ballotStore = inject(BallotStore);
 
-  contest = computed<PitchView>(() => this.pitchStore.pitchViewSelected());
-  candidateList = computed(() => this.contest().slateView.slateMemberViews);
+  pitch = computed<PitchView>(() => this.pitchStore.pitchViewSelected());
+  candidateList = computed(() => this.pitch().slateView.slateMemberViews);
   selectedCandidateId = signal<number>(0);
 
   candidatesAvailable = signal<SlateMemberView[]>([]);
   candidatesRanked = signal<SlateMemberView[]>([]);
-  isTopSlate = computed<boolean>(() => this.contest().slateView.isTopSlate);
+  isTopSlate = computed<boolean>(() => this.pitch().slateView.isTopSlate);
   preparedBallot = signal<SlateView>({
     id: 0,
-    pitchId: this.contest().id,
+    pitchId: this.pitch().id,
     authorId: this.authorId(),
     isTopSlate: this.isTopSlate(),
     slateMemberViews: [],
@@ -45,7 +47,7 @@ export class BodyComponent {
 
   constructor() {
     effect(() => {
-      this.contest();
+      this.pitch();
       untracked(() => {
         this.setAvailableCandidates();
       });
@@ -54,9 +56,9 @@ export class BodyComponent {
 
   setAvailableCandidates() {
     this.candidatesAvailable.set(this.candidateList());
-    if (this.pitchStore.voterSlate()?.slateMemberViews) {
+    if (this.ballotStore.voterSlate()?.slateMemberViews) {
       this.candidatesRanked.set(
-        this.pitchStore.voterSlate().slateMemberViews.reduce((acc: SlateMemberView[], slateMemberView: SlateMemberView) => {
+        this.ballotStore.voterSlate().slateMemberViews.reduce((acc: SlateMemberView[], slateMemberView: SlateMemberView) => {
           const candidate = this.candidateList().find(
             (candidate: SlateMemberView) => candidate.placementId === slateMemberView.placementId
           );
@@ -146,19 +148,19 @@ export class BodyComponent {
       return {
         id: slateMember.id,
         slateId: slateMember.slateId,
-        contestId: this.contest().id,
+        contestId: this.pitch().id,
         placementId: slateMember.placementId,
         rankOrder: index + 1,
         placementView: slateMember.placementView,
       };
     });
     this.preparedBallot.set({
-      id: this.contest().id,
-      pitchId: this.contest().id,
+      id: this.pitch().id,
+      pitchId: this.pitch().id,
       authorId: '',
       isTopSlate: this.isTopSlate(),
       slateMemberViews: preparedSlateMemberViews,
     });
-    this.pitchStore.updateBallot(this.preparedBallot());
+    this.ballotStore.updateBallot(this.preparedBallot());
   }
 }

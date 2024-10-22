@@ -29,6 +29,7 @@ export const authorViewInit: AuthorView = {
     folioName: '',
     placementViews: [],
   },
+  pitches: [],
 };
 
 export const assetInit: Asset = {

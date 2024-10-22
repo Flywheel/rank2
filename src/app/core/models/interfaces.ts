@@ -22,6 +22,7 @@ export interface Author {
 
 export interface AuthorView extends Author {
   authorFolio: FolioView;
+  pitches: PitchView[];
 }
 
 export interface Asset {

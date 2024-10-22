@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { HeaderComponent } from '../../../core/header/header.component';
 import { BodyComponent } from '../body/body.component';
 
-import { ContestStore } from '../../contest/contest.store';
+import { PitchStore } from '../../contest/pitch.store';
 import { ContestNewComponent } from '../../contest/contest-new/contest-new.component';
 import { ContestScrollHorizontalComponent } from '../../contest/contest-scroll-horizontal/contest-scroll-horizontal.component';
 import { FolioPlacementNewComponent } from '../../folio/folio-placement-new/folio-placement-new.component';
@@ -25,6 +25,6 @@ import { DirectComponent } from '../../contest/direct/direct.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BallotShellComponent {
-  ballotStore = inject(ContestStore);
+  ballotStore = inject(PitchStore);
   theContests = this.ballotStore.pitches;
 }

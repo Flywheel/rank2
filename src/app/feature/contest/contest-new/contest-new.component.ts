@@ -1,6 +1,6 @@
 import { Component, computed, inject, input, output } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ContestStore } from '../../contest/contest.store';
+import { PitchStore } from '../pitch.store';
 import { Pitch } from '../../../core/models/interfaces';
 import { environment } from '../../../../environments/environment';
 import { AuthorStore } from '../../author/author.store';
@@ -16,7 +16,7 @@ import { FolioStore } from '../../folio/folio.store';
 export class ContestNewComponent {
   authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
-  pichStore = inject(ContestStore);
+  pichStore = inject(PitchStore);
 
   formGroup: FormGroup;
   closeNewPitchEditor = output<boolean>();

@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Pitch, PitchView, Slate, SlateMember, SlateView } from '../../core/models/interfaces';
+import { Pitch, PitchView, Slate, SlateMember } from '../../core/models/interfaces';
 import { catchError, exhaustMap, forkJoin, map, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ContestService {
+export class PitchService {
   http = inject(HttpClient);
 
   private contestAPIUrl = `api/contest`;

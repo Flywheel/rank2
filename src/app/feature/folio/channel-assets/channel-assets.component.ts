@@ -1,7 +1,7 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { PitchView, FolioView, PlacementView } from '../../../core/models/interfaces';
 import { FolioStore } from '../folio.store';
-import { ContestStore } from '../../contest/contest.store';
+import { PitchStore } from '../../contest/pitch.store';
 import { AuthorStore } from '../../author/author.store';
 import { ChannelPitchesComponent } from '../channel-pitches/channel-pitches.component';
 import { pitchViewInit, placementViewInit } from '../../../core/models/initValues';
@@ -17,7 +17,7 @@ import { ViewerComponent } from '../../../core/viewer/viewer/viewer.component';
 export class ChannelAssetsComponent {
   authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
-  pitchStore = inject(ContestStore);
+  pitchStore = inject(PitchStore);
   folioList = input<FolioView[]>([]);
   tabSelected = input<string>('');
   showPitchMananger = signal<boolean>(false);

@@ -1,7 +1,7 @@
 import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
 import { ContestNewComponent } from '../../contest/contest-new/contest-new.component';
 import { AuthorStore } from '../../author/author.store';
-import { ContestStore } from '../../contest/contest.store';
+import { PitchStore } from '../../contest/pitch.store';
 import { FolioStore } from '../folio.store';
 import { PlacementView, SlateMember, SlateMemberView } from '../../../core/models/interfaces';
 import {
@@ -26,7 +26,7 @@ import { RouterLink } from '@angular/router';
 })
 export class ChannelPitchesComponent implements OnInit {
   authorStore = inject(AuthorStore);
-  pitchStore = inject(ContestStore);
+  pitchStore = inject(PitchStore);
   folioStore = inject(FolioStore);
   author = this.authorStore.authorLoggedIn();
 

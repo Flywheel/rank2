@@ -2,7 +2,7 @@ import { signalStore, withState, withComputed, withMethods, withHooks } from '@n
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
 import { Pitch, PitchView, SlateMember, SlateView, SlateMemberView } from '../../core/models/interfaces';
 import { pitchInit, pitchViewInit, slateViewInit, slateInit, slateMemberInit, placementViewInit } from '../../core/models/initValues';
-import { ContestService } from '../contest/contest.service';
+import { PitchService } from './pitch.service';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, tap, map, exhaustMap } from 'rxjs';
@@ -10,7 +10,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { environment } from '../../../environments/environment';
 import { FolioStore } from '../folio/folio.store';
 
-export const ContestStore = signalStore(
+export const PitchStore = signalStore(
   { providedIn: 'root' },
   withDevtools('contests'),
   withState({
@@ -25,22 +25,11 @@ export const ContestStore = signalStore(
     isAddingPitch: false,
     isAddingSlate: false,
     isAddingSlateMember: false,
-
-    //  currentPitchView: pitchViewInit,
-    //  allContestViews: [pitchViewInit],
-
-    voterSlates: [slateViewInit],
-    voterSlate: slateViewInit,
   }),
   withStorageSync({
     key: 'contests',
     autoSync: false,
   }),
-  // withComputed(store => {
-  //   return {
-  //     allContestSlateViewsComputed: computed<SlateView[]>(() => store.allContestViews().map(c => c.slateView)),
-  //   };
-  // }),
 
   withComputed(store => {
     const folioStore = inject(FolioStore);
@@ -101,7 +90,7 @@ export const ContestStore = signalStore(
     };
   }),
   withMethods(store => {
-    const dbContest = inject(ContestService);
+    const dbContest = inject(PitchService);
     return {
       Contests: rxMethod<void>(
         pipe(
@@ -178,27 +167,6 @@ export const ContestStore = signalStore(
       //     )
       //   )
       // ),
-
-      //#region Ballot
-      async updateBallot(ballot: SlateView) {
-        updateState(store, `[Slate] Update Start`, {
-          isLoading: true,
-        });
-        let updatedAuthorSlates = store.voterSlates();
-        const slateExists = updatedAuthorSlates.some(b => b.pitchId === ballot.pitchId);
-        if (slateExists) {
-          updatedAuthorSlates = updatedAuthorSlates.map(b => (b.pitchId === ballot.pitchId ? ballot : b));
-        } else {
-          updatedAuthorSlates = [...updatedAuthorSlates, ballot];
-        }
-        updateState(store, `[Slate] Update Success`, {
-          voterSlates: updatedAuthorSlates,
-          voterSlate: ballot,
-          isLoading: false,
-        });
-      },
-
-      //#endregion Ballot
 
       pitchCreate(pitch: Pitch) {
         if (environment.ianConfig.showLogs) console.log(pitch);

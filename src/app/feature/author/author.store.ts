@@ -9,7 +9,7 @@ import { AuthorService } from './author.service';
 
 import { environment } from '../../../environments/environment';
 import { FolioStore } from '../folio/folio.store';
-import { ContestStore } from '../contest/contest.store';
+import { PitchStore } from '../contest/pitch.store';
 
 export const AuthorStore = signalStore(
   { providedIn: 'root' },
@@ -29,7 +29,7 @@ export const AuthorStore = signalStore(
 
   withComputed(store => {
     const folioStore = inject(FolioStore);
-    const pitchStore = inject(ContestStore);
+    const pitchStore = inject(PitchStore);
     return {
       authorChannelViews: computed<AuthorView[]>(() => {
         return store
@@ -42,6 +42,7 @@ export const AuthorStore = signalStore(
               authorFolio:
                 folioStore.folioViewsComputed().filter(folio => folio.authorId === author.id && folio.parentFolioId === undefined)[0] ??
                 folioViewInit,
+              pitches: pitchStore.pitchViewsComputed().filter(pitch => pitch.authorId === author.id),
             };
             return authorView;
           });
@@ -57,9 +58,10 @@ export const AuthorStore = signalStore(
   }),
 
   // withComputed(store => {
-  //   const folioStore = inject(ContestStore);
+  //   const folioStore = inject(FolioStore);
+  //   const pitchStore = inject(PitchStore);
   //   return {
-  //     authorChannelPitches: computed<ContestView[]>(() => {
+  //     authorChannelPitches: computed<AuthorView[]>(() => {
   //       return store
   //         .authors()
   //         .filter(a => a.id.length > 0)
@@ -68,12 +70,16 @@ export const AuthorStore = signalStore(
   //             id: author.id,
   //             name: author.name,
   //             authorFolio:
-  //               folioStore.folioViewsComputed().filter(folio => folio.authorId === author.id && folio.parentFolioId === undefined)[0] ?? folioViewInit,
+  //               folioStore.folioViewsComputed().filter(folio => folio.authorId === author.id && folio.parentFolioId === undefined)[0] ??
+  //               folioViewInit,
+  //             pitches: pitchStore.pitchViewsComputed().filter(pitch => pitch.authorId === author.id),
   //           };
   //           return authorView;
   //         });
   //     }),
-  //     authorFolioViews: computed<FolioView[]>(() => folioStore.folioViewsComputed().filter(folio => folio.authorId === store.authorIdSelected())),
+  //     authorFolioViews: computed<FolioView[]>(() =>
+  //       folioStore.folioViewsComputed().filter(folio => folio.authorId === store.authorIdSelected())
+  //     ),
   //   };
   // }),
 

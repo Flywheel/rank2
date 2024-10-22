@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { AuthorStore } from '../../feature/author/author.store';
 import { FolioStore } from '../../feature/folio/folio.store';
-import { ContestStore } from '../../feature/contest/contest.store';
+import { PitchStore } from '../../feature/contest/pitch.store';
 import { theData } from '../../../mocks/mockdataForHydration';
 import { Asset, AssetImporter, Folio, FolioImporter, Pitch, PitchView, Placement, SlateMember } from '../models/interfaces';
 import { environment } from '../../../environments/environment';
@@ -12,7 +12,7 @@ import { environment } from '../../../environments/environment';
 export class HydrationService {
   private authorStore = inject(AuthorStore);
   private folioStore = inject(FolioStore);
-  private pitchStore = inject(ContestStore);
+  private pitchStore = inject(PitchStore);
   authorLoggedIn = this.authorStore.authorLoggedIn();
 
   updateFromStorage(): void {

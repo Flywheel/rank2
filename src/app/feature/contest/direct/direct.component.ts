@@ -1,8 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
-
-import { ContestService } from '../contest.service';
+import { PitchService } from '../pitch.service';
 import { Pitch } from '../../../core/models/interfaces';
-import { ContestStore } from '../contest.store';
+import { PitchStore } from '../pitch.store';
 import { environment } from '../../../../environments/environment';
 import { FolioStore } from '../../folio/folio.store';
 import { HydrationService } from '../../../core/services/hydration.service';
@@ -17,9 +16,9 @@ import { AuthorStore } from '../../author/author.store';
 })
 export class DirectComponent {
   authorStore = inject(AuthorStore);
-  pitchStore = inject(ContestStore);
+  pitchStore = inject(PitchStore);
   folioStore = inject(FolioStore);
-  db = inject(ContestService);
+  db = inject(PitchService);
   contestObservable = computed(() => this.db.contestsGetAll());
 
   hydrationService = inject(HydrationService);
