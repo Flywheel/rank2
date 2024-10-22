@@ -10,11 +10,12 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
+import { DirectComponent } from '../../contest/direct/direct.component';
 
 @Component({
   selector: 'mh5-body',
   standalone: true,
-  imports: [CdkDrag, CdkDropList, CdkDropListGroup, CdkDragHandle],
+  imports: [CdkDrag, CdkDropList, CdkDropListGroup, CdkDragHandle, DirectComponent],
   templateUrl: './body.component.html',
   styleUrl: './body.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -111,6 +112,26 @@ export class BodyComponent {
   }
 
   drop(event: CdkDragDrop<SlateMemberView[]>): void {
+    console.log('event.', event);
+    console.log('event.previousContainer', event.previousContainer);
+    console.log('event.container.data', event.container);
+    console.log('event.previousContainer.data', event.previousContainer.data);
+    console.log('event.container.data', event.container.data);
+    console.log('event.previousIndex', event.previousIndex);
+    console.log('event.currentIndex', event.currentIndex);
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      if (this.candidatesRanked().length !== 0) {
+        transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+      } else {
+        transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+      }
+    }
+    this.updateCurrentSlateSignal();
+  }
+
+  drop2(event: CdkDragDrop<SlateMemberView[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {

@@ -47,7 +47,7 @@
     [cdkDropListConnectedTo]="[rankedList]"
     (cdkDropListDropped)="drop($event)">
     <div class="candidate-list available">
-      @for (unranked of candidatesAvailable(); track unranked; let theCount = $count) {
+      @for (unranked of candidatesAvailable(); track $index; let theCount = $count) {
         <div
           cdkDrag
           class="candidate"
@@ -63,3 +63,5 @@
     </div>
   </div>
 </div>
+
+<mh5-direct />

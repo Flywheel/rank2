@@ -1,15 +1,3 @@
 <mh5-header callerPage="contest"></mh5-header>
-@if (newContest()) {
-  <mh5-contest-scroll-horizontal />
-  <mh5-contest-new (closeNewPitchEditor)="closeNewContest()" />
-} @else {
-  @if (newPlacement()) {
-    <mh5-contest-scroll-horizontal />
-    <mh5-folio-placement-new (closeNewPlacementEditor)="closeNewPlacement()" />
-  } @else {
-    <mh5-contest-scroll-horizontal (newContestEditorStateChange)="openNewContest()" (newPlacementEditorStateChange)="openNewPlacement()" />
-    <mh5-body />
-  }
-}
-
-<mh5-direct />
+<mh5-contest-scroll-horizontal />
+<mh5-body />

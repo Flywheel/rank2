@@ -36,10 +36,27 @@ export class DirectComponent {
   }
   hydrateSlates() {
     this.hydrationService.hydrateSlates();
+  }
+
+  testService() {
+    //#region Read
 
     this.db.contestsGetAll().subscribe(data => {
       console.log(data);
     });
+
+    //#endregion Read
+
+    //#region Create
+
+    // this.db.addSlateMember({ id: 0, slateId: 4, placementId: 36, rankOrder: 1 }).subscribe(data => {
+    //   console.log(data);
+    // });
+
+    // this.db.slateCreate({ contestId: 4, authorId: '1', isTopSlate: true }).subscribe(data => {
+    //   console.log(data);
+    // });
+    //#endregion Create
   }
 
   test2() {
@@ -57,15 +74,6 @@ export class DirectComponent {
     });
   }
 
-  testService() {
-    this.db.addSlateMember({ id: 0, slateId: 4, placementId: 36, rankOrder: 1 }).subscribe(data => {
-      console.log(data);
-    });
-
-    // this.db.slateCreate({ contestId: 4, authorId: '1', isTopSlate: true }).subscribe(data => {
-    //   console.log(data);
-    // });
-  }
   testStore() {
     if (environment.ianConfig.showLogs) {
       console.log('Environment:', environment);
