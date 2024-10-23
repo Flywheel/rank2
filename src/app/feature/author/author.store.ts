@@ -9,7 +9,7 @@ import { AuthorService } from './author.service';
 
 import { environment } from '../../../environments/environment';
 import { FolioStore } from '../folio/folio.store';
-import { PitchStore } from '../contest/pitch.store';
+import { PitchStore } from '../pitch/pitch.store';
 
 export const AuthorStore = signalStore(
   { providedIn: 'root' },

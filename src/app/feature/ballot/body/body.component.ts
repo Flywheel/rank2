@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal, untracked } from '@angular/core';
 import { PitchView, SlateMemberView, SlateView } from '../../../core/models/interfaces';
-import { PitchStore } from '../../contest/pitch.store';
+import { PitchStore } from '../../pitch/pitch.store';
 import {
   CdkDrag,
   CdkDragHandle,
@@ -10,7 +10,7 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
-import { DirectComponent } from '../../contest/direct/direct.component';
+import { DirectComponent } from '../../pitch/direct/direct.component';
 import { BallotStore } from '../ballot.store';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component, computed, inject, input, output } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PitchStore } from '../../contest/pitch.store';
+import { PitchStore } from '../../pitch/pitch.store';
 import { Pitch } from '../../../core/models/interfaces';
 import { environment } from '../../../../environments/environment';
 import { AuthorStore } from '../../author/author.store';

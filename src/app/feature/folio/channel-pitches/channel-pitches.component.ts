@@ -1,6 +1,6 @@
 import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
 import { AuthorStore } from '../../author/author.store';
-import { PitchStore } from '../../contest/pitch.store';
+import { PitchStore } from '../../pitch/pitch.store';
 import { FolioStore } from '../folio.store';
 import { PlacementView, SlateMemberView } from '../../../core/models/interfaces';
 import {
