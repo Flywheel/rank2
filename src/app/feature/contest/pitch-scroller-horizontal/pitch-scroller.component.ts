@@ -4,7 +4,7 @@ import { PitchStore } from '../pitch.store';
 import { AuthorStore } from '../../author/author.store';
 
 @Component({
-  selector: 'mh5-contest-scroll-horizontal',
+  selector: 'mh5-pitch-scroller',
   standalone: true,
   imports: [],
   template: `
@@ -16,9 +16,9 @@ import { AuthorStore } from '../../author/author.store';
       }
     </div>
   `,
-  styleUrl: './contest-scroll-horizontal.component.scss',
+  styles: [],
 })
-export class ContestScrollHorizontalComponent {
+export class PitchScrollerComponent {
   authorStore = inject(AuthorStore);
   pitchStore = inject(PitchStore);
   pitchViews = computed<PitchView[]>(() => this.authorStore.authorChannelViews()[0].pitches.filter(p => p.id > 0));

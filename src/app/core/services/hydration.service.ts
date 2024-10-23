@@ -114,7 +114,7 @@ export class HydrationService {
     });
   }
 
-  public hydrateSlates() {
+  public async hydrateSlates(): Promise<void> {
     const pitches = this.pitchStore.pitchViewsComputed().filter(p => p.id > 0);
     const folios = this.folioStore.folioViewsComputed();
 

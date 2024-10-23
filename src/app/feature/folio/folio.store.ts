@@ -203,7 +203,7 @@ export const FolioStore = signalStore(
         )
       ),
 
-      placementCreate(placement: Placement) {
+      async placementCreate(placement: Placement) {
         updateState(store, '[Placement] Create Start', { isLoading: true });
         dbFolio
           .placementCreate(placement)
@@ -274,7 +274,7 @@ export const FolioStore = signalStore(
           .subscribe();
       },
 
-      assetCreateWithPlacement(assetData: Asset, caption: string) {
+      async assetCreateWithPlacement(assetData: Asset, caption: string) {
         updateState(store, '[Asset-Media] Create Start', { isLoading: true });
         dbFolio
           .assetCreateWithPlacement(assetData, store.folioViewSelected().id, caption)

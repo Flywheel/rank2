@@ -1,11 +1,13 @@
-import { Component, computed, inject } from '@angular/core';
-import { PitchService } from '../pitch.service';
-import { Pitch } from '../../../core/models/interfaces';
-import { PitchStore } from '../pitch.store';
+import { Component, inject } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { FolioStore } from '../../folio/folio.store';
-import { HydrationService } from '../../../core/services/hydration.service';
+
 import { AuthorStore } from '../../author/author.store';
+import { FolioStore } from '../../folio/folio.store';
+import { PitchStore } from '../pitch.store';
+
+import { PitchService } from '../pitch.service';
+import { HydrationService } from '../../../core/services/hydration.service';
+import { BallotStore } from '../../ballot/ballot.store';
 
 @Component({
   selector: 'mh5-direct',
@@ -16,23 +18,28 @@ import { AuthorStore } from '../../author/author.store';
 })
 export class DirectComponent {
   authorStore = inject(AuthorStore);
-  pitchStore = inject(PitchStore);
   folioStore = inject(FolioStore);
-  db = inject(PitchService);
-  contestObservable = computed(() => this.db.contestsGetAll());
+  pitchStore = inject(PitchStore);
+  ballotStore = inject(BallotStore);
 
+  pitchService = inject(PitchService);
   hydrationService = inject(HydrationService);
-  isHydrated = false;
-  import() {
-    if (!this.isHydrated) {
-      this.hydrationService.hydrateFolios();
-      this.isHydrated = true;
-    }
 
-    if (environment.ianConfig.showLogs) {
-      console.log(this.authorStore.authorFolioTree());
+  isHydrated = false;
+
+  import() {
+    this.loadAll();
+  }
+
+  private async loadAll() {
+    if (!this.isHydrated) {
+      await this.hydrationService.hydrateFolios();
+      this.isHydrated = true;
+      this.storeLogs();
+      await this.hydrationService.hydrateSlates();
     }
   }
+
   hydrateSlates() {
     this.hydrationService.hydrateSlates();
   }
@@ -40,13 +47,26 @@ export class DirectComponent {
   testService() {
     //#region Read
 
-    this.db.contestsGetAll().subscribe(data => {
+    this.pitchService.contestsGetAll().subscribe(data => {
       console.log(data);
     });
 
     //#endregion Read
 
     //#region Create
+
+    // const contest: Pitch = {
+    //   id: 4,
+    //   folioId: 1,
+    //   closes: new Date(),
+    //   opens: new Date(),
+    //   title: 'New Title',
+    //   description: 'New Description',
+    //   authorId: '1',
+    // };
+    // this.db.contestUpdateName(contest.id, contest).subscribe(data => {
+    //   console.log(data);
+    // });
 
     // this.db.addSlateMember({ id: 0, slateId: 4, placementId: 36, rankOrder: 1 }).subscribe(data => {
     //   console.log(data);
@@ -58,28 +78,14 @@ export class DirectComponent {
     //#endregion Create
   }
 
-  test2() {
-    const contest: Pitch = {
-      id: 4,
-      folioId: 1,
-      closes: new Date(),
-      opens: new Date(),
-      title: 'New Title',
-      description: 'New Description',
-      authorId: '1',
-    };
-    this.db.contestUpdateName(contest.id, contest).subscribe(data => {
-      console.log(data);
-    });
-  }
-
-  testStore() {
+  async storeLogs(): Promise<void> {
     if (environment.ianConfig.showLogs) {
+      console.log(this.authorStore.authorFolioTree());
       console.log('Environment:', environment);
-      // console.log('Asset Placement Folio Store');
-      // console.log(this.folioStore.assets());
-      // console.log(this.folioStore.placements());
-      // console.log(this.folioStore.folios());
+      console.log('Asset Placement Folio Store');
+      console.log(this.folioStore.assets());
+      console.log(this.folioStore.placements());
+      console.log(this.folioStore.folios());
       console.log('Asset Placement Folio Computed');
       console.log(this.folioStore.assetViewsComputed());
       console.log(this.folioStore.placementViewsComputed());
@@ -100,10 +106,3 @@ export class DirectComponent {
     }
   }
 }
-
-// test4() {
-//   this.db.contestUpdateName3(4, 'New Title').subscribe(data => {
-//     console.log(data);
-//   });
-// }
-//}

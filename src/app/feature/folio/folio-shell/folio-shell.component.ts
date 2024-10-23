@@ -10,7 +10,7 @@ import { IconPlusComponent } from '../../../core/svg/icon-plus';
 import { ChannelAssetsComponent } from '../channel-assets/channel-assets.component';
 import { ChannelPitchesComponent } from '../channel-pitches/channel-pitches.component';
 import { DirectComponent } from '../../contest/direct/direct.component';
-import { ContestNewComponent } from '../../contest/pitch-new/pitch-new.component';
+import { ContestNewComponent } from '../pitch-new/pitch-new.component';
 
 @Component({
   selector: 'mh5-folio-shell',

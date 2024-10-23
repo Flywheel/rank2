@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ContestScrollHorizontalComponent } from './contest-scroll-horizontal.component';
+import { PitchScrollerComponent } from './pitch-scroller.component';
 
 describe('ContestScrollHorizontalComponent', () => {
-  let component: ContestScrollHorizontalComponent;
-  let fixture: ComponentFixture<ContestScrollHorizontalComponent>;
+  let component: PitchScrollerComponent;
+  let fixture: ComponentFixture<PitchScrollerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ContestScrollHorizontalComponent],
+      imports: [PitchScrollerComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ContestScrollHorizontalComponent);
+    fixture = TestBed.createComponent(PitchScrollerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
