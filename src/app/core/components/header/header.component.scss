@@ -1,0 +1,24 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: whitesmoke;
+  margin-top: 7px;
+  padding: 10px 15px;
+  font-weight: bold;
+
+  .title {
+    font-family: Chantelli_Antiqua;
+    flex-grow: 1;
+    text-align: center;
+    color: #ccf;
+    font-size: 15px;
+  }
+}
+
+.header a {
+  text-decoration: none;
+  color: #ccf;
+}

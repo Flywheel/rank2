@@ -92,8 +92,6 @@ export class HydrationService {
       }
       foliosPrepared.push(this.folioStore.folioViewSelected());
     }
-    console.log(foliosPrepared);
-    console.log(this.folioStore.folioViewsComputed());
     this.hydratePitches();
   }
 

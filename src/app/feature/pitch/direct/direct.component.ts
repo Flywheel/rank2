@@ -28,14 +28,15 @@ export class DirectComponent {
   isHydrated = false;
 
   import() {
-    this.loadAll();
+    this.loadData();
   }
 
-  private async loadAll() {
+  private async loadData() {
     if (!this.isHydrated) {
       await this.hydrationService.hydrateFolios();
       this.isHydrated = true;
-      this.storeLogs();
+      const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+      await delay(200);
       await this.hydrationService.hydrateSlates();
     }
   }

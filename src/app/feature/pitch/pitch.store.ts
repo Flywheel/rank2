@@ -136,38 +136,6 @@ export const PitchStore = signalStore(
         updateState(store, `[Pitch] Select By Id  ${pitchId}`, { pitchIdSelected: pitchId });
       },
 
-      // setCurrentContestView: rxMethod<number>(
-      //   pipe(
-      //     tap(() => {
-      //       updateState(store, '[ContestView] Load By Id Start', { isLoading: true });
-      //     }),
-      //     switchMap(contestId => {
-      //       const existingContestView = store.allContestViews().find(view => view.id === contestId);
-      //       if (existingContestView) {
-      //         return of(existingContestView);
-      //       } else {
-      //         const theContestView = dbContest.contestViewGetById(contestId).pipe(
-      //           tap({
-      //             next: (contestView: PitchView) => {
-      //               updateState(store, '[ContestView] Load By Id Success', {
-      //                 allContestViews: [...store.allContestViews(), contestView],
-      //               });
-      //             },
-      //           })
-      //         );
-      //         return theContestView;
-      //       }
-      //     }),
-      //     tap(contestView =>
-      //       updateState(store, '[ContestView] -- From Cache --Load By Id Success', {
-      //         currentPitchView: contestView,
-      //         slateView: store.allContestSlateViewsComputed().filter(a => a.pitchId === contestView.id)[0] ?? slateViewInit,
-      //         isLoading: false,
-      //       })
-      //     )
-      //   )
-      // ),
-
       pitchCreate(pitch: Pitch) {
         if (environment.ianConfig.showLogs) console.log(pitch);
         updateState(store, '[Pitch] Add Start', { isLoading: true });
@@ -198,7 +166,6 @@ export const PitchStore = signalStore(
 
       addSlateMembers(slateMembers: SlateMember[]) {
         updateState(store, '[SlateMember] Add Start', { isLoading: true });
-        if (environment.ianConfig.showLogs) console.log('addSlateMember', slateMembers);
         const members = slateMembers.map(slateMember => ({
           id: 0,
           placementId: slateMember.placementId,
