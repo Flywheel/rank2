@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ContestNewComponent } from './contest-new.component';
+import { ContestNewComponent } from './pitch-new.component';
 
 describe('NewContestComponent', () => {
   let component: ContestNewComponent;

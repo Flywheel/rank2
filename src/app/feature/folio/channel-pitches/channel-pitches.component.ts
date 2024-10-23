@@ -1,9 +1,8 @@
 import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
-import { ContestNewComponent } from '../../contest/contest-new/contest-new.component';
 import { AuthorStore } from '../../author/author.store';
 import { PitchStore } from '../../contest/pitch.store';
 import { FolioStore } from '../folio.store';
-import { PlacementView, SlateMember, SlateMemberView } from '../../../core/models/interfaces';
+import { PlacementView, SlateMemberView } from '../../../core/models/interfaces';
 import {
   CdkDrag,
   CdkDropList,
@@ -20,7 +19,7 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'mh5-channel-pitches',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, CdkDrag, CdkDropList, CdkDropListGroup, CdkDragHandle, ContestNewComponent],
+  imports: [CommonModule, FormsModule, RouterLink, CdkDrag, CdkDropList, CdkDropListGroup, CdkDragHandle],
   templateUrl: './channel-pitches.component.html',
   styleUrl: './channel-pitches.component.scss',
 })

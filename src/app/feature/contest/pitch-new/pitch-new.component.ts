@@ -7,11 +7,11 @@ import { AuthorStore } from '../../author/author.store';
 import { FolioStore } from '../../folio/folio.store';
 
 @Component({
-  selector: 'mh5-contest-new',
+  selector: 'mh5-pitch-new',
   standalone: true,
   imports: [ReactiveFormsModule],
-  templateUrl: './contest-new.component.html',
-  styleUrl: './contest-new.component.scss',
+  templateUrl: './pitch-new.component.html',
+  styleUrl: './pitch-new.component.scss',
 })
 export class ContestNewComponent {
   authorStore = inject(AuthorStore);

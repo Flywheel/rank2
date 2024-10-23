@@ -120,7 +120,7 @@ export const AuthorStore = signalStore(
 
       return retval;
     }),
-    folioTreeData: computed<TreeNode[]>(() => {
+    authorFolioTree: computed<TreeNode[]>(() => {
       const folios = store.authorFolioViews;
       return folios()
         .filter(folio => !folio.parentFolioId) // Start with root folios (no parent)

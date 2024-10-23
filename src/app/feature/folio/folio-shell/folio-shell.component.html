@@ -27,7 +27,7 @@
 
     @case ('Pitches') {
       @if (newPitch()) {
-        <mh5-contest-new (closeNewPitchEditor)="closeNewPitch()" [forcePopup]="true" />
+        <mh5-pitch-new (closeNewPitchEditor)="closeNewPitch()" [forcePopup]="true" />
       } @else {
         <div style="text-align: center">
           <mh5-icon-plus (click)="openNewPitch()" (keydown)="openNewPitch()" tabindex="1" />

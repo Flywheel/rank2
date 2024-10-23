@@ -33,7 +33,14 @@
 
           @if (newMedia() === true) {
             <div class="form-row">
-              <textarea class="col1" formControlName="urlAdder" name="urlAdder" id="urlAdder" rows="5" (drop)="onDrop($event)" (input)="onInput($event)">
+              <textarea
+                class="col1"
+                formControlName="urlAdder"
+                name="urlAdder"
+                id="urlAdder"
+                rows="5"
+                (drop)="onDrop($event)"
+                (input)="onInput($event)">
               </textarea>
               <div class="col2">
                 <label for="urlAdder">Drop or paste URL </label>
@@ -42,7 +49,9 @@
           }
 
           <div class="colsBoth">
-            <button type="submit" [disabled]="formGroup.invalid">Add {{ newPlacementType() }} to folio {{ folioStore.folioViewSelected().folioName }}</button>
+            <button type="submit" [disabled]="formGroup.invalid">
+              Add {{ newPlacementType() }} to folio {{ folioStore.folioViewSelected().folioName }}
+            </button>
           </div>
           <button class="col1" (click)="test()">Test</button>
           <button class="col2" (click)="cancel()">Cancel / Close</button>
@@ -53,7 +62,7 @@
         <mh5-folio-placement-media [assetView]="assetViewPrepared()" />
       }
       @if (newPitch() === true) {
-        <mh5-contest-new />
+        <mh5-pitch-new />
       }
     </div>
   </div>

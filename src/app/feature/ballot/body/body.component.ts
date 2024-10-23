@@ -28,16 +28,15 @@ export class BodyComponent {
 
   pitch = computed<PitchView>(() => this.pitchStore.pitchViewSelected());
   candidateList = computed(() => this.pitch().slateView.slateMemberViews);
-  selectedCandidateId = signal<number>(0);
 
   candidatesAvailable = signal<SlateMemberView[]>([]);
   candidatesRanked = signal<SlateMemberView[]>([]);
-  isTopSlate = computed<boolean>(() => this.pitch().slateView.isTopSlate);
+  // isTopSlate = computed<boolean>(() => this.pitch().slateView.isTopSlate);
   preparedBallot = signal<SlateView>({
     id: 0,
     pitchId: this.pitch().id,
     authorId: this.authorId(),
-    isTopSlate: this.isTopSlate(),
+    isTopSlate: false,
     slateMemberViews: [],
   });
   // contentParams = computed<string>(() => {
@@ -158,7 +157,7 @@ export class BodyComponent {
       id: this.pitch().id,
       pitchId: this.pitch().id,
       authorId: '',
-      isTopSlate: this.isTopSlate(),
+      isTopSlate: false,
       slateMemberViews: preparedSlateMemberViews,
     });
     this.ballotStore.updateBallot(this.preparedBallot());

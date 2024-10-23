@@ -30,7 +30,7 @@ export class DirectComponent {
     }
 
     if (environment.ianConfig.showLogs) {
-      console.log(this.authorStore.folioTreeData());
+      console.log(this.authorStore.authorFolioTree());
     }
   }
   hydrateSlates() {
