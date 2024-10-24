@@ -17,13 +17,13 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'mh5-channel-pitches',
+  selector: 'mh5-slate-manager',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, CdkDrag, CdkDropList, CdkDropListGroup, CdkDragHandle],
-  templateUrl: './channel-pitches.component.html',
-  styleUrl: './channel-pitches.component.scss',
+  templateUrl: './slate-manager.component.html',
+  styleUrl: './slate-manager.component.scss',
 })
-export class ChannelPitchesComponent implements OnInit {
+export class SlateManagerComponent implements OnInit {
   authorStore = inject(AuthorStore);
   pitchStore = inject(PitchStore);
   folioStore = inject(FolioStore);

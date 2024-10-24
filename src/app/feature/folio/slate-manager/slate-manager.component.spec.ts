@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PitchListComponent } from './channel-pitches.component';
+import { PitchListComponent } from './slate-manager.component';
 
 describe('PitchListComponent', () => {
   let component: PitchListComponent;

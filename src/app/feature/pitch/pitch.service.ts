@@ -10,8 +10,8 @@ import { catchError, exhaustMap, forkJoin, map, Observable, tap, throwError } fr
 export class PitchService {
   http = inject(HttpClient);
 
-  private contestAPIUrl = `api/contest`;
-  private contestViewAPIUrl = `api/contestview`;
+  private pitchAPIUrl = `api/pitch`;
+  private pitchViewAPIUrl = `api/pitchview`;
 
   private slateAPIUrl = `api/slate`;
   private slateViewAPIUrl = `api/slateview`;
@@ -20,25 +20,25 @@ export class PitchService {
 
   //#region Contest
   contestsGetAll(): Observable<Pitch[]> {
-    return this.http.get<Pitch[]>(this.contestAPIUrl);
+    return this.http.get<Pitch[]>(this.pitchAPIUrl);
   }
 
   contestGetById(id: number): Observable<Pitch> {
-    return this.http.get<Pitch>(`${this.contestAPIUrl}/${id}`);
+    return this.http.get<Pitch>(`${this.pitchAPIUrl}/${id}`);
   }
 
   contestViewsGetAll(): Observable<PitchView[]> {
-    if (environment.ianConfig.showLogs) console.log(`ballotsService.allContestViews() ${this.contestViewAPIUrl}`);
-    return this.http.get<PitchView[]>(this.contestViewAPIUrl);
+    if (environment.ianConfig.showLogs) console.log(`ballotsService.allContestViews() ${this.pitchViewAPIUrl}`);
+    return this.http.get<PitchView[]>(this.pitchViewAPIUrl);
   }
 
   contestViewGetById(id: number): Observable<PitchView> {
-    return this.http.get<PitchView>(`${this.contestViewAPIUrl}/${id}`);
+    return this.http.get<PitchView>(`${this.pitchViewAPIUrl}/${id}`);
   }
 
   pitchCreate(contestPrep: Partial<Pitch>): Observable<{ newPitch: Pitch; newSlate: Slate }> {
     if (environment.ianConfig.showLogs) console.log(contestPrep);
-    return this.http.post<Pitch>(this.contestAPIUrl, contestPrep).pipe(
+    return this.http.post<Pitch>(this.pitchAPIUrl, contestPrep).pipe(
       exhaustMap((newPitch: Pitch) => {
         const slatePrep: Partial<Slate> = {
           pitchId: newPitch.id,
@@ -61,7 +61,7 @@ export class PitchService {
   }
 
   contestUpdateName(contestId: number, contest: Pitch): Observable<Pitch> {
-    const endPoint = `${this.contestAPIUrl}/${contestId}`;
+    const endPoint = `${this.pitchAPIUrl}/${contestId}`;
     return this.http.put<Pitch>(endPoint, contest).pipe(
       tap(data => {
         if (environment.ianConfig.showLogs) console.log('data', data);

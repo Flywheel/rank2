@@ -3,16 +3,16 @@ import { PitchView, FolioView, PlacementView } from '../../../core/models/interf
 import { FolioStore } from '../folio.store';
 import { PitchStore } from '../../pitch/pitch.store';
 import { AuthorStore } from '../../author/author.store';
-import { ChannelPitchesComponent } from '../channel-pitches/channel-pitches.component';
+import { SlateManagerComponent } from '../slate-manager/slate-manager.component';
 import { pitchViewInit, placementViewInit } from '../../../core/models/initValues';
 import { ViewerComponent } from '../../../core/viewer/viewer/viewer.component';
 
 @Component({
   selector: 'mh5-channel-assets',
   standalone: true,
-  imports: [ChannelPitchesComponent, ViewerComponent],
-  templateUrl: './channel-assets.component.html',
-  styleUrl: './channel-assets.component.scss',
+  imports: [SlateManagerComponent, ViewerComponent],
+  templateUrl: './asset-manager.component.html',
+  styleUrl: './asset-manager.component.scss',
 })
 export class ChannelAssetsComponent {
   authorStore = inject(AuthorStore);

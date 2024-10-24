@@ -130,7 +130,7 @@ export const FolioStore = signalStore(
       folioCreateForNewAuthor(folio: Folio) {
         updateState(store, '[Folio] Create Start', { isLoading: true });
         dbFolio
-          .folioCreateForNewAuthor_PostingView(folio)
+          .folioCreateForNewAuthor(folio)
           .pipe(
             map((newFolio: Folio) => {
               updateState(store, '[Folio] Create Success', {

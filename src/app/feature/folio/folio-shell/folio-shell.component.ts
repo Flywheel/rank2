@@ -7,8 +7,8 @@ import { AuthorStore } from '../../author/author.store';
 import { ChannelTreeComponent } from '../channel-tree/channel-tree.component';
 import { TabList } from '../../../core/models/interfaces';
 import { IconPlusComponent } from '../../../core/svg/icon-plus';
-import { ChannelAssetsComponent } from '../channel-assets/channel-assets.component';
-import { ChannelPitchesComponent } from '../channel-pitches/channel-pitches.component';
+import { ChannelAssetsComponent } from '../asset-manager/asset-manager.component';
+import { SlateManagerComponent } from '../slate-manager/slate-manager.component';
 import { DirectComponent } from '../../pitch/direct/direct.component';
 import { ContestNewComponent } from '../pitch-new/pitch-new.component';
 
@@ -23,7 +23,7 @@ import { ContestNewComponent } from '../pitch-new/pitch-new.component';
     ChannelTreeComponent,
     IconPlusComponent,
     ChannelAssetsComponent,
-    ChannelPitchesComponent,
+    SlateManagerComponent,
     DirectComponent,
     ContestNewComponent,
   ],

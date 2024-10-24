@@ -61,7 +61,7 @@ export interface Placement {
 export interface PlacementCaptions {
   placementId: string;
   extendedCaption?: string;
-  shortCode?: string;
+  char2Caption?: string;
 }
 
 export interface PlacementView extends Placement {

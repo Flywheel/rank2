@@ -12,37 +12,42 @@ import {
   Slate,
   SlateMember,
 } from '../app/core/models/interfaces';
-import { MockdataService } from './mockdata.service';
 import { Observable } from 'rxjs';
+import {
+  assetInit,
+  authorInit,
+  folioInit,
+  folioViewInit,
+  pitchInit,
+  pitchViewInit,
+  placementInit,
+  placementViewInit,
+  slateInit,
+  slateMemberInit,
+} from '../app/core/models/initValues';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DbService implements InMemoryDbService {
-  mockData = new MockdataService();
-
-  constructor() {
-    //
-  }
-
-  author: Author[] = [];
-  contestview: PitchView[] = this.mockData.contestViewList;
-  contest: Pitch[] = this.mockData.contestList;
-  slate: Slate[] = this.mockData.slateList;
-  slatemember: SlateMember[] = this.mockData.slateMemberList;
-  folio: Folio[] = this.mockData.folioList;
-  folioview: FolioView[] = this.mockData.folioViewList;
-  placement: Placement[] = this.mockData.placementList;
-  placementview: PlacementView[] = this.mockData.placementViewList;
-  asset: Asset[] = this.mockData.assetList;
+  author: Author[] = [authorInit];
+  pitch: Pitch[] = [pitchInit];
+  pitchView: PitchView[] = [pitchViewInit];
+  slate: Slate[] = [slateInit];
+  slatemember: SlateMember[] = [slateMemberInit];
+  asset: Asset[] = [assetInit];
+  folio: Folio[] = [folioInit];
+  folioview: FolioView[] = [folioViewInit];
+  placement: Placement[] = [placementInit];
+  placementview: PlacementView[] = [placementViewInit];
 
   createDb() {
     return {
       author: this.author,
-      contest: this.contest,
+      pitch: this.pitch,
       slate: this.slate,
       slatemember: this.slatemember,
-      contestview: this.contestview,
+      pitchView: this.pitchView,
       folio: this.folio,
       folioview: this.folioview,
       placement: this.placement,
