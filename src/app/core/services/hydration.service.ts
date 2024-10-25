@@ -100,7 +100,7 @@ export class HydrationService {
     const folioViews = this.folioStore.folioViewsComputed();
     folioViews.forEach(f => {
       const pitchPrep = {
-        title: f.folioName,
+        name: f.folioName,
         description: f.folioName,
         authorId,
         folioId: f.id,

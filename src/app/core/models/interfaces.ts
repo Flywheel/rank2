@@ -77,7 +77,7 @@ export interface FolioView extends Folio {
 export interface Pitch {
   id: number;
   folioId: number;
-  title: string;
+  name: string;
   description: string;
   opens: Date;
   closes: Date;

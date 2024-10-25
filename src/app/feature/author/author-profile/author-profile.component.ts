@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, computed, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { AuthorStore } from '../author.store';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -11,17 +11,20 @@ import { Author, Folio } from '../../../core/models/interfaces';
 import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
 import { AuthorService } from '../author.service';
 import { FolioStore } from '../../folio/folio.store';
+import { DirectComponent } from '../../pitch/direct/direct.component';
+import { PitchStore } from '../../pitch/pitch.store';
 
 @Component({
   selector: 'mh5-author-profile',
   standalone: true,
-  imports: [RouterLink, FormsModule, IconTimelineComponent, AuthorConsentComponent],
+  imports: [RouterLink, FormsModule, IconTimelineComponent, AuthorConsentComponent, DirectComponent],
   templateUrl: './author-profile.component.html',
   styleUrl: './author-profile.component.scss',
 })
-export class AuthorProfileComponent {
+export class AuthorProfileComponent implements AfterViewInit {
   authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
+  pitxhStore = inject(PitchStore);
   isRunSomethingVisible = signal<boolean>(true);
   channelName = signal<string>('');
   showConsentPopup = signal(false);
@@ -29,6 +32,14 @@ export class AuthorProfileComponent {
   authorDefaultName = AUTHOR_DEFAULT_NAME;
 
   isChannelNameOk = computed<boolean>(() => this.channelName().length >= 3 && this.channelName().length <= 15);
+  @ViewChild('newHandleInput') newHandleInput!: ElementRef<HTMLInputElement>;
+
+  ngAfterViewInit(): void {
+    // Check if the input element exists before setting focus
+    if (this.newHandleInput && this.newHandleInput.nativeElement) {
+      this.newHandleInput.nativeElement.focus();
+    }
+  }
 
   showConsentDialog() {
     if (environment.ianConfig.showLogs) console.log('ShowConsentDialog', this.showConsentPopup());
@@ -42,16 +53,6 @@ export class AuthorProfileComponent {
   }
 
   runSomething() {
-    // const authorData: Author = {
-    //   id: uuidv7(),
-    //   name: this.channelName(),
-    // };
-    // this.authorStore.authorAdd(authorData);
-
-    // if (environment.ianConfig.showLogs) {
-    //   console.log(this.authorStore.authorLoggedIn());
-    //   console.log(this.authorStore.knownAuthors());
-    // }
     const loggedInAuthorData = this.authorStore.authorLoggedIn();
     if (environment.ianConfig.showLogs) console.log(loggedInAuthorData);
     this.authorStore.authorById(loggedInAuthorData.id);
@@ -60,7 +61,6 @@ export class AuthorProfileComponent {
       console.log(this.authorStore.authorLoggedIn());
       console.log(loggedInAuthorData.id, this.channelName());
     }
-    //  this.authorStore.authorLoggedInUpdate(loggedInAuthorData.id, { name: 'this.channelName()' });
   }
 
   initializeAuthorHandle() {
@@ -78,15 +78,5 @@ export class AuthorProfileComponent {
       console.log(updatedAuthorData);
       console.log(newFolio);
     }
-  }
-
-  db = inject(AuthorService);
-  test3(theId: string) {
-    this.db.authorsGetAll().subscribe(data => {
-      console.log(data);
-    });
-    this.db.authorGetById(theId).subscribe(data => {
-      console.log(data);
-    });
   }
 }

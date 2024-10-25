@@ -15,7 +15,7 @@ const commonProviders = [
 
   provideServiceWorker('ngsw-worker.js', {
     enabled: !isDevMode(),
-    registrationStrategy: 'registerImmediately',
+    registrationStrategy: 'registerWhenStable:30000',
   }),
   //provideClientHydration(),
   provideAnimationsAsync(),

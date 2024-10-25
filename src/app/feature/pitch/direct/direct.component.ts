@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 
 import { AuthorStore } from '../../author/author.store';
@@ -8,6 +8,7 @@ import { PitchStore } from '../pitch.store';
 import { PitchService } from '../pitch.service';
 import { HydrationService } from '../../../core/services/hydration.service';
 import { BallotStore } from '../../ballot/ballot.store';
+import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
 
 @Component({
   selector: 'mh5-direct',
@@ -25,6 +26,7 @@ export class DirectComponent {
   pitchService = inject(PitchService);
   hydrationService = inject(HydrationService);
 
+  needsAuthorName = computed<boolean>(() => this.authorStore.authorLoggedIn().name === AUTHOR_DEFAULT_NAME);
   isHydrated = false;
 
   import() {
@@ -47,15 +49,11 @@ export class DirectComponent {
 
   testService() {
     //#region Read
-
-    this.pitchService.contestsGetAll().subscribe(data => {
-      console.log(data);
-    });
-
+    // this.pitchService.contestsGetAll().subscribe(data => {
+    //   console.log(data);
+    // });
     //#endregion Read
-
     //#region Create
-
     // const contest: Pitch = {
     //   id: 4,
     //   folioId: 1,
@@ -68,11 +66,9 @@ export class DirectComponent {
     // this.db.contestUpdateName(contest.id, contest).subscribe(data => {
     //   console.log(data);
     // });
-
     // this.db.addSlateMember({ id: 0, slateId: 4, placementId: 36, rankOrder: 1 }).subscribe(data => {
     //   console.log(data);
     // });
-
     // this.db.slateCreate({ contestId: 4, authorId: '1', isTopSlate: true }).subscribe(data => {
     //   console.log(data);
     // });

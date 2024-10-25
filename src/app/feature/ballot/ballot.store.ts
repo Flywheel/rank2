@@ -1,11 +1,11 @@
-import { signalStore, withState, withComputed, withMethods, withHooks } from '@ngrx/signals';
+import { signalStore, withState, withMethods, withHooks } from '@ngrx/signals';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
 import { SlateView } from '../../core/models/interfaces';
 import { slateViewInit } from '../../core/models/initValues';
 
 export const BallotStore = signalStore(
   { providedIn: 'root' },
-  withDevtools('contests'),
+  withDevtools('ballots'),
   withState({
     voterSlates: [slateViewInit],
     voterSlate: slateViewInit,
@@ -17,7 +17,7 @@ export const BallotStore = signalStore(
   }),
 
   withMethods(store => {
-    // const dbContest = inject(ContestService);
+    // const dbballot = inject(ballotService);
     return {
       async updateBallot(ballot: SlateView) {
         updateState(store, `[Slate] Update Start`, {
@@ -39,10 +39,5 @@ export const BallotStore = signalStore(
     };
   }),
 
-  withHooks({
-    // onInit(store) {
-    //   // store.Contests();
-    //   // store.setCurrentContestView(1);
-    // },
-  })
+  withHooks({})
 );

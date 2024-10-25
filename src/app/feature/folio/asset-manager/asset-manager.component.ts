@@ -8,7 +8,7 @@ import { pitchViewInit, placementViewInit } from '../../../core/models/initValue
 import { ViewerComponent } from '../../../core/viewer/viewer/viewer.component';
 
 @Component({
-  selector: 'mh5-channel-assets',
+  selector: 'mh5-asset-manager',
   standalone: true,
   imports: [SlateManagerComponent, ViewerComponent],
   templateUrl: './asset-manager.component.html',
@@ -25,10 +25,6 @@ export class ChannelAssetsComponent {
   placements = computed<PlacementView[]>(() => {
     return this.folioStore.folioViewSelected().placementViews ?? [];
   });
-
-  // pitchesBySelectedFolio = computed<PitchView[]>(() => {
-  //   return this.pitchStore.allContestViews().filter(a => a.authorId === this.authorStore.authorLoggedIn().id) ?? [];
-  // });
 
   pitchesOnFolio = computed<PitchView[]>(() => {
     return this.pitchStore.pitchViewsComputed().filter(p => p.folioId === this.folioStore.folioIdSelected()) ?? [];

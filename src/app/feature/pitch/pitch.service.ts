@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Pitch, PitchView, Slate, SlateMember } from '../../core/models/interfaces';
+import { Pitch, Slate, SlateMember } from '../../core/models/interfaces';
 import { catchError, exhaustMap, forkJoin, map, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
@@ -18,31 +18,13 @@ export class PitchService {
 
   private slateMemberAPIUrl = `api/slatemember`;
 
-  //#region Contest
-  contestsGetAll(): Observable<Pitch[]> {
-    return this.http.get<Pitch[]>(this.pitchAPIUrl);
-  }
-
-  contestGetById(id: number): Observable<Pitch> {
-    return this.http.get<Pitch>(`${this.pitchAPIUrl}/${id}`);
-  }
-
-  contestViewsGetAll(): Observable<PitchView[]> {
-    if (environment.ianConfig.showLogs) console.log(`ballotsService.allContestViews() ${this.pitchViewAPIUrl}`);
-    return this.http.get<PitchView[]>(this.pitchViewAPIUrl);
-  }
-
-  contestViewGetById(id: number): Observable<PitchView> {
-    return this.http.get<PitchView>(`${this.pitchViewAPIUrl}/${id}`);
-  }
-
-  pitchCreate(contestPrep: Partial<Pitch>): Observable<{ newPitch: Pitch; newSlate: Slate }> {
-    if (environment.ianConfig.showLogs) console.log(contestPrep);
-    return this.http.post<Pitch>(this.pitchAPIUrl, contestPrep).pipe(
+  pitchCreate(pitchPrep: Partial<Pitch>): Observable<{ newPitch: Pitch; newSlate: Slate }> {
+    if (environment.ianConfig.showLogs) console.log(pitchPrep);
+    return this.http.post<Pitch>(this.pitchAPIUrl, pitchPrep).pipe(
       exhaustMap((newPitch: Pitch) => {
         const slatePrep: Partial<Slate> = {
           pitchId: newPitch.id,
-          authorId: contestPrep.authorId!,
+          authorId: pitchPrep.authorId!,
           isTopSlate: true,
         };
         if (environment.ianConfig.showLogs) console.log(newPitch);
@@ -60,9 +42,9 @@ export class PitchService {
     );
   }
 
-  contestUpdateName(contestId: number, contest: Pitch): Observable<Pitch> {
-    const endPoint = `${this.pitchAPIUrl}/${contestId}`;
-    return this.http.put<Pitch>(endPoint, contest).pipe(
+  pitchTitleUpdat(pitchId: number, pitch: Pitch): Observable<Pitch> {
+    const endPoint = `${this.pitchAPIUrl}/${pitchId}`;
+    return this.http.put<Pitch>(endPoint, pitch).pipe(
       tap(data => {
         if (environment.ianConfig.showLogs) console.log('data', data);
       }),
@@ -86,34 +68,6 @@ export class PitchService {
     return this.http.get<Slate>(`${this.slateAPIUrl}/${id}`);
   }
 
-  //   slateViewsGetAll(): Observable<SlateView[]> {
-  //     if (environment.ianConfig.showLogs) console.log(`  slateViewsGetAll(): Observable<SlateView[]> {
-  //  ${this.slateViewAPIUrl}`);
-  //     return this.http.get<SlateView[]>(this.slateViewAPIUrl);
-  //   }
-
-  // slateViewGetById(id: number): Observable<SlateView> {
-  //   return this.http.get<SlateView>(`${this.slateViewAPIUrl}/${id}`);
-  // }
-
-  // slateCreate(slatePrep: Partial<Slate>): Observable<Slate> {
-  //   return this.http.post<Slate>(this.slateAPIUrl, slatePrep).pipe(
-  //     catchError(error => {
-  //       if (environment.ianConfig.showLogs) console.log('error', error);
-  //       return throwError(() => new Error('FolioCreate failed'));
-  //     })
-  //   );
-  // }
-
-  // slateCreateForContest(slatePrep: Partial<Slate>): Observable<Slate> {
-  //   return this.http.post<Slate>(this.slateAPIUrl, slatePrep).pipe(
-  //     catchError(error => {
-  //       if (environment.ianConfig.showLogs) console.log('error', error);
-  //       return throwError(() => new Error('FolioCreate failed'));
-  //     })
-  //   );
-  // }
-
   addSlateMember(slateMember: SlateMember): Observable<SlateMember> {
     return this.http.post<SlateMember>(this.slateMemberAPIUrl, {
       placementId: slateMember.placementId,
@@ -130,10 +84,9 @@ export class PitchService {
         rankOrder: slateMember.rankOrder,
       })
     );
-
-    // Use forkJoin to aggregate the observables and return them as a single array
     return forkJoin(requests);
   }
+
   addSlateMembers2(slateMembers: SlateMember[]) {
     slateMembers.forEach(slateMember => {
       this.http.post<SlateMember[]>(this.slateMemberAPIUrl, slateMember);
@@ -147,27 +100,4 @@ export class PitchService {
   deleteSlateMembersBySlateId(slateId: number) {
     return this.http.delete(`${this.slateMemberAPIUrl}/${slateId}`);
   }
-
-  // addSlateMembers(slateMembers: SlateMember[]): Observable<SlateMember[]> {
-
-  //   const promises = slateMembers.map((slateMember) => {
-  //     return
-  //       this.http
-  //         .post<SlateMember>(this.slateMemberAPIUrl, {
-  //           placementId: slateMember.placementId,
-  //           slateId: slateMember.slateId,
-  //           rankOrder: slateMember.rankOrder,
-  //         })
-  //         .subscribe({
-  //           next: (data) => {
-
-  //             resolve(data);
-  //           },
-  //           error: (error) => {
-  //             reject(error);
-  //           },
-  //         });
-  //     });
-  //   });
-  // }
 }

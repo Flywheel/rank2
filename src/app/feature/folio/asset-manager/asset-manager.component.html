@@ -28,7 +28,7 @@
           @if (pitchesOnFolioCount() > 0) {
             @for (item of pitchesOnFolio(); track $index) {
               <div class="placement-list-item" (click)="editPitch(item)" (keydown)="editPitch(item)" tabindex="0">
-                {{ item.title }} {{ item.description }}
+                {{ item.name }} {{ item.description }}
               </div>
             }
           } @else {

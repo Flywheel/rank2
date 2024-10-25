@@ -13,7 +13,7 @@ import { FolioStore } from '../folio.store';
   templateUrl: './pitch-new.component.html',
   styleUrl: './pitch-new.component.scss',
 })
-export class ContestNewComponent {
+export class PitchNewComponent {
   authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
   pichStore = inject(PitchStore);

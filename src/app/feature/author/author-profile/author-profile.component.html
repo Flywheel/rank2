@@ -1,5 +1,5 @@
 <div class="mainContainer">
-  <div class="sectionMainTitle">Identity Management</div>
+  <div class="sectionMainTitle">Author Profile Management</div>
   <div class="sectionContentTitle">Account Identifier:</div>
   @if (authorStore.authorLoggedIn() === undefined || authorStore.authorLoggedIn().id.length === 0) {
     <div class="sectionContent">
@@ -14,9 +14,10 @@
     <div class="sectionContentTitle">Author Name:</div>
     <div class="sectionContent">{{ authorStore.authorLoggedIn().name }}</div>
   } @else {
-    <div class="sectionMainTitle">Create Your Author Handle</div>
+    <div class="sectionMainTitle">Create Your Handle Name</div>
     <div class="sectionContentTitle">
       <input
+        #newHandleInput
         class="newHandleInput"
         [ngModel]="channelName()"
         (ngModelChange)="channelName.set($event)"
@@ -25,7 +26,9 @@
     </div>
 
     @if (isChannelNameOk() !== true) {
-      <div class="sectionContentCaption" style="color: lightpink">Use letters and numbers (no spaces or symbols) up to 16 characters long.</div>
+      <div class="sectionContentCaption" style="color: lightpink">
+        Use letters and numbers (no spaces or symbols) up to 16 characters long.
+      </div>
     } @else {
       <div class="sectionContentCaption">
         Channel <span style="color: white"> &#64;{{ channelName() }} </span>
@@ -38,17 +41,20 @@
   }
 
   <div class="sectionMainTitle">Activity</div>
-  <div class="sectionContentTitle">Author Slates</div>
-
-  <div class="sectionContent">Author Folio Created {{ authorStore.authorLoggedInView().authorFolio.folioName }}</div>
-  <div class="sectionContent">Ballots Cast</div>
-  <div class="sectionContent">Placements Added {{ authorStore.authorLoggedInView().authorFolio.placementViews.length }}</div>
-  <div class="sectionContent">Contests Added</div>
+  <div class="sectionContentTitle">Created {{ authorStore.authorLoggedInView().authorFolio.folioName }}</div>
+  <div class="sectionContent">{{ authorStore.authorLoggedInView().authorFolio.folioName }}</div>
+  <div class="sectionContentTitle">Ballots Cast</div>
+  <div class="sectionContent">ballotStore</div>
+  <div class="sectionContentTitle">Placements Added</div>
+  <div class="sectionContent">{{ authorStore.authorLoggedInView().authorFolio.placementViews.length }}</div>
+  <div class="sectionContentTitle">Pitches Added</div>
+  <div class="sectionContent">{{ authorStore.authorLoggedInView().pitches.length }}</div>
 
   <div class="sectionMainTitle">Actions Available</div>
 
   @if (isRunSomethingVisible()) {
-    <button (click)="runSomething()" style="margin: 10px">Run Test</button>
+    <button class="adminButton" (click)="runSomething()">Run Test</button>
+    <mh5-direct />
   } @else {
     <div class="sectionContent">
       <p>Nothing today. Still in development</p>

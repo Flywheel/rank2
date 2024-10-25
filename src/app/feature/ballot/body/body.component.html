@@ -26,7 +26,7 @@
           <button class="move-candidate-down" (click)="moveDownOnePosition(ranked)">&#8595;</button>
         </div>
       } @empty {
-        <p>Ready to accept your preferences for {{ pitch().title }}.</p>
+        <p>Ready to accept your preferences for {{ pitch().name }}.</p>
         <p>Drag and reorder candidates here.</p>
       }
     </div>
@@ -34,7 +34,7 @@
   @if (candidatesAvailable().length !== 0) {
     <div class="title">
       <span>-</span>
-      <span>Candidates for {{ pitch().title }}</span>
+      <span>Candidates for {{ pitch().name }}</span>
       <span>-</span>
     </div>
   }
@@ -58,7 +58,7 @@
           <span class="add-candidate"></span>
         </div>
       } @empty {
-        Finished all {{ pitchStore.slateView().slateMemberViews.length }} candidates for {{ pitch().title }}.
+        Finished all {{ pitchStore.slateView().slateMemberViews.length }} candidates for {{ pitch().name }}.
       }
     </div>
   </div>

@@ -53,3 +53,40 @@
   background-color: #334;
   flex-grow: 1;
 }
+
+/* folio-shell.component.scss */
+
+.signup-warning-container {
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically */
+  padding: 20px;
+}
+
+.signup-warning {
+  width: 400px; /* Adjust the width as needed */
+  height: 200px; /* Adjust the height as needed */
+  background-color: #558; /* White background */
+  border: 2px solid #007bff; /* Blue border */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  display: flex;
+  justify-content: center; /* Centers text horizontally */
+  align-items: center; /* Centers text vertically */
+  text-align: center; /* Centers text */
+  padding: 20px; /* Inner spacing */
+  cursor: pointer; /* Changes cursor to pointer on hover */
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s; /* Smooth transitions */
+}
+
+.signup-warning:hover {
+  transform: scale(1.05); /* Slightly enlarges the square on hover */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+
+.signup-warning:focus {
+  outline: none; /* Removes default focus outline */
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Custom focus shadow */
+}

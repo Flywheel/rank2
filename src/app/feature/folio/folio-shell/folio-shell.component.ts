@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { HeaderComponent } from '../../../core/header/header.component';
 import { FolioScrollHorizontalComponent } from '../folio-scroll-horizontal/folio-scroll-horizontal.component';
 import { FolioPlacementNewComponent } from '../folio-placement-new/folio-placement-new.component';
@@ -10,8 +10,9 @@ import { IconPlusComponent } from '../../../core/svg/icon-plus';
 import { ChannelAssetsComponent } from '../asset-manager/asset-manager.component';
 import { SlateManagerComponent } from '../slate-manager/slate-manager.component';
 import { DirectComponent } from '../../pitch/direct/direct.component';
-import { ContestNewComponent } from '../pitch-new/pitch-new.component';
-
+import { PitchNewComponent } from '../pitch-new/pitch-new.component';
+import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
+import { Router } from '@angular/router';
 @Component({
   selector: 'mh5-folio-shell',
   standalone: true,
@@ -25,13 +26,15 @@ import { ContestNewComponent } from '../pitch-new/pitch-new.component';
     ChannelAssetsComponent,
     SlateManagerComponent,
     DirectComponent,
-    ContestNewComponent,
+    PitchNewComponent,
   ],
   templateUrl: './folio-shell.component.html',
   styleUrl: './folio-shell.component.scss',
 })
 export class FolioShellComponent {
+  router = inject(Router);
   authorStore = inject(AuthorStore);
+  needsAuthorName = computed<boolean>(() => this.authorStore.authorLoggedIn().name === AUTHOR_DEFAULT_NAME);
 
   tabs: TabList[] = [
     { name: 'Assets', title: 'Assets' },
@@ -45,6 +48,10 @@ export class FolioShellComponent {
   thePitches = this.authorStore.authorPitchViews;
   newPitch = signal(false);
   newPlacement = signal(false);
+
+  openPage(page: string) {
+    this.router.navigate([page]);
+  }
 
   openNewPlacement() {
     this.newPlacement.set(true);

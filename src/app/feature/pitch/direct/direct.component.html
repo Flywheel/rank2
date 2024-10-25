@@ -1,9 +1,7 @@
 <div class="">
-  <div></div>
-  <div class="">
+  @if (!needsAuthorName()) {
     <button class="adminButton" (click)="import()">Load Data</button>
     <!-- <button class="adminButton" (click)="testService()">Services</button> -->
     <button class="adminButton" (click)="storeLogs()">Stores</button>
-  </div>
-  <div class=""></div>
+  }
 </div>

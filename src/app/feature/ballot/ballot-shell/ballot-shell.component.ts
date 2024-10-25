@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { HeaderComponent } from '../../../core/header/header.component';
 import { BodyComponent } from '../body/body.component';
 
-import { PitchStore } from '../../pitch/pitch.store';
 import { PitchScrollerComponent } from '../../pitch/pitch-scroller-horizontal/pitch-scroller.component';
 
 import { DirectComponent } from '../../pitch/direct/direct.component';
@@ -15,7 +14,4 @@ import { DirectComponent } from '../../pitch/direct/direct.component';
   styleUrl: './ballot-shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BallotShellComponent {
-  ballotStore = inject(PitchStore);
-  theContests = this.ballotStore.pitches;
-}
+export class BallotShellComponent {}

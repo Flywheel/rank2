@@ -9,9 +9,9 @@ import { AuthorStore } from '../../author/author.store';
   imports: [],
   template: `
     <div class="horizontal-scroll">
-      @for (contest of pitchViews(); track $index) {
-        <div class="menu-item" (click)="selectContest(contest.id)" (keydown)="selectContest(contest.id)" tabindex="$index">
-          {{ contest.title }}
+      @for (pitch of pitchViews(); track $index) {
+        <div class="menu-item" (click)="selectPitch(pitch.id)" (keydown)="selectPitch(pitch.id)" tabindex="$index">
+          {{ pitch.name }}
         </div>
       }
     </div>
@@ -22,7 +22,7 @@ export class PitchScrollerComponent {
   authorStore = inject(AuthorStore);
   pitchStore = inject(PitchStore);
   pitchViews = computed<PitchView[]>(() => this.authorStore.authorChannelViews()[0].pitches.filter(p => p.id > 0));
-  selectContest(id: number) {
+  selectPitch(id: number) {
     this.pitchStore.setPitchSelected(id);
   }
 }

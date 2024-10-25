@@ -1,7 +1,6 @@
 <mh5-header callerPage="folio" />
 
 <mh5-folio-scroll-horizontal [theFoliosInput]="theFolios()" (newPlacementEditorStateChange)="openNewPlacement()" />
-
 <div class="tabs streamHeader">
   @for (tab of tabs; track $index) {
     <button (click)="selectedTab = tab" class="streamButton" [class.selected]="selectedTab === tab">
@@ -9,38 +8,50 @@
     </button>
   }
 </div>
-
-<div class="assetPanel">
-  @switch (selectedTab.name) {
-    @case ('Assets') {
-      @if (newPlacement()) {
-        <mh5-folio-placement-new (closeNewPlacementEditor)="closeNewPlacement()" [forcePopup]="true" />
-      } @else {
-        <div style="text-align: center">
-          <mh5-icon-plus (click)="openNewPlacement()" (keydown)="openNewPlacement()" tabindex="1" />
+@if (needsAuthorName()) {
+  <div class="signup-warning-container">
+    <div
+      (click)="openPage('/author')"
+      (keydown.enter)="openPage('/author')"
+      tabindex="0"
+      aria-label="Signup Warning"
+      class="signup-warning">
+      To add and manage assets, please create a handle name for your author profile.
+    </div>
+  </div>
+} @else {
+  <div class="assetPanel">
+    @switch (selectedTab.name) {
+      @case ('Assets') {
+        @if (newPlacement()) {
+          <mh5-folio-placement-new (closeNewPlacementEditor)="closeNewPlacement()" [forcePopup]="true" />
+        } @else {
+          <div style="text-align: center">
+            <mh5-icon-plus (click)="openNewPlacement()" (keydown)="openNewPlacement()" tabindex="1" />
+          </div>
+        }
+        <div>
+          <mh5-asset-manager [folioList]="authorStore.authorFolioViewList()" [tabSelected]="selectedTab.name" />
         </div>
       }
-      <div>
-        <mh5-channel-assets [folioList]="authorStore.authorFolioViewList()" [tabSelected]="selectedTab.name" />
-      </div>
-    }
 
-    @case ('Pitches') {
-      @if (newPitch()) {
-        <mh5-pitch-new (closeNewPitchEditor)="closeNewPitch()" [forcePopup]="true" />
-      } @else {
-        <div style="text-align: center">
-          <mh5-icon-plus (click)="openNewPitch()" (keydown)="openNewPitch()" tabindex="1" />
+      @case ('Pitches') {
+        @if (newPitch()) {
+          <mh5-pitch-new (closeNewPitchEditor)="closeNewPitch()" [forcePopup]="true" />
+        } @else {
+          <div style="text-align: center">
+            <mh5-icon-plus (click)="openNewPitch()" (keydown)="openNewPitch()" tabindex="1" />
+          </div>
+        }
+        <div>
+          <mh5-asset-manager [folioList]="authorStore.authorFolioViewList()" [tabSelected]="selectedTab.name" />
         </div>
       }
-      <div>
-        <mh5-channel-assets [folioList]="authorStore.authorFolioViewList()" [tabSelected]="selectedTab.name" />
-      </div>
+      @case ('Slates') {
+        <div></div>
+      }
     }
-    @case ('Slates') {
-      <div></div>
-    }
-  }
-</div>
+  </div>
 
-<mh5-direct />
+  <mh5-direct />
+}

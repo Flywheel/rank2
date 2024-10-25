@@ -114,7 +114,7 @@ export const pitchInit: Pitch = {
   folioId: 0,
   opens: new Date('1922-01-03'),
   closes: new Date('1922-01-04'),
-  title: '',
+  name: '',
   description: '',
 };
 export const pitchViewInit: PitchView = {
@@ -123,7 +123,7 @@ export const pitchViewInit: PitchView = {
   folioId: 0,
   opens: new Date('1922-01-03'),
   closes: new Date('1922-01-04'),
-  title: '',
+  name: '',
   description: '',
   slateId: 0,
   slateView: slateViewInit,
