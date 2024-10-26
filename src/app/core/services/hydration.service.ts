@@ -13,7 +13,7 @@ export class HydrationService {
   private authorStore = inject(AuthorStore);
   private folioStore = inject(FolioStore);
   private pitchStore = inject(PitchStore);
-  authorLoggedIn = this.authorStore.authorLoggedIn();
+  authorLoggedIn = this.authorStore.authorLoggedIn;
 
   updateFromStorage(): void {
     this.authorStore.readFromStorage(); // reads the stored item from storage and patches the state
@@ -43,7 +43,7 @@ export class HydrationService {
   }
 
   public async hydrateFolios(): Promise<void> {
-    const authorId = this.authorLoggedIn.id;
+    const authorId = this.authorLoggedIn().id;
     const rootFolioId = this.authorStore.authorChannelViews().filter(f => f.id === authorId)[0].authorFolio.id;
     const assetsToImport: AssetImporter[] = theData.assets;
     const foliosToImport: FolioImporter[] = theData.folios;
@@ -107,7 +107,7 @@ export class HydrationService {
         opens: new Date(),
         closes: new Date(new Date().setMonth(new Date().getMonth() + 1)),
       };
-      const newPitch = pitchPrep as Pitch; // cast with no ID to create new pitch
+      const newPitch = pitchPrep as unknown as Pitch; // cast with no ID to create new pitch
       this.pitchStore.pitchCreate(newPitch);
     });
   }

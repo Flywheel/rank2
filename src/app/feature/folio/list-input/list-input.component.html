@@ -1,0 +1,11 @@
+<p>list-input works!</p>
+<textarea (paste)="handlePaste($event)"></textarea>
+<button (click)="validateData()">Validate</button>
+@if (validationErrors.length) {
+  <div class="">
+    @for (error of validationErrors; track $index) {
+      <p>{{ error }}</p>
+    }
+    <p *ngFor="let error of validationErrors">{{ error }}</p>
+  </div>
+}

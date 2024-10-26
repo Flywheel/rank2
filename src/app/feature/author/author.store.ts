@@ -57,7 +57,6 @@ export const AuthorStore = signalStore(
     };
   }),
 
-  // withComputed(store => {
   //   const folioStore = inject(FolioStore);
   //   const pitchStore = inject(PitchStore);
   //   return {

@@ -53,7 +53,6 @@
   <div class="sectionMainTitle">Actions Available</div>
 
   @if (isRunSomethingVisible()) {
-    <button class="adminButton" (click)="runSomething()">Run Test</button>
     <mh5-direct />
   } @else {
     <div class="sectionContent">
@@ -65,6 +64,7 @@
   <div class="sectionContent"><a style="color: #ddd" [routerLink]="['/tos']">Privacy and Terms of Service</a></div>
 </div>
 
+<div class=""><button class="adminButton" (click)="runSomething()">Run Test</button></div>
 @defer (when showConsentPopup() === true) {
   <mh5-author-consent [forcePopup]="showConsentPopup()" (closeComponent)="closeConsentDialog()" />
 }

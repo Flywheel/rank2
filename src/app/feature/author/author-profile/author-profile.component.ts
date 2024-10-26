@@ -9,7 +9,6 @@ import { environment } from '../../../../environments/environment';
 import { Author, Folio } from '../../../core/models/interfaces';
 // import { uuidv7 } from 'uuidv7';
 import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
-import { AuthorService } from '../author.service';
 import { FolioStore } from '../../folio/folio.store';
 import { DirectComponent } from '../../pitch/direct/direct.component';
 import { PitchStore } from '../../pitch/pitch.store';
@@ -24,7 +23,7 @@ import { PitchStore } from '../../pitch/pitch.store';
 export class AuthorProfileComponent implements AfterViewInit {
   authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
-  pitxhStore = inject(PitchStore);
+  pitchStore = inject(PitchStore);
   isRunSomethingVisible = signal<boolean>(true);
   channelName = signal<string>('');
   showConsentPopup = signal(false);

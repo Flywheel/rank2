@@ -79,6 +79,8 @@ export const theData = {
     { folioName: 'US Pres 2024', mediaType: 'youtube', caption: 'Chase Oliver', sourceId: 'V3n8qmgNHZc' },
     { folioName: 'US Pres 2024', mediaType: 'youtube', caption: 'Jill Stein', sourceId: '2KsIxLn7UO0' },
     { folioName: 'US Pres 2024', mediaType: 'youtube', caption: 'Randall Terry', sourceId: 't3J0iRz35jc' },
+    { folioName: 'US Pres 2024', mediaType: 'youtube', caption: 'Donald Trump', sourceId: 'AcpjvVFAayo' },
+    { folioName: 'US Pres 2024', mediaType: 'youtube', caption: 'Cornel West', sourceId: 'LAZv9UZBDFg' },
 
     { folioName: 'Eurovision 2024', mediaType: 'youtube', sourceId: 'nrjFhjpm7D8', caption: 'Albania: BESA - TITAN' },
     { folioName: 'Eurovision 2024', mediaType: 'youtube', sourceId: '_6xfmW0Fc40', caption: 'Armenia: LADANIVA - Jako' },
