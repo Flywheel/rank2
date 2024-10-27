@@ -8,11 +8,12 @@ import { MediaService } from '../../../core/services/media.service';
 import { FolioPlacementMediaComponent } from '../folio-placement-media/folio-placement-media.component';
 import { assetViewInit } from '../../../core/models/initValues';
 import { PitchNewComponent } from '../pitch-new/pitch-new.component';
+import { ListInputComponent } from '../list-input/list-input.component';
 
 @Component({
   selector: 'mh5-folio-placement-new',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, FolioPlacementMediaComponent, PitchNewComponent],
+  imports: [ReactiveFormsModule, FormsModule, FolioPlacementMediaComponent, PitchNewComponent, ListInputComponent],
   templateUrl: './folio-placement-new.component.html',
   styleUrl: './folio-placement-new.component.scss',
 })
