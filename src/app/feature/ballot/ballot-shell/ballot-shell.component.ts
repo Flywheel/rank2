@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { HeaderComponent } from '../../../core/header/header.component';
 import { BodyComponent } from '../body/body.component';
 
-import { PitchScrollerComponent } from '../../pitch/pitch-scroller-horizontal/pitch-scroller.component';
+import { PitchScrollerComponent } from '../../pitch/pitch-scroller/pitch-scroller.component';
 
 import { DirectComponent } from '../../pitch/direct/direct.component';
 

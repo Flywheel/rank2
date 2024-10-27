@@ -96,7 +96,7 @@ export class HydrationService {
   }
 
   hydratePitches() {
-    const authorId = this.authorLoggedIn.id;
+    const authorId = this.authorLoggedIn.id();
     const folioViews = this.folioStore.folioViewsComputed();
     folioViews.forEach(f => {
       const pitchPrep = {

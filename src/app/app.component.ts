@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { FolioStore } from './feature/folio/folio.store';
 import { Folio } from './core/models/interfaces';
+import { SwUpdate } from '@angular/service-worker';
 
 @Component({
   selector: 'mh5-root',
@@ -18,7 +19,7 @@ import { Folio } from './core/models/interfaces';
 export class AppComponent implements OnInit, OnDestroy {
   authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
-  // swUpdate = inject(SwUpdate);
+  swUpdate = inject(SwUpdate);
   title = 'MH - rank2';
   isIframe = false;
 
@@ -28,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // this.reloadCache();
+    this.reloadCache();
     if (typeof window !== 'undefined') {
       this.isIframe = window !== window.parent && !window.opener;
     }
@@ -43,6 +44,14 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       }
     }
+  }
+
+  reloadCache(): void {
+    this.swUpdate.versionUpdates.subscribe(event => {
+      if (event.type === 'VERSION_READY') {
+        window.location.reload();
+      }
+    });
   }
 
   private loadForDemo_NoBackend() {

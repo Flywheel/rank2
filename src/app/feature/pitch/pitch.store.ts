@@ -59,6 +59,8 @@ export const PitchStore = signalStore(
       pitchViewsComputed: computed<PitchView[]>(() =>
         store.pitches().map(pitch => ({
           ...pitch,
+          id: pitch.id,
+          authorId: pitch.authorId,
           slateId: store.slateViewsComputed().find(s => s.id === pitch.id)?.pitchId ?? 0,
           slateView: store.slateViewsComputed().find(s => s.id === pitch.id) ?? slateViewInit,
         }))
