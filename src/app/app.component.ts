@@ -59,7 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private loadForDemo_NoBackend() {
     const authorId = this.authorStore.authorLoggedIn().id;
-    const author = this.authorStore.authorById(authorId);
+    const author = this.authorStore.authorSelectedSetById(authorId);
     if (!author) {
       this.authorStore.authorCreate(author);
       this.authorStore.authorLogin(author);

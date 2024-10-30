@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { AuthorStore } from '../../feature/author/author.store';
 import { FolioStore } from '../../feature/folio/folio.store';
 import { PitchStore } from '../../feature/pitch/pitch.store';
-import { theData } from '../../../mocks/mockdataForHydration';
+//import { theData } from '../../../mocks/mockdataForHydration';
 import { Asset, AssetImporter, Folio, FolioImporter, Pitch, PitchView, Placement, SlateMember } from '../models/interfaces';
 import { environment } from '../../../environments/environment';
 
@@ -42,9 +42,9 @@ export class HydrationService {
     }));
   }
 
-  public async hydrateFolios(): Promise<void> {
-    const authorId = this.authorLoggedIn().id;
-    const rootFolioId = this.authorStore.authorChannelViews().filter(f => f.id === authorId)[0].authorFolio.id;
+  public async hydrateFolios(authorId: string, theData: any): Promise<void> {
+    //const authorId = this.authorLoggedIn().id;
+    const rootFolioId = this.authorStore.authorViews().filter(f => f.id === authorId)[0].authorFolio.id;
     const assetsToImport: AssetImporter[] = theData.assets;
     const foliosToImport: FolioImporter[] = theData.folios;
     // const placementPrepared: Placement = placementInit;
@@ -92,11 +92,11 @@ export class HydrationService {
       }
       foliosPrepared.push(this.folioStore.folioViewSelected());
     }
-    this.hydratePitches();
+    this.hydratePitches(authorId);
   }
 
-  hydratePitches() {
-    const authorId = this.authorLoggedIn.id();
+  hydratePitches(authorId: string) {
+    //  const authorId = this.authorLoggedIn.id();
     const folioViews = this.folioStore.folioViewsComputed();
     folioViews.forEach(f => {
       const pitchPrep = {

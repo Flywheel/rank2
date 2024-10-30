@@ -16,7 +16,7 @@ export const AuthorStore = signalStore(
   withDevtools('authors'),
   withState({
     authorLoggedIn: authorInit,
-    authorIdSelected: '',
+    authorSelectedId: '',
     authors: [authorInit],
     isLoading: false,
     consentStatus: 'unknown' as string,
@@ -31,7 +31,7 @@ export const AuthorStore = signalStore(
     const folioStore = inject(FolioStore);
     const pitchStore = inject(PitchStore);
     return {
-      authorChannelViews: computed<AuthorView[]>(() => {
+      authorViews: computed<AuthorView[]>(() => {
         return store
           .authors()
           .filter(a => a.id.length > 0)
@@ -47,12 +47,13 @@ export const AuthorStore = signalStore(
             return authorView;
           });
       }),
-      authorFolioViews: computed<FolioView[]>(() =>
-        folioStore.folioViewsComputed().filter(folio => folio.authorId === store.authorIdSelected())
+
+      authorSelectedFolioViews: computed<FolioView[]>(() =>
+        folioStore.folioViewsComputed().filter(folio => folio.authorId === store.authorSelectedId())
       ),
 
-      authorPitchViews: computed<PitchView[]>(() =>
-        pitchStore.pitchViewsComputed().filter(folio => folio.authorId === store.authorIdSelected())
+      authorSelectedPitchViews: computed<PitchView[]>(() =>
+        pitchStore.pitchViewsComputed().filter(folio => folio.authorId === store.authorSelectedId())
       ),
     };
   }),
@@ -84,13 +85,13 @@ export const AuthorStore = signalStore(
 
   withComputed(store => ({
     authorSelectedView: computed<AuthorView>(
-      () => store.authorChannelViews().find(author => author.id === store.authorIdSelected()) ?? authorViewInit
+      () => store.authorViews().find(author => author.id === store.authorSelectedId()) ?? authorViewInit
     ),
     authorLoggedInView: computed<AuthorView>(
-      () => store.authorChannelViews().find(author => author.id === store.authorLoggedIn().id) ?? authorViewInit
+      () => store.authorViews().find(author => author.id === store.authorLoggedIn().id) ?? authorViewInit
     ),
     authorFolioViewList: computed<FolioView[]>(() => {
-      const folios = store.authorFolioViews;
+      const folios = store.authorSelectedFolioViews;
       const retval: FolioView[] = [];
 
       const traverseFolios = (folio: FolioView, depth: number, path: number[] = []) => {
@@ -120,7 +121,7 @@ export const AuthorStore = signalStore(
       return retval;
     }),
     authorFolioTree: computed<TreeNode[]>(() => {
-      const folios = store.authorFolioViews;
+      const folios = store.authorSelectedFolioViews;
       return folios()
         .filter(folio => !folio.parentFolioId) // Start with root folios (no parent)
         .map(folio => buildTreeNode(folio, 0, folios()));
@@ -176,7 +177,7 @@ export const AuthorStore = signalStore(
       async authorLogin(author: Author) {
         updateState(store, '[Author] Add Success', {
           authorLoggedIn: author,
-          authorIdSelected: author.id,
+          authorSelectedId: author.id,
           isLoading: false,
         });
         store.authorStateToLocalStorage();
@@ -235,17 +236,17 @@ export const AuthorStore = signalStore(
         )
       ),
 
-      authorById: rxMethod<string>(
+      authorSelectedSetById: rxMethod<string>(
         pipe(
           switchMap(authorId => {
             updateState(store, '[Author] GetById Start', { isLoading: true });
-            const existingAuthor = store.authors().find(author => author.id === authorId);
-            if (existingAuthor) {
+            const knownAuthor = store.authors().find(author => author.id === authorId);
+            if (knownAuthor) {
               updateState(store, '[Author] GetById Success', {
-                authorIdSelected: authorId,
+                authorSelectedId: authorId,
                 isLoading: false,
               });
-              return of(existingAuthor);
+              return of(knownAuthor);
             } else {
               return dbAuthor.authorGetById(authorId).pipe(
                 map((author: Author) => {

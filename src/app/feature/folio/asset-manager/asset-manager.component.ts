@@ -18,6 +18,7 @@ export class ChannelAssetsComponent {
   authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
   pitchStore = inject(PitchStore);
+
   folioList = input<FolioView[]>([]);
   tabSelected = input<string>('');
   showPitchMananger = signal<boolean>(false);

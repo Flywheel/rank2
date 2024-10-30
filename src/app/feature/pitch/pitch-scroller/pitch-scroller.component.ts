@@ -23,8 +23,8 @@ export class PitchScrollerComponent {
   authorStore = inject(AuthorStore);
   pitchStore = inject(PitchStore);
   pitchViews = computed<PitchView[]>(() => {
-    if (this.authorStore.authorChannelViews().length > 0) {
-      return this.authorStore.authorChannelViews()[0].pitches.filter(p => p.id > 0);
+    if (this.authorStore.authorViews().length > 0) {
+      return this.authorStore.authorViews()[0].pitches.filter(p => p.id > 0);
     } else return [pitchViewInit];
   });
   selectPitch(id: number) {

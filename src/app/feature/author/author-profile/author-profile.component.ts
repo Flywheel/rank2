@@ -54,7 +54,7 @@ export class AuthorProfileComponent implements AfterViewInit {
   runSomething() {
     const loggedInAuthorData = this.authorStore.authorLoggedIn();
     if (environment.ianConfig.showLogs) console.log(loggedInAuthorData);
-    this.authorStore.authorById(loggedInAuthorData.id);
+    this.authorStore.authorSelectedSetById(loggedInAuthorData.id);
     if (environment.ianConfig.showLogs) {
       console.log(loggedInAuthorData);
       console.log(this.authorStore.authorLoggedIn());

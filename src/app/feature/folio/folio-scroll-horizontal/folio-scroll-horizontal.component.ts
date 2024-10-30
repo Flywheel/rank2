@@ -4,6 +4,7 @@ import { AuthorView, FolioView } from '../../../core/models/interfaces';
 import { IconPlusComponent } from '../../../core/svg/icon-plus';
 import { IconProfileComponent } from '../../../core/svg/icon-profile';
 import { IconShareComponent } from '../../../core/svg/icon-share';
+import { AuthorStore } from '../../author/author.store';
 
 @Component({
   selector: 'mh5-folio-scroll-horizontal',
@@ -14,6 +15,8 @@ import { IconShareComponent } from '../../../core/svg/icon-share';
 })
 export class FolioScrollHorizontalComponent {
   folioStore = inject(FolioStore);
+  authorStore = inject(AuthorStore);
+
   theFoliosInput = input<FolioView[]>();
   knownAuthors = input<AuthorView[]>();
   newFolioEditorStateChange = output<boolean>();
@@ -33,12 +36,7 @@ export class FolioScrollHorizontalComponent {
   selectFolio(id: number) {
     this.folioStore.setFolioSelected(id);
   }
-  newFolio() {
-    this.folioStore.toggleFolioAdder(true);
-    this.newFolioEditorStateChange.emit(true);
-  }
-  newPlacement() {
-    this.folioStore.togglePlacementAdder(true);
-    this.newPlacementEditorStateChange.emit(true);
+  selectAuthor(id: string) {
+    this.authorStore.authorSelectedSetById(id);
   }
 }
