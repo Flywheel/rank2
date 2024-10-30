@@ -1,3 +1,10 @@
-<mh5-header callerPage="pitch"></mh5-header>
-<mh5-pitch-scroller />
-<mh5-body />
+@if (!hideViewerDisplay()) {
+  <mh5-header callerPage="viewer" />
+  <div class="placement-display">
+    <mh5-viewer [placementView]="slateMember().placementView" />
+  </div>
+} @else {
+  <mh5-header callerPage="pitch" />
+  <mh5-pitch-scroller />
+  <mh5-body (hidePlacementDisplay)="hidePlacementDisplayToggle()" (placementToDisplay)="setSlateMemberView($event)" />
+}

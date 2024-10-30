@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, output, signal, untracked } from '@angular/core';
 import { PitchView, SlateMemberView, SlateView } from '../../../core/models/interfaces';
 import { PitchStore } from '../../pitch/pitch.store';
 import {
@@ -26,23 +26,14 @@ export class BodyComponent {
   pitchStore = inject(PitchStore);
   ballotStore = inject(BallotStore);
 
+  candidatesAvailable = signal<SlateMemberView[]>([]);
+  candidatesRanked = signal<SlateMemberView[]>([]);
+
   pitch = computed<PitchView>(() => this.pitchStore.pitchViewSelected());
   candidateList = computed(() => this.pitch().slateView.slateMemberViews);
 
-  candidatesAvailable = signal<SlateMemberView[]>([]);
-  candidatesRanked = signal<SlateMemberView[]>([]);
-  // isTopSlate = computed<boolean>(() => this.pitch().slateView.isTopSlate);
-  preparedBallot = signal<SlateView>({
-    id: 0,
-    pitchId: this.pitch().id,
-    authorId: this.authorId(),
-    isTopSlate: false,
-    slateMemberViews: [],
-  });
-  // contentParams = computed<string>(() => {
-  //   const selected = this.candidateList().filter(candidate => candidate.placementId === this.selectedCandidateId())[0];
-  //   return selected ? selected.placementView.assetView.mediaType + '..i..' + selected.placementView.assetView.sourceId : '';
-  // });
+  hidePlacementDisplay = output<boolean>();
+  placementToDisplay = output<SlateMemberView>();
 
   constructor() {
     effect(() => {
@@ -51,6 +42,11 @@ export class BodyComponent {
         this.setAvailableCandidates();
       });
     });
+  }
+
+  viewPlacement(placement: SlateMemberView) {
+    this.hidePlacementDisplay.emit(false);
+    this.placementToDisplay.emit(placement);
   }
 
   setAvailableCandidates() {
@@ -140,6 +136,14 @@ export class BodyComponent {
     }
     this.updateCurrentSlateSignal();
   }
+
+  preparedBallot = signal<SlateView>({
+    id: 0,
+    pitchId: this.pitch().id,
+    authorId: this.authorId(),
+    isTopSlate: false,
+    slateMemberViews: [],
+  });
 
   updateCurrentSlateSignal() {
     if (this.candidatesRanked().length === 0) return;

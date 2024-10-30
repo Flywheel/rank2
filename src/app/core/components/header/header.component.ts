@@ -1,11 +1,10 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { IconCommunityComponent } from '../../svg/icon-community';
 import { IconShareComponent } from '../../svg/icon-share';
 import { IconProfileComponent } from '../../svg/icon-profile';
 import { AuthorConsentComponent } from '../../../feature/author/author-consent/author-consent.component';
-import { AuthorStore } from '../../../feature/author/author.store';
 import { IconDashboardComponent } from '../../svg/icon-dashboard';
 import { IconFrameComponent } from '../../svg/icon-dashboard copy';
 import { IconMhComponent } from '../../svg/icon-mh';
@@ -27,11 +26,11 @@ import { IconMhComponent } from '../../svg/icon-mh';
 })
 export class HeaderComponent {
   router = inject(Router);
-  authorStore = inject(AuthorStore);
+  // authorStore = inject(AuthorStore);
   callerPage = input.required<string>();
   location = inject(Location);
-  isCookieStatusAccepted = computed<boolean>(() => this.authorStore.consentStatus() === 'accepted');
-  showCookieConsentComponent = signal(false);
+  // isCookieStatusAccepted = computed<boolean>(() => this.authorStore.consentStatus() === 'accepted');
+  // showCookieConsentComponent = signal(false);
 
   openPage(page: string) {
     this.router.navigate([page]);
@@ -41,8 +40,8 @@ export class HeaderComponent {
     this.location.back();
   }
 
-  closeCookieComponent() {
-    console.log('closeCookieComponent Fired');
-    this.showCookieConsentComponent.set(false);
-  }
+  // closeCookieComponent() {
+  //   console.log('closeCookieComponent Fired');
+  //   this.showCookieConsentComponent.set(false);
+  // }
 }

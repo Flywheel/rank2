@@ -4,7 +4,6 @@ import { AuthorStore } from '../../feature/author/author.store';
 import { FolioStore } from '../../feature/folio/folio.store';
 import { environment } from '../../../environments/environment';
 import { theData } from '../../../mocks/mockdataForHydration';
-import { theDataTony } from '../../../mocks/mockdataTony';
 
 @Injectable({
   providedIn: 'root',

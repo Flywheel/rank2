@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { HeaderComponent } from '../../../core/header/header.component';
+import { HeaderComponent } from '../../../core/components/header/header.component';
 import { FolioScrollHorizontalComponent } from '../folio-scroll-horizontal/folio-scroll-horizontal.component';
 import { FolioPlacementNewComponent } from '../folio-placement-new/folio-placement-new.component';
 import { FolioPlacementListComponent } from '../folio-placement-list/folio-placement-list.component';

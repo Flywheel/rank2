@@ -22,7 +22,9 @@
           </span>
           <span class="sort-handle" cdkDragHandle></span>
           <span class="candidate-index" cdkDragHandle>{{ $index + 1 }}</span>
-          <span class="candidate-ranked" cdkDragHandle> {{ ranked.placementView.caption }}</span>
+          <span class="candidate-ranked" cdkDragHandle (click)="viewPlacement(ranked)" (keypress)="viewPlacement(ranked)" tabindex="1">
+            {{ ranked.placementView.caption }}</span
+          >
           <button class="move-candidate-down" (click)="moveDownOnePosition(ranked)">&#8595;</button>
         </div>
       } @empty {
