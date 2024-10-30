@@ -6,7 +6,6 @@ import { FolioService } from './folio.service';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, exhaustMap, firstValueFrom, map, pipe, tap, throwError } from 'rxjs';
-import { environment } from '../../../environments/environment';
 
 export const FolioStore = signalStore(
   { providedIn: 'root' },
@@ -127,7 +126,7 @@ export const FolioStore = signalStore(
         updateState(store, `[Folio] Select By Id  ${folioId}`, { folioIdSelected: folioId });
       },
 
-      folioCreateForNewAuthor(folio: Folio) {
+      async folioCreateForNewAuthor(folio: Folio): Promise<void> {
         updateState(store, '[Folio] Create Start', { isLoading: true });
         dbFolio
           .folioCreateForNewAuthor(folio)

@@ -155,13 +155,13 @@ export const AuthorStore = signalStore(
           .pipe(
             exhaustMap(newAuthor => {
               updateState(store, '[Author] Add Success', {
-                authorLoggedIn: newAuthor,
-                authorIdSelected: newAuthor.id,
+                // authorLoggedIn: newAuthor,
+                // authorIdSelected: newAuthor.id,
                 authors: [...store.authors(), newAuthor],
                 //   authorViewsKnown: [...store.authorViewsKnown(), newAuthor as AuthorView],
                 isLoading: false,
               });
-              store.authorStateToLocalStorage();
+              //store.authorStateToLocalStorage();
               return of(newAuthor);
             }),
             catchError(error => {
@@ -171,6 +171,16 @@ export const AuthorStore = signalStore(
             })
           )
           .subscribe();
+      },
+
+      async authorLogin(author: Author) {
+        updateState(store, '[Author] Add Success', {
+          authorLoggedIn: author,
+          authorIdSelected: author.id,
+          isLoading: false,
+        });
+        store.authorStateToLocalStorage();
+        return of(author);
       },
 
       async authorLoggedInUpdate(authorId: string, authorData: Author) {

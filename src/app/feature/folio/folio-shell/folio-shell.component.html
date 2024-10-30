@@ -1,6 +1,9 @@
 <mh5-header callerPage="folio" />
 
-<mh5-folio-scroll-horizontal [theFoliosInput]="theFolios()" (newPlacementEditorStateChange)="openNewPlacement()" />
+<mh5-folio-scroll-horizontal
+  [theFoliosInput]="theFolios()"
+  (newPlacementEditorStateChange)="openNewPlacement()"
+  [knownAuthors]="knownAuthors()" />
 <div class="tabs streamHeader">
   @for (tab of tabs; track $index) {
     <button (click)="selectedTab = tab" class="streamButton" [class.selected]="selectedTab === tab">

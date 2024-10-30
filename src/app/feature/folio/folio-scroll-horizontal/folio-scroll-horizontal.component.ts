@@ -1,7 +1,6 @@
 import { Component, computed, effect, inject, input, output, untracked } from '@angular/core';
 import { FolioStore } from '../folio.store';
-import { FolioView } from '../../../core/models/interfaces';
-import { environment } from '../../../../environments/environment';
+import { AuthorView, FolioView } from '../../../core/models/interfaces';
 import { IconPlusComponent } from '../../../core/svg/icon-plus';
 import { IconProfileComponent } from '../../../core/svg/icon-profile';
 import { IconShareComponent } from '../../../core/svg/icon-share';
@@ -16,6 +15,7 @@ import { IconShareComponent } from '../../../core/svg/icon-share';
 export class FolioScrollHorizontalComponent {
   folioStore = inject(FolioStore);
   theFoliosInput = input<FolioView[]>();
+  knownAuthors = input<AuthorView[]>();
   newFolioEditorStateChange = output<boolean>();
   newPlacementEditorStateChange = output<boolean>();
 

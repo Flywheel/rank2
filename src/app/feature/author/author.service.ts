@@ -51,23 +51,6 @@ export class AuthorService {
     );
   }
 
-  //updateAuthor(author: Author): Promise<Author> {
-  // async authorUpdate(authorId: string, authorData: Partial<Author>): Promise<Author> {
-  //   const theAuthor = { id: authorId, ...authorData };
-  //   return new Promise((resolve, reject) => {
-  //     this.http.put<Author>(`${this.authorAPIUrl}/${authorId}`, theAuthor).subscribe({
-  //       next: data => {
-  //         if (environment.ianConfig.showLogs) console.log(`authorUpdate ${data}`);
-  //         resolve(data);
-  //       },
-  //       error: error => {
-  //         if (environment.ianConfig.showLogs) console.error('getAllAuthors Error:', error);
-  //         reject(error);
-  //       },
-  //     });
-  //   });
-  // }
-
   private handleError({ status }: HttpErrorResponse) {
     return throwError(() => `${status} Error occurred`);
   }

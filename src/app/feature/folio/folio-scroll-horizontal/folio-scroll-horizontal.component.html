@@ -1,7 +1,22 @@
 <div class="horizontal-scroll">
   @for (folio of theFoliosInput(); track $index) {
     @if (!folio.parentFolioId) {
-      <div class="channel-item" (click)="selectFolio(folio.id)" (keydown)="selectFolio(folio.id)" tabindex="$index">{{ folio.folioName }}</div>
+      <div class="channel-item" (click)="selectFolio(folio.id)" (keydown)="selectFolio(folio.id)" tabindex="$index">
+        {{ folio.folioName }}
+      </div>
+    }
+  }
+</div>
+<div class="horizontal-scroll">
+  @for (author of knownAuthors(); track $index) {
+    @if (author) {
+      <div
+        class="channel-item"
+        (click)="selectFolio(author.authorFolio.id)"
+        (keydown)="selectFolio(author.authorFolio.id)"
+        tabindex="$index">
+        {{ author.name }}
+      </div>
     }
   }
 </div>

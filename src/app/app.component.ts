@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
 import { FolioStore } from './feature/folio/folio.store';
 import { Folio } from './core/models/interfaces';
 import { SwUpdate } from '@angular/service-worker';
+import { StartupService } from './core/services/startup.service';
 
 @Component({
   selector: 'mh5-root',
@@ -19,6 +20,7 @@ import { SwUpdate } from '@angular/service-worker';
 export class AppComponent implements OnInit, OnDestroy {
   authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
+  startupService = inject(StartupService);
   swUpdate = inject(SwUpdate);
   title = 'MH - rank2';
   isIframe = false;
@@ -41,6 +43,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.authorStore.setConsent(consent);
         if (consent === 'accepted') {
           this.loadForDemo_NoBackend();
+          this.startupService.load();
         }
       }
     }
@@ -59,6 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
     const author = this.authorStore.authorById(authorId);
     if (!author) {
       this.authorStore.authorCreate(author);
+      this.authorStore.authorLogin(author);
     }
     if (this.authorStore.authorLoggedIn().name !== AUTHOR_DEFAULT_NAME) {
       const folioDefault: Folio = {

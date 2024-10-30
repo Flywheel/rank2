@@ -3,6 +3,7 @@ import { AuthorStore } from '../author.store';
 import { AUTHOR_CONSENT_KEY, AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
 import { environment } from '../../../../environments/environment';
 import { uuidv7 } from 'uuidv7';
+import { Author } from '../../../core/models/interfaces';
 
 @Component({
   selector: 'mh5-author-consent',
@@ -28,7 +29,9 @@ export class AuthorConsentComponent implements OnInit {
   }
 
   acceptCookies(): void {
-    this.authorStore.authorCreate({ id: uuidv7(), name: AUTHOR_DEFAULT_NAME });
+    const author: Author = { id: uuidv7(), name: AUTHOR_DEFAULT_NAME };
+    this.authorStore.authorCreate(author);
+    this.authorStore.authorLogin(author);
     this.setConsent('accepted');
   }
 

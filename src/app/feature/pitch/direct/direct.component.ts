@@ -9,6 +9,7 @@ import { PitchService } from '../pitch.service';
 import { HydrationService } from '../../../core/services/hydration.service';
 import { BallotStore } from '../../ballot/ballot.store';
 import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
+import { Author, Folio } from '../../../core/models/interfaces';
 
 @Component({
   selector: 'mh5-direct',
@@ -33,6 +34,29 @@ export class DirectComponent {
     this.loadData();
   }
 
+  private async loadData2() {
+    const authorStartup: Author = {
+      name: 'Ian',
+      id: 'xxxx---xxxx---xxxx---xxxx',
+    };
+    this.authorStore.authorCreate(authorStartup);
+    const folioDefault: Folio = {
+      id: 0,
+      authorId: authorStartup.id,
+      folioName: '@' + authorStartup.name,
+      parentFolioId: undefined,
+    };
+    await this.folioStore.folioCreateForNewAuthor(folioDefault);
+
+    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+    await delay(1000);
+    if (environment.ianConfig.showLogs) console.log(this.folioStore.folios());
+    const theTopFolio = this.folioStore.folios().find(f => f.authorId === authorStartup.id && f.parentFolioId === undefined);
+    if (environment.ianConfig.showLogs) console.log(theTopFolio);
+    // if (theTopFolio) await this.hydrationService.hydrateFolios(theTopFolio!);
+    else alert('No top folio found');
+  }
+
   private async loadData() {
     if (!this.isHydrated) {
       await this.hydrationService.hydrateFolios();
@@ -42,7 +66,6 @@ export class DirectComponent {
       await this.hydrationService.hydrateSlates();
     }
   }
-
   hydrateSlates() {
     this.hydrationService.hydrateSlates();
   }
@@ -79,10 +102,12 @@ export class DirectComponent {
     if (environment.ianConfig.showLogs) {
       console.log(this.authorStore.authorFolioTree());
       console.log('Environment:', environment);
+
       console.log('Asset Placement Folio Store');
       console.log(this.folioStore.assets());
       console.log(this.folioStore.placements());
       console.log(this.folioStore.folios());
+
       console.log('Asset Placement Folio Computed');
       console.log(this.folioStore.assetViewsComputed());
       console.log(this.folioStore.placementViewsComputed());

@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { HydrationService } from './hydration.service';
 
-describe('LocalStorageService', () => {
+describe('HydrationService', () => {
   let service: HydrationService;
 
   beforeEach(() => {

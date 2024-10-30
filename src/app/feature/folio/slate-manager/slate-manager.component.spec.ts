@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PitchListComponent } from './slate-manager.component';
+import { SlateManagerComponent } from './slate-manager.component';
 
 describe('PitchListComponent', () => {
-  let component: PitchListComponent;
-  let fixture: ComponentFixture<PitchListComponent>;
+  let component: SlateManagerComponent;
+  let fixture: ComponentFixture<SlateManagerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PitchListComponent],
+      imports: [SlateManagerComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PitchListComponent);
+    fixture = TestBed.createComponent(SlateManagerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

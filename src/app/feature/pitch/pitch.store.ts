@@ -1,12 +1,10 @@
-import { signalStore, withState, withComputed, withMethods, withHooks } from '@ngrx/signals';
+import { signalStore, withState, withComputed, withMethods } from '@ngrx/signals';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
 import { Pitch, PitchView, SlateMember, SlateView, SlateMemberView } from '../../core/models/interfaces';
 import { pitchInit, pitchViewInit, slateViewInit, slateInit, slateMemberInit, placementViewInit } from '../../core/models/initValues';
 import { PitchService } from './pitch.service';
 import { computed, inject } from '@angular/core';
-import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, tap, map, exhaustMap } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { FolioStore } from '../folio/folio.store';
 
@@ -94,46 +92,6 @@ export const PitchStore = signalStore(
   withMethods(store => {
     const dbPitch = inject(PitchService);
     return {
-      // Contests: rxMethod<void>(
-      //   pipe(
-      //     exhaustMap(() => {
-      //       updateState(store, '[Contest] Load Start', { isLoading: true });
-      //       return dbPitch.contestsGetAll().pipe(
-      //         map((allContests: Pitch[]) => {
-      //           updateState(store, '[Contest] Load Success', value => ({
-      //             ...value,
-      //             pitches: allContests,
-      //             isLoading: false,
-      //           }));
-      //           return allContests;
-      //         })
-      //       );
-      //     })
-      //   )
-      // ),
-
-      // ContestViews: rxMethod<void>(
-      //   pipe(
-      //     tap(() => {
-      //       updateState(store, '[ContestView] Load Start', { isLoading: true });
-      //     }),
-      //     exhaustMap(() => {
-      //       return dbPitch.contestViewsGetAll().pipe(
-      //         takeUntilDestroyed(),
-      //         tap({
-      //           next: (allContestViews: PitchView[]) => {
-      //             updateState(store, '[ContestView] Load Success', value => ({
-      //               ...value,
-      //               allContestViews,
-      //               isLoading: false,
-      //             }));
-      //           },
-      //         })
-      //       );
-      //     })
-      //   )
-      // ),
-
       setPitchSelected(pitchId: number) {
         updateState(store, `[Pitch] Select By Id  ${pitchId}`, { pitchIdSelected: pitchId });
       },
@@ -194,12 +152,5 @@ export const PitchStore = signalStore(
           .subscribe();
       },
     };
-  }),
-
-  withHooks({
-    // onInit(store) {
-    //   // store.Contests();
-    //   // store.setCurrentContestView(1);
-    // },
   })
 );

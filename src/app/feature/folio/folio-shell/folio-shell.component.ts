@@ -5,7 +5,7 @@ import { FolioPlacementNewComponent } from '../folio-placement-new/folio-placeme
 import { FolioPlacementListComponent } from '../folio-placement-list/folio-placement-list.component';
 import { AuthorStore } from '../../author/author.store';
 import { ChannelTreeComponent } from '../channel-tree/channel-tree.component';
-import { TabList } from '../../../core/models/interfaces';
+import { AuthorView, TabList } from '../../../core/models/interfaces';
 import { IconPlusComponent } from '../../../core/svg/icon-plus';
 import { ChannelAssetsComponent } from '../asset-manager/asset-manager.component';
 import { SlateManagerComponent } from '../slate-manager/slate-manager.component';
@@ -34,6 +34,7 @@ import { Router } from '@angular/router';
 export class FolioShellComponent {
   router = inject(Router);
   authorStore = inject(AuthorStore);
+  knownAuthors = computed<AuthorView[]>(() => this.authorStore.authorChannelViews().filter(a => a.id.length > 1));
   needsAuthorName = computed<boolean>(() => this.authorStore.authorLoggedIn().name === AUTHOR_DEFAULT_NAME);
 
   tabs: TabList[] = [
