@@ -4,9 +4,9 @@ export const theData = {
     { folioName: 'AimsPoll', parentFolioName: '' },
 
     { folioName: 'Border Integrity', parentFolioName: 'AimsPoll' },
-    // { folioName: 'Minimum Wage', parentFolioName: 'AimsPoll' },
-    // { folioName: 'Eurovision 2024', parentFolioName: '' },
-    // { folioName: 'Ladder Singles 2009', parentFolioName: '' },
+    { folioName: 'Minimum Wage', parentFolioName: 'AimsPoll' },
+    { folioName: 'Eurovision 2024', parentFolioName: '' },
+    { folioName: 'Ladder Singles 2009', parentFolioName: '' },
     // { folioName: 'Tony Best Play 2024', parentFolioName: '' },
     // { folioName: 'Tony Best Musical 2024', parentFolioName: '' },
 

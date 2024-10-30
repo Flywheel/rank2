@@ -52,8 +52,6 @@ export class ChannelAssetsComponent {
       this.placementToDisplay.set(placementViewInit);
     }
     console.log(placement.assetView.mediaType);
-
-    //create event for logging placement seen
   }
 
   pitchToDisplay = signal<PitchView>(pitchViewInit);

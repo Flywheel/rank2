@@ -67,6 +67,8 @@ export class DirectComponent {
     if (environment.ianConfig.showLogs) console.log(theTopFolio);
     if (theTopFolio) await this.hydrationService.hydrateFolios(theTopFolio.authorId!, theDataTony);
     else alert('No top folio found');
+    await delay(200);
+    await this.hydrationService.hydrateSlates();
   }
 
   testService() {

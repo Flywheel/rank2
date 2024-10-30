@@ -42,5 +42,7 @@
   <mh5-slate-manager [folioMembers]="placements()" />
 }
 @if (!hidePlacementDisplay()) {
-  <mh5-viewer [placementView]="placementToDisplay()" />
+  <div class="placement-display">
+    <mh5-viewer [placementView]="placementToDisplay()" />
+  </div>
 }

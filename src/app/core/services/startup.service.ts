@@ -3,6 +3,8 @@ import { HydrationService } from './hydration.service';
 import { AuthorStore } from '../../feature/author/author.store';
 import { FolioStore } from '../../feature/folio/folio.store';
 import { environment } from '../../../environments/environment';
+import { theData } from '../../../mocks/mockdataForHydration';
+import { theDataTony } from '../../../mocks/mockdataTony';
 
 @Injectable({
   providedIn: 'root',
@@ -12,23 +14,13 @@ export class StartupService {
   authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
 
-  load(): void {
+  async load(): Promise<void> {
     if (environment.ianConfig.showLogs) console.log('StartupService load');
     if (environment.ianConfig.showLogs) console.log(this.authorStore.authorLoggedIn().name);
-    // const authorStartup: Author = {
-    //   name: 'Ian',
-    //   id: 'xxxx---xxxx---xxxx---xxxx',
-    // };
-    // this.authorStore.authorCreate(authorStartup);
-    // //  this.authorStore.authorLogin(authorStartup);
+    await this.hydrationService.hydrateFolios(this.authorStore.authorLoggedIn().id, theData);
 
-    // const folioDefault: Folio = {
-    //   id: 0,
-    //   authorId: authorStartup.id,
-    //   folioName: '@' + authorStartup.name,
-    //   parentFolioId: undefined,
-    // };
-    // this.folioStore.folioCreateForNewAuthor(folioDefault);
-    // this.hydrationService.hydrateFolios(authorStartup.id);
+    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+    await delay(200);
+    await this.hydrationService.hydrateSlates();
   }
 }

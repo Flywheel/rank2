@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, output, untracked } from '@angular/core';
+import { Component, computed, effect, inject, input, untracked } from '@angular/core';
 import { FolioStore } from '../folio.store';
 import { AuthorView, FolioView } from '../../../core/models/interfaces';
 import { IconPlusComponent } from '../../../core/svg/icon-plus';
@@ -19,8 +19,6 @@ export class FolioScrollHorizontalComponent {
 
   theFoliosInput = input<FolioView[]>();
   knownAuthors = input<AuthorView[]>();
-  newFolioEditorStateChange = output<boolean>();
-  newPlacementEditorStateChange = output<boolean>();
 
   firstFolioId = computed<number>(() => this.theFoliosInput()?.[0]?.id ?? 0);
 
