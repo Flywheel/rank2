@@ -6,6 +6,7 @@
     [class.border-on-empty]="candidatesRanked().length === 0"
     [cdkDropListData]="candidatesRanked()"
     [cdkDropListConnectedTo]="[availableList]"
+    cdkDropListOrientation="mixed"
     (cdkDropListDropped)="drop($event)">
     <div class="candidate-list ranked">
       @for (ranked of candidatesRanked(); track $index) {
@@ -47,6 +48,7 @@
     id="availableDropList"
     [cdkDropListData]="candidatesAvailable()"
     [cdkDropListConnectedTo]="[rankedList]"
+    cdkDropListOrientation="mixed"
     (cdkDropListDropped)="drop($event)">
     <div class="candidate-list available">
       @for (unranked of candidatesAvailable(); track $index; let theCount = $count) {

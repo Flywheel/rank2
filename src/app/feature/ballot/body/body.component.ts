@@ -3,10 +3,10 @@ import { PitchView, SlateMemberView, SlateView } from '../../../core/models/inte
 import { PitchStore } from '../../pitch/pitch.store';
 import {
   CdkDrag,
+  CdkDragDrop,
   CdkDragHandle,
   CdkDropList,
   CdkDropListGroup,
-  CdkDragDrop,
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
@@ -51,9 +51,9 @@ export class BodyComponent {
 
   setAvailableCandidates() {
     this.candidatesAvailable.set(this.candidateList());
-    if (this.ballotStore.voterSlate()?.slateMemberViews) {
+    if (this.ballotStore.currentSlate()?.slateMemberViews) {
       this.candidatesRanked.set(
-        this.ballotStore.voterSlate().slateMemberViews.reduce((acc: SlateMemberView[], slateMemberView: SlateMemberView) => {
+        this.ballotStore.currentSlate().slateMemberViews.reduce((acc: SlateMemberView[], slateMemberView: SlateMemberView) => {
           const candidate = this.candidateList().find(
             (candidate: SlateMemberView) => candidate.placementId === slateMemberView.placementId
           );

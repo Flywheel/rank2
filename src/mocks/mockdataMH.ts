@@ -1,14 +1,18 @@
-export const theData = {
+export const dataMH = {
+  author: {
+    name: 'miniherald',
+    id: 'xxxx---xxxx---xxxx---xxxx',
+  },
   folios: [
-    { folioName: 'US Pres 2024', parentFolioName: '' },
-    // { folioName: 'AimsPoll', parentFolioName: '' },
+    //  { folioName: 'US Pres 2024', parentFolioName: '@miniherald' },
+    { folioName: 'AimsPoll', parentFolioName: '@miniherald' },
+
     // { folioName: 'Border Integrity', parentFolioName: 'AimsPoll' },
     // { folioName: 'Minimum Wage', parentFolioName: 'AimsPoll' },
-    // { folioName: 'Eurovision 2024', parentFolioName: '' },
-    // { folioName: 'Ladder Singles 2009', parentFolioName: '' },
-    // { folioName: 'Tony Best Play 2024', parentFolioName: '' },
-    // { folioName: 'Tony Best Musical 2024', parentFolioName: '' },
-    // { folioName: 'Oscars 2024', parentFolioName: '' },
+    // { folioName: 'Eurovision 2024', parentFolioName: '@miniherald' },
+    // { folioName: 'Ladder Singles 2009', parentFolioName: '@miniherald' },
+    // { folioName: 'Tony Best Play 2024', parentFolioName: '@miniherald' },
+    // { folioName: 'Tony Best Musical 2024', parentFolioName: '@miniherald' },
   ],
   assets: [
     {

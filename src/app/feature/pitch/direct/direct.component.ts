@@ -9,9 +9,7 @@ import { PitchService } from '../pitch.service';
 import { HydrationService } from '../../../core/services/hydration.service';
 import { BallotStore } from '../../ballot/ballot.store';
 import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
-import { Author, Folio } from '../../../core/models/interfaces';
 import { theData } from '../../../../mocks/mockdataForHydration';
-import { theDataTony } from '../../../../mocks/mockdataTony';
 
 @Component({
   selector: 'mh5-direct',
@@ -47,28 +45,6 @@ export class DirectComponent {
   }
   hydrateSlates() {
     this.hydrationService.hydrateSlates();
-  }
-  async loadData2() {
-    const authorStartup: Author = theDataTony.author;
-
-    this.authorStore.authorCreate(authorStartup);
-    const folioDefault: Folio = {
-      id: 0,
-      authorId: authorStartup.id,
-      folioName: '@' + authorStartup.name,
-      parentFolioId: undefined,
-    };
-    await this.folioStore.folioCreateForNewAuthor(folioDefault);
-
-    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-    await delay(1000);
-    if (environment.ianConfig.showLogs) console.log(this.folioStore.folios());
-    const theTopFolio = this.folioStore.folios().find(f => f.authorId === authorStartup.id && f.parentFolioId === undefined);
-    if (environment.ianConfig.showLogs) console.log(theTopFolio);
-    if (theTopFolio) await this.hydrationService.hydrateFolios(theTopFolio.authorId!, theDataTony);
-    else alert('No top folio found');
-    await delay(200);
-    await this.hydrationService.hydrateSlates();
   }
 
   testService() {
@@ -123,6 +99,11 @@ export class DirectComponent {
       console.log(this.pitchStore.slateMemberViewsComputed());
       console.log(this.pitchStore.slateViewsComputed());
       console.log(this.pitchStore.pitchViewsComputed());
+
+      console.log('Author: Store View');
+      console.log(this.authorStore.authors());
+      console.log(this.authorStore.authorViews());
+      //   console.log(this.authorStore.authorViews2());
 
       console.log('pitchViewSelected');
       console.log(this.pitchStore.pitchViewSelected());

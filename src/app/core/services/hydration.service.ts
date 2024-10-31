@@ -44,7 +44,14 @@ export class HydrationService {
 
   public async hydrateFolios(authorId: string, theData: any): Promise<void> {
     //const authorId = this.authorLoggedIn().id;
-    const rootFolioId = this.authorStore.authorViews().filter(f => f.id === authorId)[0].authorFolio.id;
+    const theAuthor = this.authorStore.authorViews().find(f => f.id === authorId);
+    if (!theAuthor) {
+      console.log('Author not found');
+      return;
+    }
+    console.log(theAuthor);
+    const rootFolioId = this.folioStore.folios().find(f => f.authorId === authorId && f.parentFolioId === undefined)?.id;
+    //  const rootFolioId2 = this.authorStore.authorViews().filter(f => f.id === authorId)[0].authorFolio.id;
     const assetsToImport: AssetImporter[] = theData.assets;
     const foliosToImport: FolioImporter[] = theData.folios;
     // const placementPrepared: Placement = placementInit;

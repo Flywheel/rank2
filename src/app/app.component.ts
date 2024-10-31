@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthorStore } from './feature/author/author.store';
-import { AUTHOR_CONSENT_KEY, AUTHOR_DEFAULT_NAME } from './core/models/constants';
+import { AUTHOR_CONSENT_KEY, AUTHOR_DEFAULT_NAME, AUTHOR_HOST_NAME } from './core/models/constants';
 import { AuthorConsentComponent } from './feature/author/author-consent/author-consent.component';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
@@ -22,10 +22,11 @@ export class AppComponent implements OnInit, OnDestroy {
   folioStore = inject(FolioStore);
   startupService = inject(StartupService);
   swUpdate = inject(SwUpdate);
-  title = 'MH - rank2';
+  title = AUTHOR_HOST_NAME;
   isIframe = false;
 
   private readonly _destroying$ = new Subject<void>();
+
   constructor() {
     this.onLoad();
   }
@@ -36,6 +37,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.isIframe = window !== window.parent && !window.opener;
     }
   }
+
   async onLoad() {
     if (typeof window !== 'undefined') {
       const consent = localStorage.getItem(AUTHOR_CONSENT_KEY);
