@@ -18,22 +18,16 @@
       <a (click)="openPage('/dashboard')" (keydown)="openPage('/dashboard')" tabindex="0" aria-label="demoText"> <mh5-icon-dashboard /> </a>
     }
 
-    @case ('viewer') {
-      <a (click)="goBack()" (keydown)="goBack()" tabindex="0" aria-label="demoText"> Done</a>
-      <div class="title">Mini Herald</div>
-      <div><mh5-icon-share /></div>
-    }
-
     @case ('profile') {
       <a (click)="goBack()" (keydown)="goBack()" tabindex="0" aria-label="demoText">Done</a>
       <div class="title">Mini Herald</div>
       <a (click)="openPage('/dashboard')" (keydown)="openPage('/dashboard')" tabindex="0" aria-label="demoText"> <mh5-icon-dashboard /> </a>
     }
 
-    @case ('profile2') {
-      <a (click)="goBack()" (keydown)="goBack()" tabindex="0" aria-label="demoText">Done</a>
-      <div class="title">Mini XXXX</div>
-      <a (click)="openPage('/dashboard')" (keydown)="openPage('/dashboard')" tabindex="0" aria-label="demoText"> <mh5-icon-dashboard /> </a>
+    @case ('viewer') {
+      <a (click)="closePlacementDisplay()" (keydown)="closePlacementDisplay()" tabindex="0" aria-label="demoText">Done</a>
+      <div class="title">Mini Herald Viewer</div>
+      <div><mh5-icon-share /></div>
     }
   }
 </div>

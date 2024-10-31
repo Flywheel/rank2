@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { IconCommunityComponent } from '../../svg/icon-community';
@@ -26,11 +26,10 @@ import { IconMhComponent } from '../../svg/icon-mh';
 })
 export class HeaderComponent {
   router = inject(Router);
-  // authorStore = inject(AuthorStore);
   callerPage = input.required<string>();
   location = inject(Location);
-  // isCookieStatusAccepted = computed<boolean>(() => this.authorStore.consentStatus() === 'accepted');
-  // showCookieConsentComponent = signal(false);
+
+  hidePlacementDisplay = output<boolean>();
 
   openPage(page: string) {
     this.router.navigate([page]);
@@ -39,9 +38,7 @@ export class HeaderComponent {
   goBack() {
     this.location.back();
   }
-
-  // closeCookieComponent() {
-  //   console.log('closeCookieComponent Fired');
-  //   this.showCookieConsentComponent.set(false);
-  // }
+  closePlacementDisplay() {
+    this.hidePlacementDisplay.emit(true);
+  }
 }

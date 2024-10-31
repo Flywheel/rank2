@@ -21,8 +21,8 @@ export class BallotShellComponent {
   hideViewerDisplay = signal<boolean>(true);
   slateMember = signal<SlateMemberView>(slateMemberViewInit);
 
-  hidePlacementDisplayToggle() {
-    this.hideViewerDisplay.set(!this.hideViewerDisplay());
+  hidePlacementDisplayToggle(toggle: boolean) {
+    this.hideViewerDisplay.set(toggle);
   }
   setSlateMemberView(slateMemberView: SlateMemberView) {
     this.slateMember.set(slateMemberView);
