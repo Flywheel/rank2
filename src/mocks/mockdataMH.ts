@@ -1,4 +1,6 @@
-export const dataMH = {
+import { DataImporter } from '../app/core/models/interfaces';
+
+export const dataMH: DataImporter = {
   author: {
     name: 'miniherald',
     id: 'xxxx---xxxx---xxxx---xxxx',
@@ -7,8 +9,8 @@ export const dataMH = {
     //  { folioName: 'US Pres 2024', parentFolioName: '@miniherald' },
     { folioName: 'AimsPoll', parentFolioName: '@miniherald' },
 
-    // { folioName: 'Border Integrity', parentFolioName: 'AimsPoll' },
-    // { folioName: 'Minimum Wage', parentFolioName: 'AimsPoll' },
+    { folioName: 'Border Integrity', parentFolioName: 'AimsPoll' },
+    { folioName: 'Minimum Wage', parentFolioName: 'AimsPoll' },
     // { folioName: 'Eurovision 2024', parentFolioName: '@miniherald' },
     // { folioName: 'Ladder Singles 2009', parentFolioName: '@miniherald' },
     // { folioName: 'Tony Best Play 2024', parentFolioName: '@miniherald' },

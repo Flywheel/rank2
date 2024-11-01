@@ -28,7 +28,7 @@ export class AuthorConsentComponent implements OnInit {
     this.consentValue.set(localStorage.getItem(AUTHOR_CONSENT_KEY));
   }
 
-  acceptCookies(): void {
+  async acceptCookies() {
     const author: Author = { id: uuidv7(), name: AUTHOR_DEFAULT_NAME };
     this.authorStore.authorCreate(author);
     this.authorStore.authorLogin(author);
@@ -41,7 +41,7 @@ export class AuthorConsentComponent implements OnInit {
 
   setConsent(setting: string) {
     localStorage.setItem(AUTHOR_CONSENT_KEY, setting);
-    this.authorStore.setConsent(setting);
+    this.authorStore.getConsentValueFromLocalStorage(setting);
     this.consentValue.set(setting);
     this.closeComponent.emit(false);
   }

@@ -3,7 +3,7 @@ import { AuthorStore } from '../../feature/author/author.store';
 import { FolioStore } from '../../feature/folio/folio.store';
 import { PitchStore } from '../../feature/pitch/pitch.store';
 //import { theData } from '../../../mocks/mockdataForHydration';
-import { Asset, AssetImporter, Folio, FolioImporter, Pitch, PitchView, Placement, SlateMember } from '../models/interfaces';
+import { Asset, AssetImporter, DataImporter, Folio, FolioImporter, Pitch, PitchView, Placement, SlateMember } from '../models/interfaces';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -42,7 +42,7 @@ export class HydrationService {
     }));
   }
 
-  public async hydrateFolios(authorId: string, theData: any): Promise<void> {
+  public async hydrateFolios(authorId: string, theData: DataImporter): Promise<void> {
     //const authorId = this.authorLoggedIn().id;
     const theAuthor = this.authorStore.authorViews().find(f => f.id === authorId);
     if (!theAuthor) {
@@ -50,6 +50,7 @@ export class HydrationService {
       return;
     }
     console.log(theAuthor);
+    console.log(this.folioStore.folios());
     const rootFolioId = this.folioStore.folios().find(f => f.authorId === authorId && f.parentFolioId === undefined)?.id;
     //  const rootFolioId2 = this.authorStore.authorViews().filter(f => f.id === authorId)[0].authorFolio.id;
     const assetsToImport: AssetImporter[] = theData.assets;

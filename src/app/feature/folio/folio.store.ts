@@ -64,6 +64,7 @@ export const FolioStore = signalStore(
             const placementViews = store.placementViewsComputed().filter(placement => placement.folioId === folio.id);
             return {
               ...folio,
+              level: 0,
               placementViews,
             };
           })
@@ -92,32 +93,6 @@ export const FolioStore = signalStore(
   withMethods(store => {
     const dbFolio = inject(FolioService);
     return {
-      // #region Folio
-      foliosLoadAll: rxMethod<void>(
-        pipe(
-          exhaustMap(() => {
-            updateState(store, '[Folio] Load All Start', { isLoading: true });
-            return dbFolio.foliosGetAll().pipe(
-              map((allFolios: Folio[]) => {
-                updateState(store, '[Folio] Load All Success', value => ({
-                  ...value,
-                  folios: allFolios,
-                  isLoading: false,
-                }));
-                return allFolios;
-              }),
-              catchError(error => {
-                updateState(store, '[Folio] getAllFolios Failure', {
-                  isLoading: false,
-                  // error: error.message || 'An error occurred while loading folios',
-                });
-                return throwError(error);
-              })
-            );
-          })
-        )
-      ),
-
       toggleFolioAdder(state: boolean) {
         updateState(store, `[Folio] Is Adding  ${state}`, { isAddingFolio: state });
       },
@@ -127,12 +102,13 @@ export const FolioStore = signalStore(
       },
 
       async folioCreateForNewAuthor(folio: Folio): Promise<void> {
-        updateState(store, '[Folio] Create Start', { isLoading: true });
+        updateState(store, '[Folio-Root] Create Start', { isLoading: true });
         dbFolio
           .folioCreateForNewAuthor(folio)
           .pipe(
             map((newFolio: Folio) => {
-              updateState(store, '[Folio] Create Success', {
+              console.log(newFolio);
+              updateState(store, '[Folio-Root] Create Success', {
                 folios: [...store.folios(), newFolio],
                 isLoading: false,
               });
@@ -140,7 +116,7 @@ export const FolioStore = signalStore(
               return newFolio;
             }),
             catchError(error => {
-              updateState(store, '[Folio] Create Failed', { isLoading: false });
+              updateState(store, '[Folio-Root] Create Failed', { isLoading: false });
               return throwError(error);
             })
           )
@@ -177,31 +153,6 @@ export const FolioStore = signalStore(
 
       //#region Placement
 
-      placementsLoadAll: rxMethod<void>(
-        pipe(
-          exhaustMap(() => {
-            updateState(store, '[Placement] Placements Load Start', { isLoading: true });
-            return dbFolio.placementsGetAll().pipe(
-              map((allPlacements: Placement[]) => {
-                updateState(store, '[Placement] Placements Load Success', value => ({
-                  ...value,
-                  placements: allPlacements,
-                  isLoading: false,
-                }));
-                return allPlacements;
-              }),
-              catchError(error => {
-                updateState(store, '[Placement] getAllPlacements Failure', {
-                  isLoading: false,
-                  //  error: error.message || 'An error occurred while loading placements',
-                });
-                return throwError(error);
-              })
-            );
-          })
-        )
-      ),
-
       async placementCreate(placement: Placement) {
         updateState(store, '[Placement] Create Start', { isLoading: true });
         dbFolio
@@ -230,27 +181,6 @@ export const FolioStore = signalStore(
       //#endregion
 
       //#region Asset
-      Assets: rxMethod<void>(
-        pipe(
-          tap(() => {
-            updateState(store, '[Asset] getAllAssets Start', { isLoading: true });
-          }),
-          exhaustMap(() => {
-            return dbFolio.assetsGetAll().pipe(
-              //  takeUntilDestroyed(),
-              tap({
-                next: (allAssets: Asset[]) => {
-                  updateState(store, '[Asset] getAllAssets Success', value => ({
-                    ...value,
-                    assets: allAssets,
-                    isLoading: false,
-                  }));
-                },
-              })
-            );
-          })
-        )
-      ),
 
       assetCreate(asset: Asset) {
         updateState(store, '[Asset] Create Start', { isLoading: true });

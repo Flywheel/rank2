@@ -4,7 +4,7 @@ import { AuthorStore } from '../../feature/author/author.store';
 import { FolioStore } from '../../feature/folio/folio.store';
 import { environment } from '../../../environments/environment';
 import { theData } from '../../../mocks/mockdataForHydration';
-import { Author, Folio } from '../models/interfaces';
+import { Author, DataImporter, Folio } from '../models/interfaces';
 import { dataMH } from '../../../mocks/mockdataMH';
 
 @Injectable({
@@ -18,18 +18,18 @@ export class StartupService {
   async load(): Promise<void> {
     if (environment.ianConfig.showLogs) console.log('StartupService load');
     if (environment.ianConfig.showLogs) console.log(this.authorStore.authorLoggedIn().name);
-    await this.hydrationService.hydrateFolios(this.authorStore.authorLoggedIn().id, theData);
+    await this.hydrationService.hydrateFolios(this.authorStore.authorLoggedIn().id, theData as DataImporter);
 
     const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
     await delay(200);
     await this.hydrationService.hydrateSlates();
-    await this.loadData2();
+    await this.loadDataMH();
   }
 
-  async loadData2() {
+  async loadDataMH() {
     const authorStartup: Author = dataMH.author;
 
-    this.authorStore.authorCreate(authorStartup);
+    await this.authorStore.authorCreate(authorStartup);
     const folioDefault: Folio = {
       id: 0,
       authorId: authorStartup.id,

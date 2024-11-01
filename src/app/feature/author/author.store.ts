@@ -1,6 +1,6 @@
 import { computed, inject } from '@angular/core';
 import { signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
-import { pipe, switchMap, of, exhaustMap, catchError, throwError, map } from 'rxjs';
+import { pipe, switchMap, of, exhaustMap, catchError, throwError, map, tap } from 'rxjs';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
 import { Author, AuthorView, PitchView, FolioView, TreeNode } from '../../core/models/interfaces';
@@ -47,11 +47,9 @@ export const AuthorStore = signalStore(
           .authors()
           .filter(a => a.id.length > 0)
           .map(author => {
-            const rootFolioId = folioStore.folios().find(f => f.authorId === author.id && f.parentFolioId === undefined)?.id;
             const authorView: AuthorView = {
-              name: author.name,
               id: author.id,
-              //authorFolio: folioStore.folioViewsComputed().filter(f => f.id === rootFolioId)[0],
+              name: author.name,
               authorFolio: folioStore
                 .folioViewsComputed()
                 .filter(folio => folio.authorId === author.id && folio.parentFolioId === undefined)[0],
@@ -60,50 +58,8 @@ export const AuthorStore = signalStore(
             return authorView;
           });
       }),
-
-      // authorViews2: computed<AuthorView[]>(() => {
-      //   return store
-      //     .authors()
-      //     .filter(a => a.id.length > 0)
-      //     .map(author => {
-      //       const authorView: AuthorView = {
-      //         name: author.name,
-      //         id: author.id,
-      //         authorFolio:
-      //           folioStore.folioViewsComputed().filter(folio => folio.authorId === author.id && folio.parentFolioId === undefined)[0] ??
-      //           folioViewInit,
-      //         pitches: pitchStore.pitchViewsComputed().filter(pitch => pitch.authorId === author.id),
-      //       };
-      //       return authorView;
-      //     });
-      // }),
     };
   }),
-
-  //   const folioStore = inject(FolioStore);
-  //   const pitchStore = inject(PitchStore);
-  //   return {
-  //     authorChannelPitches: computed<AuthorView[]>(() => {
-  //       return store
-  //         .authors()
-  //         .filter(a => a.id.length > 0)
-  //         .map(author => {
-  //           const authorView: AuthorView = {
-  //             id: author.id,
-  //             name: author.name,
-  //             authorFolio:
-  //               folioStore.folioViewsComputed().filter(folio => folio.authorId === author.id && folio.parentFolioId === undefined)[0] ??
-  //               folioViewInit,
-  //             pitches: pitchStore.pitchViewsComputed().filter(pitch => pitch.authorId === author.id),
-  //           };
-  //           return authorView;
-  //         });
-  //     }),
-  //     authorFolioViews: computed<FolioView[]>(() =>
-  //       folioStore.folioViewsComputed().filter(folio => folio.authorId === store.authorIdSelected())
-  //     ),
-  //   };
-  // }),
 
   withComputed(store => ({
     authorSelectedView: computed<AuthorView>(
@@ -151,20 +107,10 @@ export const AuthorStore = signalStore(
   })),
 
   withMethods(store => {
-    return {
-      async authorStateToLocalStorage() {
-        updateState(store, '[Author] WriteToLocalStorage Start', { isLoading: true });
-        store.writeToStorage();
-        updateState(store, '[Author] WriteToLocalStorage Success', { isLoading: false });
-      },
-    };
-  }),
-
-  withMethods(store => {
     const dbAuthor = inject(AuthorService);
 
     return {
-      async setConsent(consentValue: string) {
+      async getConsentValueFromLocalStorage(consentValue: string) {
         updateState(store, '[Author] Read From Storage Start', { isLoading: true });
         store.readFromStorage();
         if (environment.ianConfig.showLogs) console.log(' store.authorLoggedIn()', store.authorLoggedIn());
@@ -173,24 +119,23 @@ export const AuthorStore = signalStore(
 
       async authorCreate(author: Author) {
         updateState(store, '[Author] Add Start', { isLoading: true });
-        dbAuthor
+        return dbAuthor
           .authorCreate(author)
           .pipe(
-            exhaustMap(newAuthor => {
-              updateState(store, '[Author] Add Success', {
-                // authorLoggedIn: newAuthor,
-                // authorIdSelected: newAuthor.id,
-                authors: [...store.authors(), newAuthor],
-                //   authorViewsKnown: [...store.authorViewsKnown(), newAuthor as AuthorView],
-                isLoading: false,
-              });
-              //store.authorStateToLocalStorage();
-              return of(newAuthor);
-            }),
+            exhaustMap(newAuthor =>
+              of(newAuthor).pipe(
+                tap(() => {
+                  updateState(store, '[Author] Add Success', {
+                    authors: [...store.authors(), newAuthor],
+                    isLoading: false,
+                  });
+                })
+              )
+            ),
             catchError(error => {
-              if (environment.ianConfig.showLogs) console.log('error', error);
+              console.error('[Author] Add Failure', error);
               updateState(store, '[Author] Add Failure', { isLoading: false });
-              return throwError(error);
+              return throwError(() => error);
             })
           )
           .subscribe();
@@ -202,8 +147,7 @@ export const AuthorStore = signalStore(
           authorSelectedId: author.id,
           isLoading: false,
         });
-        store.authorStateToLocalStorage();
-        return of(author);
+        store.writeToStorage();
       },
 
       async authorLoggedInUpdate(authorId: string, authorData: Author) {
@@ -226,37 +170,11 @@ export const AuthorStore = signalStore(
             catchError(error => {
               if (environment.ianConfig.showLogs) console.log('error', error);
               updateState(store, '[Author] Update Failure', { isLoading: false });
-              return throwError(error);
+              return throwError(() => error);
             })
           )
           .subscribe();
       },
-
-      authorsLoad: rxMethod<void>(
-        pipe(
-          exhaustMap(() => {
-            updateState(store, '[Author] Load Start', { isLoading: true });
-            return dbAuthor.authorsGetAll().pipe(
-              map((allAuthors: Author[]) => {
-                updateState(store, '[Author] authorsLoad Success', value => ({
-                  ...value,
-                  authors: allAuthors,
-                  authorViewsKnown: allAuthors as AuthorView[],
-                  isLoading: false,
-                }));
-                return allAuthors;
-              }),
-              catchError(error => {
-                updateState(store, '[Author] Load Failure', {
-                  isLoading: false,
-                  // error: error.message || 'An error occurred while loading folios',
-                });
-                return throwError(error);
-              })
-            );
-          })
-        )
-      ),
 
       authorSelectedSetById: rxMethod<string>(
         pipe(

@@ -37,11 +37,9 @@ export class PitchScrollerComponent {
   });
 
   pitchViews = computed<PitchView[]>(() => {
-    if (this.authorStore.authorViews().length > 0) {
-      return this.authorStore
-        .authorViews()
-        .filter(a => (a.name = this.selectedAuthorName()))[0]
-        .pitches.filter(p => p.id > 0);
+    const selectedAuthorView = this.authorStore.authorViews().find(a => a.name === this.selectedAuthorName());
+    if (selectedAuthorView) {
+      return selectedAuthorView.pitches.filter(p => p.id > 0);
     } else return [pitchViewInit];
   });
 

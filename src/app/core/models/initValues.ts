@@ -27,6 +27,7 @@ export const authorViewInit: AuthorView = {
     id: 0,
     authorId: '',
     folioName: '',
+    level: 0,
     placementViews: [],
   },
   pitches: [],
@@ -75,6 +76,7 @@ export const folioViewInit: FolioView = {
   id: 0,
   authorId: '',
   folioName: '',
+  level: 0,
   placementViews: [],
 };
 

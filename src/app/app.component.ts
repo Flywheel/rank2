@@ -42,10 +42,9 @@ export class AppComponent implements OnInit, OnDestroy {
     if (typeof window !== 'undefined') {
       const consent = localStorage.getItem(AUTHOR_CONSENT_KEY);
       if (consent) {
-        this.authorStore.setConsent(consent);
+        this.authorStore.getConsentValueFromLocalStorage(consent);
         if (consent === 'accepted') {
-          this.loadForDemo_NoBackend();
-          this.startupService.load();
+          await this.loadForDemo_NoBackend();
         }
       }
     }
@@ -59,12 +58,13 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
-  private loadForDemo_NoBackend() {
+  private async loadForDemo_NoBackend() {
     const authorId = this.authorStore.authorLoggedIn().id;
     const author = this.authorStore.authorSelectedSetById(authorId);
+    console.log(author);
     if (!author) {
-      this.authorStore.authorCreate(author);
-      this.authorStore.authorLogin(author);
+      await this.authorStore.authorCreate(author);
+      await this.authorStore.authorLogin(author);
     }
     if (this.authorStore.authorLoggedIn().name !== AUTHOR_DEFAULT_NAME) {
       const folioDefault: Folio = {
@@ -73,8 +73,11 @@ export class AppComponent implements OnInit, OnDestroy {
         folioName: '@' + this.authorStore.authorLoggedIn().name,
         parentFolioId: undefined,
       };
-      this.folioStore.folioCreateForNewAuthor(folioDefault);
+      console.log(folioDefault);
+      await this.folioStore.folioCreateForNewAuthor(folioDefault);
+      console.log(this.folioStore.folios());
     }
+    await this.startupService.load();
   }
 
   ngOnDestroy(): void {

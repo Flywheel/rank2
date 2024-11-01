@@ -33,23 +33,7 @@ export class FolioService {
   }
 
   folioCreateForNewAuthor({ authorId, folioName }: Folio): Observable<Folio> {
-    return this.http
-      .post<Folio>(this.folioAPIUrl, { authorId, folioName })
-      .pipe
-      // exhaustMap(newFolio => {
-      //   if (environment.ianConfig.showLogs) console.log('data', newFolio);
-      //   return this.http.post<FolioView>(this.folioViewAPIUrl, { authorId, folioName, placementViews: [] }).pipe(
-      //     map(folioViewData => {
-      //       if (environment.ianConfig.showLogs) console.log('folioViewData', folioViewData);
-      //       return newFolio;
-      //     })
-      //   );
-      // }),
-      // catchError(error => {
-      //   if (environment.ianConfig.showLogs) console.log('error', error);
-      //   return throwError(() => new Error('FolioCreate failed'));
-      // })
-      ();
+    return this.http.post<Folio>(this.folioAPIUrl, { authorId, folioName });
   }
 
   folioCreateWithParent(folioPrep: Partial<Folio>): Observable<{ newFolio: Folio; newAsset: Asset; newPlacement: Placement }> {

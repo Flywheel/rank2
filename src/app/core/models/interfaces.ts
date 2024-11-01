@@ -71,7 +71,7 @@ export interface PlacementView extends Placement {
 
 export interface FolioView extends Folio {
   placementViews: PlacementView[];
-  level?: number;
+  level: number;
 }
 
 export interface Pitch {
@@ -120,4 +120,10 @@ export interface AssetImporter {
 export interface FolioImporter {
   folioName: string;
   parentFolioName: string;
+}
+
+export interface DataImporter {
+  author: Author;
+  folios: FolioImporter[];
+  assets: AssetImporter[];
 }

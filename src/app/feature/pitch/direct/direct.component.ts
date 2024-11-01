@@ -10,6 +10,7 @@ import { HydrationService } from '../../../core/services/hydration.service';
 import { BallotStore } from '../../ballot/ballot.store';
 import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
 import { theData } from '../../../../mocks/mockdataForHydration';
+import { DataImporter } from '../../../core/models/interfaces';
 
 @Component({
   selector: 'mh5-direct',
@@ -36,7 +37,7 @@ export class DirectComponent {
 
   private async loadData() {
     if (!this.isHydrated) {
-      await this.hydrationService.hydrateFolios(this.authorStore.authorLoggedIn().id, theData);
+      await this.hydrationService.hydrateFolios(this.authorStore.authorLoggedIn().id, theData as DataImporter);
       this.isHydrated = true;
       const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
       await delay(200);
