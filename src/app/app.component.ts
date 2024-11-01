@@ -77,8 +77,8 @@ export class AppComponent implements OnInit, OnDestroy {
       delay(1000);
       console.log(this.folioStore.folios());
     }
-    await this.startupService.initializeDataForMiniHerald();
-    await this.startupService.loadDataMH();
+    await this.startupService.dataForLoggedInAuthorData();
+    await this.startupService.dataForMiniHerald();
   }
 
   ngOnDestroy(): void {

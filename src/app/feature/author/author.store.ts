@@ -65,10 +65,12 @@ export const AuthorStore = signalStore(
     authorSelectedView: computed<AuthorView>(
       () => store.authorViews().find(author => author.id === store.authorSelectedId()) ?? authorViewInit
     ),
+
     authorLoggedInView: computed<AuthorView>(
       () => store.authorViews().find(author => author.id === store.authorLoggedIn().id) ?? authorViewInit
     ),
-    authorFolioViewList: computed<FolioView[]>(() => {
+
+    authorSelectedFolioViews: computed<FolioView[]>(() => {
       const folios = store.authorSelectedFolioViews;
       const retval: FolioView[] = [];
 

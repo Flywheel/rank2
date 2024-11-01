@@ -31,7 +31,7 @@
           </div>
         }
         <div>
-          <mh5-asset-manager [folioList]="authorStore.authorFolioViewList()" [tabSelected]="selectedTab.name" />
+          <mh5-asset-manager [folioList]="authorStore.authorSelectedFolioViews()" [tabSelected]="selectedTab.name" />
         </div>
       }
 
@@ -44,7 +44,7 @@
           </div>
         }
         <div>
-          <mh5-asset-manager [folioList]="authorStore.authorFolioViewList()" [tabSelected]="selectedTab.name" />
+          <mh5-asset-manager [folioList]="authorStore.authorSelectedFolioViews()" [tabSelected]="selectedTab.name" />
         </div>
       }
       @case ('Slates') {
