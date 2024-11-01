@@ -4,8 +4,7 @@ import { Asset, AssetView, Folio, FolioView, Placement, PlacementView } from '..
 import { assetInit, assetViewInit, folioInit, folioViewInit, placementInit } from '../../core/models/initValues';
 import { FolioService } from './folio.service';
 import { computed, inject } from '@angular/core';
-import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { catchError, exhaustMap, firstValueFrom, map, pipe, tap, throwError } from 'rxjs';
+import { catchError, firstValueFrom, map, throwError } from 'rxjs';
 
 export const FolioStore = signalStore(
   { providedIn: 'root' },

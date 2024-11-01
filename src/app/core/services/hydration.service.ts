@@ -52,6 +52,7 @@ export class HydrationService {
     console.log(theAuthor);
     console.log(this.folioStore.folios());
     const rootFolioId = this.folioStore.folios().find(f => f.authorId === authorId && f.parentFolioId === undefined)?.id;
+    console.log(rootFolioId);
     //  const rootFolioId2 = this.authorStore.authorViews().filter(f => f.id === authorId)[0].authorFolio.id;
     const assetsToImport: AssetImporter[] = theData.assets;
     const foliosToImport: FolioImporter[] = theData.folios;
@@ -105,7 +106,7 @@ export class HydrationService {
 
   hydratePitches(authorId: string) {
     //  const authorId = this.authorLoggedIn.id();
-    const folioViews = this.folioStore.folioViewsComputed();
+    const folioViews = this.folioStore.folioViewsComputed().filter(p => p.authorId === authorId);
     folioViews.forEach(f => {
       const pitchPrep = {
         name: f.folioName,
@@ -120,8 +121,9 @@ export class HydrationService {
     });
   }
 
-  public async hydrateSlates(): Promise<void> {
-    const pitches = this.pitchStore.pitchViewsComputed().filter(p => p.id > 0);
+  public async hydrateSlates(authorId: string): Promise<void> {
+    const pitches = this.pitchStore.pitchViewsComputed().filter(p => p.authorId === authorId);
+    console.log(pitches);
     const folios = this.folioStore.folioViewsComputed();
 
     pitches.forEach(pitch => {

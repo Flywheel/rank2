@@ -4,7 +4,7 @@ import { pipe, switchMap, of, exhaustMap, catchError, throwError, map, tap } fro
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
 import { Author, AuthorView, PitchView, FolioView, TreeNode } from '../../core/models/interfaces';
-import { authorInit, authorViewInit, folioViewInit } from '../../core/models/initValues';
+import { authorInit, authorViewInit } from '../../core/models/initValues';
 import { AuthorService } from './author.service';
 
 import { environment } from '../../../environments/environment';
@@ -192,6 +192,7 @@ export const AuthorStore = signalStore(
                 map((author: Author) => {
                   updateState(store, '[Author] GetById Success', {
                     authors: [...store.authors(), author],
+                    authorSelectedId: authorId,
                     isLoading: false,
                   });
                   return author;

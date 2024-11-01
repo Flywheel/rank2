@@ -15,15 +15,15 @@ export class StartupService {
   authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
 
-  async load(): Promise<void> {
+  async initializeDataForMiniHerald(): Promise<void> {
+    const theAuthor = this.authorStore.authorLoggedIn();
     if (environment.ianConfig.showLogs) console.log('StartupService load');
-    if (environment.ianConfig.showLogs) console.log(this.authorStore.authorLoggedIn().name);
-    await this.hydrationService.hydrateFolios(this.authorStore.authorLoggedIn().id, theData as DataImporter);
+    if (environment.ianConfig.showLogs) console.log(theAuthor.name);
+    await this.hydrationService.hydrateFolios(theAuthor.id, theData as DataImporter);
 
     const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
     await delay(200);
-    await this.hydrationService.hydrateSlates();
-    await this.loadDataMH();
+    await this.hydrationService.hydrateSlates(theAuthor.id);
   }
 
   async loadDataMH() {
@@ -46,6 +46,6 @@ export class StartupService {
     if (theTopFolio) await this.hydrationService.hydrateFolios(theTopFolio.authorId!, dataMH);
     else alert('No top folio found');
     await delay(200);
-    await this.hydrationService.hydrateSlates();
+    await this.hydrationService.hydrateSlates(folioDefault.authorId);
   }
 }

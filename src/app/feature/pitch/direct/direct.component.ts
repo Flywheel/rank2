@@ -31,22 +31,22 @@ export class DirectComponent {
   needsAuthorName = computed<boolean>(() => this.authorStore.authorLoggedIn().name === AUTHOR_DEFAULT_NAME);
   isHydrated = false;
 
-  import() {
-    this.loadData();
-  }
+  // import() {
+  //   this.loadData();
+  // }
 
-  private async loadData() {
-    if (!this.isHydrated) {
-      await this.hydrationService.hydrateFolios(this.authorStore.authorLoggedIn().id, theData as DataImporter);
-      this.isHydrated = true;
-      const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-      await delay(200);
-      await this.hydrationService.hydrateSlates();
-    }
-  }
-  hydrateSlates() {
-    this.hydrationService.hydrateSlates();
-  }
+  // private async loadData() {
+  //   if (!this.isHydrated) {
+  //     await this.hydrationService.hydrateFolios(this.authorStore.authorLoggedIn().id, theData as DataImporter);
+  //     this.isHydrated = true;
+  //     const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  //     await delay(200);
+  //     await this.hydrationService.hydrateSlates();
+  //   }
+  // }
+  // hydrateSlates() {
+  //   this.hydrationService.hydrateSlates();
+  // }
 
   testService() {
     //#region Read

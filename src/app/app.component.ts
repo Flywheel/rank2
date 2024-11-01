@@ -4,7 +4,7 @@ import { AuthorStore } from './feature/author/author.store';
 import { AUTHOR_CONSENT_KEY, AUTHOR_DEFAULT_NAME, AUTHOR_HOST_NAME } from './core/models/constants';
 import { AuthorConsentComponent } from './feature/author/author-consent/author-consent.component';
 import { CommonModule } from '@angular/common';
-import { Subject } from 'rxjs';
+import { delay, Subject } from 'rxjs';
 import { FolioStore } from './feature/folio/folio.store';
 import { Folio } from './core/models/interfaces';
 import { SwUpdate } from '@angular/service-worker';
@@ -61,7 +61,6 @@ export class AppComponent implements OnInit, OnDestroy {
   private async loadForDemo_NoBackend() {
     const authorId = this.authorStore.authorLoggedIn().id;
     const author = this.authorStore.authorSelectedSetById(authorId);
-    console.log(author);
     if (!author) {
       await this.authorStore.authorCreate(author);
       await this.authorStore.authorLogin(author);
@@ -75,9 +74,11 @@ export class AppComponent implements OnInit, OnDestroy {
       };
       console.log(folioDefault);
       await this.folioStore.folioCreateForNewAuthor(folioDefault);
+      delay(1000);
       console.log(this.folioStore.folios());
     }
-    await this.startupService.load();
+    await this.startupService.initializeDataForMiniHerald();
+    await this.startupService.loadDataMH();
   }
 
   ngOnDestroy(): void {
