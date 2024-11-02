@@ -11,6 +11,7 @@ import { BallotStore } from '../../ballot/ballot.store';
 import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
 import { theData } from '../../../../mocks/mockdataForHydration';
 import { DataImporter } from '../../../core/models/interfaces';
+import { StartupService } from '../../../core/services/startup.service';
 
 @Component({
   selector: 'mh5-direct',
@@ -24,6 +25,7 @@ export class DirectComponent {
   folioStore = inject(FolioStore);
   pitchStore = inject(PitchStore);
   ballotStore = inject(BallotStore);
+  startupService = inject(StartupService);
 
   pitchService = inject(PitchService);
   hydrationService = inject(HydrationService);
@@ -31,9 +33,9 @@ export class DirectComponent {
   needsAuthorName = computed<boolean>(() => this.authorStore.authorLoggedIn().name === AUTHOR_DEFAULT_NAME);
   isHydrated = false;
 
-  // import() {
-  //   this.loadData();
-  // }
+  import() {
+    this.startupService.importAuthorLoggedInAssets();
+  }
 
   // private async loadData() {
   //   if (!this.isHydrated) {

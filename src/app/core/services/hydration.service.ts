@@ -49,14 +49,13 @@ export class HydrationService {
       console.log('Author not found');
       return;
     }
+
+    const rootFolioId = this.folioStore.folios().find(f => f.authorId === authorId && f.parentFolioId === undefined)?.id;
     console.log(theAuthor);
     console.log(this.folioStore.folios());
-    const rootFolioId = this.folioStore.folios().find(f => f.authorId === authorId && f.parentFolioId === undefined)?.id;
     console.log(rootFolioId);
-    //  const rootFolioId2 = this.authorStore.authorViews().filter(f => f.id === authorId)[0].authorFolio.id;
     const assetsToImport: AssetImporter[] = theData.assets;
     const foliosToImport: FolioImporter[] = theData.folios;
-    // const placementPrepared: Placement = placementInit;
     const foliosPrepared: Folio[] = [];
 
     for (const folio of foliosToImport) {

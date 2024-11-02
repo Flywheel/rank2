@@ -11,10 +11,10 @@ export const miniHeraldData: DataImporter = {
 
     { folioName: 'Border Integrity', parentFolioName: 'AimsPoll' },
     { folioName: 'Minimum Wage', parentFolioName: 'AimsPoll' },
-    // { folioName: 'Eurovision 2024', parentFolioName: '@miniherald' },
+    { folioName: 'Eurovision 2024', parentFolioName: '@miniherald' },
     // { folioName: 'Ladder Singles 2009', parentFolioName: '@miniherald' },
-    // { folioName: 'Tony Best Play 2024', parentFolioName: '@miniherald' },
-    // { folioName: 'Tony Best Musical 2024', parentFolioName: '@miniherald' },
+    { folioName: 'Tony Best Play 2024', parentFolioName: '@miniherald' },
+    { folioName: 'Tony Best Musical 2024', parentFolioName: '@miniherald' },
   ],
   assets: [
     {

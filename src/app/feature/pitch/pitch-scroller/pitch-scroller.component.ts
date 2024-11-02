@@ -24,7 +24,7 @@ import { FormsModule } from '@angular/forms';
       }
     </div>
   `,
-  styles: [],
+  styleUrl: './pitch-scroller.component.scss',
 })
 export class PitchScrollerComponent {
   authorStore = inject(AuthorStore);

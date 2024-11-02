@@ -120,6 +120,7 @@ export const AuthorStore = signalStore(
       },
 
       async authorCreate(author: Author) {
+        if (environment.ianConfig.showLogs) console.log(author);
         updateState(store, '[Author] Add Start', { isLoading: true });
         return dbAuthor
           .authorCreate(author)
@@ -212,6 +213,14 @@ export const AuthorStore = signalStore(
           })
         )
       ),
+    };
+  }),
+  withMethods(store => {
+    //   //const dbAuthor = inject(AuthorService);
+    return {
+      async authorSelectedByIdAsync(authorId: string) {
+        store.authorSelectedSetById(authorId);
+      },
     };
   })
 );
