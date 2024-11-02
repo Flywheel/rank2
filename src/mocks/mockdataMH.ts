@@ -1,6 +1,6 @@
 import { DataImporter } from '../app/core/models/interfaces';
 
-export const dataMH: DataImporter = {
+export const miniHeraldData: DataImporter = {
   author: {
     name: 'miniherald',
     id: 'xxxx---xxxx---xxxx---xxxx',

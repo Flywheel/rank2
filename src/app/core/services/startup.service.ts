@@ -4,7 +4,7 @@ import { AuthorStore } from '../../feature/author/author.store';
 import { FolioStore } from '../../feature/folio/folio.store';
 import { theData } from '../../../mocks/mockdataForHydration';
 import { Author, DataImporter, Folio } from '../models/interfaces';
-import { dataMH } from '../../../mocks/mockdataMH';
+import { miniHeraldData } from '../../../mocks/mockdataMH';
 
 @Injectable({
   providedIn: 'root',
@@ -15,17 +15,15 @@ export class StartupService {
   authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
 
-  async dataForLoggedInAuthorData(): Promise<void> {
+  async importAuthorLoggedInAssets(): Promise<void> {
     const theAuthor = this.authorStore.authorLoggedIn();
-
     await this.hydrationService.hydrateFolios(theAuthor.id, theData as DataImporter);
-
     await this.delay(200);
     await this.hydrationService.hydrateSlates(theAuthor.id);
   }
 
-  async dataForMiniHerald() {
-    const authorStartup: Author = dataMH.author;
+  async importMiniHeraldAssets() {
+    const authorStartup: Author = miniHeraldData.author;
 
     await this.authorStore.authorCreate(authorStartup);
     const folioDefault: Folio = {
@@ -38,7 +36,7 @@ export class StartupService {
 
     await this.delay(1000);
     const theTopFolio = this.folioStore.folios().find(f => f.authorId === authorStartup.id && f.parentFolioId === undefined);
-    if (theTopFolio) await this.hydrationService.hydrateFolios(theTopFolio.authorId!, dataMH);
+    if (theTopFolio) await this.hydrationService.hydrateFolios(theTopFolio.authorId!, miniHeraldData);
     else alert('No top folio found');
     await this.delay(200);
     await this.hydrationService.hydrateSlates(folioDefault.authorId);
