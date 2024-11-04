@@ -26,8 +26,36 @@
         @if (newPlacement()) {
           <mh5-folio-placement-new (closeNewPlacementEditor)="closeNewPlacement()" [forcePopup]="true" />
         } @else {
-          <div style="text-align: center">
+          <!-- <div style="text-align: center">
             <mh5-icon-plus (click)="openNewPlacement()" (keydown)="openNewPlacement()" tabindex="1" />
+          </div> -->
+          <div style="display: flex; justify-content: space-between">
+            <div class="folio-column">
+              <div class="sectionTitle" (click)="openNewPlacement()" (keydown)="openNewPlacement()" tabindex="1">
+                Folios
+                <span style="margin-left: 8px">
+                  <mh5-icon-plus />
+                </span>
+              </div>
+            </div>
+
+            <div class="placement-column">
+              <div class="sectionTitle" (click)="openNewPlacement()" (keydown)="openNewPlacement()" tabindex="2">
+                Placements
+                <span style="margin-left: 8px">
+                  <mh5-icon-plus />
+                </span>
+              </div>
+            </div>
+
+            <div class="pitch-column">
+              <div class="sectionTitle" (click)="openNewPitch()" (keydown)="openNewPitch()" tabindex="3">
+                Pitches
+                <span style="margin-left: 8px">
+                  <mh5-icon-plus />
+                </span>
+              </div>
+            </div>
           </div>
         }
         <div>
@@ -36,7 +64,7 @@
       }
 
       @case ('Pitches') {
-        @if (newPitch()) {
+        <!-- @if (newPitch()) {
           <mh5-pitch-new (closeNewPitchEditor)="closeNewPitch()" [forcePopup]="true" />
         } @else {
           <div style="text-align: center">
@@ -45,7 +73,7 @@
         }
         <div>
           <mh5-asset-manager [folioList]="authorStore.authorSelectedFolioViews()" [tabSelected]="selectedTab.name" />
-        </div>
+        </div> -->
       }
       @case ('Slates') {
         <div><mh5-direct /></div>

@@ -54,12 +54,20 @@ export class FolioShellComponent {
     this.router.navigate([page]);
   }
 
+  openNewFolio() {
+    this.newPlacement.set(true);
+  }
+  closeNewFolio() {
+    this.newPlacement.set(false);
+  }
+
   openNewPlacement() {
     this.newPlacement.set(true);
   }
   closeNewPlacement() {
     this.newPlacement.set(false);
   }
+
   openNewPitch() {
     this.newPitch.set(true);
   }

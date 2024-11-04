@@ -1,6 +1,6 @@
 @if (!showPitchMananger()) {
   <div style="display: flex; justify-content: space-between">
-    <div class="left-panel">
+    <div class="folio-column">
       <div class="folio-list">
         @for (folioItem of folioList(); track $index) {
           <div
@@ -14,32 +14,35 @@
         }
       </div>
     </div>
-    <div class="right-panel">
+
+    <div class="placement-column">
       @if (tabSelected() === 'Assets') {
         <div class="placement-list">
-          @for (item of placements(); track $index) {
+          @for (item of placementsOnSelectedFolio(); track $index) {
             <div class="placement-list-item" (click)="displayAsset(item)" (keydown)="displayAsset(item)" tabindex="0">
               {{ item.assetView.mediaType === 'folio' ? '- ' : '' }} {{ item.caption }}
             </div>
           }
         </div>
-      } @else {
-        <div class="placement-list">
-          @if (pitchesOnFolioCount() > 0) {
-            @for (item of pitchesOnFolio(); track $index) {
-              <div class="placement-list-item" (click)="editPitch(item)" (keydown)="editPitch(item)" tabindex="0">
-                {{ item.name }}
-              </div>
-            }
-          } @else {
-            <div class="placement-list-item">No slates have yet been pitched for this folio.</div>
-          }
-        </div>
+        <!-- } @else { -->
+        <div class="pitch-column"></div>
       }
     </div>
+
+    <div class="pitch-column">
+      <div class="placement-list">
+        @if (pitchesOnFolioCount() > 0) {
+          @for (item of pitchesOnSelectedFolio(); track $index) {
+            <div class="placement-list-item" (click)="editPitch(item)" (keydown)="editPitch(item)" tabindex="0">
+              {{ item.name }}
+            </div>
+          }
+        } @else {
+          <div class="placement-list-item">No slates have yet been pitched for this folio.</div>
+        }
+      </div>
+    </div>
   </div>
-} @else {
-  <mh5-slate-manager [folioMembers]="placements()" />
 }
 @if (!hidePlacementDisplay()) {
   <div class="placement-display">

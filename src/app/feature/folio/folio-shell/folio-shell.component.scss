@@ -49,10 +49,6 @@
   border-bottom-left-radius: 1px;
   border-bottom-right-radius: 1px;
 }
-.assetPanel {
-  background-color: #334;
-  flex-grow: 1;
-}
 
 /* folio-shell.component.scss */
 
@@ -90,3 +86,27 @@
   outline: none; /* Removes default focus outline */
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Custom focus shadow */
 }
+
+.sectionTitle {
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  color: #ccf;
+  margin-right: 8px;
+}
+
+.assetPanel {
+  background-color: #334;
+  flex-grow: 1;
+}
+
+@import '../../../core/styles/asset-styles.scss';
+// .folio-column {
+//   width: 35%;
+// }
+// .placement-column {
+//   width: 35%;
+// }
+// .pitch-column {
+//   width: 35%;
+// }
