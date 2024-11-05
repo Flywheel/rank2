@@ -1,39 +1,23 @@
 @if (showPopup()) {
   <div class="modal-overlay">
     <div class="modal">
-      <!-- <div class="checkbox-container">
-        <!-- <label class="checkbox-label">
-          <input type="checkbox" name="entryType" [ngModel]="newPlacement()" (ngModelChange)="newPlacement.set($event)" value="Caption" />
-          Caption
-        </label> 
-        <label class="checkbox-label">
-          <input type="checkbox" name="entryType" [ngModel]="newMedia()" (ngModelChange)="newMedia.set($event)" value="true" />
-          Media
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox" name="entryType" [ngModel]="newFolio()" (ngModelChange)="newFolio.set($event)" value="true" />
-          Folio
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox" name="entryType" [ngModel]="newPitch()" (ngModelChange)="newPitch.set($event)" value="true" />
-          Pitch
-        </label>
-      </div> -->
+      <div class="modal-header">
+        <button type="submit" class="cancel-done" (click)="cancel()">Cancel/Done</button>
+        <span>Folio selected: {{ folioStore.folioViewSelected().folioName }}</span>
+      </div>
 
       <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form-container">
         <div class="form-row">
-          <div class="add-folio">
-            <p>{{ assetType() }}</p>
-            <label for="entryType">Entry Type</label>
-            <input class="col1" id="caption" formControlName="caption" type="text" />
-            <div class="col2">
-              @if (formGroup.get('caption')?.invalid && formGroup.get('caption')?.touched) {
-                <label for="caption" class="warning">Entry is required</label>
-              } @else {
-                <label for="caption">Enter Caption </label>
-              }
-            </div>
+          <!-- <div class="add-folio"> -->
+          <input id="caption" formControlName="caption" type="text" />
+          <div>
+            @if (formGroup.get('caption')?.invalid && formGroup.get('caption')?.touched) {
+              <label for="caption" class="warning">Awaiting entry...</label>
+            } @else {
+              <label for="caption">Enter new {{ assetType() }} name. </label>
+            }
           </div>
+          <!-- </div> -->
 
           @if (newMedia() === true) {
             <div class="form-row">
@@ -54,14 +38,23 @@
 
           <div class="colsBoth">
             <button type="submit" [disabled]="formGroup.invalid">
-              Add {{ newPlacementType() }} to folio {{ folioStore.folioViewSelected().folioName }}
+              @switch (assetType()) {
+                @case ('folio') {
+                  Add subfolio to {{ folioStore.folioViewSelected().folioName }};
+                }
+                @case ('placement') {
+                  Add asset to folio {{ folioStore.folioViewSelected().folioName }};
+                }
+              }
+
+              Adding {{ assetType() }} {{ folioStore.folioViewSelected().folioName }};
             </button>
           </div>
-          <button class="col1" (click)="test()">Test</button>
-          <button class="col2" (click)="cancel()">Cancel / Close</button>
+          <!-- <button class="col1" (click)="test()">Test</button>
+          <button class="col2" (click)="cancel()">Cancel / Close</button> -->
         </div>
       </form>
-
+      <!-- 
       @if (newMedia() === true) {
         <mh5-folio-placement-media [assetView]="assetViewPrepared()" />
       }
@@ -69,7 +62,7 @@
         <mh5-pitch-new />
       }
 
-      <mh5-list-input />
+      <mh5-list-input /> -->
     </div>
   </div>
 }

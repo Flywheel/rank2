@@ -26,23 +26,10 @@ export class FolioPlacementNewComponent {
   showPopup = computed<boolean>(() => this.forcePopup());
   assetType = input.required<string>();
 
-  //newPlacement = signal(false);
   newMedia = signal(false);
+  newPlacment = signal(false);
   newFolio = signal(false);
   newPitch = signal(false);
-
-  newPlacementType = computed(() => {
-    if (this.newPitch() === true) {
-      return 'Pitch';
-    }
-    if (this.newFolio() === true) {
-      return 'Folio';
-    }
-    if (this.newMedia() === true) {
-      return 'MediaUrl';
-    }
-    return 'Caption';
-  });
 
   formGroup: FormGroup = this.fb.group({
     caption: ['', Validators.required],
@@ -54,8 +41,9 @@ export class FolioPlacementNewComponent {
   onSubmit() {
     const parentFolioId = this.folioStore.folioViewSelected().id;
     const authorId = this.authorStore.authorLoggedIn().id;
-    switch (this.newPlacementType()) {
-      case 'Caption':
+    if (environment.ianConfig.showLogs) console.log(this.assetType());
+    switch (this.assetType()) {
+      case 'Placement':
         if (this.formGroup.valid) {
           const newPlacement: Placement = {
             id: 0,
