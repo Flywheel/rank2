@@ -24,6 +24,7 @@ export class FolioPlacementNewComponent {
 
   forcePopup = input<boolean>(false);
   showPopup = computed<boolean>(() => this.forcePopup());
+  assetType = input.required<string>();
 
   //newPlacement = signal(false);
   newMedia = signal(false);

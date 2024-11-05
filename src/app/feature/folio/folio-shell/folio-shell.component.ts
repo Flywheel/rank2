@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, Type } from '@angular/core';
 import { HeaderComponent } from '../../../core/components/header/header.component';
 import { FolioScrollHorizontalComponent } from '../folio-scroll-horizontal/folio-scroll-horizontal.component';
 import { FolioPlacementNewComponent } from '../folio-placement-new/folio-placement-new.component';
@@ -32,6 +32,8 @@ import { Router } from '@angular/router';
   styleUrl: './folio-shell.component.scss',
 })
 export class FolioShellComponent {
+  assetTypeSelected = signal('');
+
   router = inject(Router);
   authorStore = inject(AuthorStore);
   knownAuthors = computed<AuthorView[]>(() => this.authorStore.authorViews());
@@ -48,27 +50,30 @@ export class FolioShellComponent {
   theFolios = this.authorStore.authorSelectedFolioViews;
   thePitches = this.authorStore.authorSelectedPitchViews;
   newPitch = signal(false);
-  newPlacement = signal(false);
+  showModalDialog = signal(false);
 
   openPage(page: string) {
     this.router.navigate([page]);
   }
 
   openNewFolio() {
-    this.newPlacement.set(true);
+    this.assetTypeSelected.set('Folio');
+    this.showModalDialog.set(true);
   }
   closeNewFolio() {
-    this.newPlacement.set(false);
+    this.showModalDialog.set(false);
   }
 
   openNewPlacement() {
-    this.newPlacement.set(true);
+    this.assetTypeSelected.set('Placement');
+    this.showModalDialog.set(true);
   }
   closeNewPlacement() {
-    this.newPlacement.set(false);
+    this.showModalDialog.set(false);
   }
 
   openNewPitch() {
+    this.assetTypeSelected.set('Pitch');
     this.newPitch.set(true);
   }
   closeNewPitch() {

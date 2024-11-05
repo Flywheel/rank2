@@ -59,8 +59,12 @@
 
 .modal {
   position: relative;
-  background-color: #66a;
+  background-color: rgba(102, 170, 170, 0.6);
   padding: 5px;
   width: 450px;
   max-width: 100%;
+}
+
+.add-folio {
+  opacity: 1;
 }

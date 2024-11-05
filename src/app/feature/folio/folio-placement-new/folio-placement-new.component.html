@@ -1,11 +1,11 @@
 @if (showPopup()) {
   <div class="modal-overlay">
     <div class="modal">
-      <div class="checkbox-container">
+      <!-- <div class="checkbox-container">
         <!-- <label class="checkbox-label">
           <input type="checkbox" name="entryType" [ngModel]="newPlacement()" (ngModelChange)="newPlacement.set($event)" value="Caption" />
           Caption
-        </label> -->
+        </label> 
         <label class="checkbox-label">
           <input type="checkbox" name="entryType" [ngModel]="newMedia()" (ngModelChange)="newMedia.set($event)" value="true" />
           Media
@@ -18,17 +18,21 @@
           <input type="checkbox" name="entryType" [ngModel]="newPitch()" (ngModelChange)="newPitch.set($event)" value="true" />
           Pitch
         </label>
-      </div>
+      </div> -->
 
       <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form-container">
         <div class="form-row">
-          <input class="col1" id="caption" formControlName="caption" type="text" />
-          <div class="col2">
-            @if (formGroup.get('caption')?.invalid && formGroup.get('caption')?.touched) {
-              <label for="caption" class="warning">Entry is required</label>
-            } @else {
-              <label for="caption">Enter Caption </label>
-            }
+          <div class="add-folio">
+            <p>{{ assetType() }}</p>
+            <label for="entryType">Entry Type</label>
+            <input class="col1" id="caption" formControlName="caption" type="text" />
+            <div class="col2">
+              @if (formGroup.get('caption')?.invalid && formGroup.get('caption')?.touched) {
+                <label for="caption" class="warning">Entry is required</label>
+              } @else {
+                <label for="caption">Enter Caption </label>
+              }
+            </div>
           </div>
 
           @if (newMedia() === true) {

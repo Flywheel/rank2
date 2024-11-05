@@ -2,7 +2,7 @@
   @for (author of knownAuthors(); track $index) {
     @if (author) {
       <div class="channel-item" (click)="selectAuthor(author.id)" (keydown)="selectAuthor(author.id)" tabindex="$index">
-        {{ author.name }} {{ author.id.substring(0, 4) }}
+        {{ author.name }}
       </div>
     }
   }
