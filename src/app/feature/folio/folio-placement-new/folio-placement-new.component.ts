@@ -42,8 +42,10 @@ export class FolioPlacementNewComponent {
     const parentFolioId = this.folioStore.folioViewSelected().id;
     const authorId = this.authorStore.authorLoggedIn().id;
     if (environment.ianConfig.showLogs) console.log(this.assetType());
+
     switch (this.assetType()) {
       case 'Placement':
+        this.folioStore.togglePlacementAdder(true);
         if (this.formGroup.valid) {
           const newPlacement: Placement = {
             id: 0,
@@ -52,7 +54,16 @@ export class FolioPlacementNewComponent {
             assetId: 1,
             caption: this.formGroup.value.caption,
           };
-          this.folioStore.placementCreate(newPlacement);
+
+          if (this.newMedia()) {
+            const media: Asset = {
+              id: 0,
+              mediaType: this.assetViewPrepared().mediaType,
+              sourceId: this.assetViewPrepared().sourceId,
+              authorId: this.authorStore.authorLoggedIn().id,
+            };
+            this.folioStore.assetCreateWithPlacement(media, this.formGroup.value.caption);
+          } else this.folioStore.placementCreate(newPlacement);
           this.folioStore.togglePlacementAdder(false);
         }
         break;
@@ -68,19 +79,19 @@ export class FolioPlacementNewComponent {
           this.folioStore.toggleFolioAdder(false);
         }
         break;
-      case 'MediaUrl':
-        if (this.formGroup.valid) {
-          this.folioStore.togglePlacementAdder(true);
-          const media: Asset = {
-            id: 0,
-            mediaType: this.assetViewPrepared().mediaType,
-            sourceId: this.assetViewPrepared().sourceId,
-            authorId: this.authorStore.authorLoggedIn().id,
-          };
-          this.folioStore.assetCreateWithPlacement(media, this.formGroup.value.caption);
-          this.folioStore.togglePlacementAdder(false);
-        }
-        break;
+      // case 'MediaUrl':
+      //   if (this.formGroup.valid) {
+      //     this.folioStore.togglePlacementAdder(true);
+      //     const media: Asset = {
+      //       id: 0,
+      //       mediaType: this.assetViewPrepared().mediaType,
+      //       sourceId: this.assetViewPrepared().sourceId,
+      //       authorId: this.authorStore.authorLoggedIn().id,
+      //     };
+      //     this.folioStore.assetCreateWithPlacement(media, this.formGroup.value.caption);
+      //     this.folioStore.togglePlacementAdder(false);
+      //   }
+      //   break;
     }
     this.formGroup.controls['caption'].reset();
   }

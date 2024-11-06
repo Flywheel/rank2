@@ -3,7 +3,7 @@
     <div class="modal">
       <div class="modal-header">
         <button type="submit" class="cancel-done" (click)="cancel()">Cancel/Done</button>
-        <span>Folio selected: {{ folioStore.folioViewSelected().folioName }}</span>
+        <span>Folio: {{ folioStore.folioViewSelected().folioName }}</span>
       </div>
 
       <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form-container">
@@ -11,6 +11,14 @@
           <!-- <div class="add-folio"> -->
           <input id="caption" formControlName="caption" type="text" />
           <div>
+            <div class="">
+              <input
+                type="checkbox"
+                [ngModel]="newMedia()"
+                (ngModelChange)="newMedia.set($event)"
+                [ngModelOptions]="{ standalone: true }" />
+              Add media
+            </div>
             @if (formGroup.get('caption')?.invalid && formGroup.get('caption')?.touched) {
               <label for="caption" class="warning">Awaiting entry...</label>
             } @else {
@@ -47,18 +55,18 @@
                 }
               }
 
-              Adding {{ assetType() }} {{ folioStore.folioViewSelected().folioName }};
+              Add {{ assetType() }}
             </button>
           </div>
           <!-- <button class="col1" (click)="test()">Test</button>
           <button class="col2" (click)="cancel()">Cancel / Close</button> -->
         </div>
       </form>
-      <!-- 
+
       @if (newMedia() === true) {
         <mh5-folio-placement-media [assetView]="assetViewPrepared()" />
       }
-      @if (newPitch() === true) {
+      <!-- @if (newPitch() === true) {
         <mh5-pitch-new />
       }
 
