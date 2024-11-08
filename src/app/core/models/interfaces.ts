@@ -127,3 +127,10 @@ export interface DataImporter {
   folios: FolioImporter[];
   assets: AssetImporter[];
 }
+
+export enum AssetType {
+  None = 'None',
+  Folio = 'Folio',
+  Placement = 'Placement',
+  Pitch = 'Pitch',
+}

@@ -2,30 +2,64 @@
   <div class="modal-overlay">
     <div class="modal">
       <div class="modal-header">
-        <button type="submit" class="cancel-done" (click)="cancel()">Cancel/Done</button>
+        <div class="cancel" (click)="cancel()" (keydown)="cancel()" tabindex="1">Cancel</div>
         <span>Folio: {{ folioStore.folioViewSelected().folioName }}</span>
       </div>
 
       <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form-container">
         <div class="form-row">
-          <!-- <div class="add-folio"> -->
-          <input id="caption" formControlName="caption" type="text" />
+          <input #captionField id="caption" formControlName="caption" type="text" />
           <div>
-            <div class="">
-              <input
-                type="checkbox"
-                [ngModel]="newMedia()"
-                (ngModelChange)="newMedia.set($event)"
-                [ngModelOptions]="{ standalone: true }" />
-              Add media
-            </div>
             @if (formGroup.get('caption')?.invalid && formGroup.get('caption')?.touched) {
               <label for="caption" class="warning">Awaiting entry...</label>
             } @else {
               <label for="caption">Enter new {{ assetType() }} name. </label>
             }
+            @if (assetType() === AssetType.Placement) {
+              <div class="">
+                <input
+                  type="checkbox"
+                  [ngModel]="newMedia()"
+                  (ngModelChange)="newMedia.set($event)"
+                  [ngModelOptions]="{ standalone: true }" />
+                Add media
+              </div>
+            }
           </div>
-          <!-- </div> -->
+
+          @if (assetType() === AssetType.Pitch) {
+            <div class="">
+              <div class="form-row">
+                <input id="description" formControlName="description" type="text" />
+                <div class="">
+                  @if (formGroup.get('description')?.invalid && formGroup.get('description')?.touched) {
+                    <label for="description" class="warning">Contest Description is required</label>
+                  } @else {
+                    <label for="description">Contest Description</label>
+                  }
+                </div>
+              </div>
+
+              <div class="form-row">
+                <input id="opens" formControlName="opens" type="date" />
+
+                @if (formGroup.get('opens')?.invalid && formGroup.get('opens')?.touched) {
+                  <div>Opening date is required.</div>
+                } @else {
+                  <label for="opens">Opening date.</label>
+                }
+              </div>
+
+              <div class="form-row">
+                <input id="closes" formControlName="closes" type="date" />
+                @if (formGroup.get('closes')?.invalid && formGroup.get('closes')?.touched) {
+                  <div>Closing date is required.</div>
+                } @else {
+                  <label for="closes">Closing Date</label>
+                }
+              </div>
+            </div>
+          }
 
           @if (newMedia() === true) {
             <div class="form-row">
@@ -47,10 +81,10 @@
           <div class="colsBoth">
             <button type="submit" [disabled]="formGroup.invalid">
               @switch (assetType()) {
-                @case ('folio') {
+                @case (AssetType.Folio) {
                   Add subfolio to {{ folioStore.folioViewSelected().folioName }};
                 }
-                @case ('placement') {
+                @case (AssetType.Placement) {
                   Add asset to folio {{ folioStore.folioViewSelected().folioName }};
                 }
               }
@@ -58,8 +92,6 @@
               Add {{ assetType() }}
             </button>
           </div>
-          <!-- <button class="col1" (click)="test()">Test</button>
-          <button class="col2" (click)="cancel()">Cancel / Close</button> -->
         </div>
       </form>
 

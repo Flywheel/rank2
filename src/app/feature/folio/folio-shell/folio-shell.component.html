@@ -24,7 +24,7 @@
     @switch (selectedTab.name) {
       @case ('Assets') {
         @if (showModalDialog()) {
-          <mh5-folio-placement-new (closeNewPlacementEditor)="closeNewPlacement()" [forcePopup]="true" [assetType]="assetTypeSelected()" />
+          <mh5-folio-placement-new (closeNewPlacementEditor)="closeEditorDialog()" [forcePopup]="true" [assetType]="assetTypeSelected()" />
         } @else {
           <div style="display: flex; justify-content: space-between">
             <div class="folio-column">
@@ -61,16 +61,10 @@
       }
 
       @case ('Pitches') {
-        <!-- @if (newPitch()) {
-          <mh5-pitch-new (closeNewPitchEditor)="closeNewPitch()" [forcePopup]="true" />
-        } @else {
-          <div style="text-align: center">
-            <mh5-icon-plus (click)="openNewPitch()" (keydown)="openNewPitch()" tabindex="1" />
-          </div>
-        }
         <div>
           <mh5-asset-manager [folioList]="authorStore.authorSelectedFolioViews()" [tabSelected]="selectedTab.name" />
-        </div> -->
+        </div>
+        -->
       }
       @case ('Slates') {
         <div><mh5-direct /></div>

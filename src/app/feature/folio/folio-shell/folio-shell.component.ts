@@ -1,16 +1,12 @@
-import { Component, computed, inject, signal, Type } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { HeaderComponent } from '../../../core/components/header/header.component';
 import { FolioScrollHorizontalComponent } from '../folio-scroll-horizontal/folio-scroll-horizontal.component';
 import { FolioPlacementNewComponent } from '../folio-placement-new/folio-placement-new.component';
-import { FolioPlacementListComponent } from '../folio-placement-list/folio-placement-list.component';
 import { AuthorStore } from '../../author/author.store';
-import { ChannelTreeComponent } from '../channel-tree/channel-tree.component';
-import { AuthorView, TabList } from '../../../core/models/interfaces';
+import { AssetType, AuthorView, TabList } from '../../../core/models/interfaces';
 import { IconPlusComponent } from '../../../core/svg/icon-plus';
 import { ChannelAssetsComponent } from '../asset-manager/asset-manager.component';
-import { SlateManagerComponent } from '../slate-manager/slate-manager.component';
 import { DirectComponent } from '../../pitch/direct/direct.component';
-import { PitchNewComponent } from '../pitch-new/pitch-new.component';
 import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
 import { Router } from '@angular/router';
 @Component({
@@ -19,20 +15,16 @@ import { Router } from '@angular/router';
   imports: [
     HeaderComponent,
     FolioScrollHorizontalComponent,
-    FolioPlacementListComponent,
     FolioPlacementNewComponent,
-    ChannelTreeComponent,
     IconPlusComponent,
     ChannelAssetsComponent,
-    SlateManagerComponent,
     DirectComponent,
-    PitchNewComponent,
   ],
   templateUrl: './folio-shell.component.html',
   styleUrl: './folio-shell.component.scss',
 })
 export class FolioShellComponent {
-  assetTypeSelected = signal('');
+  assetTypeSelected = signal<AssetType>(AssetType.Folio);
 
   router = inject(Router);
   authorStore = inject(AuthorStore);
@@ -57,15 +49,12 @@ export class FolioShellComponent {
   }
 
   openNewFolio() {
-    this.assetTypeSelected.set('Folio');
+    this.assetTypeSelected.set(AssetType.Folio);
     this.showModalDialog.set(true);
-  }
-  closeNewFolio() {
-    this.showModalDialog.set(false);
   }
 
   openNewPlacement() {
-    this.assetTypeSelected.set('Placement');
+    this.assetTypeSelected.set(AssetType.Placement);
     this.showModalDialog.set(true);
   }
   closeNewPlacement() {
@@ -73,10 +62,12 @@ export class FolioShellComponent {
   }
 
   openNewPitch() {
-    this.assetTypeSelected.set('Pitch');
-    this.newPitch.set(true);
+    this.assetTypeSelected.set(AssetType.Pitch);
+
+    this.showModalDialog.set(true);
   }
-  closeNewPitch() {
-    this.newPitch.set(false);
+
+  closeEditorDialog() {
+    this.showModalDialog.set(false);
   }
 }

@@ -1,19 +1,17 @@
-import { Component, computed, inject, input, output, signal } from '@angular/core';
+import { Component, computed, effect, ElementRef, inject, input, output, signal, viewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { Asset, AssetView, Folio, Placement } from '../../../core/models/interfaces';
+import { Asset, AssetType, AssetView, Folio, Placement } from '../../../core/models/interfaces';
 import { FolioStore } from '../folio.store';
 import { AuthorStore } from '../../author/author.store';
 import { environment } from '../../../../environments/environment';
 import { MediaService } from '../../../core/services/media.service';
 import { FolioPlacementMediaComponent } from '../folio-placement-media/folio-placement-media.component';
 import { assetViewInit } from '../../../core/models/initValues';
-import { PitchNewComponent } from '../pitch-new/pitch-new.component';
-import { ListInputComponent } from '../list-input/list-input.component';
 
 @Component({
   selector: 'mh5-folio-placement-new',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, FolioPlacementMediaComponent, PitchNewComponent, ListInputComponent],
+  imports: [ReactiveFormsModule, FormsModule, FolioPlacementMediaComponent],
   templateUrl: './folio-placement-new.component.html',
   styleUrl: './folio-placement-new.component.scss',
 })
@@ -22,21 +20,54 @@ export class FolioPlacementNewComponent {
   folioStore = inject(FolioStore);
   fb = inject(FormBuilder);
 
+  formGroup: FormGroup;
+
   forcePopup = input<boolean>(false);
   showPopup = computed<boolean>(() => this.forcePopup());
-  assetType = input.required<string>();
+  AssetType = AssetType;
+  assetType = input.required<AssetType>();
 
   newMedia = signal(false);
   newPlacment = signal(false);
   newFolio = signal(false);
   newPitch = signal(false);
 
-  formGroup: FormGroup = this.fb.group({
-    caption: ['', Validators.required],
-    urlAdder: [''],
-  });
+  // formGroup: FormGroup = this.fb.group({
+  //   caption: ['', Validators.required],
+  //   urlAdder: [''],
+  //   description: [this.folioStore.folioViewSelected().folioName],
+  //   opens: [today],
+  //   closes: [nextWeekDate,],
+  // });
+
+  captionField = viewChild<ElementRef<HTMLInputElement>>('captionField');
 
   closeNewPlacementEditor = output<boolean>();
+
+  // constructor() {
+  //   effect(() => {
+  //     this.captionField()?.nativeElement.focus();
+  //   });
+  // }
+
+  constructor() {
+    effect(() => {
+      this.captionField()?.nativeElement.focus();
+    });
+    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+    const nextWeek = new Date();
+    nextWeek.setDate(nextWeek.getDate() + 7); // Set date to one week from today
+    const nextWeekDate = nextWeek.toISOString().split('T')[0]; // Get next week's date in YYYY-MM-DD format
+
+    this.formGroup = this.fb.group({
+      caption: [this.folioStore.folioViewSelected().folioName, Validators.required],
+      description: [this.folioStore.folioViewSelected().folioName, Validators.required],
+      opens: [today, Validators.required],
+      closes: [nextWeekDate, Validators.required],
+      authorId: [this.authorStore.authorLoggedIn().id, Validators.required],
+      folioId: [this.folioStore.folioIdSelected(), Validators.required],
+    });
+  }
 
   onSubmit() {
     const parentFolioId = this.folioStore.folioViewSelected().id;
@@ -44,6 +75,17 @@ export class FolioPlacementNewComponent {
     if (environment.ianConfig.showLogs) console.log(this.assetType());
 
     switch (this.assetType()) {
+      case 'Folio':
+        if (this.formGroup.valid) {
+          const folioData: Partial<Folio> = {
+            folioName: this.formGroup.value.caption.trim(),
+            authorId: this.authorStore.authorLoggedIn().id,
+            parentFolioId,
+          };
+          this.folioStore.folioCreateWithParent(folioData);
+          this.folioStore.toggleFolioAdder(false);
+        }
+        break;
       case 'Placement':
         this.folioStore.togglePlacementAdder(true);
         if (this.formGroup.valid) {
@@ -67,31 +109,6 @@ export class FolioPlacementNewComponent {
           this.folioStore.togglePlacementAdder(false);
         }
         break;
-
-      case 'Folio':
-        if (this.formGroup.valid) {
-          const folioData: Partial<Folio> = {
-            folioName: this.formGroup.value.caption.trim(),
-            authorId: this.authorStore.authorLoggedIn().id,
-            parentFolioId,
-          };
-          this.folioStore.folioCreateWithParent(folioData);
-          this.folioStore.toggleFolioAdder(false);
-        }
-        break;
-      // case 'MediaUrl':
-      //   if (this.formGroup.valid) {
-      //     this.folioStore.togglePlacementAdder(true);
-      //     const media: Asset = {
-      //       id: 0,
-      //       mediaType: this.assetViewPrepared().mediaType,
-      //       sourceId: this.assetViewPrepared().sourceId,
-      //       authorId: this.authorStore.authorLoggedIn().id,
-      //     };
-      //     this.folioStore.assetCreateWithPlacement(media, this.formGroup.value.caption);
-      //     this.folioStore.togglePlacementAdder(false);
-      //   }
-      //   break;
     }
     this.formGroup.controls['caption'].reset();
   }
@@ -112,6 +129,7 @@ export class FolioPlacementNewComponent {
     this.displayMedia(text);
     this.formGroup.get('urlAdder')?.setValue(text);
   }
+
   onInput(event: Event) {
     const text = (event.target as HTMLInputElement).value;
     this.displayMedia(text);

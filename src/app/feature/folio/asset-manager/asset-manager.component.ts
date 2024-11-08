@@ -3,14 +3,13 @@ import { PitchView, FolioView, PlacementView } from '../../../core/models/interf
 import { FolioStore } from '../folio.store';
 import { PitchStore } from '../../pitch/pitch.store';
 import { AuthorStore } from '../../author/author.store';
-import { SlateManagerComponent } from '../slate-manager/slate-manager.component';
 import { pitchViewInit, placementViewInit } from '../../../core/models/initValues';
 import { ViewerComponent } from '../../../core/viewer/viewer/viewer.component';
 
 @Component({
   selector: 'mh5-asset-manager',
   standalone: true,
-  imports: [SlateManagerComponent, ViewerComponent],
+  imports: [ViewerComponent],
   templateUrl: './asset-manager.component.html',
   styleUrl: './asset-manager.component.scss',
 })
