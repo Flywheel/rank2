@@ -19,7 +19,7 @@ export class PitchService {
   private slateMemberAPIUrl = `api/slatemember`;
 
   pitchCreate(pitchPrep: Partial<Pitch>): Observable<{ newPitch: Pitch; newSlate: Slate }> {
-    //  if (environment.ianConfig.showLogs) console.log(pitchPrep);
+    if (environment.ianConfig.showLogs) console.log(pitchPrep);
     return this.http.post<Pitch>(this.pitchAPIUrl, pitchPrep).pipe(
       exhaustMap((newPitch: Pitch) => {
         const slatePrep: Partial<Slate> = {
@@ -27,10 +27,10 @@ export class PitchService {
           authorId: pitchPrep.authorId!,
           isTopSlate: true,
         };
-        //   if (environment.ianConfig.showLogs) console.log(newPitch);
+        if (environment.ianConfig.showLogs) console.log(newPitch);
         return this.http.post<Slate>(this.slateAPIUrl, slatePrep).pipe(
           map(newSlate => {
-            //     if (environment.ianConfig.showLogs) console.log(newSlate);
+            if (environment.ianConfig.showLogs) console.log(newSlate);
             return { newPitch, newSlate };
           })
         );

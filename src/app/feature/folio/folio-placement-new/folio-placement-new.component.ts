@@ -1,12 +1,13 @@
 import { Component, computed, effect, ElementRef, inject, input, output, signal, viewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { Asset, AssetType, AssetView, Folio, Placement } from '../../../core/models/interfaces';
+import { Asset, AssetType, AssetView, Folio, Pitch, Placement } from '../../../core/models/interfaces';
 import { FolioStore } from '../folio.store';
 import { AuthorStore } from '../../author/author.store';
 import { environment } from '../../../../environments/environment';
 import { MediaService } from '../../../core/services/media.service';
 import { FolioPlacementMediaComponent } from '../folio-placement-media/folio-placement-media.component';
 import { assetViewInit } from '../../../core/models/initValues';
+import { PitchStore } from '../../pitch/pitch.store';
 
 @Component({
   selector: 'mh5-folio-placement-new',
@@ -17,6 +18,7 @@ import { assetViewInit } from '../../../core/models/initValues';
 })
 export class FolioPlacementNewComponent {
   authorStore = inject(AuthorStore);
+  pitchStore = inject(PitchStore);
   folioStore = inject(FolioStore);
   fb = inject(FormBuilder);
 
@@ -54,18 +56,34 @@ export class FolioPlacementNewComponent {
     effect(() => {
       this.captionField()?.nativeElement.focus();
     });
-    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+    const today = new Date().toISOString().split('T')[0];
     const nextWeek = new Date();
-    nextWeek.setDate(nextWeek.getDate() + 7); // Set date to one week from today
-    const nextWeekDate = nextWeek.toISOString().split('T')[0]; // Get next week's date in YYYY-MM-DD format
+    nextWeek.setDate(nextWeek.getDate() + 7);
+    const nextWeekDate = nextWeek.toISOString().split('T')[0];
 
     this.formGroup = this.fb.group({
-      caption: [this.folioStore.folioViewSelected().folioName, Validators.required],
-      description: [this.folioStore.folioViewSelected().folioName, Validators.required],
-      opens: [today, Validators.required],
-      closes: [nextWeekDate, Validators.required],
       authorId: [this.authorStore.authorLoggedIn().id, Validators.required],
       folioId: [this.folioStore.folioIdSelected(), Validators.required],
+      caption: [this.folioStore.folioViewSelected().folioName, Validators.required],
+      description: [this.folioStore.folioViewSelected().folioName],
+      opens: [today],
+      closes: [nextWeekDate],
+    });
+  }
+
+  togglePitchValidators(isRequired: boolean): void {
+    const controls = ['opens', 'closes', 'description'];
+
+    controls.forEach(controlName => {
+      const control = this.formGroup.get(controlName);
+      if (control) {
+        if (isRequired) {
+          control.setValidators([Validators.required]);
+        } else {
+          control.clearValidators();
+        }
+        control.updateValueAndValidity();
+      }
     });
   }
 
@@ -75,7 +93,7 @@ export class FolioPlacementNewComponent {
     if (environment.ianConfig.showLogs) console.log(this.assetType());
 
     switch (this.assetType()) {
-      case 'Folio':
+      case AssetType.Folio:
         if (this.formGroup.valid) {
           const folioData: Partial<Folio> = {
             folioName: this.formGroup.value.caption.trim(),
@@ -86,7 +104,7 @@ export class FolioPlacementNewComponent {
           this.folioStore.toggleFolioAdder(false);
         }
         break;
-      case 'Placement':
+      case AssetType.Placement:
         this.folioStore.togglePlacementAdder(true);
         if (this.formGroup.valid) {
           const newPlacement: Placement = {
@@ -107,6 +125,20 @@ export class FolioPlacementNewComponent {
             this.folioStore.assetCreateWithPlacement(media, this.formGroup.value.caption);
           } else this.folioStore.placementCreate(newPlacement);
           this.folioStore.togglePlacementAdder(false);
+        }
+        break;
+      case AssetType.Pitch:
+        if (this.formGroup.valid) {
+          const pitchPrep = {
+            authorId,
+            folioId: parentFolioId,
+            name: this.formGroup.value.caption,
+            description: this.formGroup.value.description,
+            opens: this.formGroup.value.opens,
+            closes: this.formGroup.value.closes,
+          };
+          const newPitch = pitchPrep as unknown as Pitch;
+          this.pitchStore.pitchCreate(newPitch);
         }
         break;
     }
