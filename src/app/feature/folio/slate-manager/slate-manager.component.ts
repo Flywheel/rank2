@@ -6,20 +6,26 @@ import { PlacementView, SlateMemberView } from '../../../core/models/interfaces'
 import {
   CdkDrag,
   CdkDropList,
-  CdkDropListGroup,
+  // CdkDropListGroup,
   CdkDragHandle,
   CdkDragDrop,
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'mh5-slate-manager',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, CdkDrag, CdkDropList, CdkDropListGroup, CdkDragHandle],
+  imports: [
+    CommonModule,
+    RouterLink,
+    CdkDrag,
+    CdkDropList,
+    // CdkDropListGroup,
+    CdkDragHandle,
+  ],
   templateUrl: './slate-manager.component.html',
   styleUrl: './slate-manager.component.scss',
 })

@@ -30,27 +30,13 @@ export class FolioPlacementNewComponent {
   assetType = input.required<AssetType>();
 
   newMedia = signal(false);
-  newPlacment = signal(false);
-  newFolio = signal(false);
-  newPitch = signal(false);
-
-  // formGroup: FormGroup = this.fb.group({
-  //   caption: ['', Validators.required],
-  //   urlAdder: [''],
-  //   description: [this.folioStore.folioViewSelected().folioName],
-  //   opens: [today],
-  //   closes: [nextWeekDate,],
-  // });
+  //newPlacment = signal(false);
+  //newFolio = signal(false);
+  // newPitch = signal(false);
 
   captionField = viewChild<ElementRef<HTMLInputElement>>('captionField');
 
   closeNewPlacementEditor = output<boolean>();
-
-  // constructor() {
-  //   effect(() => {
-  //     this.captionField()?.nativeElement.focus();
-  //   });
-  // }
 
   constructor() {
     effect(() => {
@@ -68,6 +54,7 @@ export class FolioPlacementNewComponent {
       description: [this.folioStore.folioViewSelected().folioName],
       opens: [today],
       closes: [nextWeekDate],
+      urlAdder: [''],
     });
   }
 

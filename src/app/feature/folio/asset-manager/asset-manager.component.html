@@ -1,49 +1,52 @@
-@if (!showPitchMananger()) {
-  <div style="display: flex; justify-content: space-between">
-    <div class="folio-column">
-      <div class="folio-list">
-        @for (folioItem of folioList(); track $index) {
-          <div
-            class="folio-list-item"
-            (click)="selectFolioView(folioItem)"
-            (keydown)="selectFolioView(folioItem)"
-            tabindex="0"
-            [class.selected]="folioItem === folioStore.folioViewSelected()">
-            {{ ' '.repeat(folioItem.level) }}{{ '-'.repeat(folioItem.level) }} {{ folioItem.folioName }}
+<div class="folio-container">
+  <div class="folio-column">
+    <div class="folio-list">
+      @for (folioItem of folioList(); track $index) {
+        <div
+          class="folio-list-item"
+          (click)="selectFolioView(folioItem)"
+          (keydown)="selectFolioView(folioItem)"
+          tabindex="0"
+          [class.selected]="folioItem === folioStore.folioViewSelected()">
+          {{ ' '.repeat(folioItem.level) }}{{ '-'.repeat(folioItem.level) }} {{ folioItem.folioName }}
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="placement-column">
+    @if (tabSelected() === 'Assets') {
+      <div class="placement-list">
+        @for (item of placementsOnSelectedFolio(); track $index) {
+          <div class="placement-list-item" (click)="displayPlacementAsset(item)" (keydown)="displayPlacementAsset(item)" tabindex="0">
+            {{ item.assetView.mediaType === 'folio' ? '- ' : '' }} {{ item.caption }}
           </div>
         }
       </div>
-    </div>
+      <!-- } @else { -->
+      <div class="pitch-column"></div>
+    }
+  </div>
 
-    <div class="placement-column">
-      @if (tabSelected() === 'Assets') {
-        <div class="placement-list">
-          @for (item of placementsOnSelectedFolio(); track $index) {
-            <div class="placement-list-item" (click)="displayAsset(item)" (keydown)="displayAsset(item)" tabindex="0">
-              {{ item.assetView.mediaType === 'folio' ? '- ' : '' }} {{ item.caption }}
-            </div>
-          }
-        </div>
-        <!-- } @else { -->
-        <div class="pitch-column"></div>
+  <div class="pitch-column">
+    <div class="placement-list">
+      @if (pitchesOnFolioCount() > 0) {
+        @for (item of pitchesOnSelectedFolio(); track $index) {
+          <div class="placement-list-item" (click)="editPitch(item)" (keydown)="editPitch(item)" tabindex="0">
+            {{ item.name }}
+          </div>
+        }
+      } @else {
+        <div class="placement-list-item">No slates have yet been pitched for this folio.</div>
       }
     </div>
-
-    <div class="pitch-column">
-      <div class="placement-list">
-        @if (pitchesOnFolioCount() > 0) {
-          @for (item of pitchesOnSelectedFolio(); track $index) {
-            <div class="placement-list-item" (click)="editPitch(item)" (keydown)="editPitch(item)" tabindex="0">
-              {{ item.name }}
-            </div>
-          }
-        } @else {
-          <div class="placement-list-item">No slates have yet been pitched for this folio.</div>
-        }
-      </div>
-    </div>
   </div>
+</div>
+
+@if (!hidePitchMananger()) {
+  <mh5-slate-manager [folioMembers]="placementsOnSelectedFolio()" />
 }
+
 @if (!hidePlacementDisplay()) {
   <div class="placement-display">
     <mh5-viewer [placementView]="placementToDisplay()" />

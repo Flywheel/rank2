@@ -4,6 +4,11 @@ $highlight-background-color: #002;
   width: 40%;
 }
 
+.folio-container {
+  display: flex;
+  justify-content: space-between;
+}
+
 .folio-list-item {
   width: 100%;
   display: inline-block;

@@ -1,15 +1,12 @@
 import { Component, computed, effect, inject, input, untracked } from '@angular/core';
 import { FolioStore } from '../folio.store';
 import { AuthorView, FolioView } from '../../../core/models/interfaces';
-import { IconPlusComponent } from '../../../core/svg/icon-plus';
-import { IconProfileComponent } from '../../../core/svg/icon-profile';
-import { IconShareComponent } from '../../../core/svg/icon-share';
 import { AuthorStore } from '../../author/author.store';
 
 @Component({
   selector: 'mh5-folio-scroll-horizontal',
   standalone: true,
-  imports: [IconPlusComponent, IconProfileComponent, IconShareComponent],
+  imports: [],
   templateUrl: './folio-scroll-horizontal.component.html',
   styleUrl: './folio-scroll-horizontal.component.scss',
 })
