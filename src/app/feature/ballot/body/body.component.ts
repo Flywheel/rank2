@@ -1,22 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, output, signal, untracked } from '@angular/core';
 import { PitchView, SlateMemberView, SlateView } from '../../../core/models/interfaces';
 import { PitchStore } from '../../pitch/pitch.store';
-import {
-  CdkDrag,
-  CdkDragDrop,
-  CdkDragHandle,
-  CdkDropList,
-  CdkDropListGroup,
-  moveItemInArray,
-  transferArrayItem,
-} from '@angular/cdk/drag-drop';
-import { DirectComponent } from '../../pitch/direct/direct.component';
+import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { BallotStore } from '../ballot.store';
 
 @Component({
   selector: 'mh5-body',
   standalone: true,
-  imports: [CdkDrag, CdkDropList, CdkDropListGroup, CdkDragHandle, DirectComponent],
+  imports: [CdkDrag, CdkDropList, CdkDragHandle],
   templateUrl: './body.component.html',
   styleUrl: './body.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
