@@ -5,14 +5,14 @@ import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray, tran
 import { BallotStore } from '../ballot.store';
 
 @Component({
-  selector: 'mh5-body',
+  selector: 'mh5-ballot-body',
   standalone: true,
   imports: [CdkDrag, CdkDropList, CdkDragHandle],
-  templateUrl: './body.component.html',
-  styleUrl: './body.component.scss',
+  templateUrl: './ballot-body.component.html',
+  styleUrl: './ballot-body.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BodyComponent {
+export class BallotBodyComponent {
   authorId = signal<string>('');
   pitchStore = inject(PitchStore);
   ballotStore = inject(BallotStore);
