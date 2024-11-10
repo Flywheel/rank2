@@ -45,5 +45,6 @@ export class PitchScrollerComponent {
 
   selectPitch(id: number) {
     this.pitchStore.setPitchSelected(id);
+    this.pitchStore.pitchViewSelected();
   }
 }

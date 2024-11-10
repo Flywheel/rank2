@@ -20,16 +20,20 @@ export class BallotBodyComponent {
   candidatesAvailable = signal<SlateMemberView[]>([]);
   candidatesRanked = signal<SlateMemberView[]>([]);
 
-  pitch = computed<PitchView>(() => this.pitchStore.pitchViewSelected());
-  candidateList = computed(() => this.pitch().slateView.slateMemberViews);
+  pitchViewSelected = computed<PitchView>(() => this.pitchStore.pitchViewSelected());
+  candidateList = computed(() => this.pitchViewSelected().slateView.slateMemberViews);
 
   hidePlacementDisplay = output<boolean>();
   placementToDisplay = output<SlateMemberView>();
+  currentSlates = computed(
+    () => this.ballotStore.authoredSlates().find(s => s.pitchId === this.pitchViewSelected().id) ?? this.ballotStore.currentBallotSlate()
+  );
 
   constructor() {
     effect(() => {
-      this.pitch();
+      this.pitchViewSelected();
       untracked(() => {
+        console.log(this.pitchViewSelected());
         this.setAvailableCandidates();
       });
     });
@@ -41,20 +45,30 @@ export class BallotBodyComponent {
   }
 
   setAvailableCandidates() {
+    console.log('setAvailableCandidates Start');
     this.candidatesAvailable.set(this.candidateList());
-    if (this.ballotStore.currentSlate()?.slateMemberViews) {
+    const ranksInStore = this.ballotStore.currentBallotSlate()?.slateMemberViews;
+
+    console.log(this.pitchStore.pitchViewSelected().id);
+    console.log(this.ballotStore.authoredSlates());
+    const theBallot = this.ballotStore.authoredSlates()?.find(p => p.pitchId == this.pitchStore.pitchViewSelected().id);
+    console.log(theBallot);
+    // if (theBallot) {
+    //   const ranksInStore = theBallot.slateMemberViews;
+    console.log(ranksInStore);
+    if (ranksInStore) {
       this.candidatesRanked.set(
-        this.ballotStore.currentSlate().slateMemberViews.reduce((acc: SlateMemberView[], slateMemberView: SlateMemberView) => {
-          const candidate = this.candidateList().find(
-            (candidate: SlateMemberView) => candidate.placementId === slateMemberView.placementId
-          );
+        ranksInStore.reduce((acc: SlateMemberView[], member: SlateMemberView) => {
+          const candidate = this.candidateList().find((candidate: SlateMemberView) => candidate.placementId === member.placementId);
           return candidate ? [...acc, candidate] : acc;
         }, [])
       );
       const rankedCandidatesIds = new Set(this.candidatesRanked().map(candidate => candidate.placementId));
+      console.log(rankedCandidatesIds);
       this.candidatesAvailable.set(this.candidatesAvailable().filter(candidate => !rankedCandidatesIds.has(candidate.placementId)));
+      //  }
+      this.updateCurrentSlateSignal();
     }
-    this.updateCurrentSlateSignal();
   }
 
   moveUpOnePosition(candidate: SlateMemberView) {
@@ -100,13 +114,13 @@ export class BallotBodyComponent {
   }
 
   drop(event: CdkDragDrop<SlateMemberView[]>): void {
-    console.log('event.', event);
-    console.log('event.previousContainer', event.previousContainer);
-    console.log('event.container.data', event.container);
-    console.log('event.previousContainer.data', event.previousContainer.data);
-    console.log('event.container.data', event.container.data);
-    console.log('event.previousIndex', event.previousIndex);
-    console.log('event.currentIndex', event.currentIndex);
+    // console.log('event.', event);
+    // console.log('event.previousContainer', event.previousContainer);
+    // console.log('event.container.data', event.container);
+    // console.log('event.previousContainer.data', event.previousContainer.data);
+    // console.log('event.container.data', event.container.data);
+    // console.log('event.previousIndex', event.previousIndex);
+    // console.log('event.currentIndex', event.currentIndex);
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -130,7 +144,7 @@ export class BallotBodyComponent {
 
   preparedBallot = signal<SlateView>({
     id: 0,
-    pitchId: this.pitch().id,
+    pitchId: this.pitchViewSelected().id,
     authorId: this.authorId(),
     isTopSlate: false,
     slateMemberViews: [],
@@ -142,19 +156,19 @@ export class BallotBodyComponent {
       return {
         id: slateMember.id,
         slateId: slateMember.slateId,
-        contestId: this.pitch().id,
+        contestId: this.pitchViewSelected().id,
         placementId: slateMember.placementId,
         rankOrder: index + 1,
         placementView: slateMember.placementView,
       };
     });
     this.preparedBallot.set({
-      id: this.pitch().id,
-      pitchId: this.pitch().id,
+      id: this.pitchViewSelected().id,
+      pitchId: this.pitchViewSelected().id,
       authorId: '',
       isTopSlate: false,
       slateMemberViews: preparedSlateMemberViews,
     });
-    this.ballotStore.updateBallot(this.preparedBallot());
+    this.ballotStore.updateSlate(this.preparedBallot());
   }
 }

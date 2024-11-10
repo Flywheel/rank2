@@ -1,7 +1,7 @@
 import { signalStore, withState, withMethods, withHooks, withComputed } from '@ngrx/signals';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
 import { PitchView, SlateView } from '../../core/models/interfaces';
-import { slateViewInit } from '../../core/models/initValues';
+import { pitchViewInit, slateViewInit } from '../../core/models/initValues';
 import { PitchStore } from '../pitch/pitch.store';
 import { computed, inject } from '@angular/core';
 
@@ -11,7 +11,7 @@ export const BallotStore = signalStore(
   withState({
     authoredSlates: [slateViewInit],
     pitchedSlate: slateViewInit,
-    currentSlate: slateViewInit,
+    currentBallotSlate: slateViewInit,
     isLoading: false,
   }),
   withStorageSync({
@@ -19,29 +19,43 @@ export const BallotStore = signalStore(
     autoSync: false,
   }),
 
+  withComputed(store => {
+    const pitchStore = inject(PitchStore);
+    const currentPitchId = pitchStore.pitchViewSelected().id;
+    return {
+      currentSlate: computed(() => store.authoredSlates().find(s => s.pitchId === currentPitchId) ?? slateViewInit),
+    };
+  }),
+
   withMethods(store => {
     // const dbballot = inject(ballotService);
     const pitchStore = inject(PitchStore);
     return {
-      setPitchedSlateByPitchId(pitchId: number) {
+      setCurrentSlateByPitchId(pitchId: number) {
         const currentSlate: SlateView = pitchStore.pitchViewSelected().slateView ?? [];
-        updateState(store, `[Ballot] getCurrentSlateByPitchId Success, ${pitchId}`, { currentSlate: currentSlate });
+        updateState(store, `[Ballot] CurrentSlate Set Success, ${pitchId}`, { currentBallotSlate: currentSlate });
       },
 
-      async updateBallot(ballot: SlateView) {
+      getAllSlatesByLoggedInAuthor(authorId: number) {
+        const allSlatesByAuthor: SlateView[] = store.authoredSlates() ?? [slateViewInit, authorId];
+        updateState(store, '[Ballot] getAllSlatesByAuthor Success', { authoredSlates: allSlatesByAuthor });
+      },
+
+      async updateSlate(slate: SlateView) {
+        console.log(slate);
         updateState(store, `[Slate] Update Start`, {
           isLoading: true,
         });
         let updatedAuthorSlates = store.authoredSlates();
-        const slateExists = updatedAuthorSlates.some(b => b.pitchId === ballot.pitchId);
+        const slateExists = updatedAuthorSlates.some(b => b.pitchId === slate.pitchId);
         if (slateExists) {
-          updatedAuthorSlates = updatedAuthorSlates.map(b => (b.pitchId === ballot.pitchId ? ballot : b));
+          updatedAuthorSlates = updatedAuthorSlates.map(b => (b.pitchId === slate.pitchId ? slate : b));
         } else {
-          updatedAuthorSlates = [...updatedAuthorSlates, ballot];
+          updatedAuthorSlates = [...updatedAuthorSlates, slate];
         }
         updateState(store, `[Slate] Update Success`, {
           authoredSlates: updatedAuthorSlates,
-          currentSlate: ballot,
+          currentBallotSlate: slate,
           isLoading: false,
         });
       },
