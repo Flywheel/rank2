@@ -23,23 +23,24 @@ export const BallotStore = signalStore(
     const pitchStore = inject(PitchStore);
     const currentPitchId = pitchStore.pitchViewSelected().id;
     return {
-      currentSlate: computed(() => store.authoredSlates().find(s => s.pitchId === currentPitchId) ?? slateViewInit),
+      currentSlateComputed: computed(() => store.authoredSlates().find(s => s.pitchId === currentPitchId) ?? slateViewInit),
     };
   }),
 
   withMethods(store => {
     // const dbballot = inject(ballotService);
-    const pitchStore = inject(PitchStore);
+    // const pitchStore = inject(PitchStore);
     return {
       setCurrentSlateByPitchId(pitchId: number) {
-        const currentSlate: SlateView = pitchStore.pitchViewSelected().slateView ?? [];
+        // const currentSlate: SlateView = pitchStore.pitchViewSelected().slateView ?? [];
+        const currentSlate: SlateView = store.authoredSlates().find(slates => slates.pitchId == pitchId) ?? slateViewInit;
         updateState(store, `[Ballot] CurrentSlate Set Success, ${pitchId}`, { currentBallotSlate: currentSlate });
       },
 
-      getAllSlatesByLoggedInAuthor(authorId: number) {
-        const allSlatesByAuthor: SlateView[] = store.authoredSlates() ?? [slateViewInit, authorId];
-        updateState(store, '[Ballot] getAllSlatesByAuthor Success', { authoredSlates: allSlatesByAuthor });
-      },
+      // getAllSlatesByLoggedInAuthor(authorId: number) {
+      //   const allSlatesByAuthor: SlateView[] = store.authoredSlates() ?? [slateViewInit, authorId];
+      //   updateState(store, '[Ballot] getAllSlatesByAuthor Success', { authoredSlates: allSlatesByAuthor });
+      // },
 
       async updateSlate(slate: SlateView) {
         console.log(slate);
@@ -53,8 +54,9 @@ export const BallotStore = signalStore(
         } else {
           updatedAuthorSlates = [...updatedAuthorSlates, slate];
         }
+        console.log(updatedAuthorSlates);
         updateState(store, `[Slate] Update Success`, {
-          authoredSlates: updatedAuthorSlates,
+          authoredSlates: updatedAuthorSlates.filter(s => s.pitchId !== 0),
           currentBallotSlate: slate,
           isLoading: false,
         });

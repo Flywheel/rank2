@@ -3,6 +3,7 @@ import { PitchView, SlateMemberView, SlateView } from '../../../core/models/inte
 import { PitchStore } from '../../pitch/pitch.store';
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { BallotStore } from '../ballot.store';
+import { AuthorStore } from '../../author/author.store';
 
 @Component({
   selector: 'mh5-ballot-body',
@@ -13,7 +14,7 @@ import { BallotStore } from '../ballot.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BallotBodyComponent {
-  authorId = signal<string>('');
+  authorStore = inject(AuthorStore);
   pitchStore = inject(PitchStore);
   ballotStore = inject(BallotStore);
 
@@ -23,17 +24,19 @@ export class BallotBodyComponent {
   pitchViewSelected = computed<PitchView>(() => this.pitchStore.pitchViewSelected());
   candidateList = computed(() => this.pitchViewSelected().slateView.slateMemberViews);
 
-  hidePlacementDisplay = output<boolean>();
-  placementToDisplay = output<SlateMemberView>();
   currentSlates = computed(
     () => this.ballotStore.authoredSlates().find(s => s.pitchId === this.pitchViewSelected().id) ?? this.ballotStore.currentBallotSlate()
   );
+  currentSlates2 = computed(() => this.ballotStore.currentSlateComputed());
+
+  hidePlacementDisplay = output<boolean>();
+  placementToDisplay = output<SlateMemberView>();
 
   constructor() {
     effect(() => {
       this.pitchViewSelected();
       untracked(() => {
-        console.log(this.pitchViewSelected());
+        this.ballotStore.setCurrentSlateByPitchId(this.pitchViewSelected().id);
         this.setAvailableCandidates();
       });
     });
@@ -51,10 +54,13 @@ export class BallotBodyComponent {
 
     console.log(this.pitchStore.pitchViewSelected().id);
     console.log(this.ballotStore.authoredSlates());
-    const theBallot = this.ballotStore.authoredSlates()?.find(p => p.pitchId == this.pitchStore.pitchViewSelected().id);
-    console.log(theBallot);
-    // if (theBallot) {
-    //   const ranksInStore = theBallot.slateMemberViews;
+
+    const theBallot2 = this.ballotStore.authoredSlates()?.find(p => p.pitchId == this.pitchStore.pitchViewSelected().id);
+    console.log(theBallot2);
+    if (theBallot2) {
+      const ranksInStore2 = theBallot2.slateMemberViews;
+      console.log(ranksInStore2);
+    }
     console.log(ranksInStore);
     if (ranksInStore) {
       this.candidatesRanked.set(
@@ -114,13 +120,6 @@ export class BallotBodyComponent {
   }
 
   drop(event: CdkDragDrop<SlateMemberView[]>): void {
-    // console.log('event.', event);
-    // console.log('event.previousContainer', event.previousContainer);
-    // console.log('event.container.data', event.container);
-    // console.log('event.previousContainer.data', event.previousContainer.data);
-    // console.log('event.container.data', event.container.data);
-    // console.log('event.previousIndex', event.previousIndex);
-    // console.log('event.currentIndex', event.currentIndex);
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -142,14 +141,6 @@ export class BallotBodyComponent {
     this.updateCurrentSlateSignal();
   }
 
-  preparedBallot = signal<SlateView>({
-    id: 0,
-    pitchId: this.pitchViewSelected().id,
-    authorId: this.authorId(),
-    isTopSlate: false,
-    slateMemberViews: [],
-  });
-
   updateCurrentSlateSignal() {
     if (this.candidatesRanked().length === 0) return;
     const preparedSlateMemberViews: SlateMemberView[] = this.candidatesRanked().map((slateMember, index: number) => {
@@ -162,13 +153,17 @@ export class BallotBodyComponent {
         placementView: slateMember.placementView,
       };
     });
-    this.preparedBallot.set({
-      id: this.pitchViewSelected().id,
+
+    const preparedBallot: SlateView = {
+      id: 0,
       pitchId: this.pitchViewSelected().id,
-      authorId: '',
+      authorId: this.authorStore.authorLoggedIn().id,
       isTopSlate: false,
       slateMemberViews: preparedSlateMemberViews,
-    });
-    this.ballotStore.updateSlate(this.preparedBallot());
+    };
+
+    console.log(preparedBallot);
+
+    this.ballotStore.updateSlate(preparedBallot);
   }
 }
