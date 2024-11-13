@@ -1,7 +1,7 @@
 import { signalStore, withState, withMethods, withHooks, withComputed } from '@ngrx/signals';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
-import { PitchView, SlateView } from '../../core/models/interfaces';
-import { pitchViewInit, slateViewInit } from '../../core/models/initValues';
+import { SlateView } from '../../core/models/interfaces';
+import { slateViewInit } from '../../core/models/initValues';
 import { PitchStore } from '../pitch/pitch.store';
 import { computed, inject } from '@angular/core';
 

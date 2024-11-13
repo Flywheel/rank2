@@ -6,12 +6,14 @@ import { IconTimelineComponent } from '../../../core/svg/icon-timeline';
 import { HydrationService } from '../../../core/services/hydration.service';
 import { AuthorConsentComponent } from '../author-consent/author-consent.component';
 import { environment } from '../../../../environments/environment';
-import { Author, Folio } from '../../../core/models/interfaces';
+import { Author, Folio, Pitch } from '../../../core/models/interfaces';
 // import { uuidv7 } from 'uuidv7';
 import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
 import { FolioStore } from '../../folio/folio.store';
 import { DirectComponent } from '../../pitch/direct/direct.component';
 import { PitchStore } from '../../pitch/pitch.store';
+import { BallotStore } from '../../ballot/ballot.store';
+import { pitchInit } from '../../../core/models/initValues';
 
 @Component({
   selector: 'mh5-author-profile',
@@ -24,20 +26,27 @@ export class AuthorProfileComponent implements AfterViewInit {
   authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
   pitchStore = inject(PitchStore);
+  ballotStore = inject(BallotStore);
   isRunSomethingVisible = signal<boolean>(true);
   channelName = signal<string>('');
   showConsentPopup = signal(false);
   localStorageService = inject(HydrationService);
   authorDefaultName = AUTHOR_DEFAULT_NAME;
 
+  pitchesKnown = computed(() => this.pitchStore.pitches());
+  slatesCast = computed(() => this.ballotStore.authoredSlates());
+
   isChannelNameOk = computed<boolean>(() => this.channelName().length >= 3 && this.channelName().length <= 15);
-  @ViewChild('newHandleInput') newHandleInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('newHandleInput') handleInputElement!: ElementRef<HTMLInputElement>;
 
   ngAfterViewInit(): void {
-    // Check if the input element exists before setting focus
-    if (this.newHandleInput && this.newHandleInput.nativeElement) {
-      this.newHandleInput.nativeElement.focus();
+    if (this.handleInputElement && this.handleInputElement.nativeElement) {
+      this.handleInputElement.nativeElement.focus();
     }
+  }
+
+  pitchById(pitchId: number): Pitch {
+    return this.pitchStore.pitchViewsComputed().find(p => p.id === pitchId) ?? pitchInit;
   }
 
   showConsentDialog() {
