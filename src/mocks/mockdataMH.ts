@@ -7,8 +7,8 @@ export const miniHeraldData: DataImporter = {
   },
   folios: [
     //  { folioName: 'US Pres 2024', parentFolioName: '@miniherald' },
+    { folioName: 'Grammy 2024 Record of the Year', parentFolioName: '@miniherald' },
     { folioName: 'AimsPoll', parentFolioName: '@miniherald' },
-
     { folioName: 'Border Integrity', parentFolioName: 'AimsPoll' },
     { folioName: 'Minimum Wage', parentFolioName: 'AimsPoll' },
     { folioName: 'Eurovision 2024', parentFolioName: '@miniherald' },
@@ -161,6 +161,30 @@ export const miniHeraldData: DataImporter = {
     { folioName: 'Tony Best Musical 2024', mediaType: 'youtube', sourceId: 'pAmQN4nAtpY', caption: 'Suffs' },
     { folioName: 'Tony Best Musical 2024', mediaType: 'youtube', sourceId: '0-W1yvlf_iA', caption: 'The Outsiders' },
     { folioName: 'Tony Best Musical 2024', mediaType: 'youtube', sourceId: 'e2grViuIMyc', caption: 'Water For Elephants' },
+
+    { folioName: 'Grammy 2024 Record of the Year', mediaType: 'youtube', caption: 'Now and Then - The Beatles', sourceId: 'Opxhh9Oh3rg' },
+    { folioName: 'Grammy 2024 Record of the Year', mediaType: 'youtube', caption: 'Texas Hold ‘Em - Beyoncé', sourceId: '238Z4YaAr1g' },
+    { folioName: 'Grammy 2024 Record of the Year', mediaType: 'youtube', caption: 'Espresso - Sabrina Carpenter', sourceId: 'eVli-tstM5E' },
+    { folioName: 'Grammy 2024 Record of the Year', mediaType: 'youtube', caption: '360 - Charli XCX', sourceId: 'WJW-VvmRKsE' },
+    {
+      folioName: 'Grammy 2024 Record of the Year',
+      mediaType: 'youtube',
+      caption: 'Birds of a Feather - Billie Eilish',
+      sourceId: 'V9PVRfjEBTI',
+    },
+    { folioName: 'Grammy 2024 Record of the Year', mediaType: 'youtube', caption: 'Not Like Us - Kendrick Lamar', sourceId: 'H58vbez_m4E' },
+    {
+      folioName: 'Grammy 2024 Record of the Year',
+      mediaType: 'youtube',
+      caption: 'Good Luck, Babe! - Chappell Roan',
+      sourceId: '1RKqOmSkGgM',
+    },
+    {
+      folioName: 'Grammy 2024 Record of the Year',
+      mediaType: 'youtube',
+      caption: 'Fortnight - Taylor Swift Featuring Post Malone',
+      sourceId: 'q3zqJs7JUCQ',
+    },
   ],
 };
 
