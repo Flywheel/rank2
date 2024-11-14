@@ -104,10 +104,6 @@ export const PitchStore = signalStore(
           .pipe(
             tap({
               next: ({ newPitch, newSlate }) => {
-                // if (environment.ianConfig.showLogs) {
-                //   console.log(newPitch);
-                //   console.log(newSlate);
-                // }
                 updateState(store, '[Pitch] Add Success', {
                   pitches: [...store.pitches(), newPitch],
                   slates: [...store.slates(), newSlate],
@@ -137,7 +133,6 @@ export const PitchStore = signalStore(
           .pipe(
             tap({
               next: newMembers => {
-                //  if (environment.ianConfig.showLogs) console.log('newSlateMember', newMembers);
                 updateState(store, '[SlateMember] Add Success', {
                   slateMembers: [...store.slateMembers(), ...newMembers],
                   isLoading: false,

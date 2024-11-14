@@ -22,12 +22,10 @@ export class BallotBodyComponent {
   candidatesRanked = signal<SlateMemberView[]>([]);
 
   pitchViewSelected = computed<PitchView>(() => this.pitchStore.pitchViewSelected());
+
   candidateList = computed(() => this.pitchViewSelected().slateView.slateMemberViews);
 
-  currentSlates = computed(
-    () => this.ballotStore.authoredSlates().find(s => s.pitchId === this.pitchViewSelected().id) ?? this.ballotStore.currentBallotSlate()
-  );
-  currentSlates2 = computed(() => this.ballotStore.currentSlateComputed());
+  currentSlates = computed(() => this.ballotStore.slatesAuthored().find(s => s.pitchId === this.pitchViewSelected().id));
 
   hidePlacementDisplay = output<boolean>();
   placementToDisplay = output<SlateMemberView>();
@@ -50,18 +48,7 @@ export class BallotBodyComponent {
   setAvailableCandidates() {
     console.log('setAvailableCandidates Start');
     this.candidatesAvailable.set(this.candidateList());
-    const ranksInStore = this.ballotStore.currentBallotSlate()?.slateMemberViews;
-
-    console.log(this.pitchStore.pitchViewSelected().id);
-    console.log(this.ballotStore.authoredSlates());
-
-    const theBallot2 = this.ballotStore.authoredSlates()?.find(p => p.pitchId == this.pitchStore.pitchViewSelected().id);
-    console.log(theBallot2);
-    if (theBallot2) {
-      const ranksInStore2 = theBallot2.slateMemberViews;
-      console.log(ranksInStore2);
-    }
-    console.log(ranksInStore);
+    const ranksInStore = this.ballotStore.slateInProgress()?.slateMemberViews;
     if (ranksInStore) {
       this.candidatesRanked.set(
         ranksInStore.reduce((acc: SlateMemberView[], member: SlateMemberView) => {
@@ -80,7 +67,6 @@ export class BallotBodyComponent {
   moveUpOnePosition(candidate: SlateMemberView) {
     const index = this.candidatesRanked().findIndex(t => t.placementView.caption === candidate.placementView.caption);
     if (index === 0) return;
-
     const temp = this.candidatesRanked()[index];
     this.candidatesRanked.set([
       ...this.candidatesRanked().slice(0, index - 1),
@@ -128,15 +114,6 @@ export class BallotBodyComponent {
       } else {
         transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
       }
-    }
-    this.updateCurrentSlateSignal();
-  }
-
-  drop2(event: CdkDragDrop<SlateMemberView[]>): void {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
     }
     this.updateCurrentSlateSignal();
   }

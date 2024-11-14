@@ -30,9 +30,7 @@ export const AuthorStore = signalStore(
   withComputed(store => {
     const folioStore = inject(FolioStore);
     const pitchStore = inject(PitchStore);
-    // const authors = store.authors().filter(a => a.id.length > 0);
-    // const folios = folioStore.folioViewsComputed();
-    // const pitches = pitchStore.pitchViewsComputed();
+
     return {
       authorSelectedFolioViews: computed<FolioView[]>(() =>
         folioStore.folioViewsComputed().filter(folio => folio.authorId === store.authorSelectedId())

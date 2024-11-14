@@ -2,12 +2,10 @@ import { AfterViewInit, Component, computed, ElementRef, inject, signal, ViewChi
 import { AuthorStore } from '../author.store';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { IconTimelineComponent } from '../../../core/svg/icon-timeline';
 import { HydrationService } from '../../../core/services/hydration.service';
 import { AuthorConsentComponent } from '../author-consent/author-consent.component';
 import { environment } from '../../../../environments/environment';
 import { Author, Folio, Pitch } from '../../../core/models/interfaces';
-// import { uuidv7 } from 'uuidv7';
 import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
 import { FolioStore } from '../../folio/folio.store';
 import { DirectComponent } from '../../pitch/direct/direct.component';
@@ -18,7 +16,7 @@ import { pitchInit } from '../../../core/models/initValues';
 @Component({
   selector: 'mh5-author-profile',
   standalone: true,
-  imports: [RouterLink, FormsModule, IconTimelineComponent, AuthorConsentComponent, DirectComponent],
+  imports: [RouterLink, FormsModule, AuthorConsentComponent, DirectComponent],
   templateUrl: './author-profile.component.html',
   styleUrl: './author-profile.component.scss',
 })
@@ -34,7 +32,7 @@ export class AuthorProfileComponent implements AfterViewInit {
   authorDefaultName = AUTHOR_DEFAULT_NAME;
 
   pitchesKnown = computed(() => this.pitchStore.pitches());
-  slatesCast = computed(() => this.ballotStore.authoredSlates());
+  slatesCast = computed(() => this.ballotStore.slatesAuthored());
 
   isChannelNameOk = computed<boolean>(() => this.channelName().length >= 3 && this.channelName().length <= 15);
   @ViewChild('newHandleInput') handleInputElement!: ElementRef<HTMLInputElement>;

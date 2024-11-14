@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { Author, PitchView } from '../../../core/models/interfaces';
+import { AuthorView, PitchView } from '../../../core/models/interfaces';
 import { PitchStore } from '../pitch.store';
 import { AuthorStore } from '../../author/author.store';
 import { pitchViewInit } from '../../../core/models/initValues';
@@ -32,8 +32,8 @@ export class PitchScrollerComponent {
 
   selectedAuthorName = signal<string>('miniherald');
 
-  authorList = computed<Author[]>(() => {
-    return this.authorStore.authors().filter(a => a.id.length > 2);
+  authorList = computed<AuthorView[]>(() => {
+    return this.authorStore.authorViews();
   });
 
   pitchViews = computed<PitchView[]>(() => {
@@ -45,6 +45,5 @@ export class PitchScrollerComponent {
 
   selectPitch(id: number) {
     this.pitchStore.setPitchSelected(id);
-    this.pitchStore.pitchViewSelected();
   }
 }
