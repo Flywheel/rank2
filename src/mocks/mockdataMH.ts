@@ -9,6 +9,7 @@ export const miniHeraldData: DataImporter = {
     //  { folioName: 'US Pres 2024', parentFolioName: '@miniherald' },
     { folioName: 'Grammy 2024 Record of the Year', parentFolioName: '@miniherald' },
     { folioName: 'AimsPoll', parentFolioName: '@miniherald' },
+    { folioName: 'Corey Bradford Greatest Hits', parentFolioName: '@miniherald' },
     { folioName: 'Border Integrity', parentFolioName: 'AimsPoll' },
     { folioName: 'Minimum Wage', parentFolioName: 'AimsPoll' },
     { folioName: 'Eurovision 2024', parentFolioName: '@miniherald' },
@@ -184,6 +185,30 @@ export const miniHeraldData: DataImporter = {
       mediaType: 'youtube',
       caption: 'Fortnight - Taylor Swift Featuring Post Malone',
       sourceId: 'q3zqJs7JUCQ',
+    },
+
+    { folioName: 'Corey Bradford Greatest Hits', mediaType: 'tiktok', caption: 'Monroe Doctrine', sourceId: '7368683190363508014' },
+    { folioName: 'Corey Bradford Greatest Hits', mediaType: 'tiktok', caption: 'War of 1812', sourceId: '7188311981370199342' },
+    { folioName: 'Corey Bradford Greatest Hits', mediaType: 'tiktok', caption: 'Fall of Red Lobster', sourceId: '7372773920451267886' },
+    {
+      folioName: 'Corey Bradford Greatest Hits',
+      mediaType: 'tiktok',
+      caption: 'Stock Market Crash of 1929',
+      sourceId: '7090721147318226222',
+    },
+    { folioName: 'Corey Bradford Greatest Hits', mediaType: 'tiktok', caption: 'd', sourceId: '6761576192991677702' },
+    { folioName: 'Corey Bradford Greatest Hits', mediaType: 'tiktok', caption: 'f', sourceId: '7364243751952223530' },
+    {
+      folioName: 'Corey Bradford Greatest Hits',
+      mediaType: 'tiktok',
+      caption: 'Guess I’ll put in some job applications',
+      sourceId: '7364243751952223530',
+    },
+    {
+      folioName: 'Corey Bradford Greatest Hits',
+      mediaType: 'tiktok',
+      caption: 'Is the U.S. a Republic or a Democracy?',
+      sourceId: '7362376736941559083',
     },
   ],
 };
