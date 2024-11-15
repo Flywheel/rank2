@@ -1,18 +1,27 @@
-<p>{{ placementView().caption }}</p>
-
-@switch (contentType()) {
-  @case ('jpeg') {
-    <img [src]="contentPlayer()" alt="Content Image" />
-  }
-  @case ('topic') {
-    <p>Topic</p>
-  }
-  @case ('pitch') {
-    <p>Pitch</p>
-  }
-  @default {
-    <div class="container">
-      <iframe frameborder="4" scrolling="no" allowfullscreen [src]="contentPlayer()" allow="autoplay; encrypted-media"></iframe>
-    </div>
-  }
-}
+<div class="content-wrapper">
+  <p>{{ placementView().caption }}</p>
+  <div>
+    @switch (contentType()) {
+      @case ('jpeg') {
+        <img [src]="contentPlayer()" alt="Content Image" />
+      }
+      @case ('topic') {
+        <p>Topic</p>
+      }
+      @case ('tiktok') {
+        <iframe
+          width="340"
+          height="700"
+          [src]="contentPlayer()"
+          frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen="allowfullscreen"></iframe>
+      }
+      @default {
+        <div class="container">
+          <iframe frameborder="4" scrolling="no" allowfullscreen [src]="contentPlayer()" allow="autoplay; encrypted-media"></iframe>
+        </div>
+      }
+    }
+  </div>
+</div>

@@ -1,0 +1,46 @@
+/* src/app/core/components/viewer/viewer.component.scss */
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers child elements horizontally */
+  width: 100%;
+  padding: 20px; /* Optional: Adds padding around the content */
+  box-sizing: border-box;
+}
+
+// .centered-content {
+//   margin: 10px 0; /* Optional: Adds vertical spacing between elements */
+//   text-align: center; /* Centers text within elements */
+// }
+
+// img.centered-content {
+//   max-width: 100%;
+//   height: auto;
+//   border-radius: 8px; /* Optional: Adds rounded corners to images */
+// }
+
+// iframe.centered-content,
+// .responsive-iframe {
+//   width: 100%;
+//   max-width: 500px; /* Adjust as needed for desired maximum width */
+//   height: auto;
+//   aspect-ratio: 16 / 9; /* Maintains aspect ratio */
+//   border: none; /* Removes default iframe borders */
+//   border-radius: 8px; /* Optional: Adds rounded corners to iframes */
+// }
+
+// /* Responsive adjustments */
+// @media (max-width: 768px) {
+//   .responsive-iframe {
+//     max-width: 100%;
+//   }
+
+//   iframe.centered-content {
+//     width: 90%;
+//   }
+
+//   img.centered-content {
+//     width: 90%;
+//   }
+// }

@@ -214,7 +214,6 @@ export const AuthorStore = signalStore(
     };
   }),
   withMethods(store => {
-    //   //const dbAuthor = inject(AuthorService);
     return {
       async authorSelectedByIdAsync(authorId: string) {
         store.authorSelectedSetById(authorId);

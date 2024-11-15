@@ -20,7 +20,7 @@ export class ViewerComponent {
 
   contentPlayer = computed(() => this.sanitizer.bypassSecurityTrustResourceUrl(this.mediaURL()));
 
-  contentType = computed(() => this.mediaURL()[1]);
+  contentType = computed(() => this.assetView().mediaType);
 
   constructor() {
     effect(() => {

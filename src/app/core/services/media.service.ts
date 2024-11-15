@@ -36,7 +36,7 @@ export class MediaService {
       case 'youtube':
         return `https://www.youtube.com/embed/${content.sourceId}`;
       case 'tiktok':
-        return `https://www.tiktok.com/embed//${content.sourceId}`;
+        return `https://www.tiktok.com/embed//${content.sourceId}?music_info=1&description=1`;
       case 'instagram':
         return `https://www.instagram.com/p/${content.sourceId}`;
       case 'twitter':

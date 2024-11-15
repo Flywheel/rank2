@@ -3,7 +3,7 @@ import { HeaderComponent } from '../../../core/components/header/header.componen
 import { BallotBodyComponent } from '../ballot-body/ballot-body.component';
 import { PitchScrollerComponent } from '../../pitch/pitch-scroller/pitch-scroller.component';
 import { slateMemberViewInit } from '../../../core/models/initValues';
-import { ViewerComponent } from '../../../core/viewer/viewer/viewer.component';
+import { ViewerComponent } from '../../../core/components/viewer/viewer.component';
 import { SlateMemberView } from '../../../core/models/interfaces';
 
 @Component({

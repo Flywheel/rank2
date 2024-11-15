@@ -4,7 +4,7 @@ import { FolioStore } from '../folio.store';
 import { PitchStore } from '../../pitch/pitch.store';
 import { AuthorStore } from '../../author/author.store';
 import { pitchViewInit, placementViewInit } from '../../../core/models/initValues';
-import { ViewerComponent } from '../../../core/viewer/viewer/viewer.component';
+import { ViewerComponent } from '../../../core/components/viewer/viewer.component';
 import { SlateManagerComponent } from '../slate-manager/slate-manager.component';
 
 @Component({

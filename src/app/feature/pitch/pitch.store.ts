@@ -97,7 +97,6 @@ export const PitchStore = signalStore(
       },
 
       pitchCreate(pitch: Pitch) {
-        if (environment.ianConfig.showLogs) console.log(pitch);
         updateState(store, '[Pitch] Add Start', { isLoading: true });
         dbPitch
           .pitchCreate(pitch)
