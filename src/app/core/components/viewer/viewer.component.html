@@ -8,6 +8,19 @@
       @case ('topic') {
         <p>Topic</p>
       }
+      @case ('ytshort') {
+        <div class="container">
+          <iframe
+            width="315"
+            height="560"
+            frameborder="4"
+            scrolling="no"
+            allowfullscreen
+            [src]="contentPlayer()"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+        </div>
+      }
+
       @case ('tiktok') {
         <iframe
           width="340"

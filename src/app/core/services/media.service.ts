@@ -35,6 +35,8 @@ export class MediaService {
     switch (mediaType) {
       case 'youtube':
         return `https://www.youtube.com/embed/${content.sourceId}`;
+      case 'ytshort':
+        return `https://www.youtube.com/embed/${content.sourceId}`;
       case 'tiktok':
         return `https://www.tiktok.com/embed//${content.sourceId}?music_info=1&description=1`;
       case 'instagram':
@@ -54,6 +56,13 @@ export const mediaPlatforms = {
     regex: /(?:youtube\.com\/(?:[^/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
     parse: (match: RegExpExecArray): MediaPlatform => ({
       mediaType: 'youtube',
+      id: match[1],
+    }),
+  },
+  ytshort: {
+    regex: /(?:youtube\.com\/(?:[^/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+    parse: (match: RegExpExecArray): MediaPlatform => ({
+      mediaType: 'ytshort',
       id: match[1],
     }),
   },
@@ -81,3 +90,5 @@ export const mediaPlatforms = {
     }),
   },
 };
+
+//https://youtube.com/shorts/j7cygX2gdBY?si=TKUBfoJe4Snk34xM

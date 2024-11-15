@@ -1,8 +1,12 @@
-export type MediaType = 'youtube' | 'tiktok' | 'instagram' | 'twitter' | 'textinput'; // Add other platforms as needed
-export type MediaPlatform = YouTube | Tiktok | Instagram | Twitter | TextInput; // Add other platform interfaces as needed
+export type MediaType = 'youtube' | 'ytshort' | 'tiktok' | 'instagram' | 'twitter' | 'textinput'; // Add other platforms as needed
+export type MediaPlatform = YouTube | YouTubeShort | Tiktok | Instagram | Twitter | TextInput; // Add other platform interfaces as needed
 
 interface YouTube {
   mediaType: 'youtube';
+  id: string;
+}
+interface YouTubeShort {
+  mediaType: 'ytshort';
   id: string;
 }
 
