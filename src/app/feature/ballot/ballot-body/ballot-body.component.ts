@@ -45,6 +45,39 @@ export class BallotBodyComponent {
   }
 
   setAvailableCandidates() {
+    const ranksInStore = this.ballotStore.slateInProgress()?.slateMemberViews;
+    if (ranksInStore) {
+      const candidateMap = this._createCandidateMap(this.candidateList());
+      const rankedCandidates = this._getRankedCandidates(ranksInStore, candidateMap);
+      const rankedCandidatesIds = this._getRankedCandidateIds(rankedCandidates);
+      const availableCandidates = this._filterAvailableCandidates(this.candidateList(), rankedCandidatesIds);
+
+      this.candidatesRanked.set(rankedCandidates);
+      this.candidatesAvailable.set(availableCandidates);
+
+      this.updateCurrentSlateSignal();
+    }
+  }
+
+  private _createCandidateMap(candidates: SlateMemberView[]): Map<number, SlateMemberView> {
+    return new Map(candidates.map(candidate => [candidate.placementId, candidate]));
+  }
+
+  private _getRankedCandidates(ranksInStore: SlateMemberView[], candidateMap: Map<number, SlateMemberView>): SlateMemberView[] {
+    return ranksInStore
+      .map(member => candidateMap.get(member.placementId))
+      .filter((candidate): candidate is SlateMemberView => !!candidate);
+  }
+
+  private _getRankedCandidateIds(rankedCandidates: SlateMemberView[]): Set<number> {
+    return new Set(rankedCandidates.map(candidate => candidate.placementId));
+  }
+
+  private _filterAvailableCandidates(allCandidates: SlateMemberView[], rankedIds: Set<number>): SlateMemberView[] {
+    return allCandidates.filter(candidate => !rankedIds.has(candidate.placementId));
+  }
+
+  setAvailableCandidates2() {
     console.log('setAvailableCandidates Start');
     this.candidatesAvailable.set(this.candidateList());
     const ranksInStore = this.ballotStore.slateInProgress()?.slateMemberViews;
