@@ -1,0 +1,21 @@
+.arrow {
+  background-color: #002;
+  color: #bb8;
+  font-size: 20px;
+  display: inline-block;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.scroll-right {
+  @extend .arrow;
+  padding-left: 10px;
+}
+.scroll-left {
+  @extend .arrow;
+  padding-right: 10px;
+}
+
+.horizontal-scroll-container {
+  display: flex;
+  direction: horizontal;
+}

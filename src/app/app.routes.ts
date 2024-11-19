@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { authDashboardAdminGuard } from './core/guards/authorDashbordAdminGuard';
 
-const DEFAULT_ROUTE = 'ballot';
+const DEFAULT_ROUTE = 'home';
 
 export const routes: Routes = [
   {
@@ -11,6 +11,7 @@ export const routes: Routes = [
   { path: 'contest', redirectTo: 'ballot' },
 
   { path: 'folio', loadComponent: () => import('./feature/folio/folio-shell/folio-shell.component').then(m => m.FolioShellComponent) },
+  { path: 'home', loadComponent: () => import('./feature/home/home-shell/home-shell.component').then(m => m.HomeShellComponent) },
   {
     path: 'dashboard',
     loadComponent: () => import('./feature/author/author-dashboard/author-dashboard.component').then(m => m.AuthorDashboardComponent),

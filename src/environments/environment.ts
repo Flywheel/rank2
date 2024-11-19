@@ -9,5 +9,6 @@ export const environment = {
   ianConfig: {
     hideAuthorComponent: false,
     showLogs: true,
+    defaultAuthor: 'miniherald',
   },
 };

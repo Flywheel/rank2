@@ -1,0 +1,10 @@
+@if (!hideViewerDisplay()) {
+  <mh5-header callerPage="viewer" (hidePlacementDisplay)="hidePlacementDisplayToggle($event)" />
+  <div class="placement-display">
+    <mh5-viewer [placementView]="slateMember().placementView" />
+  </div>
+} @else {
+  <mh5-header callerPage="home" />
+  <mh5-home-menu />
+  <!-- <mh5-ballot-body (hidePlacementDisplay)="hidePlacementDisplayToggle($event)" (placementToDisplay)="setSlateMemberView($event)" /> -->
+}
