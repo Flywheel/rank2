@@ -1,17 +1,15 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, output, signal } from '@angular/core';
 import { pitchViewInit } from '../../../core/models/initValues';
 import { AuthorView, PitchView } from '../../../core/models/interfaces';
 import { AuthorStore } from '../../author/author.store';
 import { PitchStore } from '../../pitch/pitch.store';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
-import { IconDropDownComponent } from '../../../core/svg/icon-arrow-dropdown';
-import { IconFrameComponent } from '../../../core/svg/icon-frame';
 
 @Component({
   selector: 'mh5-home-menu',
   standalone: true,
-  imports: [FormsModule, IconDropDownComponent, IconFrameComponent],
+  imports: [FormsModule],
   templateUrl: './home-menu.component.html',
   styleUrl: './home-menu.component.scss',
 })
@@ -20,6 +18,7 @@ export class HomeMenuComponent {
   pitchStore = inject(PitchStore);
 
   selectedAuthorName = signal<string>(environment.ianConfig.defaultAuthor);
+  selectedPitch = signal<PitchView>(pitchViewInit);
 
   authorList = computed<AuthorView[]>(() => {
     return this.authorStore.authorViews();
@@ -32,7 +31,13 @@ export class HomeMenuComponent {
     } else return [pitchViewInit];
   });
 
-  selectPitch(id: number) {
+  pitchOutput = output<PitchView>();
+
+  selectPitch(pitchView: PitchView) {
+    this.selectedPitch.set(pitchView);
+    this.pitchStore.setPitchSelected(pitchView.id);
+  }
+  selectPitch2(id: number) {
     this.pitchStore.setPitchSelected(id);
   }
 
@@ -45,29 +50,17 @@ export class HomeMenuComponent {
     }
   }
 
-  scrollNext(isNext: boolean) {
-    const currentIndex = this.pitchViews().findIndex(pv => pv.name === this.selectedAuthorName());
+  scrollRight(isNext: boolean) {
+    const currentIndex = this.pitchViews().findIndex(pv => pv.name === this.selectedPitch().name);
     let newIndex = isNext ? currentIndex + 1 : currentIndex - 1;
 
     if (currentIndex === -1) return;
     if (newIndex >= this.pitchViews().length) {
-      newIndex = 0; // Loop back to the first author
+      newIndex = 0;
     } else if (newIndex < 0) {
-      newIndex = this.pitchViews().length - 1; // Loop to the last author
+      newIndex = this.pitchViews().length - 1;
     }
-
-    this.selectedAuthorName.set(this.pitchViews()[newIndex].name);
-  }
-
-  async loadChildPitchByLocation(location: string) {
-    const pitchId = Number(location);
-    this.selectedAuthorName.set(location);
-    await this.loadChildPitch(pitchId);
-    //   this.changeDetectorRef.detectChanges();
-    this.scrollToElement(pitchId);
-  }
-
-  async loadChildPitch(pitchId: number) {
-    //   await this.pitchStore.loadPitchViewByPitchId(pitchId);
+    this.selectPitch(this.pitchViews()[newIndex]);
+    this.scrollToElement(this.selectedPitch().id);
   }
 }

@@ -121,11 +121,11 @@ body {
     font-size: 12px;
     cursor: pointer;
     border-bottom: 4px solid transparent;
+    &:hover {
+      border-bottom: 4px dashed grey;
+    }
     &.selected {
       border-bottom: 4px solid azure;
-    }
-    &:hover {
-      border-bottom: 4px dotted grey;
     }
   }
 }

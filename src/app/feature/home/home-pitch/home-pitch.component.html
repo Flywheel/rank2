@@ -1,0 +1,12 @@
+<div class="streamHeaderContainer">
+  <div class="streamHeaderButtonGroup">
+    <button class="streamButton left" (click)="gotoBallot()">Ballot</button>
+    <button class="streamButton middle" (click)="gotoComments()">Comments</button>
+    <button class="streamButton right" (click)="gotoResults()">Results</button>
+  </div>
+  <div class="streamHeaderCaption">
+    <span>-</span>
+    <span>{{ pitchViewSelected().name }}</span>
+    <span>-</span>
+  </div>
+</div>

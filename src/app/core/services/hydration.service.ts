@@ -51,9 +51,9 @@ export class HydrationService {
     }
 
     const rootFolioId = this.folioStore.folios().find(f => f.authorId === authorId && f.parentFolioId === undefined)?.id;
-    console.log(theAuthor);
-    console.log(this.folioStore.folios());
-    console.log(rootFolioId);
+    if (environment.ianConfig.showLogs) {
+      console.log(theAuthor, '; rootFolioId: ', rootFolioId, ' folios: ', this.folioStore.folios());
+    }
     const assetsToImport: AssetImporter[] = theData.assets;
     const foliosToImport: FolioImporter[] = theData.folios;
     const foliosPrepared: Folio[] = [];
@@ -68,9 +68,9 @@ export class HydrationService {
       };
 
       const { newFolio, newAsset, newPlacement } = await this.folioStore.folioCreateWithParent(folioData);
-      if (environment.ianConfig.showLogs) {
-        console.log(newFolio.id, ' ', newAsset.id, ' ', newPlacement.id);
-      }
+      // if (environment.ianConfig.showLogs) {
+      //   console.log(newFolio.id, ' ', newAsset.id, ' ', newPlacement.id);
+      // }
       this.folioStore.setFolioSelected(newFolio.id!);
 
       const folioAssets: AssetImporter[] = assetsToImport.filter(a => a.folioName === folioData.folioName);

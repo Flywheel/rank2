@@ -1,28 +1,28 @@
 <div class="horizontal-scroll-container">
-  <div class="scroll-left" (click)="scrollNext(false)" (keydown)="scrollNext(false)" tabindex="2">&#9664;</div>
-
+  <div class="scroll-left" (click)="scrollRight(false)" (keydown)="scrollRight(false)" tabindex="2">&#9664;</div>
+  <div class="select-wrapper">
+    <select class="content-type-dropdown" [ngModel]="selectedAuthorName()" (ngModelChange)="selectedAuthorName.set($event)">
+      @for (author of authorList(); track $index) {
+        <option [value]="author.name">{{ author.name }}</option>
+      }
+    </select>
+    <span class="dropdown-arrow"></span>
+  </div>
   <div class="horizontal-scroll">
-    <div class="select-wrapper">
-      <select class="content-type-dropdown" [ngModel]="selectedAuthorName()" (ngModelChange)="selectedAuthorName.set($event)">
-        @for (author of authorList(); track $index) {
-          <option [value]="author.name">{{ author.name }}</option>
-        }
-      </select>
-      <span class="dropdown-arrow"></span>
-    </div>
     @let topChannel = '@' + selectedAuthorName();
     @for (pitch of pitchViews(); track $index) {
       @if (pitch.name !== topChannel) {
         <div
           class="menu-item"
+          [class.selected]="pitch.name === selectedPitch().name"
           [id]="'menu-item:' + pitch.id"
-          (click)="selectPitch(pitch.id)"
-          (keydown)="selectPitch(pitch.id)"
+          (click)="selectPitch(pitch)"
+          (keydown)="selectPitch(pitch)"
           tabindex="$index">
           {{ pitch.name }}
         </div>
       }
     }
   </div>
-  <div class="scroll-right" (click)="scrollNext(true)" (keydown)="scrollNext(true)" tabindex="2">&#9654;</div>
+  <div class="scroll-right" (click)="scrollRight(true)" (keydown)="scrollRight(true)" tabindex="2">&#9654;</div>
 </div>
