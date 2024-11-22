@@ -1,7 +1,7 @@
 <div class="horizontal-scroll-container">
   <div class="scroll-left" (click)="scrollRight(false)" (keydown)="scrollRight(false)" tabindex="2">&#9664;</div>
   <div class="select-wrapper">
-    <select class="content-type-dropdown" [ngModel]="selectedAuthorName()" (ngModelChange)="selectedAuthorName.set($event)">
+    <select class="content-type-dropdown" [ngModel]="selectedAuthorName()" (ngModelChange)="onAuthorChange($event)">
       @for (author of authorList(); track $index) {
         <option [value]="author.name">{{ author.name }}</option>
       }
