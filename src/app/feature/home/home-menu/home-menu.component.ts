@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, OnInit, signal, untracked } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { pitchViewInit } from '../../../core/models/initValues';
 import { AuthorView, PitchView } from '../../../core/models/interfaces';
 import { AuthorStore } from '../../author/author.store';
@@ -31,19 +31,6 @@ export class HomeMenuComponent {
     } else return [pitchViewInit];
   });
 
-  constructor() {
-    effect(() => {
-      const authors = this.authorList();
-      if (authors.length > 0) {
-        console.log('Authors: ', authors);
-        const firstAuthor = authors[0];
-
-        console.log(firstAuthor);
-        untracked(() => this.onAuthorChange(firstAuthor.name));
-      }
-    });
-  }
-
   private getAuthorIdByName(authorName: string): string {
     const author = this.authorStore.authorViews().find(a => a.name === authorName);
     return author ? author.id : '';
@@ -51,7 +38,9 @@ export class HomeMenuComponent {
 
   onAuthorChange(authorName: string): void {
     this.selectedAuthorName.set(authorName);
-    const firstPitch = this.pitchViews().find(p => p.authorId === this.getAuthorIdByName(authorName));
+
+    //  const firstPitch = this.pitchViews().find(p => p.authorId === this.getAuthorIdByName(authorName));
+    const firstPitch = this.pitchViews()[0];
     if (firstPitch) {
       this.selectPitch(firstPitch);
     } else {
