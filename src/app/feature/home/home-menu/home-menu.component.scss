@@ -8,11 +8,11 @@
 
 .scroll-right {
   @extend .arrow;
-  padding-left: 10px;
+  padding-left: 6px;
 }
 .scroll-left {
   @extend .arrow;
-  padding-right: 10px;
+  padding-right: 4px;
 }
 
 .horizontal-scroll-container {

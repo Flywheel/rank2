@@ -5,11 +5,14 @@ import { AuthorStore } from '../../author/author.store';
 import { PitchStore } from '../../pitch/pitch.store';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
+import { IconArrowBackComponent } from '../../../core/svg/icon-arrow-back';
+import { IconArrowForwardComponent } from '../../../core/svg/icon-arrow-forward';
+import { IconArrowsUnfoldComponent } from '../../../core/svg/icon-arrows-unfold';
 
 @Component({
   selector: 'mh5-home-menu',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, IconArrowBackComponent, IconArrowForwardComponent, IconArrowsUnfoldComponent],
   templateUrl: './home-menu.component.html',
   styleUrl: './home-menu.component.scss',
 })
@@ -38,8 +41,6 @@ export class HomeMenuComponent {
 
   onAuthorChange(authorName: string): void {
     this.selectedAuthorName.set(authorName);
-
-    //  const firstPitch = this.pitchViews().find(p => p.authorId === this.getAuthorIdByName(authorName));
     const firstPitch = this.pitchViews()[0];
     if (firstPitch) {
       this.selectPitch(firstPitch);
@@ -64,14 +65,11 @@ export class HomeMenuComponent {
 
   scrollRight(isNext: boolean) {
     const currentIndex = this.pitchViews().findIndex(pv => pv.name === this.selectedPitch().name);
-    let newIndex = isNext ? currentIndex + 1 : currentIndex - 1;
-
     if (currentIndex === -1) return;
-    if (newIndex >= this.pitchViews().length) {
-      newIndex = 0;
-    } else if (newIndex < 0) {
-      newIndex = this.pitchViews().length - 1;
-    }
+    const itemCount = this.pitchViews().length;
+    let newIndex = isNext ? currentIndex + 1 : currentIndex - 1;
+    newIndex = newIndex >= itemCount ? 0 : newIndex < 0 ? itemCount - 1 : newIndex;
+
     this.selectPitch(this.pitchViews()[newIndex]);
     this.scrollToElement(this.selectedPitch().id);
   }
