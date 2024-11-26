@@ -18,7 +18,7 @@ export class StartupService {
   async importAuthorLoggedInAssets(): Promise<void> {
     const theAuthor = this.authorStore.authorLoggedIn();
     await this.hydrationService.hydrateFolios(theAuthor.id, theData as DataImporter);
-    await this.delay(200);
+    await this.delay(100);
     await this.hydrationService.hydrateSlates(theAuthor.id);
   }
 
@@ -34,11 +34,11 @@ export class StartupService {
     };
     await this.folioStore.folioCreateForNewAuthor(folioDefault);
 
-    await this.delay(1000);
+    await this.delay(100);
     const theTopFolio = this.folioStore.folios().find(f => f.authorId === authorStartup.id && f.parentFolioId === undefined);
     if (theTopFolio) await this.hydrationService.hydrateFolios(theTopFolio.authorId!, miniHeraldData);
     else alert('No top folio found');
-    await this.delay(200);
+    await this.delay(100);
     await this.hydrationService.hydrateSlates(folioDefault.authorId);
   }
 }

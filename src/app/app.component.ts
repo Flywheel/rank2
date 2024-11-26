@@ -79,11 +79,12 @@ export class AppComponent implements OnInit, OnDestroy {
       };
       console.log(folioDefault);
       await this.folioStore.folioCreateForNewAuthor(folioDefault);
-      delay(1000);
+      delay(100);
       console.log(this.folioStore.folios());
     }
     await this.startupService.importMiniHeraldAssets();
     await this.startupService.importAuthorLoggedInAssets();
+    this.authorStore.setStartupCompleted();
   }
 
   ngOnDestroy(): void {

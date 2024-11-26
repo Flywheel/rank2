@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal, untracked } from '@angular/core';
 import { pitchViewInit } from '../../../core/models/initValues';
 import { AuthorView, PitchView } from '../../../core/models/interfaces';
 import { AuthorStore } from '../../author/author.store';
@@ -35,14 +35,14 @@ export class HomeMenuComponent {
     } else return [pitchViewInit];
   });
 
-  // constructor() {
-  //   this.onAuthorChange(this.selectedAuthorName());
-  // }
-
-  // private getAuthorIdByName(authorName: string): string {
-  //   const author = this.authorStore.authorViews().find(a => a.name === authorName);
-  //   return author ? author.id : '';
-  // }
+  displayFirstPitch = effect(() => {
+    const theValue = this.authorStore.startupCompleted();
+    if (theValue) {
+      untracked(() => {
+        this.onSelectClick();
+      });
+    }
+  });
 
   onAuthorChange(authorName: string): void {
     this.selectedAuthorName.set(authorName);
@@ -61,6 +61,7 @@ export class HomeMenuComponent {
   }
 
   onSelectClick(): void {
+    this.selectPitch(this.pitchViews()[0]);
     this.isSelectClicked.set(true);
   }
 

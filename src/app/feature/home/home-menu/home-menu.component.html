@@ -1,5 +1,7 @@
 <div class="horizontal-scroll-container">
-  <div class="scroll-left" (click)="scrollRight(false)" (keydown)="scrollRight(false)" tabindex="2"><mh5-icon-arrow-back /></div>
+  <div class="scroll-left" (click)="scrollRight(false)" (keydown)="scrollRight(false)" tabindex="2">
+    <mh5-icon-arrow-back />
+  </div>
   <div class="select-wrapper" [class.selected]="isSelectClicked()" (click)="onSelectClick()" (keydown)="onSelectClick()" tabindex="1">
     <select class="content-type-dropdown" [ngModel]="selectedAuthorName()" (ngModelChange)="onAuthorChange($event)">
       @for (author of authorList(); track $index) {

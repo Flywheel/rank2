@@ -1,5 +1,5 @@
 import { computed, inject } from '@angular/core';
-import { signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import { signalStore, withComputed, withMethods, withState, withHooks } from '@ngrx/signals';
 import { pipe, switchMap, of, exhaustMap, catchError, throwError, map, tap } from 'rxjs';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
@@ -20,6 +20,7 @@ export const AuthorStore = signalStore(
     authors: [authorInit],
     isLoading: false,
     consentStatus: 'unknown' as string,
+    startupCompleted: false,
   }),
 
   withStorageSync({
@@ -98,6 +99,7 @@ export const AuthorStore = signalStore(
 
       return retval;
     }),
+
     authorFolioTree: computed<TreeNode[]>(() => {
       const folios = store.authorSelectedFolioViews;
       return folios()
@@ -211,6 +213,11 @@ export const AuthorStore = signalStore(
           })
         )
       ),
+      setStartupCompleted() {
+        updateState(store, '[Author] Startup Completed', {
+          startupCompleted: true,
+        });
+      },
     };
   }),
   withMethods(store => {
