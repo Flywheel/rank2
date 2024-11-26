@@ -1,0 +1,13 @@
+.streamHeaderContainer {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: #001;
+}
+
+.streamHeaderButtonGroup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #999;
+}

@@ -7,12 +7,11 @@ import { FormsModule } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
 import { IconArrowBackComponent } from '../../../core/svg/icon-arrow-back';
 import { IconArrowForwardComponent } from '../../../core/svg/icon-arrow-forward';
-import { IconArrowsUnfoldComponent } from '../../../core/svg/icon-arrows-unfold';
 
 @Component({
   selector: 'mh5-home-menu',
   standalone: true,
-  imports: [FormsModule, IconArrowBackComponent, IconArrowForwardComponent, IconArrowsUnfoldComponent],
+  imports: [FormsModule, IconArrowBackComponent, IconArrowForwardComponent],
   templateUrl: './home-menu.component.html',
   styleUrl: './home-menu.component.scss',
 })
@@ -21,7 +20,9 @@ export class HomeMenuComponent {
   pitchStore = inject(PitchStore);
 
   selectedAuthorName = signal<string>(environment.ianConfig.defaultAuthor);
+  topChannel = computed<string>(() => '@' + this.selectedAuthorName());
   selectedPitch = signal<PitchView>(pitchViewInit);
+  isSelectClicked = signal<boolean>(false);
 
   authorList = computed<AuthorView[]>(() => {
     return this.authorStore.authorViews();
@@ -34,10 +35,14 @@ export class HomeMenuComponent {
     } else return [pitchViewInit];
   });
 
-  private getAuthorIdByName(authorName: string): string {
-    const author = this.authorStore.authorViews().find(a => a.name === authorName);
-    return author ? author.id : '';
-  }
+  // constructor() {
+  //   this.onAuthorChange(this.selectedAuthorName());
+  // }
+
+  // private getAuthorIdByName(authorName: string): string {
+  //   const author = this.authorStore.authorViews().find(a => a.name === authorName);
+  //   return author ? author.id : '';
+  // }
 
   onAuthorChange(authorName: string): void {
     this.selectedAuthorName.set(authorName);
@@ -50,8 +55,13 @@ export class HomeMenuComponent {
   }
 
   selectPitch(pitchView: PitchView) {
+    this.isSelectClicked.set(false);
     this.selectedPitch.set(pitchView);
     this.pitchStore.setPitchSelected(pitchView.id);
+  }
+
+  onSelectClick(): void {
+    this.isSelectClicked.set(true);
   }
 
   scrollToElement(targetPitch: number) {
@@ -71,6 +81,7 @@ export class HomeMenuComponent {
     newIndex = newIndex >= itemCount ? 0 : newIndex < 0 ? itemCount - 1 : newIndex;
 
     this.selectPitch(this.pitchViews()[newIndex]);
+    if (newIndex === 0) this.isSelectClicked.set(true);
     this.scrollToElement(this.selectedPitch().id);
   }
 }

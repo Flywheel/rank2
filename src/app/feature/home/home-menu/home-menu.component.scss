@@ -36,4 +36,7 @@
 
 .select-wrapper {
   border-bottom: 2px solid #e0e0e0;
+  &.selected {
+    border-bottom: 4px solid azure; /* Border color when selected */
+  }
 }
