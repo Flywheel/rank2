@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { SlateMemberView } from '../../../core/models/interfaces';
 import { ContentTransform } from '../../../core/models/mediatypes';
 import { MediaService } from '../../../core/services/media.service';
@@ -21,9 +21,7 @@ export class HomePitchMemberComponent {
   sourceId = computed(() => this.placementInput().placementView.assetView.sourceId);
   mediaType = computed(() => this.placementInput().placementView.assetView.mediaType);
   caption = computed(() => this.placementInput().placementView.caption);
-  player = this.sanitizer.bypassSecurityTrustResourceUrl('');
-
-  hydratePlayer = effect(() => (this.player = this.sanitizer.bypassSecurityTrustResourceUrl(this.mediaUrl().url)));
+  player = computed(() => this.sanitizer.bypassSecurityTrustResourceUrl(this.mediaUrl().url));
 
   mediaUrl = computed<ContentTransform>(() => {
     let retval = {} as ContentTransform;

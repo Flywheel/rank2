@@ -4,7 +4,7 @@
       @case ('topicList') {}
       @case ('youtube') {
         <div class="youtubeImage_0">
-          <img [src]="player" [alt]="mediaUrl().typeName" [style.width.px]="mediaUrl().width" [style.height.px]="mediaUrl().height" />
+          <img [src]="player()" [alt]="mediaUrl().typeName" [style.width.px]="mediaUrl().width" [style.height.px]="mediaUrl().height" />
         </div>
       }
       @case ('twitter') {
