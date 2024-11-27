@@ -16,7 +16,7 @@ export class ViewerComponent {
   sanitizer = inject(DomSanitizer);
 
   assetView = computed<AssetView>(() => this.placementView().assetView);
-  mediaURL = computed(() => this.mediaService.parseMedia(this.assetView()));
+  mediaURL = computed(() => this.mediaService.getUrlFromAsset(this.assetView()));
 
   contentPlayer = computed(() => this.sanitizer.bypassSecurityTrustResourceUrl(this.mediaURL()));
 

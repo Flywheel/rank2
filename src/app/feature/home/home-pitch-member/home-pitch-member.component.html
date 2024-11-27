@@ -1,0 +1,62 @@
+<div [style.height.px]="segmentHeight()" style="display: flex; align-items: center">
+  <div class="placementImageDisplay">
+    @switch (mediaType()) {
+      @case ('topicList') {}
+      @case ('youtube') {
+        <div class="youtubeImage_0">
+          <img [src]="player" [alt]="mediaUrl().typeName" [style.width.px]="mediaUrl().width" [style.height.px]="mediaUrl().height" />
+        </div>
+      }
+      @case ('twitter') {
+        <iframe
+          width="{{ mediaUrl().width }}"
+          height="{{ mediaUrl().height }}"
+          frameborder="4"
+          scrolling="no"
+          allowfullscreen
+          [src]="player"
+          allow="autoplay; encrypted-media">
+        </iframe>
+      }
+      @case ('tiktok') {
+        <iframe width="{{ mediaUrl().width }}" height="{{ mediaUrl().height }}" [src]="player" frameborder="0"></iframe>
+      }
+      @case ('ad') {
+        <div>
+          <p>Your ad here.</p>
+        </div>
+      }
+      @case ('instagram') {
+        <div class="instagram-media">
+          <iframe class="instagram-media" frameborder="4" scrolling="no" allowfullscreen [src]="player" allow="autoplay; encrypted-media">
+          </iframe>
+        </div>
+      }
+      @case ('jpeg') {
+        <div>
+          <img width="{{ mediaUrl().width }}" height="{{ mediaUrl().height }}" [ngSrc]="player" [alt]="caption()" />
+        </div>
+      }
+      @case ('jpg-280') {
+        <div>
+          <img width="{{ mediaUrl().width }}" height="{{ mediaUrl().height }}" [ngSrc]="player" [alt]="caption()" />
+        </div>
+      }
+      @case ('topic') {
+        <div>
+          <p>Topic: {{ caption() }}</p>
+        </div>
+      }
+      @case ('pitch') {
+        <div style="width: 100px">Pitch: {{ sourceId() }}</div>
+      }
+    }
+  </div>
+  <div class="placementDetailDisplay">
+    <div class="sectionContentTitle">{{ caption() }}</div>
+    <div class="sectionContentCaption">
+      <br />
+      <mh5-icon-play-circle />
+    </div>
+  </div>
+</div>

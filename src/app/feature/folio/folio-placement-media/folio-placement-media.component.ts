@@ -16,7 +16,7 @@ export class FolioPlacementMediaComponent {
   sanitizer = inject(DomSanitizer);
   mediaService = inject(MediaService);
   mediaURL = computed(() => {
-    return this.mediaService.parseMedia(this.assetView()) ?? '';
+    return this.mediaService.getUrlFromAsset(this.assetView()) ?? '';
   });
 
   contentPlayer = computed(() => this.sanitizer.bypassSecurityTrustResourceUrl(this.mediaURL()));

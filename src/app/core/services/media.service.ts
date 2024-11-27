@@ -10,10 +10,9 @@ import { assetInit } from '../models/initValues';
 export class MediaService {
   public castUrlToAsset(input: string): Asset {
     let match: RegExpExecArray | null;
-    // console.log(this.parsedMedia());
     for (const [key, value] of Object.entries(mediaPlatforms)) {
       match = value.regex.exec(input);
-      console.log(match);
+      console.log(key, match);
       if (match) {
         const result = value.parse(match);
         if (result !== null) {
@@ -29,7 +28,7 @@ export class MediaService {
     return assetInit;
   }
 
-  public parseMedia(content: Asset | AssetView): string {
+  public getUrlFromAsset(content: Asset | AssetView): string {
     if (environment.ianConfig.showLogs) console.log(content);
     const mediaType = content.mediaType;
     switch (mediaType) {

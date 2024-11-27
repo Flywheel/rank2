@@ -1,0 +1,24 @@
+.placementDetailDisplay {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.sectionContentTitle,
+.sectionContentCaption {
+  position: absolute;
+  left: 50%;
+  top: 27%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;
+  padding-left: 0;
+}
+
+.sectionContentCaption {
+  top: 51%;
+}

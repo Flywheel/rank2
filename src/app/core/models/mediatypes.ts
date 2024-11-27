@@ -32,3 +32,11 @@ interface TextInput {
   user: string;
   theInput: string;
 }
+
+export interface ContentTransform {
+  typeName: string;
+  width: number;
+  height: number;
+  paddingBottom: string;
+  url: string;
+}

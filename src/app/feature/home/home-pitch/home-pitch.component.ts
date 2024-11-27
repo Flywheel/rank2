@@ -1,11 +1,12 @@
 import { Component, computed, inject, output } from '@angular/core';
 import { PitchStore } from '../../pitch/pitch.store';
 import { PitchView, SlateMemberView } from '../../../core/models/interfaces';
+import { HomePitchMemberComponent } from '../home-pitch-member/home-pitch-member.component';
 
 @Component({
   selector: 'mh5-home-pitch',
   standalone: true,
-  imports: [],
+  imports: [HomePitchMemberComponent],
   templateUrl: './home-pitch.component.html',
   styleUrl: './home-pitch.component.scss',
 })

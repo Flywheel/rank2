@@ -9,4 +9,10 @@
     <span>{{ pitchViewSelected().name }}</span>
     <span>-</span>
   </div>
+  @for (slateMember of pitchViewSelected().slateView.slateMemberViews; track slateMember.id) {
+    <div class="placementDisplayContainer">
+      <div class="topBorder"></div>
+      <mh5-home-pitch-member [placementInput]="slateMember" />
+    </div>
+  }
 </div>

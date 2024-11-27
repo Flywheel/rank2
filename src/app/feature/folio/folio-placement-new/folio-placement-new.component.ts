@@ -50,8 +50,8 @@ export class FolioPlacementNewComponent {
     this.formGroup = this.fb.group({
       authorId: [this.authorStore.authorLoggedIn().id, Validators.required],
       folioId: [this.folioStore.folioIdSelected(), Validators.required],
-      caption: [this.folioStore.folioViewSelected().folioName, Validators.required],
-      description: [this.folioStore.folioViewSelected().folioName],
+      caption: ['', Validators.required],
+      description: [''],
       opens: [today],
       closes: [nextWeekDate],
       urlAdder: [''],

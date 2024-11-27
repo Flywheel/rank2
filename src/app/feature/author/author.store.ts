@@ -1,5 +1,5 @@
 import { computed, inject } from '@angular/core';
-import { signalStore, withComputed, withMethods, withState, withHooks } from '@ngrx/signals';
+import { signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { pipe, switchMap, of, exhaustMap, catchError, throwError, map, tap } from 'rxjs';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
@@ -201,11 +201,9 @@ export const AuthorStore = signalStore(
                   return author;
                 }),
                 catchError(error => {
-                  // Handle error state
                   updateState(store, `[Author] GetById Failure ${error.message}`, {
                     isLoading: false,
                   });
-                  // Propagate the error
                   return throwError(() => new Error('Failed to get author'));
                 })
               );
@@ -247,7 +245,6 @@ function buildTreeNode(folioView: FolioView, depth: number, allFolios: FolioView
 
   folioView.placementViews.forEach(placement => {
     if (placement.assetView.mediaType === 'folio') {
-      // const referencedFolio = this.getFolioById(Number(placement.asset.sourceId), allFolios);
       const referencedFolio = allFolios.find(folio => folio.id === Number(placement.assetView.sourceId));
       if (referencedFolio) {
         node.children?.push(buildTreeNode(referencedFolio, depth + 1, allFolios, newPath));

@@ -11,3 +11,32 @@
   justify-content: space-between;
   color: #999;
 }
+.streamHeaderCaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2px;
+  margin-bottom: 6px;
+  padding: 2px;
+  border: 1px solid #aa7;
+}
+
+$content-text-color: #eef;
+$content-visited-text-color: #dde;
+
+.placementTitle:link {
+  color: $content-text-color;
+  text-decoration: underline;
+}
+.placementTitle:visited {
+  color: $content-visited-text-color;
+  text-decoration: none !important;
+}
+.topBorder {
+  font-size: 16px;
+  opacity: 55%;
+  background-color: #333;
+  padding-top: 5px;
+  border-bottom: 1px inset #669;
+  padding-left: 15px;
+}
