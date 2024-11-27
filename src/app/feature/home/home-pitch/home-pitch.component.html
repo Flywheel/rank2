@@ -11,7 +11,11 @@
   </div>
 </div>
 @for (slateMember of pitchViewSelected().slateView.slateMemberViews; track slateMember.id) {
-  <div class="placementDisplayContainer">
+  <div
+    class="placementDisplayContainer"
+    (click)="viewPlacement(slateMember)"
+    (keypress)="viewPlacement(slateMember)"
+    tabindex="slateMember.id">
     <div class="topBorder"></div>
     <mh5-home-pitch-member [placementInput]="slateMember" />
   </div>
