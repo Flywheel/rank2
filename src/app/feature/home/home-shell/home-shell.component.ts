@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, output, signal } from '@angular/core';
 import { HeaderComponent } from '../../../core/components/header/header.component';
 import { ViewerComponent } from '../../../core/components/viewer/viewer.component';
 import { HomeMenuComponent } from '../home-menu/home-menu.component';
@@ -15,12 +15,17 @@ import { HomePitchComponent } from '../home-pitch/home-pitch.component';
   styleUrl: './home-shell.component.scss',
 })
 export class HomeShellComponent {
-  hideViewerDisplay = signal<boolean>(true);
+  hidePlacementViewer = signal<boolean>(true);
   slateMember = signal<SlateMemberView>(slateMemberViewInit);
+  resetPitch = output<void>();
 
-  hidePlacementDisplayToggle(toggle: boolean) {
-    this.hideViewerDisplay.set(toggle);
+  togglePlacementViewer(toggle: boolean) {
+    this.hidePlacementViewer.set(toggle);
+    if (toggle) {
+      this.resetPitch.emit();
+    }
   }
+
   setSlateMemberView(slateMemberView: SlateMemberView) {
     this.slateMember.set(slateMemberView);
   }

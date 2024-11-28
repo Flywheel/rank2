@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal, untracked } from '@angular/core';
+import { Component, computed, effect, inject, input, signal, untracked } from '@angular/core';
 import { pitchViewInit } from '../../../core/models/initValues';
 import { AuthorView, PitchView } from '../../../core/models/interfaces';
 import { AuthorStore } from '../../author/author.store';
@@ -18,6 +18,8 @@ import { IconArrowForwardComponent } from '../../../core/svg/icon-arrow-forward'
 export class HomeMenuComponent {
   authorStore = inject(AuthorStore);
   pitchStore = inject(PitchStore);
+
+  returnToPitchFromView = input<number>();
 
   selectedAuthorName = signal<string>(environment.ianConfig.defaultAuthor);
   topChannel = computed<string>(() => '@' + this.selectedAuthorName());
@@ -39,10 +41,21 @@ export class HomeMenuComponent {
     const theValue = this.authorStore.startupCompleted();
     if (theValue) {
       untracked(() => {
-        this.onSelectClick();
+        if (this.returnToPitchFromView()) {
+          this.returnToPitch();
+        } else {
+          this.onSelectClick();
+        }
       });
     }
   });
+
+  returnToPitch() {
+    const pitchIndex = this.pitchViews().findIndex(pv => pv.name === this.pitchStore.pitchViewSelected().name);
+    this.selectPitch(this.pitchViews()[pitchIndex]);
+    if (pitchIndex === 0) this.isSelectClicked.set(true);
+    this.scrollToElement(this.pitchStore.pitchIdSelected());
+  }
 
   onAuthorChange(authorName: string): void {
     this.selectedAuthorName.set(authorName);

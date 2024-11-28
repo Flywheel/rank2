@@ -1,23 +1,23 @@
 import { Component, computed, inject, output } from '@angular/core';
 import { PitchStore } from '../../pitch/pitch.store';
 import { PitchView, SlateMemberView } from '../../../core/models/interfaces';
-import { HomePitchMemberComponent } from '../home-pitch-member/home-pitch-member.component';
+import { HomeSlateMemberComponent } from '../home-slate-member/home-slate-member.component';
 
 @Component({
   selector: 'mh5-home-pitch',
   standalone: true,
-  imports: [HomePitchMemberComponent],
+  imports: [HomeSlateMemberComponent],
   templateUrl: './home-pitch.component.html',
   styleUrl: './home-pitch.component.scss',
 })
 export class HomePitchComponent {
   pitchStore = inject(PitchStore);
   pitchViewSelected = computed<PitchView>(() => this.pitchStore.pitchViewSelected());
-  hidePlacementDisplay = output<boolean>();
+  hidePlacementViewer = output<boolean>();
   placementToDisplay = output<SlateMemberView>();
 
   viewPlacement(placement: SlateMemberView) {
-    this.hidePlacementDisplay.emit(false);
+    this.hidePlacementViewer.emit(false);
     this.placementToDisplay.emit(placement);
   }
   gotoBallot() {

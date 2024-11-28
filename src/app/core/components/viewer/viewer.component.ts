@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, untracked } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { MediaService } from '../../services/media.service';
 import { AssetView, PlacementView } from '../../models/interfaces';
@@ -16,18 +16,7 @@ export class ViewerComponent {
   sanitizer = inject(DomSanitizer);
 
   assetView = computed<AssetView>(() => this.placementView().assetView);
-  mediaURL = computed(() => this.mediaService.getUrlFromAsset(this.assetView()));
-
-  contentPlayer = computed(() => this.sanitizer.bypassSecurityTrustResourceUrl(this.mediaURL()));
-
   contentType = computed(() => this.assetView().mediaType);
-
-  constructor() {
-    effect(() => {
-      const caption = this.placementView().caption;
-
-      untracked(() => this.placementView());
-      console.log(caption);
-    });
-  }
+  mediaURL = computed(() => this.mediaService.getUrlFromAsset(this.assetView()));
+  contentPlayer = computed(() => this.sanitizer.bypassSecurityTrustResourceUrl(this.mediaURL()));
 }

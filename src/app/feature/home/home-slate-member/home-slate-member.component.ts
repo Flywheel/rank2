@@ -7,13 +7,13 @@ import { NgOptimizedImage } from '@angular/common';
 import { IconPlayCircleComponent } from '../../../core/svg/icon-play-circle';
 
 @Component({
-  selector: 'mh5-home-pitch-member',
+  selector: 'mh5-home-slate-member',
   standalone: true,
   imports: [NgOptimizedImage, IconPlayCircleComponent],
-  templateUrl: './home-pitch-member.component.html',
-  styleUrl: './home-pitch-member.component.scss',
+  templateUrl: './home-slate-member.component.html',
+  styleUrl: './home-slate-member.component.scss',
 })
-export class HomePitchMemberComponent {
+export class HomeSlateMemberComponent {
   mediaService = inject(MediaService);
   sanitizer = inject(DomSanitizer);
 
