@@ -12,19 +12,14 @@ import { Author } from '../../../core/models/interfaces';
   templateUrl: './author-consent.component.html',
   styleUrl: './author-consent.component.scss',
 })
-export class AuthorConsentComponent implements OnInit {
+export class AuthorConsentComponent {
   authorStore = inject(AuthorStore);
   forcePopup = input<boolean>(false);
   consentValue = signal<string | null>('');
   showConsentPopup = computed<boolean>(() => this.consentValue() === null || this.forcePopup());
   closeComponent = output<boolean>();
 
-  ngOnInit(): void {
-    if (environment.ianConfig.showLogs) console.log('AuthorConsentComponent ngOnInit');
-    this.checkAuthorConsent();
-  }
-
-  checkAuthorConsent(): void {
+  constructor() {
     this.consentValue.set(localStorage.getItem(AUTHOR_CONSENT_KEY));
   }
 

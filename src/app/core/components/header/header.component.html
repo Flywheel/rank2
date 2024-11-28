@@ -17,6 +17,12 @@
       <a (click)="openPage('/author')" (keydown)="openPage('/author')" tabindex="0" aria-label="demoText"> <mh5-icon-profile /> </a>
     }
 
+    @case ('ballot') {
+      <a (click)="goBack()" (keydown)="goBack()" tabindex="0" aria-label="demoText"> Done</a>
+      <div class="title">Mini Herald - Ballot</div>
+      <div><mh5-icon-share /></div>
+    }
+
     @case ('author') {
       <a (click)="goBack()" (keydown)="goBack()" tabindex="0" aria-label="demoText"> Done</a>
       <div class="title">Mini Herald</div>
@@ -30,7 +36,7 @@
     }
 
     @case ('viewer') {
-      <a (click)="closePlacementDisplay()" (keydown)="closePlacementDisplay()" tabindex="0" aria-label="demoText">Done</a>
+      <a (click)="hidePlacementDisplay.emit(true)" (keydown)="hidePlacementDisplay.emit(true)" tabindex="0" aria-label="demoText">Done</a>
       <div class="title">Mini Herald Viewer</div>
       <div><mh5-icon-share /></div>
     }

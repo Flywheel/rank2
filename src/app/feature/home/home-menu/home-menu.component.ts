@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, input, signal, untracked } from '@angular/core';
-import { pitchViewInit } from '../../../core/models/initValues';
+import { authorViewInit, pitchViewInit } from '../../../core/models/initValues';
 import { AuthorView, PitchView } from '../../../core/models/interfaces';
 import { AuthorStore } from '../../author/author.store';
 import { PitchStore } from '../../pitch/pitch.store';
@@ -20,11 +20,15 @@ export class HomeMenuComponent {
   pitchStore = inject(PitchStore);
 
   returnToPitchFromView = input<number>();
+  selectedPitch = signal<PitchView>(pitchViewInit);
+  topPitchSelected = signal<boolean>(false);
 
   selectedAuthorName = signal<string>(environment.ianConfig.defaultAuthor);
+  selectedAuthor = computed<AuthorView>(
+    () => this.authorStore.authorViews().find(a => a.name === this.selectedAuthorName()) ?? authorViewInit
+  );
+
   topChannel = computed<string>(() => '@' + this.selectedAuthorName());
-  selectedPitch = signal<PitchView>(pitchViewInit);
-  isSelectClicked = signal<boolean>(false);
 
   authorList = computed<AuthorView[]>(() => {
     return this.authorStore.authorViews();
@@ -37,24 +41,40 @@ export class HomeMenuComponent {
     } else return [pitchViewInit];
   });
 
-  displayFirstPitch = effect(() => {
-    const theValue = this.authorStore.startupCompleted();
-    if (theValue) {
+  preparePitchDisplay = effect(() => {
+    if (this.authorStore.startupCompleted()) {
       untracked(() => {
         if (this.returnToPitchFromView()) {
           this.returnToPitch();
         } else {
-          this.onSelectClick();
+          this.onSelectTopPitchClick();
         }
       });
     }
   });
 
   returnToPitch() {
-    const pitchIndex = this.pitchViews().findIndex(pv => pv.name === this.pitchStore.pitchViewSelected().name);
-    this.selectPitch(this.pitchViews()[pitchIndex]);
-    if (pitchIndex === 0) this.isSelectClicked.set(true);
-    this.scrollToElement(this.pitchStore.pitchIdSelected());
+    console.log(this.authorStore.authorViews()[0].name, ' : ', this.selectedAuthor().name);
+    const isFirstAuthor = this.authorStore.authorViews()[0].name === this.selectedAuthor().name;
+    if (!isFirstAuthor) {
+      const pitchIndex = this.pitchViews().findIndex(pv => pv.name === this.pitchStore.pitchViewSelected().name);
+      this.selectPitch(this.pitchViews()[pitchIndex]);
+      if (pitchIndex === 0) this.topPitchSelected.set(true);
+      this.scrollToElement(this.pitchStore.pitchIdSelected());
+    } else {
+      console.log('returnToPitch: ', this.selectedAuthor().name);
+    }
+  }
+  returnToPitch2() {
+    const isFirstAuthor = this.authorStore.authorViews()[0].name === this.selectedAuthor().name;
+    if (isFirstAuthor) {
+      const pitchIndex = this.pitchViews().findIndex(pv => pv.name === this.pitchStore.pitchViewSelected().name);
+      this.selectPitch(this.pitchViews()[pitchIndex]);
+      if (pitchIndex === 0) this.topPitchSelected.set(true);
+      this.scrollToElement(this.pitchStore.pitchIdSelected());
+    } else {
+      console.log('returnToPitch: ', this.selectedAuthor().name);
+    }
   }
 
   onAuthorChange(authorName: string): void {
@@ -68,14 +88,14 @@ export class HomeMenuComponent {
   }
 
   selectPitch(pitchView: PitchView) {
-    this.isSelectClicked.set(false);
+    this.topPitchSelected.set(false);
     this.selectedPitch.set(pitchView);
     this.pitchStore.setPitchSelected(pitchView.id);
   }
 
-  onSelectClick(): void {
+  onSelectTopPitchClick(): void {
     this.selectPitch(this.pitchViews()[0]);
-    this.isSelectClicked.set(true);
+    this.topPitchSelected.set(true);
   }
 
   scrollToElement(targetPitch: number) {
@@ -95,7 +115,7 @@ export class HomeMenuComponent {
     newIndex = newIndex >= itemCount ? 0 : newIndex < 0 ? itemCount - 1 : newIndex;
 
     this.selectPitch(this.pitchViews()[newIndex]);
-    if (newIndex === 0) this.isSelectClicked.set(true);
+    if (newIndex === 0) this.topPitchSelected.set(true);
     this.scrollToElement(this.selectedPitch().id);
   }
 }

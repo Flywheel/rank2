@@ -2,6 +2,7 @@ import { Component, computed, inject, output } from '@angular/core';
 import { PitchStore } from '../../pitch/pitch.store';
 import { PitchView, SlateMemberView } from '../../../core/models/interfaces';
 import { HomeSlateMemberComponent } from '../home-slate-member/home-slate-member.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'mh5-home-pitch',
@@ -12,6 +13,7 @@ import { HomeSlateMemberComponent } from '../home-slate-member/home-slate-member
 })
 export class HomePitchComponent {
   pitchStore = inject(PitchStore);
+  router = inject(Router);
   pitchViewSelected = computed<PitchView>(() => this.pitchStore.pitchViewSelected());
   hidePlacementViewer = output<boolean>();
   placementToDisplay = output<SlateMemberView>();
@@ -21,9 +23,9 @@ export class HomePitchComponent {
     this.placementToDisplay.emit(placement);
   }
   gotoBallot() {
-    // if (this.pitchId()) {
-    //   this.router.navigate(['/ballot', this.pitchId()]);
-    // }
+    if (this.pitchViewSelected().id > 0) {
+      this.router.navigate(['/ballot', this.pitchViewSelected().id]);
+    }
   }
 
   gotoComments() {

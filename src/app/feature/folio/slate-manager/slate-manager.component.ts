@@ -68,9 +68,6 @@ export class SlateManagerComponent implements OnInit {
   ngOnInit(): void {
     this.setAvailableCandidates();
   }
-  cancel() {
-    this.closeEditor.emit(false);
-  }
 
   setAvailableCandidates() {
     this.slateMembersAdded.set(this.pitchStore.pitchViewSelected().slateView.slateMemberViews);

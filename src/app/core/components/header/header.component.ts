@@ -28,7 +28,4 @@ export class HeaderComponent {
   goBack() {
     this.location.back();
   }
-  closePlacementDisplay() {
-    this.hidePlacementDisplay.emit(true);
-  }
 }
