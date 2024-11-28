@@ -29,6 +29,10 @@ export class BallotBodyComponent {
   hidePlacementDisplay = output<boolean>();
   placementToDisplay = output<SlateMemberView>();
 
+  // isCookieStatusAccepted = computed<boolean>(() => this.authorStore.cookieStatus() === 'accepted');
+  // showCookieConsentComponent = signal(false);
+  // showBallotCaster = signal(false);
+
   constructor() {
     effect(() => {
       this.pitchViewSelected();
@@ -127,6 +131,17 @@ export class BallotBodyComponent {
       this.candidatesRanked.set(updatedCandidates);
       this.updateCurrentSlateSignal();
     }
+  }
+
+  PrepareToPostBallot() {
+    // console.log(this.isCookieStatusAccepted());
+    // if (this.isCookieStatusAccepted()) {
+    //   //   console.log(this.ballotStore.currentSlate());
+    //   this.showCookieConsentComponent.set(false);
+    //   this.showBallotCaster.set(true);
+    // } else {
+    //   this.showCookieConsentComponent.set(true);
+    // }
   }
 
   // moveUpOnePosition(candidate: SlateMemberView) {

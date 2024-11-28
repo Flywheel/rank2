@@ -1,3 +1,17 @@
+<div class="profileControl">
+  @if (candidatesRanked().length === 0) {
+    <span class="topicTitle">Poll: {{ pitchViewSelected().name }}</span>
+    <button class="readyButton">Ready to rank</button>
+  } @else {
+    <span class="topicTitleTiny">
+      <a class="topicTitleTinyHighlight">{{ pitchViewSelected().name }}</a
+      ><br />
+      Drag ⋮⋮⋮ to reorder. Click name for info.
+    </span>
+    <button class="profileButtonBright" (click)="PrepareToPostBallot()">Ready to post</button>
+  }
+</div>
+
 <div class="candidate-container">
   <div
     cdkDropList

@@ -250,3 +250,83 @@ $spacing-large: 1.25rem; // 20px
 .cdk-drag-animating {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
+
+// $content-text: #EEA;
+// $unranked-content-text: #EEA;
+// $content-visited-text: #AA0;
+// $recommended-topic-background: #2c2c2c;
+$text-color: #eea;
+// $border-color: #aaa;
+// $topic-background-color: #3e3e3e;
+// $button-background-color: #804745;
+// $index-background-color: #222;
+$index-text-color: #eea;
+
+// .subtitle {
+//     font-size: 14px;
+//     color: #aaa;
+//     margin-bottom: 5px;
+// }
+
+.profileControl {
+  display: flex;
+  justify-content: space-between;
+  border-radius: 2px;
+  margin-bottom: 5px;
+  border: 1px solid #000;
+  border-bottom: 2px solid #88a;
+  height: 40px;
+  padding-bottom: 5px;
+}
+
+.profileText {
+  color: $index-text-color;
+  padding: 4px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 3px 5px;
+  border-radius: 5px;
+}
+
+.profileButton {
+  background-color: #884;
+  color: #225;
+  border: 1px solid gray;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 25px;
+  width: 38.2%;
+  height: 35px;
+}
+
+.profileButtonBright {
+  @extend .profileButton;
+  background-color: $text-color;
+  color: #225;
+  font-size: 18px;
+}
+
+.readyButton {
+  @extend .profileButtonBright;
+  background-color: #225;
+  color: $text-color;
+}
+.readyButton:hover,
+.readyButton:focus {
+  background-color: yellow;
+}
+
+.profileButtonBright:disabled {
+  background-color: #112;
+  color: gray;
+}
+
+.profileButton:hover {
+  color: darkblue;
+  text-decoration: underline;
+}
