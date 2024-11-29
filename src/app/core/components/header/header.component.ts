@@ -17,6 +17,7 @@ import { IconMhComponent } from '../../svg/icon-mh';
 export class HeaderComponent {
   router = inject(Router);
   callerPage = input.required<string>();
+  caption = input<string>('Pitch');
   location = inject(Location);
 
   hidePlacementDisplay = output<boolean>();

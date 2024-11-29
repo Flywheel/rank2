@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authDashboardAdminGuard } from './core/guards/authorDashbordAdminGuard';
 import { BallotComponent } from './feature/ballot/ballot/ballot.component';
+import { PitchShellComponent } from './feature/pitch/pitch-shell/pitch-shell.component';
 
 const DEFAULT_ROUTE = 'home';
 
@@ -11,6 +12,7 @@ export const routes: Routes = [
   },
   { path: 'contest', redirectTo: 'contests' },
   { path: 'ballot/:id', component: BallotComponent },
+  { path: 'pitch/:id', component: PitchShellComponent },
 
   { path: 'folio', loadComponent: () => import('./feature/folio/folio-shell/folio-shell.component').then(m => m.FolioShellComponent) },
   { path: 'home', loadComponent: () => import('./feature/home/home-shell/home-shell.component').then(m => m.HomeShellComponent) },

@@ -1,26 +1,25 @@
 import { Component, computed, inject } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 
-import { AuthorStore } from '../../author/author.store';
-import { FolioStore } from '../../folio/folio.store';
-import { PitchStore } from '../pitch.store';
-
-import { PitchService } from '../pitch.service';
-import { HydrationService } from '../../../core/services/hydration.service';
-import { BallotStore } from '../../ballot/ballot.store';
-import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
+import { AUTHOR_DEFAULT_NAME } from '../../models/constants';
 import { theData } from '../../../../mocks/mockdataForHydration';
-import { DataImporter } from '../../../core/models/interfaces';
-import { StartupService } from '../../../core/services/startup.service';
+import { DataImporter } from '../../models/interfaces';
+import { StartupService } from '../../services/startup.service';
+import { AuthorStore } from '../../../feature/author/author.store';
+import { BallotStore } from '../../../feature/ballot/ballot.store';
+import { FolioStore } from '../../../feature/folio/folio.store';
+import { PitchService } from '../../../feature/pitch/pitch.service';
+import { PitchStore } from '../../../feature/pitch/pitch.store';
+import { HydrationService } from '../../services/hydration.service';
 
 @Component({
-  selector: 'mh5-direct',
+  selector: 'mh5-backdoor',
   standalone: true,
   imports: [],
-  templateUrl: './direct.component.html',
-  styleUrl: './direct.component.scss',
+  templateUrl: './backdoor.component.html',
+  styleUrl: './backdoor.component.scss',
 })
-export class DirectComponent {
+export class BackdoorComponent {
   authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
   pitchStore = inject(PitchStore);

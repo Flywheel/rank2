@@ -6,7 +6,7 @@ import { AuthorStore } from '../../author/author.store';
 import { AssetType, AuthorView, TabList } from '../../../core/models/interfaces';
 import { IconPlusComponent } from '../../../core/svg/icon-plus';
 import { ChannelAssetsComponent } from '../asset-manager/asset-manager.component';
-import { DirectComponent } from '../../pitch/direct/direct.component';
+import { BackdoorComponent } from '../../../core/components/backdoor/backdoor.component';
 import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
 import { Router } from '@angular/router';
 @Component({
@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
     FolioPlacementNewComponent,
     IconPlusComponent,
     ChannelAssetsComponent,
-    DirectComponent,
+    BackdoorComponent,
   ],
   templateUrl: './folio-shell.component.html',
   styleUrl: './folio-shell.component.scss',

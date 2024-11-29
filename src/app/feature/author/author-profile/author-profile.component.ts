@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
 import { Author, Folio, Pitch } from '../../../core/models/interfaces';
 import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
 import { FolioStore } from '../../folio/folio.store';
-import { DirectComponent } from '../../pitch/direct/direct.component';
+import { BackdoorComponent } from '../../../core/components/backdoor/backdoor.component';
 import { PitchStore } from '../../pitch/pitch.store';
 import { BallotStore } from '../../ballot/ballot.store';
 import { pitchInit } from '../../../core/models/initValues';
@@ -16,7 +16,7 @@ import { pitchInit } from '../../../core/models/initValues';
 @Component({
   selector: 'mh5-author-profile',
   standalone: true,
-  imports: [RouterLink, FormsModule, AuthorConsentComponent, DirectComponent],
+  imports: [RouterLink, FormsModule, AuthorConsentComponent, BackdoorComponent],
   templateUrl: './author-profile.component.html',
   styleUrl: './author-profile.component.scss',
 })

@@ -1,0 +1,14 @@
+<p>ballot-menu works!</p>
+<div class="horizontal-scroll">
+  <select class="content-type-dropdown" [ngModel]="selectedAuthorName()" (ngModelChange)="selectedAuthorName.set($event)">
+    @for (author of authorList(); track $index) {
+      <option [value]="author.name">{{ author.name }}</option>
+    }
+  </select>
+
+  @for (pitch of pitchViews(); track $index) {
+    <div class="menu-item" (click)="selectPitch(pitch.id)" (keydown)="selectPitch(pitch.id)" tabindex="$index">
+      {{ pitch.name }}
+    </div>
+  }
+</div>

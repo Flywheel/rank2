@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DirectComponent } from './direct.component';
+import { BackdoorComponent } from './backdoor.component';
 
-describe('DirectComponent', () => {
-  let component: DirectComponent;
-  let fixture: ComponentFixture<DirectComponent>;
+describe('BackdoorComponent', () => {
+  let component: BackdoorComponent;
+  let fixture: ComponentFixture<BackdoorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DirectComponent]
+      imports: [BackdoorComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DirectComponent);
+    fixture = TestBed.createComponent(BackdoorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

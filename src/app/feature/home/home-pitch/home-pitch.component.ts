@@ -18,9 +18,15 @@ export class HomePitchComponent {
   hidePlacementViewer = output<boolean>();
   placementToDisplay = output<SlateMemberView>();
 
-  viewPlacement(placement: SlateMemberView) {
-    this.hidePlacementViewer.emit(false);
-    this.placementToDisplay.emit(placement);
+  viewPlacement(slateMember: SlateMemberView) {
+    console.log(slateMember.placementView.assetView.mediaType);
+    if (slateMember.placementView.assetView.mediaType !== 'folio') {
+      this.hidePlacementViewer.emit(false);
+      this.placementToDisplay.emit(slateMember);
+    } else {
+      console.log(slateMember);
+      this.router.navigate(['/pitch', slateMember.placementView.assetView.sourceId]);
+    }
   }
   gotoBallot() {
     if (this.pitchViewSelected().id > 0) {

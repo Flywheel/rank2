@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { AuthorView, PitchView } from '../../../core/models/interfaces';
-import { PitchStore } from '../pitch.store';
+import { PitchStore } from '../../pitch/pitch.store';
 import { AuthorStore } from '../../author/author.store';
 import { pitchViewInit } from '../../../core/models/initValues';
 import { FormsModule } from '@angular/forms';
