@@ -6,15 +6,26 @@ import { AuthorStore } from '../../author/author.store';
 import { pitchViewInit, placementViewInit } from '../../../core/models/initValues';
 import { ViewerComponent } from '../../../core/components/viewer/viewer.component';
 import { SlateManagerComponent } from '../slate-manager/slate-manager.component';
+import { IconPitchComponent } from '../../../core/svg/icon-pitch';
+import { IconYoutubeComponent } from '../../../core/svg/icon-youtube';
+import { IconTiktokComponent } from '../../../core/svg/icon-tiktok';
+import { IconYouTubeShortsComponent } from '../../../core/svg/icon-youtube-shorts';
 
 @Component({
   selector: 'mh5-asset-manager',
   standalone: true,
-  imports: [ViewerComponent, SlateManagerComponent],
+  imports: [
+    ViewerComponent,
+    SlateManagerComponent,
+    IconPitchComponent,
+    IconYoutubeComponent,
+    IconTiktokComponent,
+    IconYouTubeShortsComponent,
+  ],
   templateUrl: './asset-manager.component.html',
   styleUrl: './asset-manager.component.scss',
 })
-export class ChannelAssetsComponent {
+export class AssetManagerComponent {
   authorStore = inject(AuthorStore);
   folioStore = inject(FolioStore);
   pitchStore = inject(PitchStore);

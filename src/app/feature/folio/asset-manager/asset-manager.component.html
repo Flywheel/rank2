@@ -19,12 +19,27 @@
       <div class="placement-list">
         @for (item of placementsOnSelectedFolio(); track $index) {
           <div class="placement-list-item" (click)="displayPlacementAsset(item)" (keydown)="displayPlacementAsset(item)" tabindex="0">
-            {{ item.assetView.mediaType === 'folio' ? '- ' : '' }} {{ item.caption }}
+            @switch (item.assetView.mediaType) {
+              @case ('youtube') {
+                <mh5-icon-youtube />
+              }
+              @case ('ytshort') {
+                <mh5-icon-youtube-shorts />
+              }
+              @case ('tiktok') {
+                <mh5-icon-tiktok />
+              }
+              @case ('pitch') {
+                <mh5-icon-pitch />
+              }
+              @case ('folio') {
+                <mh5-icon-pitch />
+              }
+            }
+            {{ item.caption }}
           </div>
         }
       </div>
-      <!-- } @else { -->
-      <div class="pitch-column"></div>
     }
   </div>
 

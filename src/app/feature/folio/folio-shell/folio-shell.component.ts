@@ -5,7 +5,7 @@ import { FolioPlacementNewComponent } from '../folio-placement-new/folio-placeme
 import { AuthorStore } from '../../author/author.store';
 import { AssetType, AuthorView, TabList } from '../../../core/models/interfaces';
 import { IconPlusComponent } from '../../../core/svg/icon-plus';
-import { ChannelAssetsComponent } from '../asset-manager/asset-manager.component';
+import { AssetManagerComponent } from '../asset-manager/asset-manager.component';
 import { BackdoorComponent } from '../../../core/components/backdoor/backdoor.component';
 import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
 import { Router } from '@angular/router';
@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
     FolioScrollHorizontalComponent,
     FolioPlacementNewComponent,
     IconPlusComponent,
-    ChannelAssetsComponent,
+    AssetManagerComponent,
     BackdoorComponent,
   ],
   templateUrl: './folio-shell.component.html',
