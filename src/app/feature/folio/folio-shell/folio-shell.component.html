@@ -2,7 +2,7 @@
 
 <mh5-folio-scroll-horizontal [theFoliosInput]="theFolios()" [knownAuthors]="knownAuthors()" />
 <div class="tabs streamHeader">
-  @for (tab of tabs; track $index) {
+  @for (tab of tabs(); track $index) {
     <button (click)="selectedTab = tab" class="streamButton" [class.selected]="selectedTab === tab">
       {{ tab.title }}
     </button>
@@ -56,13 +56,17 @@
           </div>
         }
         <div>
-          <mh5-asset-manager [folioList]="authorStore.authorSelectedFolioViews()" [tabSelected]="selectedTab.name" />
+          <mh5-asset-manager
+            [folioList]="authorStore.authorSelectedFolioViews()"
+            [tabSelected]="selectedTab.name"
+            (tabWanted)="tabWanted($event)" />
         </div>
       }
 
       @case ('Pitches') {
         <div>
-          <mh5-asset-manager [folioList]="authorStore.authorSelectedFolioViews()" [tabSelected]="selectedTab.name" />
+          <mh5-pitch-manager />
+          <!-- <mh5-asset-manager [folioList]="authorStore.authorSelectedFolioViews()" [tabSelected]="selectedTab.name" /> -->
         </div>
       }
       @case ('Slates') {

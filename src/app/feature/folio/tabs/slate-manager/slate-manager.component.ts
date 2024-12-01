@@ -1,8 +1,8 @@
-import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
-import { AuthorStore } from '../../author/author.store';
-import { PitchStore } from '../../pitch/pitch.store';
-import { FolioStore } from '../folio.store';
-import { PlacementView, SlateMemberView } from '../../../core/models/interfaces';
+import { Component, computed, effect, inject, input, output, signal, untracked } from '@angular/core';
+import { AuthorStore } from '../../../author/author.store';
+import { PitchStore } from '../../../pitch/pitch.store';
+import { FolioStore } from '../../folio.store';
+import { PitchView, PlacementView, SlateMemberView } from '../../../../core/models/interfaces';
 import {
   CdkDrag,
   CdkDropList,
@@ -29,11 +29,13 @@ import { RouterLink } from '@angular/router';
   templateUrl: './slate-manager.component.html',
   styleUrl: './slate-manager.component.scss',
 })
-export class SlateManagerComponent implements OnInit {
+export class SlateManagerComponent {
   authorStore = inject(AuthorStore);
   pitchStore = inject(PitchStore);
   folioStore = inject(FolioStore);
   author = this.authorStore.authorLoggedIn();
+
+  pitchViewSelected = computed<PitchView>(() => this.pitchStore.pitchViewSelected());
 
   folioMembers = input.required<PlacementView[]>();
 
@@ -65,9 +67,12 @@ export class SlateManagerComponent implements OnInit {
   slateMembersAvailable = signal<SlateMemberView[]>([]);
   slateMembersAdded = signal<SlateMemberView[]>([]);
 
-  ngOnInit(): void {
-    this.setAvailableCandidates();
-  }
+  reset = effect(() => {
+    this.pitchViewSelected();
+    untracked(() => {
+      this.setAvailableCandidates();
+    });
+  });
 
   setAvailableCandidates() {
     this.slateMembersAdded.set(this.pitchStore.pitchViewSelected().slateView.slateMemberViews);
@@ -90,7 +95,6 @@ export class SlateManagerComponent implements OnInit {
     console.log(slateMemberView);
     this.slateMembersAdded.set([...this.slateMembersAdded(), slateMemberView]);
     this.slateMembersAvailable.set(this.slateMembersAvailable().filter(t => t.placementId !== virtualSlateMemberView.placementId));
-    // }
   }
 
   drop(event: CdkDragDrop<SlateMemberView[]>): void {

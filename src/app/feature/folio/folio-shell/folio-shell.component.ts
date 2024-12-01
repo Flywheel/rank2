@@ -5,10 +5,11 @@ import { FolioPlacementNewComponent } from '../folio-placement-new/folio-placeme
 import { AuthorStore } from '../../author/author.store';
 import { AssetType, AuthorView, TabList } from '../../../core/models/interfaces';
 import { IconPlusComponent } from '../../../core/svg/icon-plus';
-import { AssetManagerComponent } from '../asset-manager/asset-manager.component';
+import { AssetManagerComponent } from '../tabs/asset-manager/asset-manager.component';
 import { BackdoorComponent } from '../../../core/components/backdoor/backdoor.component';
 import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
 import { Router } from '@angular/router';
+import { PitchManagerComponent } from '../tabs/pitch-manager/pitch-manager.component';
 @Component({
   selector: 'mh5-folio-shell',
   standalone: true,
@@ -19,6 +20,7 @@ import { Router } from '@angular/router';
     IconPlusComponent,
     AssetManagerComponent,
     BackdoorComponent,
+    PitchManagerComponent,
   ],
   templateUrl: './folio-shell.component.html',
   styleUrl: './folio-shell.component.scss',
@@ -31,12 +33,12 @@ export class FolioShellComponent {
   knownAuthors = computed<AuthorView[]>(() => this.authorStore.authorViews());
   needsAuthorName = computed<boolean>(() => this.authorStore.authorLoggedIn().name === AUTHOR_DEFAULT_NAME);
 
-  tabs: TabList[] = [
+  tabs = signal<TabList[]>([
     { name: 'Assets', title: 'Assets' },
     { name: 'Pitches', title: 'Pitches' },
     { name: 'Slates', title: 'Slates' },
-  ];
-  selectedTab = this.tabs[0];
+  ]);
+  selectedTab = this.tabs()[0];
 
   showViewer = false;
   theFolios = this.authorStore.authorSelectedFolioViews;
@@ -48,6 +50,9 @@ export class FolioShellComponent {
     this.router.navigate([page]);
   }
 
+  tabWanted(tab: string) {
+    this.selectedTab = this.tabs().find(t => t.name === tab) ?? this.tabs()[0];
+  }
   openNewFolio() {
     this.assetTypeSelected.set(AssetType.Folio);
     this.showModalDialog.set(true);

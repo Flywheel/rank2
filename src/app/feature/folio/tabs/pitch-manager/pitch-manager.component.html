@@ -1,0 +1,10 @@
+<div class="">Folio: {{ folioStore.folioViewSelected().folioName }}</div>
+<div class="">
+  <select [ngModel]="selectedPitch()" (ngModelChange)="selectPitch($event)">
+    @for (item of folioPitches(); track $index) {
+      <option [ngValue]="item">{{ item.caption }}</option>
+    }
+  </select>
+</div>
+
+<mh5-slate-manager [folioMembers]="folioStore.folioViewSelected().placementViews"></mh5-slate-manager>
