@@ -42,7 +42,31 @@ export class PitchService {
     );
   }
 
-  pitchTitleUpdat(pitchId: number, pitch: Pitch): Observable<Pitch> {
+  pitchCreateWithPlacement(pitchPrep: Partial<Pitch>): Observable<{ newPitch: Pitch; newSlate: Slate }> {
+    // if (environment.ianConfig.showLogs) console.log(pitchPrep);
+    return this.http.post<Pitch>(this.pitchAPIUrl, pitchPrep).pipe(
+      exhaustMap((newPitch: Pitch) => {
+        const slatePrep: Partial<Slate> = {
+          pitchId: newPitch.id,
+          authorId: pitchPrep.authorId!,
+          isTopSlate: true,
+        };
+        // if (environment.ianConfig.showLogs) console.log(newPitch);
+        return this.http.post<Slate>(this.slateAPIUrl, slatePrep).pipe(
+          map(newSlate => {
+            // if (environment.ianConfig.showLogs) console.log(newSlate);
+            return { newPitch, newSlate };
+          })
+        );
+      }),
+      catchError(error => {
+        if (environment.ianConfig.showLogs) console.log('error', error);
+        return throwError(() => new Error('Pitch Create failed'));
+      })
+    );
+  }
+
+  pitchTitleUpdate(pitchId: number, pitch: Pitch): Observable<Pitch> {
     const endPoint = `${this.pitchAPIUrl}/${pitchId}`;
     return this.http.put<Pitch>(endPoint, pitch).pipe(
       tap(data => {

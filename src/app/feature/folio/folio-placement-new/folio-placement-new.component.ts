@@ -74,7 +74,7 @@ export class FolioPlacementNewComponent {
     });
   }
 
-  onSubmit() {
+  async onSubmit() {
     const parentFolioId = this.folioStore.folioViewSelected().id;
     const authorId = this.authorStore.authorLoggedIn().id;
     if (environment.ianConfig.showLogs) console.log(this.assetType());
@@ -109,14 +109,14 @@ export class FolioPlacementNewComponent {
               sourceId: this.assetViewPrepared().sourceId,
               authorId: this.authorStore.authorLoggedIn().id,
             };
-            this.folioStore.assetCreateWithPlacement(media, this.formGroup.value.caption);
-          } else this.folioStore.placementCreate(newPlacement);
+            this.folioStore.createPlacementWithAsset(media, this.formGroup.value.caption);
+          } else this.folioStore.createPlacement(newPlacement);
           this.folioStore.togglePlacementAdder(false);
         }
         break;
       case AssetType.Pitch:
         if (this.formGroup.valid) {
-          const pitchPrep = {
+          const pitchPrepInit = {
             authorId,
             folioId: parentFolioId,
             name: this.formGroup.value.caption,
@@ -124,8 +124,19 @@ export class FolioPlacementNewComponent {
             opens: this.formGroup.value.opens,
             closes: this.formGroup.value.closes,
           };
-          const newPitch = pitchPrep as unknown as Pitch;
-          this.pitchStore.pitchCreate(newPitch);
+          const pitchPrep = pitchPrepInit as unknown as Pitch;
+          const { newPitch } = await this.pitchStore.createPitchAndSlate(pitchPrep);
+
+          //this.pitchStore.createPitch(pitchPrep2);
+
+          const assetPrep: Asset = {
+            id: 0,
+            mediaType: 'pitchlink',
+            sourceId: newPitch.id.toLocaleString(),
+            authorId: this.authorStore.authorLoggedIn().id,
+          };
+          this.folioStore.createPlacementWithAsset2(parentFolioId, this.formGroup.value.caption, assetPrep);
+          this.folioStore.togglePlacementAdder(false);
         }
         break;
     }

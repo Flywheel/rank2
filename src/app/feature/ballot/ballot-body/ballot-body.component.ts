@@ -81,25 +81,6 @@ export class BallotBodyComponent {
     return allCandidates.filter(candidate => !rankedIds.has(candidate.placementId));
   }
 
-  setAvailableCandidates2() {
-    console.log('setAvailableCandidates Start');
-    this.candidatesAvailable.set(this.candidateList());
-    const ranksInStore = this.ballotStore.slateInProgress()?.slateMemberViews;
-    if (ranksInStore) {
-      this.candidatesRanked.set(
-        ranksInStore.reduce((acc: SlateMemberView[], member: SlateMemberView) => {
-          const candidate = this.candidateList().find((candidate: SlateMemberView) => candidate.placementId === member.placementId);
-          return candidate ? [...acc, candidate] : acc;
-        }, [])
-      );
-      const rankedCandidatesIds = new Set(this.candidatesRanked().map(candidate => candidate.placementId));
-      console.log(rankedCandidatesIds);
-      this.candidatesAvailable.set(this.candidatesAvailable().filter(candidate => !rankedCandidatesIds.has(candidate.placementId)));
-      //  }
-      this.updateCurrentSlateSignal();
-    }
-  }
-
   swapItems<T>(array: T[], index1: number, index2: number): T[] {
     const newArray = [...array];
     [newArray[index1], newArray[index2]] = [newArray[index2], newArray[index1]];
@@ -143,35 +124,6 @@ export class BallotBodyComponent {
     //   this.showCookieConsentComponent.set(true);
     // }
   }
-
-  // moveUpOnePosition(candidate: SlateMemberView) {
-  //   const index = this.candidatesRanked().findIndex(t => t.placementView.caption === candidate.placementView.caption);
-  //   if (index === 0) return;
-  //   const temp = this.candidatesRanked()[index];
-  //   this.candidatesRanked.set([
-  //     ...this.candidatesRanked().slice(0, index - 1),
-  //     temp,
-  //     this.candidatesRanked()[index - 1],
-  //     ...this.candidatesRanked().slice(index + 1),
-  //   ]);
-  //   this.updateCurrentSlateSignal();
-  // }
-
-  // moveDownOnePosition2(candidate: SlateMemberView) {
-  //   const index = this.candidatesRanked().findIndex(t => t.placementView.caption === candidate.placementView.caption);
-  //   if (index === this.candidatesRanked().length - 1) this.moveToAvailable(candidate);
-
-  //   if (index < this.candidatesRanked().length - 1) {
-  //     const temp = this.candidatesRanked()[index];
-  //     this.candidatesRanked.set([
-  //       ...this.candidatesRanked().slice(0, index),
-  //       this.candidatesRanked()[index + 1],
-  //       temp,
-  //       ...this.candidatesRanked().slice(index + 2),
-  //     ]);
-  //     this.updateCurrentSlateSignal();
-  //   }
-  // }
 
   moveToAvailable(candidate: SlateMemberView) {
     this.candidatesRanked.set(this.candidatesRanked().filter(t => t.placementView.caption !== candidate.placementView.caption));

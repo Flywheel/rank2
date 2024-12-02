@@ -152,7 +152,7 @@ export const FolioStore = signalStore(
 
       //#region Placement
 
-      async placementCreate(placement: Placement) {
+      async createPlacement(placement: Placement) {
         updateState(store, '[Placement] Create Start', { isLoading: true });
         dbFolio
           .placementCreate(placement)
@@ -202,7 +202,7 @@ export const FolioStore = signalStore(
           .subscribe();
       },
 
-      async assetCreateWithPlacement(assetData: Asset, caption: string) {
+      async createPlacementWithAsset(assetData: Asset, caption: string) {
         updateState(store, '[Asset-Media] Create Start', { isLoading: true });
         dbFolio
           .assetCreateWithPlacement(assetData, store.folioViewSelected().id, caption)
@@ -214,6 +214,30 @@ export const FolioStore = signalStore(
               updateState(store, '[Asset-Media] Asset Create Success', {
                 assets: [...store.assets(), newAsset],
               });
+              store.writeToStorage();
+            }),
+            catchError(error => {
+              console.error('FolioStore creation failed', error);
+              updateState(store, '[Asset-Media] Create Failed', { isLoading: false });
+              return throwError(error);
+            })
+          )
+          .subscribe();
+      },
+
+      async createPlacementWithAsset2(folioId: number, caption: string, assetPrep: Asset) {
+        updateState(store, '[Asset-Media] Create Start', { isLoading: true });
+        dbFolio
+          .assetCreateWithPlacement(assetPrep, folioId, caption)
+          .pipe(
+            map(({ newAsset, newPlacement }) => {
+              updateState(store, '[Asset-Media] Placement Create Success', {
+                placements: [...store.placements(), newPlacement],
+              });
+              updateState(store, '[Asset-Media] Asset Create Success', {
+                assets: [...store.assets(), newAsset],
+              });
+              console.log(newPlacement, newAsset);
               store.writeToStorage();
             }),
             catchError(error => {

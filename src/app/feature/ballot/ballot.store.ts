@@ -20,18 +20,16 @@ export const BallotStore = signalStore(
     return {
       setCurrentSlateByPitchId(pitchId: number) {
         const currentSlate: SlateView = store.slatesAuthored().find(slates => slates.pitchId == pitchId) ?? slateViewInit;
-        updateState(store, `[Ballot] CurrentSlate Set Success, ${pitchId}`, { slateInProgress: currentSlate });
+        updateState(store, `[Slate] CurrentSlate Set Success, ${pitchId}`, { slateInProgress: currentSlate });
       },
 
       async updateSlate(slate: SlateView) {
         updateState(store, `[Slate] Update Start`, { isLoading: true });
         let updatedAuthorSlates = store.slatesAuthored();
         const slateExists = updatedAuthorSlates.some(b => b.pitchId === slate.pitchId);
-        if (slateExists) {
-          updatedAuthorSlates = updatedAuthorSlates.map(b => (b.pitchId === slate.pitchId ? slate : b));
-        } else {
-          updatedAuthorSlates = [...updatedAuthorSlates, slate];
-        }
+        updatedAuthorSlates = slateExists
+          ? updatedAuthorSlates.map(b => (b.pitchId === slate.pitchId ? slate : b))
+          : [...updatedAuthorSlates, slate];
         updateState(store, `[Slate] Update Success`, {
           slatesAuthored: updatedAuthorSlates.filter(s => s.pitchId !== 0),
           slateInProgress: slate,

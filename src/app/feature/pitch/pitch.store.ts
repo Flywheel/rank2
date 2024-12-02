@@ -1,10 +1,10 @@
 import { signalStore, withState, withComputed, withMethods } from '@ngrx/signals';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
-import { Pitch, PitchView, SlateMember, SlateView, SlateMemberView } from '../../core/models/interfaces';
+import { Pitch, PitchView, SlateMember, SlateView, SlateMemberView, Slate } from '../../core/models/interfaces';
 import { pitchInit, pitchViewInit, slateViewInit, slateInit, slateMemberInit, placementViewInit } from '../../core/models/initValues';
 import { PitchService } from './pitch.service';
 import { computed, inject } from '@angular/core';
-import { tap } from 'rxjs';
+import { catchError, firstValueFrom, tap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { FolioStore } from '../folio/folio.store';
 
@@ -91,12 +91,13 @@ export const PitchStore = signalStore(
   }),
   withMethods(store => {
     const dbPitch = inject(PitchService);
+    const folioStore = inject(FolioStore);
     return {
       setPitchSelected(pitchId: number) {
         updateState(store, `[Pitch] Select By Id  ${pitchId}`, { pitchIdSelected: pitchId });
       },
 
-      pitchCreate(pitch: Pitch) {
+      createPitch(pitch: Pitch) {
         updateState(store, '[Pitch] Add Start', { isLoading: true });
         dbPitch
           .pitchCreate(pitch)
@@ -117,6 +118,32 @@ export const PitchStore = signalStore(
             })
           )
           .subscribe();
+      },
+
+      async createPitchAndSlate(pitchPrep: Partial<Pitch>): Promise<{ newPitch: Pitch; newSlate: Slate }> {
+        console.log('createPitchAndSlate', pitchPrep);
+        updateState(store, '[Pitch] Create Start', { isLoading: true });
+        const { newPitch, newSlate } = await firstValueFrom(
+          dbPitch.pitchCreate(pitchPrep).pipe(
+            catchError(error => {
+              console.error('Pitch creation failed', error);
+              updateState(store, '[Pitch] Create Failed', { isLoading: false });
+              return throwError(error);
+            })
+          )
+        );
+        updateState(store, '[Pitch] Add Success', {
+          pitches: [...store.pitches(), newPitch],
+          isLoading: false,
+        });
+        updateState(store, '[Slate] Add Success', {
+          slates: [...store.slates(), newSlate],
+          isLoading: false,
+        });
+
+        store.writeToStorage();
+
+        return { newPitch, newSlate };
       },
 
       addSlateMembers(slateMembers: SlateMember[]) {

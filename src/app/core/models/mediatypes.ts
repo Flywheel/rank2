@@ -1,5 +1,5 @@
-export type MediaType = 'youtube' | 'ytshort' | 'tiktok' | 'instagram' | 'twitter' | 'textinput'; // Add other platforms as needed
-export type MediaPlatform = YouTube | YouTubeShort | Tiktok | Instagram | Twitter | TextInput; // Add other platform interfaces as needed
+export type MediaType = 'youtube' | 'ytshort' | 'tiktok' | 'instagram' | 'twitter' | 'textinput' | 'pitchlink'; // Add other platforms as needed
+export type MediaPlatform = YouTube | YouTubeShort | Tiktok | Instagram | Twitter | TextInput | PitchLink; // Add other platform interfaces as needed
 
 interface YouTube {
   mediaType: 'youtube';
@@ -31,6 +31,10 @@ interface TextInput {
   mediaType: 'textinput';
   user: string;
   theInput: string;
+}
+interface PitchLink {
+  mediaType: 'pitchlink';
+  id: string;
 }
 
 export interface ContentTransform {

@@ -2,7 +2,6 @@ import { inject, Injectable } from '@angular/core';
 import { AuthorStore } from '../../feature/author/author.store';
 import { FolioStore } from '../../feature/folio/folio.store';
 import { PitchStore } from '../../feature/pitch/pitch.store';
-//import { theData } from '../../../mocks/mockdataForHydration';
 import { Asset, AssetImporter, DataImporter, Folio, FolioImporter, Pitch, PitchView, Placement, SlateMember } from '../models/interfaces';
 import { environment } from '../../../environments/environment';
 
@@ -15,24 +14,6 @@ export class HydrationService {
   private pitchStore = inject(PitchStore);
   authorLoggedIn = this.authorStore.authorLoggedIn;
 
-  updateFromStorage(): void {
-    this.authorStore.readFromStorage(); // reads the stored item from storage and patches the state
-    this.folioStore.readFromStorage();
-    this.pitchStore.readFromStorage();
-  }
-
-  updateStorage(): void {
-    this.authorStore.writeToStorage(); // writes the current state to storage
-    this.folioStore.writeToStorage();
-    this.pitchStore.writeToStorage();
-  }
-
-  clearStorage(): void {
-    this.authorStore.clearStorage(); // clears the stored item in storage
-    this.folioStore.clearStorage();
-    this.pitchStore.clearStorage();
-  }
-
   slateMembersCastFromFolio(placements: Placement[], pitch: PitchView): SlateMember[] {
     return placements.map(({ id }, index) => ({
       id: 0,
@@ -43,7 +24,6 @@ export class HydrationService {
   }
 
   public async hydrateFolios(authorId: string, theData: DataImporter): Promise<void> {
-    //const authorId = this.authorLoggedIn().id;
     const theAuthor = this.authorStore.authorViews().find(f => f.id === authorId);
     if (!theAuthor) {
       console.log('Author not found');
@@ -67,10 +47,8 @@ export class HydrationService {
         parentFolioId: parentFolioId,
       };
 
-      const { newFolio, newAsset, newPlacement } = await this.folioStore.folioCreateWithParent(folioData);
-      // if (environment.ianConfig.showLogs) {
-      //   console.log(newFolio.id, ' ', newAsset.id, ' ', newPlacement.id);
-      // }
+      const { newFolio } = await this.folioStore.folioCreateWithParent(folioData);
+
       this.folioStore.setFolioSelected(newFolio.id!);
 
       const folioAssets: AssetImporter[] = assetsToImport.filter(a => a.folioName === folioData.folioName);
@@ -85,7 +63,7 @@ export class HydrationService {
               assetId: 1,
               id: 0,
             };
-            await this.folioStore.placementCreate(placementData);
+            await this.folioStore.createPlacement(placementData);
           } else {
             const assetData: Asset = {
               ...placement,
@@ -94,16 +72,16 @@ export class HydrationService {
               sourceId: placement.sourceId,
               id: 0,
             };
-            await this.folioStore.assetCreateWithPlacement(assetData, placement.caption);
+            await this.folioStore.createPlacementWithAsset(assetData, placement.caption);
           }
         }
       }
       foliosPrepared.push(this.folioStore.folioViewSelected());
     }
-    this.hydratePitches(authorId);
+    this.hydrateInitialPitches(authorId);
   }
 
-  hydratePitches(authorId: string) {
+  hydrateInitialPitches(authorId: string) {
     //  const authorId = this.authorLoggedIn.id();
     const folioViews = this.folioStore.folioViewsComputed().filter(p => p.authorId === authorId);
     folioViews.forEach(f => {
@@ -116,9 +94,28 @@ export class HydrationService {
         closes: new Date(new Date().setMonth(new Date().getMonth() + 1)),
       };
       const newPitch = pitchPrep as unknown as Pitch; // cast with no ID to create new pitch
-      this.pitchStore.pitchCreate(newPitch);
+      this.pitchStore.createPitch(newPitch);
     });
   }
+
+  //  async hydrateInitialPitches2(authorId: string): Promise<{ newPitch: Pitch; newSlate: Slate }>  {
+  //     //  const authorId = this.authorLoggedIn.id();
+  //     const folioViews = this.folioStore.folioViewsComputed().filter(p => p.authorId === authorId);
+  //     folioViews.forEach(f => {
+  //       const pitchPrep = {
+  //         name: f.folioName,
+  //         description: f.folioName,
+  //         authorId,
+  //         folioId: f.id,
+  //         opens: new Date(),
+  //         closes: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+  //       };
+  //       const pitchPrep2 = pitchPrep as unknown as Pitch; // cast with no ID to create new pitch
+  //       const { newPitch, newSlate } = await this.pitchStore.createPitchAndSlate(pitchPrep2);
+  //       console.log(newPitch, newSlate);
+  //       return {newPitch, newSlate };
+  //     });
+  //   }
 
   public async hydrateSlates(authorId: string): Promise<void> {
     const pitches = this.pitchStore.pitchViewsComputed().filter(p => p.authorId === authorId);
