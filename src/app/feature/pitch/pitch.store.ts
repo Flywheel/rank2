@@ -46,7 +46,9 @@ export const PitchStore = signalStore(
       slateViewsComputed: computed<SlateView[]>(() =>
         store.slates().map(slate => ({
           ...slate,
-          slateMemberViews: store.slateMemberViewsComputed().filter(s => s.slateId === slate.id),
+          slateMemberViews: store
+            .slateMemberViewsComputed()
+            .filter(s => s.slateId === slate.id && s.placementView.assetView.mediaType !== 'folio'),
         }))
       ),
     };
@@ -91,7 +93,6 @@ export const PitchStore = signalStore(
   }),
   withMethods(store => {
     const dbPitch = inject(PitchService);
-    const folioStore = inject(FolioStore);
     return {
       setPitchSelected(pitchId: number) {
         updateState(store, `[Pitch] Select By Id  ${pitchId}`, { pitchIdSelected: pitchId });
@@ -121,7 +122,6 @@ export const PitchStore = signalStore(
       },
 
       async createPitchAndSlate(pitchPrep: Partial<Pitch>): Promise<{ newPitch: Pitch; newSlate: Slate }> {
-        console.log('createPitchAndSlate', pitchPrep);
         updateState(store, '[Pitch] Create Start', { isLoading: true });
         const { newPitch, newSlate } = await firstValueFrom(
           dbPitch.pitchCreate(pitchPrep).pipe(
@@ -132,6 +132,7 @@ export const PitchStore = signalStore(
             })
           )
         );
+
         updateState(store, '[Pitch] Add Success', {
           pitches: [...store.pitches(), newPitch],
           isLoading: false,
@@ -142,7 +143,6 @@ export const PitchStore = signalStore(
         });
 
         store.writeToStorage();
-
         return { newPitch, newSlate };
       },
 

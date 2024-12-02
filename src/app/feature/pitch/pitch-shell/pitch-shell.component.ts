@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input } from '@angular/core';
+import { Component, computed, effect, inject, input, untracked } from '@angular/core';
 import { HeaderComponent } from '../../../core/components/header/header.component';
 import { HomePitchComponent } from '../../home/home-pitch/home-pitch.component';
 import { PitchStore } from '../pitch.store';
@@ -14,9 +14,12 @@ export class PitchShellComponent {
   pitchStore = inject(PitchStore);
   id = input<string>();
 
-  // constructor() {
-  //   this.pitchStore.setPitchSelected(parseInt(this.id() ?? '0'));
-  // }
+  loader = effect(() => {
+    const x = parseInt(this.id() ?? '0');
+    untracked(() => {
+      this.pitchStore.setPitchSelected(x);
+    });
+  });
 
   thePitchView = computed(() => this.pitchStore.pitchViewsComputed().find(p => p.id === parseInt(this.id() ?? '0')));
 }

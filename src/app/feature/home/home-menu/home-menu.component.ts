@@ -54,7 +54,7 @@ export class HomeMenuComponent {
   });
 
   returnToPitch() {
-    console.log(this.authorStore.authorViews()[0].name, ' : ', this.selectedAuthor().name);
+    //   console.log(this.authorStore.authorViews()[0].name, ' : ', this.selectedAuthor().name);
     const isFirstAuthor = this.authorStore.authorViews()[0].name === this.selectedAuthor().name;
     if (!isFirstAuthor) {
       const pitchIndex = this.pitchViews().findIndex(pv => pv.name === this.pitchStore.pitchViewSelected().name);

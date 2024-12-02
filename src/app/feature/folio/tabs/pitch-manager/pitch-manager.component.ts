@@ -14,18 +14,10 @@ import { FormsModule } from '@angular/forms';
 })
 export class PitchManagerComponent {
   folioStore = inject(FolioStore);
-  folioPitches = computed(() => this.folioStore.folioViewSelected().placementViews.filter(p => p.assetView.mediaType === 'pitch'));
   selectedPitch = signal<PitchView>(pitchViewInit);
-
+  folioPitches = computed(() => this.folioStore.folioViewSelected().placementViews.filter(p => p.assetView.mediaType === 'pitch'));
+  placementViews = computed(() => this.folioStore.folioViewSelected().placementViews.filter(p => p.assetView.mediaType !== 'folio'));
   selectPitch(pitch: PitchView) {
     this.selectedPitch.set(pitch);
   }
-  runlog = effect(() => {
-    console.log(this.folioStore.folioViewSelected().placementViews);
-    console.log(this.folioPitches());
-
-    // untracked(() => {
-    //   this.setAvailableCandidates();
-    // });
-  });
 }

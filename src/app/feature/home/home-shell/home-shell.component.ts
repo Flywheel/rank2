@@ -6,11 +6,12 @@ import { slateMemberViewInit } from '../../../core/models/initValues';
 import { SlateMemberView } from '../../../core/models/interfaces';
 import { FormsModule } from '@angular/forms';
 import { HomePitchComponent } from '../home-pitch/home-pitch.component';
+import { PitchShellComponent } from '../../pitch/pitch-shell/pitch-shell.component';
 
 @Component({
   selector: 'mh5-home-shell',
   standalone: true,
-  imports: [HeaderComponent, ViewerComponent, HomeMenuComponent, FormsModule, HomePitchComponent],
+  imports: [HeaderComponent, ViewerComponent, HomeMenuComponent, FormsModule, HomePitchComponent, PitchShellComponent],
   templateUrl: './home-shell.component.html',
   styleUrl: './home-shell.component.scss',
 })

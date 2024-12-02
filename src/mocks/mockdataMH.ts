@@ -16,7 +16,7 @@ export const miniHeraldData: DataImporter = {
     { folioName: 'AimsPoll', parentFolioName: '@miniherald' },
     { folioName: 'Border Integrity', parentFolioName: 'AimsPoll' },
     { folioName: 'Minimum Wage', parentFolioName: 'AimsPoll' },
-    // { folioName: 'Ladder Singles 2009', parentFolioName: '@miniherald' },
+    { folioName: 'Ladder Singles 2009', parentFolioName: '@miniherald' },
   ],
   assets: [
     {

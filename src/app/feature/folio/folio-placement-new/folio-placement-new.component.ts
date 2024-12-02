@@ -26,16 +26,12 @@ export class FolioPlacementNewComponent {
 
   forcePopup = input<boolean>(false);
   showPopup = computed<boolean>(() => this.forcePopup());
-  AssetType = AssetType;
+  AssetTypeEnum = AssetType;
   assetType = input.required<AssetType>();
 
   newMedia = signal(false);
-  //newPlacment = signal(false);
-  //newFolio = signal(false);
-  // newPitch = signal(false);
 
   captionField = viewChild<ElementRef<HTMLInputElement>>('captionField');
-
   closeNewPlacementEditor = output<boolean>();
 
   constructor() {
@@ -131,7 +127,7 @@ export class FolioPlacementNewComponent {
 
           const assetPrep: Asset = {
             id: 0,
-            mediaType: 'pitchlink',
+            mediaType: 'pitch',
             sourceId: newPitch.id.toLocaleString(),
             authorId: this.authorStore.authorLoggedIn().id,
           };

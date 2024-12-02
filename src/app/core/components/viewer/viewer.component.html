@@ -8,6 +8,9 @@
       @case ('topic') {
         <p>Topic</p>
       }
+      @case ('pitch') {
+        <mh5-pitch-shell [id]="placementView().assetView.sourceId" />
+      }
       @case ('ytshort') {
         <div class="container">
           <iframe

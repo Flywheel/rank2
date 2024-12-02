@@ -10,6 +10,7 @@ import { IconPitchComponent } from '../../../../core/svg/icon-pitch';
 import { IconYoutubeComponent } from '../../../../core/svg/icon-youtube';
 import { IconTiktokComponent } from '../../../../core/svg/icon-tiktok';
 import { IconYouTubeShortsComponent } from '../../../../core/svg/icon-youtube-shorts';
+import { IconDashboardComponent } from '../../../../core/svg/icon-dashboard';
 
 @Component({
   selector: 'mh5-asset-manager',
@@ -21,6 +22,7 @@ import { IconYouTubeShortsComponent } from '../../../../core/svg/icon-youtube-sh
     IconYoutubeComponent,
     IconTiktokComponent,
     IconYouTubeShortsComponent,
+    IconDashboardComponent,
   ],
   templateUrl: './asset-manager.component.html',
   styleUrl: './asset-manager.component.scss',

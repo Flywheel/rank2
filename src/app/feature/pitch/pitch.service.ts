@@ -11,10 +11,8 @@ export class PitchService {
   http = inject(HttpClient);
 
   private pitchAPIUrl = `api/pitch`;
-  private pitchViewAPIUrl = `api/pitchview`;
 
   private slateAPIUrl = `api/slate`;
-  private slateViewAPIUrl = `api/slateview`;
 
   private slateMemberAPIUrl = `api/slatemember`;
 

@@ -1,8 +1,13 @@
 @if (!hidePlacementViewer()) {
   <mh5-header callerPage="viewer" (hidePlacementDisplay)="togglePlacementViewer($event)" />
   <div class="placement-display">
-    <mh5-viewer [placementView]="slateMember().placementView" />
+    @if (slateMember().placementView.assetView.mediaType === 'pitch') {
+      <mh5-pitch-shell [id]="slateMember().placementView.assetView.sourceId" />
+    } @else {
+      <mh5-viewer [placementView]="slateMember().placementView" />
+    }
   </div>
+  <!-- } -->
 } @else {
   <mh5-header callerPage="home" />
   <mh5-home-menu [returnToPitchFromView]="slateMember().slateId" />

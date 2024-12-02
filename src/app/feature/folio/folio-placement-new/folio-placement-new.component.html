@@ -15,7 +15,7 @@
             } @else {
               <label for="caption">Enter new {{ assetType() }} name. </label>
             }
-            @if (assetType() === AssetType.Placement) {
+            @if (assetType() === AssetTypeEnum.Placement) {
               <div class="">
                 <input
                   type="checkbox"
@@ -27,7 +27,7 @@
             }
           </div>
 
-          @if (assetType() === AssetType.Pitch) {
+          @if (assetType() === AssetTypeEnum.Pitch) {
             <div class="">
               <div class="form-row">
                 <input id="description" formControlName="description" type="text" />
@@ -81,10 +81,10 @@
           <div class="colsBoth">
             <button type="submit" [disabled]="formGroup.invalid">
               @switch (assetType()) {
-                @case (AssetType.Folio) {
+                @case (AssetTypeEnum.Folio) {
                   Add subfolio to {{ folioStore.folioViewSelected().folioName }};
                 }
-                @case (AssetType.Placement) {
+                @case (AssetTypeEnum.Placement) {
                   Add asset to folio {{ folioStore.folioViewSelected().folioName }};
                 }
               }

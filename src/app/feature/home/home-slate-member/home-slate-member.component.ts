@@ -16,12 +16,14 @@ import { IconPlayCircleComponent } from '../../../core/svg/icon-play-circle';
 export class HomeSlateMemberComponent {
   mediaService = inject(MediaService);
   sanitizer = inject(DomSanitizer);
+  defaultImageFolder = '/src/assets/img/aimspoll/';
 
   placementInput = input.required<SlateMemberView>();
   sourceId = computed(() => this.placementInput().placementView.assetView.sourceId);
   mediaType = computed(() => this.placementInput().placementView.assetView.mediaType);
   caption = computed(() => this.placementInput().placementView.caption);
   player = computed(() => this.sanitizer.bypassSecurityTrustResourceUrl(this.mediaUrl().url));
+  pitchImaqe = this.defaultImageFolder + 'Turtle.jpeg';
 
   mediaUrl = computed<ContentTransform>(() => {
     let retval = {} as ContentTransform;
@@ -66,8 +68,8 @@ export class HomeSlateMemberComponent {
       case 'pitch':
         retval = {
           typeName: 'pitch',
-          width: 116,
-          height: 202,
+          width: 150,
+          height: 150 / 1.33,
           paddingBottom: '56.25%',
           url: this.sourceId(),
         };

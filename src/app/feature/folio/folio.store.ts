@@ -237,7 +237,6 @@ export const FolioStore = signalStore(
               updateState(store, '[Asset-Media] Asset Create Success', {
                 assets: [...store.assets(), newAsset],
               });
-              console.log(newPlacement, newAsset);
               store.writeToStorage();
             }),
             catchError(error => {
