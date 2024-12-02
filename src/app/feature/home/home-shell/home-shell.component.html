@@ -1,12 +1,15 @@
 @if (!hidePlacementViewer()) {
-  <mh5-header callerPage="viewer" (hidePlacementDisplay)="togglePlacementViewer($event)" />
-  <div class="placement-display">
-    @if (slateMember().placementView.assetView.mediaType === 'pitch') {
-      <mh5-pitch-shell [id]="slateMember().placementView.assetView.sourceId" />
-    } @else {
+  @if (slateMember().placementView.assetView.mediaType === 'pitch') {
+    <mh5-header callerPage="pitch" (hidePlacementDisplay)="togglePlacementViewer($event)" [caption]="slateMember().placementView.caption" />
+
+    <mh5-pitch-shell [id]="slateMember().placementView.assetView.sourceId" />
+  } @else {
+    <mh5-header callerPage="viewer" (hidePlacementDisplay)="togglePlacementViewer($event)" />
+    <div class="placement-display">
       <mh5-viewer [placementView]="slateMember().placementView" />
-    }
-  </div>
+    </div>
+  }
+
   <!-- } -->
 } @else {
   <mh5-header callerPage="home" />

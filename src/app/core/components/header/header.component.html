@@ -6,8 +6,8 @@
       <div><mh5-icon-share /></div>
     }
     @case ('pitch') {
-      <a (click)="goBack()" (keydown)="goBack()" tabindex="0" aria-label="demoText"> Done</a>
-      <div class="title">Mini Herald</div>
+      <a (click)="hidePlacementDisplay.emit(true)" (keydown)="hidePlacementDisplay.emit(true)" tabindex="0" aria-label="demoText">Done</a>
+      <div class="title">Mini Herald - {{ caption() }}</div>
       <div><mh5-icon-share /></div>
     }
 

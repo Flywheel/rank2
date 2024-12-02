@@ -1,3 +1,8 @@
-<!-- <mh5-header callerPage="pitch" [caption]="pitchStore.pitchViewSelected().name" /> -->
-<p class="">Pitch{{ thePitchView()?.name }} {{ id() }}</p>
+<div class="horizontal-scroll-container">
+  <div class="horizontal-scroll">
+    <div class="menu-item" [class.selected]="true">
+      {{ pitchStore.pitchViewSelected().name }}
+    </div>
+  </div>
+</div>
 <mh5-home-pitch />

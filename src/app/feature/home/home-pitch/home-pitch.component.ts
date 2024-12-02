@@ -1,4 +1,4 @@
-import { Component, computed, inject, output } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { PitchStore } from '../../pitch/pitch.store';
 import { PitchView, SlateMemberView } from '../../../core/models/interfaces';
 import { HomeSlateMemberComponent } from '../home-slate-member/home-slate-member.component';
@@ -14,6 +14,9 @@ import { Router } from '@angular/router';
 export class HomePitchComponent {
   pitchStore = inject(PitchStore);
   router = inject(Router);
+
+  id = input<string>();
+
   pitchViewSelected = computed<PitchView>(() => this.pitchStore.pitchViewSelected());
   hidePlacementViewer = output<boolean>();
   placementToDisplay = output<SlateMemberView>();
