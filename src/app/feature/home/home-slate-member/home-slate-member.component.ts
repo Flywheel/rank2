@@ -94,7 +94,7 @@ export class HomeSlateMemberComponent {
         break;
       case 'topic':
       case 'pitch':
-        height = 150;
+        height = 80;
         break;
       default:
         height = 120;
