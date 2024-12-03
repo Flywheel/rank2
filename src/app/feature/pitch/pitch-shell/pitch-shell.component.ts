@@ -14,9 +14,9 @@ export class PitchShellComponent {
   id = input<string>();
 
   loader = effect(() => {
-    const x = parseInt(this.id() ?? '0');
+    const pitchId = parseInt(this.id() ?? '0');
     untracked(() => {
-      this.pitchStore.setPitchSelected(x);
+      this.pitchStore.setPitchSelected(pitchId);
     });
   });
 }

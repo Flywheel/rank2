@@ -15,20 +15,21 @@ export class HomePitchComponent {
   pitchStore = inject(PitchStore);
   router = inject(Router);
 
-  id = input<string>();
-
   pitchViewSelected = computed<PitchView>(() => this.pitchStore.pitchViewSelected());
   hidePlacementViewer = output<boolean>();
   placementToDisplay = output<SlateMemberView>();
+  pitchToDisplay = output<SlateMemberView>();
 
   viewPlacement(slateMember: SlateMemberView) {
-    console.log(slateMember.placementView.assetView.mediaType);
-    if (slateMember.placementView.assetView.mediaType !== 'folio') {
+    console.log(slateMember);
+    if (slateMember.placementView.assetView.mediaType !== 'pitch') {
       this.hidePlacementViewer.emit(false);
       this.placementToDisplay.emit(slateMember);
     } else {
-      console.log(slateMember);
-      this.router.navigate(['/pitch', slateMember.placementView.assetView.sourceId]);
+      const pitchId = Number(slateMember.placementView.assetView.sourceId);
+
+      this.pitchStore.setPitchSelected(pitchId);
+      this.pitchToDisplay.emit(slateMember);
     }
   }
   gotoBallot() {

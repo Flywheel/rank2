@@ -42,6 +42,7 @@ export class HomeMenuComponent {
   });
 
   preparePitchDisplay = effect(() => {
+    this.returnToPitchFromView();
     if (this.authorStore.startupCompleted()) {
       untracked(() => {
         if (this.returnToPitchFromView()) {
@@ -54,20 +55,9 @@ export class HomeMenuComponent {
   });
 
   returnToPitch() {
-    //   console.log(this.authorStore.authorViews()[0].name, ' : ', this.selectedAuthor().name);
+    console.log('returnToPitch: ', this.selectedAuthor().name);
     const isFirstAuthor = this.authorStore.authorViews()[0].name === this.selectedAuthor().name;
     if (!isFirstAuthor) {
-      const pitchIndex = this.pitchViews().findIndex(pv => pv.name === this.pitchStore.pitchViewSelected().name);
-      this.selectPitch(this.pitchViews()[pitchIndex]);
-      if (pitchIndex === 0) this.topPitchSelected.set(true);
-      this.scrollToElement(this.pitchStore.pitchIdSelected());
-    } else {
-      console.log('returnToPitch: ', this.selectedAuthor().name);
-    }
-  }
-  returnToPitch2() {
-    const isFirstAuthor = this.authorStore.authorViews()[0].name === this.selectedAuthor().name;
-    if (isFirstAuthor) {
       const pitchIndex = this.pitchViews().findIndex(pv => pv.name === this.pitchStore.pitchViewSelected().name);
       this.selectPitch(this.pitchViews()[pitchIndex]);
       if (pitchIndex === 0) this.topPitchSelected.set(true);
