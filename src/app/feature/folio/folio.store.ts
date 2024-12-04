@@ -134,10 +134,10 @@ export const FolioStore = signalStore(
         return { newFolio, newAsset, newPlacement };
       },
 
-      async createPlacementWithAsset(assetData: Asset, caption: string) {
+      async createPlacementAsAsset(assetData: Asset, caption: string) {
         updateState(store, '[Asset-Media] Create Start', { isLoading: true });
         dbFolio
-          .createPlacementWithAsset(assetData, store.folioViewSelected().id, caption)
+          .createPlacementAsAsset(assetData, store.folioViewSelected().id, caption)
           .pipe(
             map(({ newAsset, newPlacement }) => {
               updateState(store, '[Asset-Media] Placement Create Success', {
@@ -160,7 +160,7 @@ export const FolioStore = signalStore(
       async createPlacementWithAsset2(folioId: number, caption: string, assetPrep: Asset) {
         updateState(store, '[Asset-Media] Create Start', { isLoading: true });
         dbFolio
-          .createPlacementWithAsset(assetPrep, folioId, caption)
+          .createPlacementAsAsset(assetPrep, folioId, caption)
           .pipe(
             map(({ newAsset, newPlacement }) => {
               updateState(store, '[Asset-Media] Placement Create Success', {

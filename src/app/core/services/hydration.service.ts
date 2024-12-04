@@ -85,7 +85,7 @@ export class HydrationService {
               sourceId: placement.sourceId,
               id: 0,
             };
-            await this.folioStore.createPlacementWithAsset(assetData, placement.caption);
+            await this.folioStore.createPlacementAsAsset(assetData, placement.caption);
           }
         }
       }

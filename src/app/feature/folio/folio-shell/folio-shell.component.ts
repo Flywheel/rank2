@@ -10,6 +10,7 @@ import { BackdoorComponent } from '../../../core/components/backdoor/backdoor.co
 import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
 import { Router } from '@angular/router';
 import { PitchManagerComponent } from '../tabs/pitch-manager/pitch-manager.component';
+import { SlatesAuthoredComponent } from '../tabs/slates-authored/slates-authored.component';
 @Component({
   selector: 'mh5-folio-shell',
   standalone: true,
@@ -21,6 +22,7 @@ import { PitchManagerComponent } from '../tabs/pitch-manager/pitch-manager.compo
     AssetManagerComponent,
     BackdoorComponent,
     PitchManagerComponent,
+    SlatesAuthoredComponent,
   ],
   templateUrl: './folio-shell.component.html',
   styleUrl: './folio-shell.component.scss',

@@ -105,7 +105,7 @@ export class FolioService {
     );
   }
 
-  createPlacementWithAsset(assetData: Asset, folioId: number, caption: string): Observable<{ newAsset: Asset; newPlacement: Placement }> {
+  createPlacementAsAsset(assetData: Asset, folioId: number, caption: string): Observable<{ newAsset: Asset; newPlacement: Placement }> {
     return this.assetCreate(assetData).pipe(
       exhaustMap((createdAsset: Asset) => {
         const placement: Placement = {

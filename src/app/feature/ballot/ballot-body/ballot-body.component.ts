@@ -18,66 +18,53 @@ export class BallotBodyComponent {
   pitchStore = inject(PitchStore);
   ballotStore = inject(BallotStore);
 
-  candidatesAvailable = signal<SlateMemberView[]>([]);
-  candidatesRanked = signal<SlateMemberView[]>([]);
+  membersRanked = signal<SlateMemberView[]>([]);
 
   pitchViewSelected = computed<PitchView>(() => this.pitchStore.pitchViewSelected());
-  candidateList = computed(() => this.pitchViewSelected().slateView.slateMemberViews);
+  membersAvailable = computed(() => this.pitchViewSelected().slateView.slateMemberViews);
 
-  currentSlates = computed(() => this.ballotStore.slatesAuthored().find(s => s.pitchId === this.pitchViewSelected().id));
+  membersNotRanked = computed<SlateMemberView[]>(() => {
+    const rankedCandidatesIds = this.getRankedMemberIds(this.getRankedMembersFromStore());
+    return this.filterAvailableMembers(this.membersAvailable(), rankedCandidatesIds);
+  });
 
   hidePlacementDisplay = output<boolean>();
   placementToDisplay = output<SlateMemberView>();
 
-  // isCookieStatusAccepted = computed<boolean>(() => this.authorStore.cookieStatus() === 'accepted');
-  // showCookieConsentComponent = signal(false);
-  // showBallotCaster = signal(false);
-
-  constructor() {
-    effect(() => {
-      this.pitchViewSelected();
-      untracked(() => {
-        this.ballotStore.setCurrentSlateByPitchId(this.pitchViewSelected().id);
-        this.setAvailableCandidates();
-      });
+  initializer = effect(() => {
+    this.pitchViewSelected();
+    untracked(() => {
+      this.membersRanked.set(this.getRankedMembersFromStore());
     });
-  }
+  });
 
   viewPlacement(placement: SlateMemberView) {
     this.hidePlacementDisplay.emit(false);
     this.placementToDisplay.emit(placement);
   }
 
-  setAvailableCandidates() {
-    const ranksInStore = this.ballotStore.slateInProgress()?.slateMemberViews;
-    if (ranksInStore) {
-      const candidateMap = this._createCandidateMap(this.candidateList());
-      const rankedCandidates = this._getRankedCandidates(ranksInStore, candidateMap);
-      const rankedCandidatesIds = this._getRankedCandidateIds(rankedCandidates);
-      const availableCandidates = this._filterAvailableCandidates(this.candidateList(), rankedCandidatesIds);
-
-      this.candidatesRanked.set(rankedCandidates);
-      this.candidatesAvailable.set(availableCandidates);
-
-      this.updateCurrentSlateSignal();
-    }
+  getRankedMembersFromStore(): SlateMemberView[] {
+    const ranksInStore = this.ballotStore.activeSlate()?.slateMemberViews;
+    if (!ranksInStore) return [];
+    const candidateMap = this.createMemberMap(this.membersAvailable());
+    return this.getRankedMembers(ranksInStore, candidateMap);
   }
 
-  private _createCandidateMap(candidates: SlateMemberView[]): Map<number, SlateMemberView> {
+  private createMemberMap(candidates: SlateMemberView[]): Map<number, SlateMemberView> {
     return new Map(candidates.map(candidate => [candidate.placementId, candidate]));
   }
 
-  private _getRankedCandidates(ranksInStore: SlateMemberView[], candidateMap: Map<number, SlateMemberView>): SlateMemberView[] {
+  private getRankedMembers(ranksInStore: SlateMemberView[], candidateMap: Map<number, SlateMemberView>): SlateMemberView[] {
     return ranksInStore
       .map(member => candidateMap.get(member.placementId))
       .filter((candidate): candidate is SlateMemberView => !!candidate);
   }
 
-  private _getRankedCandidateIds(rankedCandidates: SlateMemberView[]): Set<number> {
+  private getRankedMemberIds(rankedCandidates: SlateMemberView[]): Set<number> {
     return new Set(rankedCandidates.map(candidate => candidate.placementId));
   }
 
-  private _filterAvailableCandidates(allCandidates: SlateMemberView[], rankedIds: Set<number>): SlateMemberView[] {
+  private filterAvailableMembers(allCandidates: SlateMemberView[], rankedIds: Set<number>): SlateMemberView[] {
     return allCandidates.filter(candidate => !rankedIds.has(candidate.placementId));
   }
 
@@ -88,18 +75,18 @@ export class BallotBodyComponent {
   }
 
   moveUpOnePosition(candidate: SlateMemberView) {
-    const candidates = this.candidatesRanked();
+    const candidates = this.membersRanked();
     const index = candidates.findIndex(t => t.placementView.caption === candidate.placementView.caption);
 
     if (index > 0) {
       const updatedCandidates = this.swapItems(candidates, index, index - 1);
-      this.candidatesRanked.set(updatedCandidates);
+      this.membersRanked.set(updatedCandidates);
       this.updateCurrentSlateSignal();
     }
   }
 
   moveDownOnePosition(candidate: SlateMemberView) {
-    const candidates = this.candidatesRanked();
+    const candidates = this.membersRanked();
     const index = candidates.findIndex(t => t.placementView.caption === candidate.placementView.caption);
 
     if (index === candidates.length - 1) {
@@ -107,33 +94,20 @@ export class BallotBodyComponent {
       return;
     }
 
-    if (index < this.candidatesRanked().length - 1) {
+    if (index < this.membersRanked().length - 1) {
       const updatedCandidates = this.swapItems(candidates, index, index + 1);
-      this.candidatesRanked.set(updatedCandidates);
+      this.membersRanked.set(updatedCandidates);
       this.updateCurrentSlateSignal();
     }
   }
 
-  PrepareToPostBallot() {
-    // console.log(this.isCookieStatusAccepted());
-    // if (this.isCookieStatusAccepted()) {
-    //   //   console.log(this.ballotStore.currentSlate());
-    //   this.showCookieConsentComponent.set(false);
-    //   this.showBallotCaster.set(true);
-    // } else {
-    //   this.showCookieConsentComponent.set(true);
-    // }
-  }
-
   moveToAvailable(candidate: SlateMemberView) {
-    this.candidatesRanked.set(this.candidatesRanked().filter(t => t.placementView.caption !== candidate.placementView.caption));
-    this.candidatesAvailable.set([...this.candidatesAvailable(), candidate]);
+    this.membersRanked.set(this.membersRanked().filter(t => t.placementView.caption !== candidate.placementView.caption));
     this.updateCurrentSlateSignal();
   }
 
   moveToSelected(candidate: SlateMemberView) {
-    this.candidatesAvailable.set(this.candidatesAvailable().filter(t => t.placementView.caption !== candidate.placementView.caption));
-    this.candidatesRanked.set([...this.candidatesRanked(), candidate]);
+    this.membersRanked.set([...this.membersRanked(), candidate]);
     this.updateCurrentSlateSignal();
   }
 
@@ -141,7 +115,7 @@ export class BallotBodyComponent {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      if (this.candidatesRanked().length !== 0) {
+      if (this.membersRanked().length !== 0) {
         transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
       } else {
         transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
@@ -151,8 +125,8 @@ export class BallotBodyComponent {
   }
 
   updateCurrentSlateSignal() {
-    if (this.candidatesRanked().length === 0) return;
-    const preparedSlateMemberViews: SlateMemberView[] = this.candidatesRanked().map((slateMember, index: number) => {
+    if (this.membersRanked().length === 0) return;
+    const preparedSlateMemberViews: SlateMemberView[] = this.membersRanked().map((slateMember, index: number) => {
       return {
         id: slateMember.id,
         slateId: slateMember.slateId,
@@ -171,8 +145,20 @@ export class BallotBodyComponent {
       slateMemberViews: preparedSlateMemberViews,
     };
 
-    console.log(preparedBallot);
-
     this.ballotStore.updateSlate(preparedBallot);
+  }
+
+  // isCookieStatusAccepted = computed<boolean>(() => this.authorStore.cookieStatus() === 'accepted');
+  // showCookieConsentComponent = signal(false);
+  // showBallotCaster = signal(false);
+  PrepareToPostBallot() {
+    // console.log(this.isCookieStatusAccepted());
+    // if (this.isCookieStatusAccepted()) {
+    //   //   console.log(this.ballotStore.currentSlate());
+    //   this.showCookieConsentComponent.set(false);
+    //   this.showBallotCaster.set(true);
+    // } else {
+    //   this.showCookieConsentComponent.set(true);
+    // }
   }
 }

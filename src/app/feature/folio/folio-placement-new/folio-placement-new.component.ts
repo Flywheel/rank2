@@ -105,7 +105,7 @@ export class FolioPlacementNewComponent {
               sourceId: this.assetViewPrepared().sourceId,
               authorId: this.authorStore.authorLoggedIn().id,
             };
-            this.folioStore.createPlacementWithAsset(media, this.formGroup.value.caption);
+            this.folioStore.createPlacementAsAsset(media, this.formGroup.value.caption);
           } else this.folioStore.createPlacement(newPlacement);
           this.folioStore.togglePlacementAdder(false);
         }

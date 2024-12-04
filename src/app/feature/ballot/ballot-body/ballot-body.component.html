@@ -1,5 +1,5 @@
 <div class="profileControl">
-  @if (candidatesRanked().length === 0) {
+  @if (membersRanked().length === 0) {
     <span class="topicTitle">Poll: {{ pitchViewSelected().name }}</span>
     <button class="readyButton">Ready to rank</button>
   } @else {
@@ -17,13 +17,13 @@
     cdkDropList
     #rankedList="cdkDropList"
     id="rankedDropList"
-    [class.border-on-empty]="candidatesRanked().length === 0"
-    [cdkDropListData]="candidatesRanked()"
+    [class.border-on-empty]="membersRanked().length === 0"
+    [cdkDropListData]="membersRanked()"
     [cdkDropListConnectedTo]="[availableList]"
     cdkDropListOrientation="mixed"
     (cdkDropListDropped)="drop($event)">
     <div class="candidate-list ranked">
-      @for (ranked of candidatesRanked(); track $index) {
+      @for (ranked of membersRanked(); track $index) {
         <div cdkDrag class="candidate" id="cand-{{ ranked.placementId }}" [attr.tabindex]="ranked.placementId">
           <span
             class="move-candidate-up"
@@ -48,7 +48,7 @@
       }
     </div>
   </div>
-  @if (candidatesAvailable().length !== 0) {
+  @if (membersNotRanked().length !== 0) {
     <div class="title">
       <span>-</span>
       <span>Candidates for {{ pitchViewSelected().name }}</span>
@@ -60,12 +60,12 @@
     cdkDropList
     #availableList="cdkDropList"
     id="availableDropList"
-    [cdkDropListData]="candidatesAvailable()"
+    [cdkDropListData]="membersNotRanked()"
     [cdkDropListConnectedTo]="[rankedList]"
     cdkDropListOrientation="mixed"
     (cdkDropListDropped)="drop($event)">
     <div class="candidate-list available">
-      @for (unranked of candidatesAvailable(); track $index; let theCount = $count) {
+      @for (unranked of membersNotRanked(); track $index) {
         <div
           cdkDrag
           class="candidate"

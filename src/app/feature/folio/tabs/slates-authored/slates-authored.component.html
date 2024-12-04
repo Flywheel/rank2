@@ -1,0 +1,10 @@
+@for (slate of allSlates(); track $index) {
+  <div>
+    <p class="">
+      {{ slate.pitchId }}
+    </p>
+    @for (member of slate.slateMemberViews; track $index) {
+      <div class="">{{ member.placementView.caption }}</div>
+    }
+  </div>
+}
