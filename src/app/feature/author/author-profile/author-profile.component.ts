@@ -78,7 +78,7 @@ export class AuthorProfileComponent implements AfterViewInit {
       authorId: currentAuthor.id,
       folioName: '@' + this.channelName(),
     };
-    this.folioStore.folioCreateForNewAuthor(newFolio);
+    this.folioStore.createFolioAsRoot(newFolio);
     if (environment.ianConfig.showLogs) {
       console.log(currentAuthor);
       console.log(updatedAuthorData);

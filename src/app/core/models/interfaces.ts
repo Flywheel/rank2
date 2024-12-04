@@ -33,7 +33,7 @@ export interface Asset {
 }
 
 export interface AssetView extends Asset {
-  url: string;
+  url?: string;
   styling?: string;
 }
 

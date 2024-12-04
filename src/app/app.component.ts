@@ -78,7 +78,7 @@ export class AppComponent implements OnInit, OnDestroy {
         parentFolioId: undefined,
       };
       console.log(folioDefault);
-      await this.folioStore.folioCreateForNewAuthor(folioDefault);
+      await this.folioStore.createFolioAsRoot(folioDefault);
       delay(100);
       console.log(this.folioStore.folios());
     }

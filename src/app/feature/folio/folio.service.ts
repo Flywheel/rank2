@@ -32,15 +32,15 @@ export class FolioService {
     return this.http.get<FolioView>(`${this.folioViewAPIUrl}/${id}`);
   }
 
-  folioCreateForNewAuthor({ authorId, folioName }: Folio): Observable<Folio> {
+  createFolioAsRoot({ authorId, folioName }: Folio): Observable<Folio> {
     return this.http.post<Folio>(this.folioAPIUrl, { authorId, folioName });
   }
 
-  folioCreateWithParent(folioPrep: Partial<Folio>): Observable<{ newFolio: Folio; newAsset: Asset; newPlacement: Placement }> {
+  createFolioAsAsset(folioPrep: Partial<Folio>): Observable<{ newFolio: Folio; newAsset: Asset; newPlacement: Placement }> {
     return this.http.post<Folio>(this.folioAPIUrl, folioPrep).pipe(
       exhaustMap((newFolio: Folio) => {
         const newAsset: Asset = {
-          id: 0, // Assuming backend assigns the ID
+          id: 0,
           mediaType: 'folio',
           sourceId: newFolio.id.toString() || '0',
           authorId: folioPrep.authorId!,
@@ -48,7 +48,7 @@ export class FolioService {
         return this.assetCreate(newAsset).pipe(
           exhaustMap((newAsset: Asset) => {
             const placementPrep: Placement = {
-              id: 0, // Assuming backend assigns the ID
+              id: 0,
               folioId: folioPrep.parentFolioId!,
               caption: folioPrep.folioName?.trim() || 'New Folio',
               assetId: newAsset.id,
@@ -91,15 +91,6 @@ export class FolioService {
     );
   }
 
-  // placementCreate(placement: Placement): Observable<Placement> {
-  //   return this.http.post<Placement>(this.placementAPIUrl, placement).pipe(
-  //     catchError(error => {
-  //       if (environment.ianConfig.showLogs) console.error('Placement Create failed', error);
-  //       return throwError(() => new Error('Placement Create failed'));
-  //     })
-  //   );
-  // }
-
   assetsGetAll(): Observable<Asset[]> {
     if (environment.ianConfig.showLogs) console.log(`folioService.allAssets() ${this.assetAPIUrl}`);
     return this.http.get<Asset[]>(this.assetAPIUrl).pipe(takeUntilDestroyed());
@@ -114,7 +105,7 @@ export class FolioService {
     );
   }
 
-  assetCreateWithPlacement(assetData: Asset, folioId: number, caption: string): Observable<{ newAsset: Asset; newPlacement: Placement }> {
+  createPlacementWithAsset(assetData: Asset, folioId: number, caption: string): Observable<{ newAsset: Asset; newPlacement: Placement }> {
     return this.assetCreate(assetData).pipe(
       exhaustMap((createdAsset: Asset) => {
         const placement: Placement = {

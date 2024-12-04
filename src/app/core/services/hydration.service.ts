@@ -60,7 +60,7 @@ export class HydrationService {
         parentFolioId: parentFolioId,
       };
 
-      const { newFolio } = await this.folioStore.folioCreateWithParent(folioData);
+      const { newFolio } = await this.folioStore.createFolioAsAsset(folioData);
 
       this.folioStore.setFolioSelected(newFolio.id!);
 

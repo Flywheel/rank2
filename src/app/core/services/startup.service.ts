@@ -32,7 +32,7 @@ export class StartupService {
       folioName: '@' + authorStartup.name,
       parentFolioId: undefined,
     };
-    await this.folioStore.folioCreateForNewAuthor(folioDefault);
+    await this.folioStore.createFolioAsRoot(folioDefault);
 
     await this.delay(100);
     const theTopFolio = this.folioStore.folios().find(f => f.authorId === authorStartup.id && f.parentFolioId === undefined);
