@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'mh5-slate-manager',
+  selector: 'mh5-topslate-manager',
   standalone: true,
   imports: [
     CommonModule,
@@ -26,10 +26,10 @@ import { RouterLink } from '@angular/router';
     // CdkDropListGroup,
     CdkDragHandle,
   ],
-  templateUrl: './slate-manager.component.html',
-  styleUrl: './slate-manager.component.scss',
+  templateUrl: './topslate-manager.component.html',
+  styleUrl: './topslate-manager.component.scss',
 })
-export class SlateManagerComponent {
+export class TopSlateManagerComponent {
   authorStore = inject(AuthorStore);
   pitchStore = inject(PitchStore);
   folioStore = inject(FolioStore);

@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { SlateManagerComponent } from '../slate-manager/slate-manager.component';
+import { TopSlateManagerComponent } from '../topslate-manager/topslate-manager.component';
 import { FolioStore } from '../../folio.store';
 import { PitchView } from '../../../../core/models/interfaces';
 import { pitchViewInit } from '../../../../core/models/initValues';
@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'mh5-pitch-manager',
   standalone: true,
-  imports: [SlateManagerComponent, FormsModule],
+  imports: [TopSlateManagerComponent, FormsModule],
   templateUrl: './pitch-manager.component.html',
   styleUrl: './pitch-manager.component.scss',
 })

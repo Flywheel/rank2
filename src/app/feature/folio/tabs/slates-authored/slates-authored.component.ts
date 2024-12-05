@@ -19,11 +19,11 @@ export class SlatesAuthoredComponent {
   allSlates = computed(() => this.ballotStore.slatesAuthored());
 
   //relevantPitchViewes = computed(() => this.pitchStore.pitchViewsComputed().map(p => p.id));
-  knownPitches = computed(() => {
-    const xx = this.ballotStore.pitchesKnown();
-    xx.map(p => ({ ...p, id: p.slateView.slateMemberViews.map(s => s.slateId) }));
-    return xx;
-  });
+  // knownPitches = computed(() => {
+  //   const xx = this.ballotStore.pitchesKnown();
+  //   xx.map(p => ({ ...p, id: p.slateView.slateMemberViews.map(s => s.slateId) }));
+  //   return xx;
+  // });
 
   goToBallot = (id: number) => {
     console.log('goToBallot ', id);

@@ -1,8 +1,8 @@
-@for (pitch of knownPitches(); track $index) {
-  <div class="pitch-container">
+<div class="slates-authored-container">
+  @for (pitch of pitchStore.pitchViewsComputed(); track $index) {
     @for (slateView of allSlates(); track $index) {
       @if (slateView.pitchId === pitch.id) {
-        <div class="">
+        <div class="pitch-container">
           <div class="pitch-name" (click)="goToBallot(pitch.id)" (keydown)="goToBallot(pitch.id)" tabindex="pitch.id">{{ pitch.name }}</div>
           @for (member of slateView.slateMemberViews; track $index) {
             <div class="slate-member">
@@ -13,5 +13,5 @@
         </div>
       }
     }
-  </div>
-}
+  }
+</div>

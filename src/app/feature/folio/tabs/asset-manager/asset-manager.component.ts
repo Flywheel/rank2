@@ -5,7 +5,7 @@ import { PitchStore } from '../../../pitch/pitch.store';
 import { AuthorStore } from '../../../author/author.store';
 import { pitchViewInit, placementViewInit } from '../../../../core/models/initValues';
 import { ViewerComponent } from '../../../../core/components/viewer/viewer.component';
-import { SlateManagerComponent } from '../slate-manager/slate-manager.component';
+import { TopSlateManagerComponent } from '../topslate-manager/topslate-manager.component';
 import { IconPitchComponent } from '../../../../core/svg/icon-pitch';
 import { IconYoutubeComponent } from '../../../../core/svg/icon-youtube';
 import { IconTiktokComponent } from '../../../../core/svg/icon-tiktok';
@@ -17,7 +17,7 @@ import { IconDashboardComponent } from '../../../../core/svg/icon-dashboard';
   standalone: true,
   imports: [
     ViewerComponent,
-    SlateManagerComponent,
+    TopSlateManagerComponent,
     IconPitchComponent,
     IconYoutubeComponent,
     IconTiktokComponent,
