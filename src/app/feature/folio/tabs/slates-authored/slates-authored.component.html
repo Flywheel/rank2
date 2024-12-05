@@ -1,10 +1,17 @@
-@for (slate of allSlates(); track $index) {
-  <div>
-    <p class="">
-      {{ slate.pitchId }}
-    </p>
-    @for (member of slate.slateMemberViews; track $index) {
-      <div class="">{{ member.placementView.caption }}</div>
+@for (pitch of knownPitches(); track $index) {
+  <div class="pitch-container">
+    @for (slateView of allSlates(); track $index) {
+      @if (slateView.pitchId === pitch.id) {
+        <div class="">
+          <div class="pitch-name" (click)="goToBallot(pitch.id)" (keydown)="goToBallot(pitch.id)" tabindex="pitch.id">{{ pitch.name }}</div>
+          @for (member of slateView.slateMemberViews; track $index) {
+            <div class="slate-member">
+              <div class="slate-member-rank">{{ member.rankOrder }}</div>
+              <div class="slate-member-caption">{{ member.placementView.caption }}</div>
+            </div>
+          }
+        </div>
+      }
     }
   </div>
 }

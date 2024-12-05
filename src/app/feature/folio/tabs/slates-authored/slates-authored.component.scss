@@ -1,0 +1,43 @@
+/* src/app/feature/folio/tabs/slates-authored/slates-authored.component.scss */
+
+.slates-authored-container {
+  padding: 1rem;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.pitch-container {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background-color: #2c2c2c;
+  border-radius: 4px;
+}
+
+.pitch-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ccf;
+  margin-bottom: 0.5rem;
+}
+
+.slate-member {
+  padding: 0.5rem;
+  background-color: #3e3e3e;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.slate-member-rank {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #eea;
+}
+
+.slate-member-caption {
+  font-size: 1rem;
+  color: #ddd;
+}
