@@ -1,10 +1,11 @@
-import { signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
+import { signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
 import { Asset, AssetView, Folio, FolioView, Placement, PlacementView } from '../../core/models/interfaces';
 import { assetInit, assetViewInit, folioInit, folioViewInit, placementInit } from '../../core/models/initValues';
 import { FolioService } from './folio.service';
 import { computed, inject } from '@angular/core';
 import { catchError, firstValueFrom, map, throwError } from 'rxjs';
+import { ErrorService } from '../../core/services/error.service';
 
 export const FolioStore = signalStore(
   { providedIn: 'root' },
@@ -17,6 +18,7 @@ export const FolioStore = signalStore(
     isLoading: false,
     isAddingFolio: false,
     isAddingPlacement: false,
+    error: null as string | null,
   }),
 
   withStorageSync({
@@ -79,6 +81,11 @@ export const FolioStore = signalStore(
 
   withMethods(store => {
     const dbFolio = inject(FolioService);
+
+    const errorService = inject(ErrorService);
+    const err = errorService.handleSignalStoreResponse;
+
+    // const clearError = () => setError(null);
     return {
       toggleFolioAdder(state: boolean) {
         updateState(store, `[Folio] Is Adding  ${state}`, { isAddingFolio: state });
@@ -90,23 +97,17 @@ export const FolioStore = signalStore(
 
       async createFolioAsRoot(folioPrep: Folio): Promise<void> {
         updateState(store, '[Folio-Root] Create Start', { isLoading: true });
-        dbFolio
-          .createFolioAsRoot(folioPrep)
-          .pipe(
-            map((newFolio: Folio) => {
-              updateState(store, '[Folio-Root] Create Success', {
-                folios: [...store.folios(), newFolio],
-                isLoading: false,
-              });
-              store.writeToStorage();
-              return newFolio;
-            }),
-            catchError(error => {
-              updateState(store, '[Folio-Root] Create Failed', { isLoading: false });
-              return throwError(error);
-            })
-          )
-          .subscribe();
+        try {
+          const newFolio = await firstValueFrom(dbFolio.createFolioAsRoot(folioPrep));
+          updateState(store, '[Folio-Root] Create Success', {
+            folios: [...store.folios(), newFolio],
+            isLoading: false,
+          });
+          store.writeToStorage();
+        } catch (error) {
+          err(error, '[Folio-Root] Create Failed');
+          updateState(store, '[Folio-Root] Create Failed', { isLoading: false });
+        }
       },
 
       async createFolioAsAsset(folioPrep: Partial<Folio>): Promise<{ newFolio: Folio; newAsset: Asset; newPlacement: Placement }> {
@@ -134,30 +135,7 @@ export const FolioStore = signalStore(
         return { newFolio, newAsset, newPlacement };
       },
 
-      async createPlacementAsAsset(assetData: Asset, caption: string) {
-        updateState(store, '[Asset-Media] Create Start', { isLoading: true });
-        dbFolio
-          .createPlacementAsAsset(assetData, store.folioViewSelected().id, caption)
-          .pipe(
-            map(({ newAsset, newPlacement }) => {
-              updateState(store, '[Asset-Media] Placement Create Success', {
-                placements: [...store.placements(), newPlacement],
-              });
-              updateState(store, '[Asset-Media] Asset Create Success', {
-                assets: [...store.assets(), newAsset],
-              });
-              store.writeToStorage();
-            }),
-            catchError(error => {
-              console.error('FolioStore creation failed', error);
-              updateState(store, '[Asset-Media] Create Failed', { isLoading: false });
-              return throwError(error);
-            })
-          )
-          .subscribe();
-      },
-
-      async createPlacementWithAsset2(folioId: number, caption: string, assetPrep: Asset) {
+      async createPlacementWithAsset(folioId: number, caption: string, assetPrep: Asset) {
         updateState(store, '[Asset-Media] Create Start', { isLoading: true });
         dbFolio
           .createPlacementAsAsset(assetPrep, folioId, caption)
@@ -174,7 +152,7 @@ export const FolioStore = signalStore(
             catchError(error => {
               console.error('FolioStore creation failed', error);
               updateState(store, '[Asset-Media] Create Failed', { isLoading: false });
-              return throwError(error);
+              return error;
             })
           )
           .subscribe();
@@ -183,6 +161,10 @@ export const FolioStore = signalStore(
       //#endregion Folio
 
       //#region Placement
+
+      togglePlacementAdder(state: boolean) {
+        updateState(store, `[Placement] Is Adding = ${state}`, { isAddingPlacement: state });
+      },
 
       async createPlacement(placement: Placement) {
         updateState(store, '[Placement] Create Start', { isLoading: true });
@@ -199,14 +181,10 @@ export const FolioStore = signalStore(
             }),
             catchError(error => {
               updateState(store, '[Placement] Create Failed', { isLoading: false });
-              return throwError(error);
+              return error;
             })
           )
           .subscribe();
-      },
-
-      togglePlacementAdder(state: boolean) {
-        updateState(store, `[Placement] Is Adding = ${state}`, { isAddingPlacement: state });
       },
 
       //#endregion
@@ -228,7 +206,7 @@ export const FolioStore = signalStore(
             }),
             catchError(error => {
               updateState(store, '[Asset] Create Failed', { isLoading: false });
-              return throwError(error);
+              return error;
             })
           )
           .subscribe();
@@ -236,13 +214,5 @@ export const FolioStore = signalStore(
 
       //#endregion
     };
-  }),
-
-  withHooks({
-    // onInit(store) {
-    //   // store.loadAllFolios();
-    //   // store.loadAllPlacements();
-    //   // store.Assets();
-    // },
   })
 );

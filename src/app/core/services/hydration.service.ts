@@ -85,7 +85,8 @@ export class HydrationService {
               sourceId: placement.sourceId,
               id: 0,
             };
-            await this.folioStore.createPlacementAsAsset(assetData, placement.caption);
+            //  await this.folioStore.createPlacementAsAsset(assetData, placement.caption);
+            await this.folioStore.createPlacementWithAsset(newFolio.id, placement.caption, assetData);
           }
         }
       }
@@ -130,7 +131,7 @@ export class HydrationService {
       sourceId: newPitch.id.toLocaleString(),
       authorId: this.authorStore.authorLoggedIn().id,
     };
-    this.folioStore.createPlacementWithAsset2(folioView.parentFolioId!, folioView.folioName, assetPrep);
+    this.folioStore.createPlacementWithAsset(folioView.parentFolioId!, folioView.folioName, assetPrep);
   }
 
   public async hydrateSlates(authorId: string): Promise<void> {

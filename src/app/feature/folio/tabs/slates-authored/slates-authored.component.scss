@@ -19,6 +19,11 @@
   font-weight: bold;
   color: #ccf;
   margin-bottom: 0.5rem;
+  text-decoration: underline;
+  &:hover {
+    cursor: pointer;
+    color: #dd9;
+  }
 }
 
 .slate-member {

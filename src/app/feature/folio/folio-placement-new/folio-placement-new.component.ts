@@ -99,13 +99,14 @@ export class FolioPlacementNewComponent {
           };
 
           if (this.newMedia()) {
-            const media: Asset = {
+            const assetPrep: Asset = {
               id: 0,
               mediaType: this.assetViewPrepared().mediaType,
               sourceId: this.assetViewPrepared().sourceId,
               authorId: this.authorStore.authorLoggedIn().id,
             };
-            this.folioStore.createPlacementAsAsset(media, this.formGroup.value.caption);
+            // this.folioStore.createPlacementAsAsset(assetPrep, this.formGroup.value.caption);
+            this.folioStore.createPlacementWithAsset(parentFolioId, newPlacement.caption, assetPrep);
           } else this.folioStore.createPlacement(newPlacement);
           this.folioStore.togglePlacementAdder(false);
         }
@@ -131,7 +132,7 @@ export class FolioPlacementNewComponent {
             sourceId: newPitch.id.toLocaleString(),
             authorId: this.authorStore.authorLoggedIn().id,
           };
-          this.folioStore.createPlacementWithAsset2(parentFolioId, this.formGroup.value.caption, assetPrep);
+          this.folioStore.createPlacementWithAsset(parentFolioId, this.formGroup.value.caption, assetPrep);
           this.folioStore.togglePlacementAdder(false);
         }
         break;

@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { TopSlateManagerComponent } from '../topslate-manager/topslate-manager.component';
 import { FolioStore } from '../../folio.store';
 import { PitchView } from '../../../../core/models/interfaces';

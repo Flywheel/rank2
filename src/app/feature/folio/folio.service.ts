@@ -1,51 +1,45 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Asset, Folio, FolioView, Placement, PlacementView } from '../../core/models/interfaces';
-import { catchError, exhaustMap, Observable, throwError, map } from 'rxjs';
+import { Asset, Folio, FolioView, Placement } from '../../core/models/interfaces';
+import { catchError, exhaustMap, Observable, map, timeout, retry } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { environment } from '../../../environments/environment';
+import { ErrorService } from '../../core/services/error.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FolioService {
   http = inject(HttpClient);
+  errorService = inject(ErrorService);
+  err = this.errorService.handleHttpErrorResponse;
 
   private folioAPIUrl = `api/folio`;
   private folioViewAPIUrl = `api/folioview`;
 
   private placementAPIUrl = `api/placement`;
-  private placementViewAPIUrl = `api/placementview`;
-
   private assetAPIUrl = `api/asset`;
-  private assetViewAPIUrl = `api/assetview`;
-
-  foliosGetAll(): Observable<Folio[]> {
-    return this.http.get<Folio[]>(this.folioAPIUrl);
-  }
-
-  folioGetById(id: number): Observable<Folio> {
-    return this.http.get<Folio>(`${this.folioAPIUrl}/${id}`);
-  }
-
-  folioViewGetById(id: number): Observable<FolioView> {
-    return this.http.get<FolioView>(`${this.folioViewAPIUrl}/${id}`);
-  }
 
   createFolioAsRoot({ authorId, folioName }: Folio): Observable<Folio> {
-    return this.http.post<Folio>(this.folioAPIUrl, { authorId, folioName });
+    return this.http.post<Folio>(this.folioAPIUrl, { authorId, folioName }).pipe(
+      timeout(5000),
+      retry(2),
+      catchError(error => this.err(error, 'Folio creation failed'))
+    );
   }
 
   createFolioAsAsset(folioPrep: Partial<Folio>): Observable<{ newFolio: Folio; newAsset: Asset; newPlacement: Placement }> {
     return this.http.post<Folio>(this.folioAPIUrl, folioPrep).pipe(
+      timeout(5000),
+      retry(2),
       exhaustMap((newFolio: Folio) => {
-        const newAsset: Asset = {
+        const assetPrep: Asset = {
           id: 0,
           mediaType: 'folio',
           sourceId: newFolio.id.toString() || '0',
           authorId: folioPrep.authorId!,
         };
-        return this.assetCreate(newAsset).pipe(
+        return this.assetCreate(assetPrep).pipe(
           exhaustMap((newAsset: Asset) => {
             const placementPrep: Placement = {
               id: 0,
@@ -64,45 +58,21 @@ export class FolioService {
           })
         );
       }),
-      catchError(error => {
-        console.error('Folio creation failed', error);
-        return throwError(() => new Error('Folio creation failed'));
-      })
+      catchError(error => this.err(error, 'Folio creation failed'))
     );
-  }
-
-  placementsGetAll(): Observable<Placement[]> {
-    if (environment.ianConfig.showLogs) console.log(`folioService.allPlacements() ${this.placementAPIUrl}`);
-    return this.http.get<Placement[]>(this.placementAPIUrl).pipe(takeUntilDestroyed());
-  }
-
-  placementViewsGetAll(): Observable<PlacementView[]> {
-    if (environment.ianConfig.showLogs) console.log(`folioService.allFolioViews() ${this.placementViewAPIUrl}`);
-    return this.http.get<PlacementView[]>(this.placementViewAPIUrl).pipe(takeUntilDestroyed());
   }
 
   placementCreate({ authorId, assetId, folioId, caption }: Placement): Observable<Placement> {
     const id = undefined;
-    return this.http.post<Placement>(this.placementAPIUrl, { id, authorId, assetId, folioId, caption }).pipe(
-      catchError(error => {
-        if (environment.ianConfig.showLogs) console.log('error', error);
-        return throwError(() => new Error('Placement Create failed'));
-      })
-    );
-  }
-
-  assetsGetAll(): Observable<Asset[]> {
-    if (environment.ianConfig.showLogs) console.log(`folioService.allAssets() ${this.assetAPIUrl}`);
-    return this.http.get<Asset[]>(this.assetAPIUrl).pipe(takeUntilDestroyed());
+    return this.http
+      .post<Placement>(this.placementAPIUrl, { id, authorId, assetId, folioId, caption })
+      .pipe(catchError(error => this.err(error, 'Folio creation failed')));
   }
 
   assetCreate({ authorId, mediaType, sourceId }: Asset): Observable<Asset> {
-    return this.http.post<Asset>(this.assetAPIUrl, { authorId, mediaType, sourceId }).pipe(
-      catchError(error => {
-        if (environment.ianConfig.showLogs) console.log('error', error);
-        return throwError(() => new Error('Asset Create failed'));
-      })
-    );
+    return this.http
+      .post<Asset>(this.assetAPIUrl, { authorId, mediaType, sourceId })
+      .pipe(catchError(error => this.err(error, 'Asset creation failed')));
   }
 
   createPlacementAsAsset(assetData: Asset, folioId: number, caption: string): Observable<{ newAsset: Asset; newPlacement: Placement }> {
@@ -122,10 +92,28 @@ export class FolioService {
           }))
         );
       }),
-      catchError(error => {
-        console.error('Folio creation failed', error);
-        return throwError(() => new Error('Folio creation failed'));
-      })
+      catchError(error => this.err(error, 'Placement creation failed'))
     );
+  }
+
+  placementsGetAll(): Observable<Placement[]> {
+    if (environment.ianConfig.showLogs) console.log(`folioService.allPlacements() ${this.placementAPIUrl}`);
+    return this.http.get<Placement[]>(this.placementAPIUrl).pipe(takeUntilDestroyed());
+  }
+
+  assetsGetAll(): Observable<Asset[]> {
+    if (environment.ianConfig.showLogs) console.log(`folioService.allAssets() ${this.assetAPIUrl}`);
+    return this.http.get<Asset[]>(this.assetAPIUrl).pipe(takeUntilDestroyed());
+  }
+  foliosGetAll(): Observable<Folio[]> {
+    return this.http.get<Folio[]>(this.folioAPIUrl);
+  }
+
+  folioGetById(id: number): Observable<Folio> {
+    return this.http.get<Folio>(`${this.folioAPIUrl}/${id}`);
+  }
+
+  folioViewGetById(id: number): Observable<FolioView> {
+    return this.http.get<FolioView>(`${this.folioViewAPIUrl}/${id}`);
   }
 }
