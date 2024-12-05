@@ -4,6 +4,9 @@
     <button class="streamButton middle" (click)="gotoComments()">Comments</button>
     <button class="streamButton right" (click)="gotoResults()">Results</button>
   </div>
+  @if (errorService.error) {
+    <div class="error-message">{{ errorService.error }}</div>
+  }
   <div class="streamHeaderCaption">
     <span>-</span>
     <span>{{ pitchViewSelected().name }}</span>

@@ -1,17 +1,32 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ErrorService {
-  public handleHttpErrorResponse({ status }: HttpErrorResponse, message?: string) {
+  handleHttpErrorResponse({ status }: HttpErrorResponse, message?: string) {
     message = message || 'Sorry. An error occurred';
+    this.errorSignal.set(message);
     return throwError(() => `${status}:  ${message}`);
   }
-  public handleSignalStoreResponse({ status }: any, message?: string) {
+
+  handleSignalStoreResponse({ status }: any, message?: string) {
     message = message || 'Sorry. An error occurred';
+    this.errorSignal.set(message);
     return throwError(() => `${status}:  ${message}`);
+  }
+  private errorSignal = signal<string | null>(null);
+
+  get error() {
+    return this.errorSignal();
+  }
+
+  setError(message: string | null) {
+    this.errorSignal.set(message);
+  }
+  clearError() {
+    this.setError(null);
   }
 }

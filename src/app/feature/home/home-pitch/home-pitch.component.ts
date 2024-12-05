@@ -3,6 +3,7 @@ import { PitchStore } from '../../pitch/pitch.store';
 import { PitchView, SlateMemberView } from '../../../core/models/interfaces';
 import { HomeSlateMemberComponent } from '../home-slate-member/home-slate-member.component';
 import { Router } from '@angular/router';
+import { ErrorService } from '../../../core/services/error.service';
 
 @Component({
   selector: 'mh5-home-pitch',
@@ -12,6 +13,7 @@ import { Router } from '@angular/router';
   styleUrl: './home-pitch.component.scss',
 })
 export class HomePitchComponent {
+  errorService = inject(ErrorService);
   pitchStore = inject(PitchStore);
   router = inject(Router);
 

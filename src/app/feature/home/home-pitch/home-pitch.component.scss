@@ -11,15 +11,6 @@
   justify-content: space-between;
   color: #999;
 }
-.streamHeaderCaption {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 2px;
-  margin-bottom: 6px;
-  padding: 2px;
-  border: 1px solid #aa7;
-}
 
 $content-text-color: #eef;
 $content-visited-text-color: #dde;
@@ -28,10 +19,12 @@ $content-visited-text-color: #dde;
   color: $content-text-color;
   text-decoration: underline;
 }
+
 .placementTitle:visited {
   color: $content-visited-text-color;
   text-decoration: none !important;
 }
+
 .topBorder {
   font-size: 16px;
   opacity: 55%;
@@ -39,4 +32,56 @@ $content-visited-text-color: #dde;
   padding-top: 5px;
   border-bottom: 1px inset #669;
   padding-left: 15px;
+}
+.streamHeaderCaption {
+  position: relative; /* Ensure pseudo-element positioning */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2px;
+  margin-bottom: 6px;
+  padding: 2px;
+  border: 1px solid #aa7;
+  background-color: #001; /* Match container background */
+  overflow: hidden; /* Hide overflow from animation */
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%; /* Extend width for smooth animation */
+    height: 100%;
+
+    /* Background using CSS gradients */
+    background: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px; /* Grid size */
+
+    opacity: 0.1; /* Subtlety of the background */
+    pointer-events: none; /* Allow interactions through the pseudo-element */
+
+    /* Apply the animation */
+    -webkit-animation: moveGradient 120s linear infinite; /* Safari and Chrome */
+    animation: moveGradient 120s linear infinite;
+  }
+}
+
+/* Define keyframes for the animation */
+@-webkit-keyframes moveGradient {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes moveGradient {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(-50%, -50%);
+  }
 }
