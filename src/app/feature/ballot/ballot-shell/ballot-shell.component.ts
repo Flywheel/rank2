@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, output, signal } from '@angular/core';
 import { HeaderComponent } from '../../../core/components/header/header.component';
 import { BallotBodyComponent } from '../ballot-body/ballot-body.component';
 import { BallotMenuComponent } from '../ballot-menu/ballot-menu.component';
@@ -15,13 +15,26 @@ import { SlateMemberView } from '../../../core/models/interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BallotShellComponent {
-  hideViewerDisplay = signal<boolean>(true);
+  hidePlacementViewer = signal<boolean>(true);
   slateMember = signal<SlateMemberView>(slateMemberViewInit);
 
-  hidePlacementDisplayToggle(toggle: boolean) {
-    this.hideViewerDisplay.set(toggle);
+  resetPitch = output<void>();
+
+  togglePlacementViewer(toggle: boolean) {
+    console.log('togglePlacementViewer', toggle);
+    this.hidePlacementViewer.set(toggle);
+    if (toggle) {
+      this.resetPitch.emit();
+    }
   }
   setSlateMemberView(slateMemberView: SlateMemberView) {
+    console.log('setSlateMemberView', slateMemberView);
     this.slateMember.set(slateMemberView);
+  }
+
+  setPitchView(slateMemberView: SlateMemberView) {
+    console.log('setSlateMemberView', slateMemberView);
+    this.slateMember.set(slateMemberView);
+    this.resetPitch.emit();
   }
 }

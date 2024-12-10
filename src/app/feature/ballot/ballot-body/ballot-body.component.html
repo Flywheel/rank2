@@ -23,13 +23,13 @@
     cdkDropListOrientation="mixed"
     (cdkDropListDropped)="drop($event)">
     <div class="candidate-list ranked">
-      @for (ranked of membersRanked(); track $index) {
-        <div cdkDrag class="candidate" id="cand-{{ ranked.placementId }}" [attr.tabindex]="ranked.placementId">
+      @for (rankedMember of membersRanked(); track $index) {
+        <div cdkDrag class="candidate" id="cand-{{ rankedMember.placementId }}" [attr.tabindex]="rankedMember.placementId">
           <span
             class="move-candidate-up"
             cdkDragHandle
-            (click)="moveUpOnePosition(ranked)"
-            (keydown)="moveUpOnePosition(ranked)"
+            (click)="moveUpOnePosition(rankedMember)"
+            (keydown)="moveUpOnePosition(rankedMember)"
             tabindex="1">
             @if ($index !== 0) {
               &#8593;
@@ -37,10 +37,15 @@
           </span>
           <span class="sort-handle" cdkDragHandle></span>
           <span class="candidate-index" cdkDragHandle>{{ $index + 1 }}</span>
-          <span class="candidate-ranked" cdkDragHandle (click)="viewPlacement(ranked)" (keypress)="viewPlacement(ranked)" tabindex="1">
-            {{ ranked.placementView.caption }}</span
+          <span
+            class="candidate-ranked"
+            cdkDragHandle
+            (click)="viewPlacement(rankedMember)"
+            (keypress)="viewPlacement(rankedMember)"
+            tabindex="rankedMember.id">
+            {{ rankedMember.placementView.caption }}</span
           >
-          <button class="move-candidate-down" (click)="moveDownOnePosition(ranked)">&#8595;</button>
+          <button class="move-candidate-down" (click)="moveDownOnePosition(rankedMember)">&#8595;</button>
         </div>
       } @empty {
         <p>Ready to accept your preferences for {{ pitchViewSelected().name }}.</p>

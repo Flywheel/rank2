@@ -25,7 +25,7 @@ export class StartupService {
   async importMiniHeraldAssets() {
     const authorStartup: Author = miniHeraldData.author;
 
-    await this.authorStore.authorCreate(authorStartup);
+    await this.authorStore.createAuthor(authorStartup);
     const folioDefault: Folio = {
       id: 0,
       authorId: authorStartup.id,

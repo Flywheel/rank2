@@ -22,7 +22,7 @@ export class FolioService {
 
   createFolioAsRoot({ authorId, folioName }: Folio): Observable<Folio> {
     return this.http.post<Folio>(this.folioAPIUrl, { authorId, folioName }).pipe(
-      timeout(5000),
+      timeout(2500),
       retry(2),
       catchError(error => this.err(error, 'Folio creation failed'))
     );
@@ -30,7 +30,7 @@ export class FolioService {
 
   createFolioAsAsset(folioPrep: Partial<Folio>): Observable<{ newFolio: Folio; newAsset: Asset; newPlacement: Placement }> {
     return this.http.post<Folio>(this.folioAPIUrl, folioPrep).pipe(
-      timeout(5000),
+      timeout(2500),
       retry(2),
       exhaustMap((newFolio: Folio) => {
         const assetPrep: Asset = {

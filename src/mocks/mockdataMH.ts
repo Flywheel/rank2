@@ -197,8 +197,8 @@ export const miniHeraldData: DataImporter = {
       caption: 'Stock Market Crash of 1929',
       sourceId: '7090721147318226222',
     },
-    { folioName: 'Corey Bradford TikTok', mediaType: 'tiktok', caption: 'd', sourceId: '6761576192991677702' },
-    { folioName: 'Corey Bradford TikTok', mediaType: 'tiktok', caption: 'f', sourceId: '7364243751952223530' },
+    { folioName: 'Corey Bradford TikTok', mediaType: 'tiktok', caption: 'Social Media Tour', sourceId: '6761576192991677702' },
+    { folioName: 'Corey Bradford TikTok', mediaType: 'tiktok', caption: 'WWII Study Guide', sourceId: '7364243751952223530' },
     {
       folioName: 'Corey Bradford TikTok',
       mediaType: 'tiktok',

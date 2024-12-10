@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, output } from '@angular/core';
+import { Component, computed, inject, output } from '@angular/core';
 import { PitchStore } from '../../pitch/pitch.store';
 import { PitchView, SlateMemberView } from '../../../core/models/interfaces';
 import { HomeSlateMemberComponent } from '../home-slate-member/home-slate-member.component';
@@ -29,7 +29,6 @@ export class HomePitchComponent {
       this.placementToDisplay.emit(slateMember);
     } else {
       const pitchId = Number(slateMember.placementView.assetView.sourceId);
-
       this.pitchStore.setPitchSelected(pitchId);
       this.pitchToDisplay.emit(slateMember);
     }

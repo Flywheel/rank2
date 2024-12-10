@@ -60,15 +60,15 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private async loadForDemo_NoBackend() {
     const authorId = this.authorStore.authorLoggedIn().id;
-    const author2 = await this.authorStore.authorSelectedByIdAsync(authorId);
+    const author2 = await this.authorStore.selectedAuthorByIdAsync(authorId);
     const author = this.authorStore.authorSelectedSetById(authorId);
 
     console.log(this.authorStore.authorLoggedIn());
     console.log(author);
     console.log(author2);
     if (!author) {
-      await this.authorStore.authorCreate(author);
-      await this.authorStore.authorLogin(author);
+      await this.authorStore.createAuthor(author);
+      await this.authorStore.loginAuthor(author);
     }
     if (this.authorStore.authorLoggedIn().name !== AUTHOR_DEFAULT_NAME) {
       const folioDefault: Folio = {
@@ -83,7 +83,7 @@ export class AppComponent implements OnInit, OnDestroy {
       console.log(this.folioStore.folios());
     }
     await this.startupService.importMiniHeraldAssets();
-    await this.startupService.importAuthorLoggedInAssets();
+    //  await this.startupService.importAuthorLoggedInAssets();
     this.authorStore.setStartupCompleted();
   }
 

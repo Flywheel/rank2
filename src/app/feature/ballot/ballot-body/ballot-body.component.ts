@@ -28,8 +28,9 @@ export class BallotBodyComponent {
     return this.filterAvailableMembers(this.membersAvailable(), rankedCandidatesIds);
   });
 
-  hidePlacementDisplay = output<boolean>();
+  hidePlacementViewer = output<boolean>();
   placementToDisplay = output<SlateMemberView>();
+  pitchToDisplay = output<SlateMemberView>();
 
   initializer = effect(() => {
     this.pitchViewSelected();
@@ -39,7 +40,8 @@ export class BallotBodyComponent {
   });
 
   viewPlacement(placement: SlateMemberView) {
-    this.hidePlacementDisplay.emit(false);
+    console.log('viewPlacement', placement);
+    this.hidePlacementViewer.emit(false);
     this.placementToDisplay.emit(placement);
   }
 

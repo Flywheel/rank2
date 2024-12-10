@@ -72,7 +72,7 @@ export class AuthorProfileComponent implements AfterViewInit {
   initializeAuthorHandle() {
     const currentAuthor = this.authorStore.authorLoggedIn();
     const updatedAuthorData: Author = { id: currentAuthor.id, name: this.channelName() };
-    this.authorStore.authorLoggedInUpdate(currentAuthor.id, updatedAuthorData);
+    this.authorStore.updateLoggedInAuthor(currentAuthor.id, updatedAuthorData);
     const newFolio: Folio = {
       id: 0,
       authorId: currentAuthor.id,

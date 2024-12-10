@@ -5,8 +5,8 @@ import { pitchInit, pitchViewInit, slateViewInit, slateInit, slateMemberInit, pl
 import { PitchService } from './pitch.service';
 import { computed, inject } from '@angular/core';
 import { catchError, firstValueFrom, tap, throwError } from 'rxjs';
-import { environment } from '../../../environments/environment';
 import { FolioStore } from '../folio/folio.store';
+import { ErrorService } from '../../core/services/error.service';
 
 export const PitchStore = signalStore(
   { providedIn: 'root' },
@@ -67,6 +67,7 @@ export const PitchStore = signalStore(
       ),
     };
   }),
+
   withComputed(store => {
     const folioStore = inject(FolioStore);
     return {
@@ -93,15 +94,17 @@ export const PitchStore = signalStore(
   }),
   withMethods(store => {
     const dbPitch = inject(PitchService);
+    const errorService = inject(ErrorService);
+    const err = errorService.handleSignalStoreResponse;
     return {
       setPitchSelected(pitchId: number) {
         updateState(store, `[Pitch] Select By Id  ${pitchId}`, { pitchIdSelected: pitchId });
       },
 
       createPitch(pitch: Pitch) {
-        updateState(store, '[Pitch] Add Start', { isLoading: true });
+        updateState(store, '[Pitch] Create Start', { isLoading: true });
         dbPitch
-          .pitchCreate(pitch)
+          .createPitchWithSlate(pitch)
           .pipe(
             tap({
               next: ({ newPitch, newSlate }) => {
@@ -113,20 +116,20 @@ export const PitchStore = signalStore(
                 store.writeToStorage();
               },
               error: error => {
-                if (environment.ianConfig.showLogs) console.log('error', error);
-                updateState(store, '[Pitch] Add Failed', { isLoading: false });
+                err(error, 'Create Pitch Failed');
+                updateState(store, '[Pitch] Create Failed', { isLoading: false });
               },
             })
           )
           .subscribe();
       },
 
-      async createPitchAndSlate(pitchPrep: Partial<Pitch>): Promise<{ newPitch: Pitch; newSlate: Slate }> {
+      async createPitchAndSlate3(pitchPrep: Partial<Pitch>): Promise<{ newPitch: Pitch; newSlate: Slate }> {
         updateState(store, '[Pitch] Create Start', { isLoading: true });
         const { newPitch, newSlate } = await firstValueFrom(
-          dbPitch.pitchCreate(pitchPrep).pipe(
+          dbPitch.createPitchWithSlate(pitchPrep).pipe(
             catchError(error => {
-              console.error('Pitch creation failed', error);
+              err(error, 'Pitch and Slate Create Failed');
               updateState(store, '[Pitch] Create Failed', { isLoading: false });
               return throwError(error);
             })
@@ -146,31 +149,48 @@ export const PitchStore = signalStore(
         return { newPitch, newSlate };
       },
 
-      addSlateMembers(slateMembers: SlateMember[]) {
+      async createPitchAndSlate(pitchPrep: Partial<Pitch>): Promise<{ newPitch: Pitch; newSlate: Slate }> {
+        updateState(store, '[Pitch] Create Start', { isLoading: true });
+        try {
+          const { newPitch, newSlate } = await firstValueFrom(dbPitch.createPitchWithSlate(pitchPrep));
+
+          updateState(store, '[Pitch] Add Success', {
+            pitches: [...store.pitches(), newPitch],
+            isLoading: false,
+          });
+          updateState(store, '[Slate] Add Success', {
+            slates: [...store.slates(), newSlate],
+            isLoading: false,
+          });
+
+          store.writeToStorage();
+          return { newPitch, newSlate };
+        } catch (error) {
+          err(error, 'Create Pitch and Slate Failed');
+          updateState(store, '[Pitch And Slate] Add Failed', { isLoading: false });
+        }
+        return { newPitch: pitchInit, newSlate: slateInit };
+      },
+
+      async addSlateMembers(slateMembers: SlateMember[]) {
         updateState(store, '[SlateMember] Add Start', { isLoading: true });
-        const members = slateMembers.map(slateMember => ({
-          id: 0,
-          placementId: slateMember.placementId,
-          slateId: slateMember.slateId,
-          rankOrder: slateMember.rankOrder,
-        }));
-        dbPitch
-          .addSlateMembers(members)
-          .pipe(
-            tap({
-              next: newMembers => {
-                updateState(store, '[SlateMember] Add Success', {
-                  slateMembers: [...store.slateMembers(), ...newMembers],
-                  isLoading: false,
-                });
-              },
-              error: error => {
-                if (environment.ianConfig.showLogs) console.log('error', error);
-                updateState(store, '[SlateMember] Add Failed', { isLoading: false });
-              },
-            })
-          )
-          .subscribe();
+        try {
+          const members = slateMembers.map(slateMember => ({
+            id: 0,
+            placementId: slateMember.placementId,
+            slateId: slateMember.slateId,
+            rankOrder: slateMember.rankOrder,
+          }));
+          const newMembers = await firstValueFrom(dbPitch.addSlateMembers(members));
+
+          updateState(store, '[SlateMember] Add Success', {
+            slateMembers: [...store.slateMembers(), ...newMembers],
+            isLoading: false,
+          });
+        } catch (error) {
+          err(error, 'Add Slatemembers Failed');
+          updateState(store, '[SlateMember] Add Failed', { isLoading: false });
+        }
       },
     };
   })

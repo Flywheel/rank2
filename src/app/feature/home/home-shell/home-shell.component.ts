@@ -29,6 +29,7 @@ export class HomeShellComponent {
       this.resetPitch.emit();
     }
   }
+
   setSlateMemberView(slateMemberView: SlateMemberView) {
     this.slateMember.set(slateMemberView);
   }
