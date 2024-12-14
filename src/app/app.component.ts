@@ -59,21 +59,21 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private async loadForDemo_NoBackend() {
-    const authorId = this.authorStore.authorLoggedIn().id;
-    const author2 = await this.authorStore.selectedAuthorByIdAsync(authorId);
-    const author = this.authorStore.authorSelectedSetById(authorId);
+    const loggedInAuthorId = this.authorStore.authorLoggedIn().id;
+    //    const author2 = await this.authorStore.selectedAuthorByIdAsync(loggedInAuthorId);
+    const author = this.authorStore.authorSelectedSetById(loggedInAuthorId);
 
     console.log(this.authorStore.authorLoggedIn());
     console.log(author);
-    console.log(author2);
+    //   console.log(author2);
     if (!author) {
-      await this.authorStore.createAuthor(author);
+      await this.authorStore.createAuthor(author, false);
       await this.authorStore.loginAuthor(author);
     }
     if (this.authorStore.authorLoggedIn().name !== AUTHOR_DEFAULT_NAME) {
       const folioDefault: Folio = {
         id: 0,
-        authorId: authorId,
+        authorId: loggedInAuthorId,
         folioName: '@' + this.authorStore.authorLoggedIn().name,
         parentFolioId: undefined,
       };

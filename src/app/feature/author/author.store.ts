@@ -111,7 +111,7 @@ export const AuthorStore = signalStore(
   withMethods(store => {
     const dbAuthor = inject(AuthorService);
     const errorService = inject(ErrorService);
-    const err = errorService.handleSignalStoreResponse;
+    const handleError = errorService.handleSignalStoreResponse;
 
     return {
       async getConsentValueFromLocalStorage(consentValue: string) {
@@ -121,13 +121,13 @@ export const AuthorStore = signalStore(
 
           updateState(store, '[Author] Read From Storage Success', { isLoading: false, consentStatus: consentValue });
         } catch (error) {
-          err(error, '[Author] Read From Storage Failed');
+          handleError(error, '[Author] Read From Storage Failed');
           updateState(store, '[Author] Read From Storage Failed', { isLoading: false });
           throw error;
         }
       },
 
-      async createAuthor(authorPrep: Author) {
+      async createAuthor(authorPrep: Author, inscribeToStorage: boolean) {
         updateState(store, '[Author] Add Start', { isLoading: true });
         try {
           const newAuthor = await firstValueFrom(dbAuthor.authorCreate(authorPrep));
@@ -136,11 +136,11 @@ export const AuthorStore = signalStore(
             isLoading: false,
           });
         } catch (error) {
-          err(error, '[Author] Read From Storage Failed');
-          updateState(store, '[Author] Read From Storage Failed', { isLoading: false });
+          handleError(error, '[Author] Add Failed');
+          updateState(store, '[Author] Add Failed', { isLoading: false });
           throw error;
         } finally {
-          store.writeToStorage();
+          if (inscribeToStorage) store.writeToStorage();
         }
       },
 
@@ -153,7 +153,7 @@ export const AuthorStore = signalStore(
           });
           store.writeToStorage();
         } catch (error) {
-          err(error, '[Author] Login Failed');
+          handleError(error, '[Author] Login Failed');
           updateState(store, '[Author] Login Failed', { isLoading: false });
           throw error;
         }
@@ -170,7 +170,7 @@ export const AuthorStore = signalStore(
           });
           store.writeToStorage();
         } catch (error) {
-          err(error, '[Author] Update Failed');
+          handleError(error, '[Author] Update Failed');
           updateState(store, '[Author] Update Failed', { isLoading: false });
           throw error;
         }
@@ -195,7 +195,7 @@ export const AuthorStore = signalStore(
             });
             return author;
           } catch (error) {
-            err(error, '[Author] Update Failed');
+            handleError(error, '[Author] Update Failed');
             updateState(store, '[Author] GetById Failure', { isLoading: false });
             throw error;
           }

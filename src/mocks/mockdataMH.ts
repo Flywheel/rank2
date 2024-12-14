@@ -8,17 +8,15 @@ export const miniHeraldData: DataImporter = {
   folios: [
     { folioName: 'Grammy 2024 Record of the Year', parentFolioName: '@miniherald' },
     { folioName: 'Noosphere', parentFolioName: '@miniherald' },
-    { folioName: 'Eurovision 2024', parentFolioName: '@miniherald' },
-
     { folioName: 'Tony Best Play 2024', parentFolioName: '@miniherald' },
     { folioName: 'Tony Best Musical 2024', parentFolioName: '@miniherald' },
     { folioName: 'Corey Bradford TikTok', parentFolioName: '@miniherald' },
     { folioName: 'Corey Bradford YT Shorts', parentFolioName: '@miniherald' },
     { folioName: 'US Pres 2024', parentFolioName: '@miniherald' },
+    { folioName: 'Ladder Singles 2009', parentFolioName: '@miniherald' },
     { folioName: 'AimsPoll', parentFolioName: '@miniherald' },
     { folioName: 'Border Integrity', parentFolioName: 'AimsPoll' },
     { folioName: 'Minimum Wage', parentFolioName: 'AimsPoll' },
-    { folioName: 'Ladder Singles 2009', parentFolioName: '@miniherald' },
   ],
   assets: [
     {

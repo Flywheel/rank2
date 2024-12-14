@@ -25,7 +25,7 @@ export class AuthorConsentComponent {
 
   async acceptCookies() {
     const author: Author = { id: uuidv7(), name: AUTHOR_DEFAULT_NAME };
-    this.authorStore.createAuthor(author);
+    this.authorStore.createAuthor(author, true);
     this.authorStore.loginAuthor(author);
     this.setConsent('accepted');
   }
