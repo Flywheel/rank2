@@ -11,7 +11,7 @@ import { ErrorService } from '../../core/services/error.service';
 export class AuthorService {
   http = inject(HttpClient);
   errorService = inject(ErrorService);
-  err = this.errorService.handleHttpErrorResponse;
+  handleError = this.errorService.handleHttpErrorResponse;
   private authorAPIUrl = 'api/author';
 
   authorCreate(author: Author): Observable<Author> {
@@ -21,7 +21,7 @@ export class AuthorService {
       tap(data => {
         if (environment.ianConfig.showLogs) console.log('data', data);
       }),
-      catchError(error => this.err(error, 'Author creation failed'))
+      catchError(error => this.handleError(error, 'Author creation failed'))
     );
   }
 
@@ -35,7 +35,7 @@ export class AuthorService {
       tap(data => {
         if (environment.ianConfig.showLogs) console.log('data', data);
       }),
-      catchError(error => this.err(error, 'Author Update failed'))
+      catchError(error => this.handleError(error, 'Author Update failed'))
     );
   }
 

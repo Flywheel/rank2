@@ -6,13 +6,15 @@ export const miniHeraldData: DataImporter = {
     id: 'xxxx---xxxx---xxxx---xxxx',
   },
   folios: [
-    //  { folioName: 'US Pres 2024', parentFolioName: '@miniherald' },
     { folioName: 'Grammy 2024 Record of the Year', parentFolioName: '@miniherald' },
+    { folioName: 'Noosphere', parentFolioName: '@miniherald' },
     { folioName: 'Eurovision 2024', parentFolioName: '@miniherald' },
+
     { folioName: 'Tony Best Play 2024', parentFolioName: '@miniherald' },
     { folioName: 'Tony Best Musical 2024', parentFolioName: '@miniherald' },
     { folioName: 'Corey Bradford TikTok', parentFolioName: '@miniherald' },
     { folioName: 'Corey Bradford YT Shorts', parentFolioName: '@miniherald' },
+    { folioName: 'US Pres 2024', parentFolioName: '@miniherald' },
     { folioName: 'AimsPoll', parentFolioName: '@miniherald' },
     { folioName: 'Border Integrity', parentFolioName: 'AimsPoll' },
     { folioName: 'Minimum Wage', parentFolioName: 'AimsPoll' },
@@ -71,6 +73,14 @@ export const miniHeraldData: DataImporter = {
     { folioName: 'Border Integrity', mediaType: 'Caption', caption: 'Facts', sourceId: '' },
     { folioName: 'Border Integrity', mediaType: 'Caption', caption: 'Values', sourceId: '' },
     { folioName: 'Border Integrity', mediaType: 'Caption', caption: 'Propositions', sourceId: '' },
+
+    {
+      folioName: 'Noosphere',
+      mediaType: 'youtube',
+      caption: 'Terrence Deacon on the Noosphere | Closer to Truth Chats',
+      sourceId: 'aBNmAleGbnE',
+    },
+
     { folioName: 'Minimum Wage', mediaType: 'Caption', caption: 'Facts', sourceId: '' },
     { folioName: 'Minimum Wage', mediaType: 'Caption', caption: 'Values', sourceId: '' },
     { folioName: 'Minimum Wage', mediaType: 'Caption', caption: 'Propositions', sourceId: '' },

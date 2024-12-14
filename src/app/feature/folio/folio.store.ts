@@ -11,20 +11,21 @@ export const FolioStore = signalStore(
   { providedIn: 'root' },
   withDevtools('folios'),
   withState({
-    folioIdSelected: 0,
     folios: [folioInit],
+    folioIdSelected: 0,
+    isAddingFolio: false,
+    isLoading: false,
+    isAddingPlacement: false,
     placements: [placementInit],
     assets: [assetInit],
-    isLoading: false,
-    isAddingFolio: false,
-    isAddingPlacement: false,
-    error: null as string | null,
   }),
 
   withStorageSync({
     key: 'folios',
     autoSync: false,
   }),
+
+  //#region Computed Signals
 
   withComputed(store => {
     return {
@@ -79,11 +80,13 @@ export const FolioStore = signalStore(
     };
   }),
 
+  //#endregion
+
+  //#region Methods
   withMethods(store => {
     const dbFolio = inject(FolioService);
-
     const errorService = inject(ErrorService);
-    const err = errorService.handleSignalStoreResponse;
+    const handleError = errorService.handleSignalStoreResponse;
 
     return {
       toggleFolioAdder(state: boolean) {
@@ -102,11 +105,11 @@ export const FolioStore = signalStore(
             folios: [...store.folios(), newFolio],
             isLoading: false,
           });
-          store.writeToStorage();
         } catch (error) {
-          err(error, '[Folio-Root] Create Failed');
           updateState(store, '[Folio-Root] Create Failed', { isLoading: false });
-          throw error;
+          throw handleError(error, '[Folio-Root] Create Failed');
+        } finally {
+          store.writeToStorage();
         }
       },
 
@@ -128,9 +131,8 @@ export const FolioStore = signalStore(
 
           return { newFolio, newAsset, newPlacement };
         } catch (error) {
-          err(error, '[Folio-Root] Create Failed');
           updateState(store, '[Folio-Root] Create Failed', { isLoading: false });
-          throw error;
+          throw handleError(error, '[Folio-Root] Create Failed');
         }
       },
 
@@ -147,15 +149,11 @@ export const FolioStore = signalStore(
           });
           store.writeToStorage();
         } catch (error) {
-          err(error, 'Placement with Asset Create Failed');
+          handleError(error, 'Placement with Asset Create Failed');
           updateState(store, '[Placement With Asset] Create Failed', { isLoading: false });
           throw error;
         }
       },
-
-      //#endregion Folio
-
-      //#region Placement
 
       togglePlacementAdder(state: boolean) {
         updateState(store, `[Placement] Is Adding = ${state}`, { isAddingPlacement: state });
@@ -171,15 +169,11 @@ export const FolioStore = signalStore(
           });
           store.writeToStorage();
         } catch (error) {
-          err(error, 'Placement Create Failed');
+          handleError(error, 'Placement Create Failed');
           updateState(store, '[Placement] Create Failed', { isLoading: false });
           throw error;
         }
       },
-
-      //#endregion
-
-      //#region Asset
 
       async assetCreate(assetPrep: Asset) {
         updateState(store, '[Asset] Create Start', { isLoading: true });
@@ -191,15 +185,19 @@ export const FolioStore = signalStore(
           });
           store.writeToStorage();
         } catch (error) {
-          err(error, 'Placement Create Failed');
+          handleError(error, 'Placement Create Failed');
           updateState(store, '[Placement] Create Failed', { isLoading: false });
           throw error;
         }
       },
-
-      //#endregion
     };
   })
+  //#endregion
+
+  // withStorageSync({
+  //   key: 'folios',
+  //   autoSync: false,
+  // }),
 );
 
 // async createFolioAsAsset2(folioPrep: Partial<Folio>): Promise<{ newFolio: Folio; newAsset: Asset; newPlacement: Placement }> {

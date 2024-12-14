@@ -10,13 +10,10 @@
 </div>
 @if (needsAuthorName()) {
   <div class="signup-warning-container">
-    <div
-      (click)="openPage('/author')"
-      (keydown.enter)="openPage('/author')"
-      tabindex="0"
-      aria-label="Signup Warning"
-      class="signup-warning">
-      To add and manage assets, please create a handle name for your author profile.
+    <div tabindex="0" aria-label="Signup Warning" class="signup-warning">
+      To add and manage assets, please create a handle name for your author profile.<br />
+      <mh5-icon-profile />
+      <mh5-author-inputs />
     </div>
   </div>
 } @else {

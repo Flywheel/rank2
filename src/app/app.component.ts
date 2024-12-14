@@ -83,7 +83,7 @@ export class AppComponent implements OnInit, OnDestroy {
       console.log(this.folioStore.folios());
     }
     await this.startupService.importMiniHeraldAssets();
-    //  await this.startupService.importAuthorLoggedInAssets();
+    await this.startupService.importAuthorLoggedInAssets();
     this.authorStore.setStartupCompleted();
   }
 

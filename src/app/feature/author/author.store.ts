@@ -1,7 +1,7 @@
 import { computed, inject } from '@angular/core';
 import { signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
-import { pipe, switchMap, of, catchError, throwError, map, firstValueFrom } from 'rxjs';
-import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { firstValueFrom } from 'rxjs';
+
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
 import { Author, AuthorView, PitchView, FolioView, TreeNode } from '../../core/models/interfaces';
 import { authorInit, authorViewInit } from '../../core/models/initValues';
@@ -15,9 +15,9 @@ export const AuthorStore = signalStore(
   { providedIn: 'root' },
   withDevtools('authors'),
   withState({
+    authors: [authorInit],
     authorLoggedIn: authorInit,
     authorSelectedId: '',
-    authors: [authorInit],
     isLoading: false,
     consentStatus: 'unknown' as string,
     startupCompleted: false,
@@ -139,6 +139,8 @@ export const AuthorStore = signalStore(
           err(error, '[Author] Read From Storage Failed');
           updateState(store, '[Author] Read From Storage Failed', { isLoading: false });
           throw error;
+        } finally {
+          store.writeToStorage();
         }
       },
 

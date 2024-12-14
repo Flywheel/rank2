@@ -20,7 +20,7 @@ export class HeaderComponent {
   caption = input<string>('Pitch');
   location = inject(Location);
 
-  hidePlacementDisplay = output<boolean>();
+  hidePlacementViewer = output<boolean>();
 
   openPage(page: string) {
     this.router.navigate([page]);

@@ -1,6 +1,6 @@
 @if (!hidePlacementViewer()) {
-  <mh5-header callerPage="viewer" (hidePlacementDisplay)="togglePlacementViewer($event)" />
-  <div class="placement-display">
+  <mh5-header callerPage="viewer" (hidePlacementViewer)="togglePlacementViewer($event)" />
+  <div class="placement-viewer">
     <mh5-viewer [placementView]="slateMember().placementView" />
   </div>
 } @else {

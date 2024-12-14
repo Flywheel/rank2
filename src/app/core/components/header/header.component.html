@@ -6,7 +6,7 @@
       <div><mh5-icon-share /></div>
     }
     @case ('pitch') {
-      <a (click)="hidePlacementDisplay.emit(true)" (keydown)="hidePlacementDisplay.emit(true)" tabindex="0" aria-label="demoText">Done</a>
+      <a (click)="hidePlacementViewer.emit(true)" (keydown)="hidePlacementViewer.emit(true)" tabindex="0" aria-label="demoText">Done</a>
       <div class="title">Mini Herald - {{ caption() }}</div>
       <div><mh5-icon-share /></div>
     }
@@ -36,7 +36,7 @@
     }
 
     @case ('viewer') {
-      <a (click)="hidePlacementDisplay.emit(true)" (keydown)="hidePlacementDisplay.emit(true)" tabindex="0" aria-label="demoText">Done</a>
+      <a (click)="hidePlacementViewer.emit(true)" (keydown)="hidePlacementViewer.emit(true)" tabindex="0" aria-label="demoText">Done</a>
       <div class="title">Mini Herald Viewer</div>
       <div><mh5-icon-share /></div>
     }

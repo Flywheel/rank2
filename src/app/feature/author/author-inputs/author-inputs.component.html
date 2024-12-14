@@ -1,0 +1,10 @@
+<div class="sectionContentTitle">
+  <input
+    #newHandleInput
+    class="newHandleInput"
+    [ngModel]="channelName()"
+    (ngModelChange)="channelName.set($event)"
+    (keyup.enter)="initializeAuthorHandle()"
+    placeholder="Enter name" />
+</div>
+<button (click)="initializeAuthorHandle()" [disabled]="allowPost()">Submit</button>

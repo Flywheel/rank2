@@ -1,18 +1,18 @@
 <div class="mainContainer">
   <div class="sectionMainTitle">Author Profile Management</div>
   <div class="sectionContentTitle">Account Identifier:</div>
-  @if (authorStore.authorLoggedIn() === undefined || authorStore.authorLoggedIn().id.length === 0) {
+  @if (author() === undefined || author().id.length === 0) {
     <div class="sectionContent">
       No account identifier found.
       <button style="margin-left: 2em" (click)="showConsentDialog()">Initialize Identifier</button>
     </div>
   } @else {
-    <div class="sectionContent">{{ authorStore.authorLoggedIn().id }}</div>
+    <div class="sectionContent">{{ author().id }}</div>
   }
 
-  @if (authorStore.authorLoggedIn().name !== authorDefaultName) {
+  @if (author().name !== authorDefaultName) {
     <div class="sectionContentTitle">Author Name:</div>
-    <div class="sectionContent">{{ authorStore.authorLoggedIn().name }}</div>
+    <div class="sectionContent">{{ author().name }}</div>
   } @else {
     <div class="sectionMainTitle">Create Your Handle Name</div>
     <div class="sectionContentTitle">
@@ -41,8 +41,8 @@
   }
 
   <div class="sectionMainTitle">Activity</div>
-  <div class="sectionContentTitle">Created {{ authorStore.authorLoggedInView().authorFolio.folioName }}</div>
-  <div class="sectionContent">{{ authorStore.authorLoggedInView().authorFolio.folioName }}</div>
+  <div class="sectionContentTitle">Created --</div>
+  <div class="sectionContent">{{ topFolio() }}</div>
   <div class="sectionContentTitle">Ballots Cast</div>
   <div class="sectionContent">
     @for (slate of ballotStore.slatesAuthored(); track $index) {
@@ -59,9 +59,9 @@
     }
   </div>
   <div class="sectionContentTitle">Placements Added</div>
-  <div class="sectionContent">{{ authorStore.authorLoggedInView().authorFolio.placementViews.length }}</div>
+  <div class="sectionContent">{{ author().authorFolio.placementViews.length }}</div>
   <div class="sectionContentTitle">Pitches Added</div>
-  <div class="sectionContent">{{ authorStore.authorLoggedInView().pitches.length }}</div>
+  <div class="sectionContent">{{ author().pitches.length }}</div>
 
   <div class="sectionMainTitle">Actions Available</div>
 
@@ -77,7 +77,6 @@
   <div class="sectionContent"><a style="color: #ddd" [routerLink]="['/tos']">Privacy and Terms of Service</a></div>
 </div>
 
-<div class=""><button class="adminButton" (click)="runSomething()">Run Test</button></div>
 @defer (when showConsentPopup() === true) {
   <mh5-author-consent [forcePopup]="showConsentPopup()" (closeComponent)="closeConsentDialog()" />
 }

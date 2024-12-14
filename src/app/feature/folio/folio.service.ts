@@ -17,9 +17,6 @@ export class FolioService {
   private folioAPIUrl = `api/folio`;
   private folioViewAPIUrl = `api/folioview`;
 
-  private placementAPIUrl = `api/placement`;
-  private assetAPIUrl = `api/asset`;
-
   createFolioAsRoot({ authorId, folioName }: Folio): Observable<Folio> {
     return this.http.post<Folio>(this.folioAPIUrl, { authorId, folioName }).pipe(
       timeout(2500),
@@ -62,12 +59,16 @@ export class FolioService {
     );
   }
 
+  private placementAPIUrl = `api/placement`;
+
   placementCreate({ authorId, assetId, folioId, caption }: Placement): Observable<Placement> {
     const id = undefined;
     return this.http
       .post<Placement>(this.placementAPIUrl, { id, authorId, assetId, folioId, caption })
       .pipe(catchError(error => this.err(error, 'Folio creation failed')));
   }
+
+  private assetAPIUrl = `api/asset`;
 
   assetCreate({ authorId, mediaType, sourceId }: Asset): Observable<Asset> {
     return this.http

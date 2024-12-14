@@ -10,11 +10,13 @@
         <div class="form-row">
           <input #captionField id="caption" formControlName="caption" type="text" />
           <div>
-            @if (formGroup.get('caption')?.invalid && formGroup.get('caption')?.touched) {
-              <label for="caption" class="warning">Awaiting entry...</label>
-            } @else {
-              <label for="caption">Enter new {{ assetType() }} name. </label>
-            }
+            <div class="caption-hints">
+              @if (formGroup.get('caption')?.invalid && formGroup.get('caption')?.touched) {
+                <label for="caption" class="warning">Awaiting entry...</label>
+              } @else {
+                <label for="caption">Enter new {{ assetType() }} name. </label>
+              }
+            </div>
             @if (assetType() === AssetTypeEnum.Placement) {
               <div class="">
                 <input

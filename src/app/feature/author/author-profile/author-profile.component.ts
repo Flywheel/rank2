@@ -25,11 +25,17 @@ export class AuthorProfileComponent implements AfterViewInit {
   folioStore = inject(FolioStore);
   pitchStore = inject(PitchStore);
   ballotStore = inject(BallotStore);
+
   isRunSomethingVisible = signal<boolean>(true);
   channelName = signal<string>('');
   showConsentPopup = signal(false);
   localStorageService = inject(HydrationService);
   authorDefaultName = AUTHOR_DEFAULT_NAME;
+
+  author = computed(() => this.authorStore.authorLoggedInView());
+  topFolio = computed(() => {
+    return this.author().authorFolio.folioName ?? 'No folio';
+  });
 
   pitchesKnown = computed(() => this.pitchStore.pitches());
   slatesCast = computed(() => this.ballotStore.slatesAuthored());
