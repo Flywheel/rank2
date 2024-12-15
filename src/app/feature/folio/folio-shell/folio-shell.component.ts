@@ -11,8 +11,7 @@ import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
 import { Router } from '@angular/router';
 import { PitchManagerComponent } from '../tabs/pitch-manager/pitch-manager.component';
 import { SlatesAuthoredComponent } from '../tabs/slates-authored/slates-authored.component';
-import { IconProfileComponent } from '../../../core/svg/icon-profile';
-import { AuthorInputsComponent } from '../../author/author-inputs/author-inputs.component';
+import { NamegetterComponent } from '../../../core/components/namegetter/namegetter.component';
 @Component({
   selector: 'mh5-folio-shell',
   standalone: true,
@@ -25,8 +24,7 @@ import { AuthorInputsComponent } from '../../author/author-inputs/author-inputs.
     BackdoorComponent,
     PitchManagerComponent,
     SlatesAuthoredComponent,
-    IconProfileComponent,
-    AuthorInputsComponent,
+    NamegetterComponent,
   ],
   templateUrl: './folio-shell.component.html',
   styleUrl: './folio-shell.component.scss',
@@ -47,7 +45,7 @@ export class FolioShellComponent {
   selectedTab = this.tabs()[0];
 
   showViewer = false;
-  theFolios = this.authorStore.authorSelectedFolioViews;
+  theFolios = this.authorStore.authorSelectedFolioViewsWithDepth;
   thePitches = this.authorStore.authorSelectedPitchViews;
   newPitch = signal(false);
   showModalDialog = signal(false);

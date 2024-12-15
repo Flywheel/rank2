@@ -42,6 +42,15 @@
       "preLaunchTask": "npm: test",
       "url": "http://localhost:9876/debug.html",
       "trace": true
+    },
+    {
+      "type": "pwa-node",
+      "request": "launch",
+      "name": "Debug Angular Server",
+      "program": "${workspaceFolder}/node_modules/@angular/cli/bin/ng",
+      "args": ["serve"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
     }
   ]
 }

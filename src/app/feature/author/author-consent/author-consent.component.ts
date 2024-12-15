@@ -1,7 +1,6 @@
-import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { AuthorStore } from '../author.store';
 import { AUTHOR_CONSENT_KEY, AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
-import { environment } from '../../../../environments/environment';
 import { uuidv7 } from 'uuidv7';
 import { Author } from '../../../core/models/interfaces';
 

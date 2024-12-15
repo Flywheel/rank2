@@ -1,0 +1,17 @@
+<p>Create handle.</p>
+<div class="signup-warning-container">
+  <div tabindex="0" aria-label="Signup Warning" class="signup-warning">
+    To add and manage assets, please create a handle name for your author profile.<br />
+    <mh5-icon-profile />
+    <div class="sectionContentTitle">
+      <input
+        #newHandleInput
+        class="newHandleInput"
+        [ngModel]="channelName()"
+        (ngModelChange)="channelName.set($event)"
+        (keyup.enter)="initializeAuthorHandle()"
+        placeholder="Enter name" />
+    </div>
+    <button (click)="initializeAuthorHandle()" [disabled]="allowPost()">Submit</button>
+  </div>
+</div>

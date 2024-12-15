@@ -6,10 +6,13 @@ import { FolioService } from './folio.service';
 import { computed, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from '../../core/services/error.service';
+import { ActionKeyService } from '../../core/services/action-key.service';
+
+const groupSource = 'Folio';
 
 export const FolioStore = signalStore(
   { providedIn: 'root' },
-  withDevtools('folios'),
+  withDevtools(groupSource),
   withState({
     folios: [folioInit],
     folioIdSelected: 0,
@@ -21,7 +24,7 @@ export const FolioStore = signalStore(
   }),
 
   withStorageSync({
-    key: 'folios',
+    key: groupSource,
     autoSync: false,
   }),
 
@@ -87,37 +90,41 @@ export const FolioStore = signalStore(
     const dbFolio = inject(FolioService);
     const errorService = inject(ErrorService);
     const handleError = errorService.handleSignalStoreResponse;
+    const actionKeyService = inject(ActionKeyService);
+    const actionKeys = actionKeyService.getActionEvents(groupSource);
 
     return {
       toggleFolioAdder(state: boolean) {
-        updateState(store, `[Folio] Is Adding  ${state}`, { isAddingFolio: state });
+        updateState(store, actionKeys(`Folio Is Adding ${state}`).event, { isAddingFolio: state });
       },
 
       setFolioSelected(folioId: number) {
-        updateState(store, `[Folio] Select By Id  ${folioId}`, { folioIdSelected: folioId });
+        updateState(store, actionKeys(`Folio Select By Id: ${folioId}`).event, { folioIdSelected: folioId });
       },
 
       async createFolioAsRoot(folioPrep: Folio): Promise<void> {
-        updateState(store, '[Folio-Root] Create Start', { isLoading: true });
+        const actionKey = actionKeys('Create Folio as Root');
+        updateState(store, actionKey.event, { isLoading: true });
         try {
           const newFolio = await firstValueFrom(dbFolio.createFolioAsRoot(folioPrep));
-          updateState(store, '[Folio-Root] Create Success', {
+          updateState(store, actionKey.success, {
             folios: [...store.folios(), newFolio],
             isLoading: false,
           });
         } catch (error) {
-          updateState(store, '[Folio-Root] Create Failed', { isLoading: false });
-          throw handleError(error, '[Folio-Root] Create Failed');
+          updateState(store, actionKey.failed, { isLoading: false });
+          throw handleError(error, actionKey.failed);
         } finally {
           store.writeToStorage();
         }
       },
 
-      async createFolioAsAsset(folioPrep: Partial<Folio>): Promise<{ newFolio: Folio; newAsset: Asset; newPlacement: Placement }> {
-        updateState(store, '[Folio-Branch] Create Start', { isLoading: true });
+      async createFolioAsBranchingAsset(folioPrep: Partial<Folio>): Promise<{ newFolio: Folio; newAsset: Asset; newPlacement: Placement }> {
+        const actionKey = actionKeys('Create Folio as Branch');
+        updateState(store, actionKey.event, { isLoading: true });
         try {
           const { newFolio, newAsset, newPlacement } = await firstValueFrom(dbFolio.createFolioAsAsset(folioPrep));
-          updateState(store, '[Folio-Branch] Create Success', {
+          updateState(store, actionKey.success, {
             folios: [...store.folios(), newFolio],
             isLoading: false,
           });
@@ -131,8 +138,8 @@ export const FolioStore = signalStore(
 
           return { newFolio, newAsset, newPlacement };
         } catch (error) {
-          updateState(store, '[Folio-Root] Create Failed', { isLoading: false });
-          throw handleError(error, '[Folio-Root] Create Failed');
+          updateState(store, actionKey.failed, { isLoading: false });
+          throw handleError(error, actionKey.failed);
         }
       },
 

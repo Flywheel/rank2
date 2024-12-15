@@ -26,16 +26,16 @@ export class AuthorService {
   }
 
   authorUpdate(authorId: string, authorData: Author): Observable<Author> {
+    if (environment.ianConfig.showLogs) console.log(authorId, authorData);
     const endPoint = `${this.authorAPIUrl}/${authorId}`;
-
-    if (environment.ianConfig.showLogs) console.log(authorData);
+    authorData.id = authorId;
     return this.http.put<Author>(endPoint, authorData).pipe(
       timeout(2500),
       retry(2),
       tap(data => {
         if (environment.ianConfig.showLogs) console.log('data', data);
       }),
-      catchError(error => this.handleError(error, 'Author Update failed'))
+      catchError(error => this.handleError(error, 'Author Update Failed'))
     );
   }
 

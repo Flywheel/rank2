@@ -1,0 +1,33 @@
+.signup-warning-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.signup-warning {
+  width: 400px;
+  height: 200px;
+  background-color: #558;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px; /* Changes cursor to pointer on hover */
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.signup-warning:hover {
+  transform: scale(1.05); /* Slightly enlarges the square on hover */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+
+.signup-warning:focus {
+  outline: none; /* Removes default focus outline */
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Custom focus shadow */
+}

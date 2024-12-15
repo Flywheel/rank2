@@ -83,7 +83,7 @@ export class FolioPlacementNewComponent {
             authorId: this.authorStore.authorLoggedIn().id,
             parentFolioId,
           };
-          this.folioStore.createFolioAsAsset(folioData);
+          this.folioStore.createFolioAsBranchingAsset(folioData);
           this.folioStore.toggleFolioAdder(false);
         }
         break;

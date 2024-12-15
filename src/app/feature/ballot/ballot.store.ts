@@ -4,6 +4,9 @@ import { PitchView, SlateView } from '../../core/models/interfaces';
 import { slateViewInit } from '../../core/models/initValues';
 import { computed, inject } from '@angular/core';
 import { PitchStore } from '../pitch/pitch.store';
+import { ActionKeyService } from '../../core/services/action-key.service';
+
+const groupSource = 'Ballot';
 
 export const BallotStore = signalStore(
   { providedIn: 'root' },
@@ -13,7 +16,7 @@ export const BallotStore = signalStore(
     isLoading: false,
   }),
   withStorageSync({
-    key: 'ballots',
+    key: groupSource,
     autoSync: false,
   }),
 
@@ -34,15 +37,18 @@ export const BallotStore = signalStore(
   }),
 
   withMethods(store => {
+    const actionKeyService = inject(ActionKeyService);
+    const actionKeys = actionKeyService.getActionEvents(groupSource);
     return {
       async updateSlate(slateView: SlateView) {
-        updateState(store, `[Slate] Update Start`, { isLoading: true });
+        const actionKey = actionKeys('Update Slate');
+        updateState(store, actionKey.event, { isLoading: true });
         let authoredSlates = store.slatesAuthored();
         const isSlateFound = authoredSlates.some(b => b.pitchId === slateView.pitchId);
         authoredSlates = isSlateFound
           ? authoredSlates.map(existingSlateView => (existingSlateView.pitchId === slateView.pitchId ? slateView : existingSlateView))
           : [...authoredSlates, slateView];
-        updateState(store, `[Slate] Update Success`, {
+        updateState(store, actionKey.success, {
           slatesAuthored: authoredSlates.filter(s => s.pitchId !== 0),
           isLoading: false,
         });

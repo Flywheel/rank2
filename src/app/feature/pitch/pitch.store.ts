@@ -7,10 +7,12 @@ import { computed, inject } from '@angular/core';
 import { catchError, firstValueFrom, tap, throwError } from 'rxjs';
 import { FolioStore } from '../folio/folio.store';
 import { ErrorService } from '../../core/services/error.service';
+import { ActionKeyService } from '../../core/services/action-key.service';
 
+const groupSource = 'Pitch';
 export const PitchStore = signalStore(
   { providedIn: 'root' },
-  withDevtools('pitches'),
+  withDevtools(groupSource),
   withState({
     pitchIdSelected: 0,
     pitches: [pitchInit],
@@ -24,8 +26,9 @@ export const PitchStore = signalStore(
     isAddingSlate: false,
     isAddingSlateMember: false,
   }),
+
   withStorageSync({
-    key: 'pitches',
+    key: groupSource,
     autoSync: false,
   }),
 
@@ -96,19 +99,22 @@ export const PitchStore = signalStore(
     const dbPitch = inject(PitchService);
     const errorService = inject(ErrorService);
     const err = errorService.handleSignalStoreResponse;
+    const actionKeyService = inject(ActionKeyService);
+    const actionKeys = actionKeyService.getActionEvents(groupSource);
     return {
       setPitchSelected(pitchId: number) {
         updateState(store, `[Pitch] Select By Id  ${pitchId}`, { pitchIdSelected: pitchId });
       },
 
       createPitch(pitch: Pitch) {
-        updateState(store, '[Pitch] Create Start', { isLoading: true });
+        const actionKey = actionKeys('Create Pitch');
+        updateState(store, actionKey.event, { isLoading: true });
         dbPitch
           .createPitchWithSlate(pitch)
           .pipe(
             tap({
               next: ({ newPitch, newSlate }) => {
-                updateState(store, '[Pitch] Add Success', {
+                updateState(store, actionKey.success, {
                   pitches: [...store.pitches(), newPitch],
                   slates: [...store.slates(), newSlate],
                   isLoading: false,
@@ -116,8 +122,8 @@ export const PitchStore = signalStore(
                 store.writeToStorage();
               },
               error: error => {
-                err(error, 'Create Pitch Failed');
-                updateState(store, '[Pitch] Create Failed', { isLoading: false });
+                err(error, actionKey.failed);
+                updateState(store, actionKey.failed, { isLoading: false });
               },
             })
           )
@@ -150,15 +156,16 @@ export const PitchStore = signalStore(
       },
 
       async createPitchAndSlate(pitchPrep: Partial<Pitch>): Promise<{ newPitch: Pitch; newSlate: Slate }> {
-        updateState(store, '[Pitch] Create Start', { isLoading: true });
+        const actionKey = actionKeys('Create Pitch with Slate');
+        updateState(store, actionKey.event, { isLoading: true });
         try {
           const { newPitch, newSlate } = await firstValueFrom(dbPitch.createPitchWithSlate(pitchPrep));
 
-          updateState(store, '[Pitch] Add Success', {
+          updateState(store, actionKey.success + ' Pitch', {
             pitches: [...store.pitches(), newPitch],
             isLoading: false,
           });
-          updateState(store, '[Slate] Add Success', {
+          updateState(store, actionKey.success + ' Slate', {
             slates: [...store.slates(), newSlate],
             isLoading: false,
           });
@@ -166,14 +173,15 @@ export const PitchStore = signalStore(
           store.writeToStorage();
           return { newPitch, newSlate };
         } catch (error) {
-          err(error, 'Create Pitch and Slate Failed');
-          updateState(store, '[Pitch And Slate] Add Failed', { isLoading: false });
+          err(error, actionKey.failed);
+          updateState(store, actionKey.failed, { isLoading: false });
         }
         return { newPitch: pitchInit, newSlate: slateInit };
       },
 
       async addSlateMembers(slateMembers: SlateMember[]) {
-        updateState(store, '[SlateMember] Add Start', { isLoading: true });
+        const actionKey = actionKeys('Add Slatemembers');
+        updateState(store, actionKey.event, { isLoading: true });
         try {
           const members = slateMembers.map(slateMember => ({
             id: 0,
@@ -183,13 +191,13 @@ export const PitchStore = signalStore(
           }));
           const newMembers = await firstValueFrom(dbPitch.addSlateMembers(members));
 
-          updateState(store, '[SlateMember] Add Success', {
+          updateState(store, actionKey.success, {
             slateMembers: [...store.slateMembers(), ...newMembers],
             isLoading: false,
           });
         } catch (error) {
-          err(error, 'Add Slatemembers Failed');
-          updateState(store, '[SlateMember] Add Failed', { isLoading: false });
+          err(error, actionKey.failed);
+          updateState(store, actionKey.failed, { isLoading: false });
         }
       },
     };

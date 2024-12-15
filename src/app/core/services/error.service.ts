@@ -15,9 +15,9 @@ export class ErrorService {
   }
 
   handleSignalStoreResponse({ status }: any, message?: string) {
-    console.error('handleSignalStoreResponse', status, message);
+    console.error('store: ', message, status);
     message = message || 'Sorry. An error occurred';
-    this.errorSignal.set(message.toString());
+    //  this.errorSignal.set(message.toString());
     return throwError(() => `${status}:  ${message}`);
   }
 

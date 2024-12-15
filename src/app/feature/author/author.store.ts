@@ -10,10 +10,13 @@ import { AuthorService } from './author.service';
 import { FolioStore } from '../folio/folio.store';
 import { PitchStore } from '../pitch/pitch.store';
 import { ErrorService } from '../../core/services/error.service';
+import { ActionKeyService } from '../../core/services/action-key.service';
+
+const groupSource = 'Author';
 
 export const AuthorStore = signalStore(
   { providedIn: 'root' },
-  withDevtools('authors'),
+  withDevtools(groupSource),
   withState({
     authors: [authorInit],
     authorLoggedIn: authorInit,
@@ -24,7 +27,7 @@ export const AuthorStore = signalStore(
   }),
 
   withStorageSync({
-    key: 'authors',
+    key: groupSource,
     autoSync: false,
   }),
 
@@ -69,7 +72,7 @@ export const AuthorStore = signalStore(
       () => store.authorViews().find(author => author.id === store.authorLoggedIn().id) ?? authorViewInit
     ),
 
-    authorSelectedFolioViews: computed<FolioView[]>(() => {
+    authorSelectedFolioViewsWithDepth: computed<FolioView[]>(() => {
       const folios = store.authorSelectedFolioViews;
       const retval: FolioView[] = [];
 
@@ -112,32 +115,35 @@ export const AuthorStore = signalStore(
     const dbAuthor = inject(AuthorService);
     const errorService = inject(ErrorService);
     const handleError = errorService.handleSignalStoreResponse;
+    const actionKeyService = inject(ActionKeyService);
+    const actionKeys = actionKeyService.getActionEvents(groupSource);
 
     return {
       async getConsentValueFromLocalStorage(consentValue: string) {
-        updateState(store, '[Author] Read From Storage Start', { isLoading: true });
+        const actionKey = actionKeys('Read From Storage');
+        updateState(store, actionKey.event, { isLoading: true });
         try {
           store.readFromStorage();
-
-          updateState(store, '[Author] Read From Storage Success', { isLoading: false, consentStatus: consentValue });
+          updateState(store, actionKey.success, { isLoading: false, consentStatus: consentValue });
         } catch (error) {
-          handleError(error, '[Author] Read From Storage Failed');
-          updateState(store, '[Author] Read From Storage Failed', { isLoading: false });
+          handleError(error, actionKey.failed);
+          updateState(store, actionKey.failed, { isLoading: false });
           throw error;
         }
       },
 
       async createAuthor(authorPrep: Author, inscribeToStorage: boolean) {
-        updateState(store, '[Author] Add Start', { isLoading: true });
+        const actionKey = actionKeys('Create Author');
+        updateState(store, actionKey.event, { isLoading: true });
         try {
           const newAuthor = await firstValueFrom(dbAuthor.authorCreate(authorPrep));
-          updateState(store, '[Author] Add Success', {
+          updateState(store, actionKey.success, {
             authors: [...store.authors(), newAuthor],
             isLoading: false,
           });
         } catch (error) {
-          handleError(error, '[Author] Add Failed');
-          updateState(store, '[Author] Add Failed', { isLoading: false });
+          handleError(error, actionKey.failed);
+          updateState(store, actionKey.failed, { isLoading: false });
           throw error;
         } finally {
           if (inscribeToStorage) store.writeToStorage();
@@ -145,42 +151,47 @@ export const AuthorStore = signalStore(
       },
 
       async loginAuthor(author: Author) {
+        const actionKey = actionKeys('Login');
         try {
-          updateState(store, '[Author] Login Success', {
+          updateState(store, actionKey.event, {
             authorLoggedIn: author,
             authorSelectedId: author.id,
-            isLoading: false,
+            isLoading: true,
           });
           store.writeToStorage();
+          updateState(store, actionKey.success, { isLoading: false });
         } catch (error) {
-          handleError(error, '[Author] Login Failed');
-          updateState(store, '[Author] Login Failed', { isLoading: false });
+          handleError(error, actionKey.failed);
+          updateState(store, actionKey.failed, { isLoading: false });
           throw error;
         }
       },
 
       async updateLoggedInAuthor(authorId: string, authorPrep: Author) {
-        updateState(store, '[Author-LoggedIn] Update Start', { isLoading: true });
+        const actionKey = actionKeys('Set Author Name');
+        updateState(store, actionKey.event, { isLoading: true });
         try {
           const updatedAuthor = await firstValueFrom(dbAuthor.authorUpdate(authorId, authorPrep));
-          updateState(store, '[Author-LoggedIn] Update Success', {
+          updateState(store, actionKey.success, {
             authorLoggedIn: updatedAuthor,
             authors: store.authors().map(author => (author.id === updatedAuthor.id ? updatedAuthor : author)),
             isLoading: false,
           });
           store.writeToStorage();
         } catch (error) {
-          handleError(error, '[Author] Update Failed');
-          updateState(store, '[Author] Update Failed', { isLoading: false });
+          console.log(error);
+          handleError(error, actionKey.failed);
+          updateState(store, actionKey.failed, { isLoading: false });
           throw error;
         }
       },
 
       async authorSelectedSetById(authorId: string): Promise<Author> {
-        updateState(store, '[Author] GetById Start', { isLoading: true });
+        const actionKey = actionKeys(`Set Selected Author By Id`);
+        updateState(store, actionKey.event, { isLoading: true });
         const knownAuthor = store.authors().find(author => author.id === authorId);
         if (knownAuthor) {
-          updateState(store, '[Author] GetById Success', {
+          updateState(store, `${actionKey.success} From Cache`, {
             authorSelectedId: authorId,
             isLoading: false,
           });
@@ -188,36 +199,29 @@ export const AuthorStore = signalStore(
         } else {
           try {
             const author = await firstValueFrom(dbAuthor.authorGetById(authorId));
-            updateState(store, '[Author] GetById Success', {
+            updateState(store, `${actionKey.success} From Backend `, {
               authors: [...store.authors(), author],
               authorSelectedId: authorId,
               isLoading: false,
             });
             return author;
           } catch (error) {
-            handleError(error, '[Author] Update Failed');
-            updateState(store, '[Author] GetById Failure', { isLoading: false });
+            handleError(error, actionKey.failed);
+            updateState(store, actionKey.failed, { isLoading: false });
             throw error;
           }
         }
       },
 
       setStartupCompleted() {
-        updateState(store, '[Author] Startup Completed', {
+        updateState(store, `[${groupSource}] Startup Completed`, {
           startupCompleted: true,
         });
       },
     };
-  }),
-
-  withMethods(store => {
-    return {
-      async selectedAuthorByIdAsync(authorId: string) {
-        store.authorSelectedSetById(authorId);
-      },
-    };
   })
 );
+
 function buildTreeNode(folioView: FolioView, depth: number, allFolios: FolioView[], path: number[] = []): TreeNode {
   if (path.includes(folioView.id)) {
     return {
@@ -253,87 +257,3 @@ function buildTreeNode(folioView: FolioView, depth: number, allFolios: FolioView
 
   return node;
 }
-
-// async authorCreatexx(author: Author) {
-//   updateState(store, '[Author] Add Start', { isLoading: true });
-
-//   return dbAuthor
-//     .authorCreate(author)
-//     .pipe(
-//       exhaustMap(newAuthor =>
-//         of(newAuthor).pipe(
-//           tap(() => {
-//             updateState(store, '[Author] Add Success', {
-//               authors: [...store.authors(), newAuthor],
-//               isLoading: false,
-//             });
-//           })
-//         )
-//       ),
-//       catchError(error => {
-//         console.error('[Author] Add Failure', error);
-//         updateState(store, '[Author] Add Failure', { isLoading: false });
-//         return throwError(() => error);
-//       })
-//     )
-//     .subscribe();
-// },
-
-// async updateLoggedInAuthor2(authorId: string, authorPrep: Author) {
-//   updateState(store, '[Author-LoggedIn] Update Start', { isLoading: true });
-
-//   if (environment.ianConfig.showLogs) console.log('updatedAuthor ', authorPrep);
-//   dbAuthor
-//     .authorUpdate(authorId, authorPrep)
-//     .pipe(
-//       exhaustMap(updatedAuthor => {
-//         if (environment.ianConfig.showLogs) console.log('updatedAuthor ', updatedAuthor);
-//         updateState(store, '[Author-LoggedIn] Update Success', {
-//           authorLoggedIn: updatedAuthor,
-//           authors: store.authors().map(author => (author.id === updatedAuthor.id ? updatedAuthor : author)),
-//           isLoading: false,
-//         });
-//         store.writeToStorage();
-//         return of(updatedAuthor);
-//       }),
-//       catchError(error => {
-//         if (environment.ianConfig.showLogs) console.log('error', error);
-//         updateState(store, '[Author] Update Failure', { isLoading: false });
-//         return throwError(() => error);
-//       })
-//     )
-//     .subscribe();
-// },
-
-// authorSelectedSetById2: rxMethod<string>(
-//   pipe(
-//     switchMap(authorId => {
-//       updateState(store, '[Author] GetById Start', { isLoading: true });
-//       const knownAuthor = store.authors().find(author => author.id === authorId);
-//       if (knownAuthor) {
-//         updateState(store, '[Author] GetById Success', {
-//           authorSelectedId: authorId,
-//           isLoading: false,
-//         });
-//         return of(knownAuthor);
-//       } else {
-//         return dbAuthor.authorGetById(authorId).pipe(
-//           map((author: Author) => {
-//             updateState(store, '[Author] GetById Success', {
-//               authors: [...store.authors(), author],
-//               authorSelectedId: authorId,
-//               isLoading: false,
-//             });
-//             return author;
-//           }),
-//           catchError(error => {
-//             updateState(store, `[Author] GetById Failure ${error.message}`, {
-//               isLoading: false,
-//             });
-//             return throwError(() => new Error('Failed to get author'));
-//           })
-//         );
-//       }
-//     })
-//   )
-// ),
