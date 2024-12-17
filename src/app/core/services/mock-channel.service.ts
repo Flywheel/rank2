@@ -36,7 +36,7 @@ export class MockChannelService {
         parentFolioId: undefined,
       };
       console.log(folioDefault);
-      await this.folioStore.createFolioAsRoot(folioDefault);
+      await this.folioStore.createRootFolio(folioDefault);
 
       delay(100);
       console.log(this.folioStore.folios());

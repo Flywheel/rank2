@@ -83,7 +83,7 @@ export class FolioPlacementNewComponent {
             authorId: this.authorStore.authorLoggedIn().id,
             parentFolioId,
           };
-          this.folioStore.createFolioAsBranchingAsset(folioData);
+          this.folioStore.createBranchFolio(folioData);
           this.folioStore.toggleFolioAdder(false);
         }
         break;
@@ -105,8 +105,8 @@ export class FolioPlacementNewComponent {
               sourceId: this.assetViewPrepared().sourceId,
               authorId: this.authorStore.authorLoggedIn().id,
             };
-            // this.folioStore.createPlacementAsAsset(assetPrep, this.formGroup.value.caption);
-            this.folioStore.createPlacementWithAsset(parentFolioId, newPlacement.caption, assetPrep);
+            //this.folioStore.createPlacementWithAsset(parentFolioId, newPlacement.caption, assetPrep);
+            this.folioStore.createPlacementWithAssetRX({ folioId: parentFolioId, caption: newPlacement.caption, assetPrep: assetPrep });
           } else this.folioStore.createPlacement(newPlacement);
           this.folioStore.togglePlacementAdder(false);
         }
@@ -122,9 +122,8 @@ export class FolioPlacementNewComponent {
             closes: this.formGroup.value.closes,
           };
           const pitchPrep = pitchPrepInit as unknown as Pitch;
-          const { newPitch } = await this.pitchStore.createPitchAndSlate(pitchPrep);
 
-          //this.pitchStore.createPitch(pitchPrep2);
+          const { newPitch } = await this.pitchStore.createPitchAndSlate(pitchPrep);
 
           const assetPrep: Asset = {
             id: 0,
@@ -132,7 +131,12 @@ export class FolioPlacementNewComponent {
             sourceId: newPitch.id.toLocaleString(),
             authorId: this.authorStore.authorLoggedIn().id,
           };
-          this.folioStore.createPlacementWithAsset(parentFolioId, this.formGroup.value.caption, assetPrep);
+          //this.folioStore.createPlacementWithAsset(parentFolioId, this.formGroup.value.caption, assetPrep);
+          this.folioStore.createPlacementWithAssetRX({
+            folioId: parentFolioId,
+            caption: this.formGroup.value.caption,
+            assetPrep: assetPrep,
+          });
           this.folioStore.togglePlacementAdder(false);
         }
         break;

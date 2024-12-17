@@ -5,8 +5,10 @@ import { slateViewInit } from '../../core/models/initValues';
 import { computed, inject } from '@angular/core';
 import { PitchStore } from '../pitch/pitch.store';
 import { ActionKeyService } from '../../core/services/action-key.service';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { pipe, tap } from 'rxjs';
 
-const groupSource = 'Ballot';
+const featureKey = 'Ballot';
 
 export const BallotStore = signalStore(
   { providedIn: 'root' },
@@ -16,7 +18,7 @@ export const BallotStore = signalStore(
     isLoading: false,
   }),
   withStorageSync({
-    key: groupSource,
+    key: featureKey,
     autoSync: false,
   }),
 
@@ -38,21 +40,41 @@ export const BallotStore = signalStore(
 
   withMethods(store => {
     const actionKeyService = inject(ActionKeyService);
-    const actionKeys = actionKeyService.getActionEvents(groupSource);
+    const actionKeys = actionKeyService.getActionEvents(featureKey);
     return {
-      async updateSlate(slateView: SlateView) {
-        const actionKey = actionKeys('Update Slate');
-        updateState(store, actionKey.event, { isLoading: true });
-        let authoredSlates = store.slatesAuthored();
-        const isSlateFound = authoredSlates.some(b => b.pitchId === slateView.pitchId);
-        authoredSlates = isSlateFound
-          ? authoredSlates.map(existingSlateView => (existingSlateView.pitchId === slateView.pitchId ? slateView : existingSlateView))
-          : [...authoredSlates, slateView];
-        updateState(store, actionKey.success, {
-          slatesAuthored: authoredSlates.filter(s => s.pitchId !== 0),
-          isLoading: false,
-        });
-      },
+      updateSlate: rxMethod<SlateView>(
+        pipe(
+          tap(slateView => {
+            const actionKey = actionKeys('Update Slate');
+            updateState(store, actionKey.event, { isLoading: true });
+            let authoredSlates = store.slatesAuthored();
+
+            const isSlateFound = authoredSlates.some(b => b.pitchId === slateView.pitchId);
+            authoredSlates = isSlateFound
+              ? authoredSlates.map(existingSlateView => (existingSlateView.pitchId === slateView.pitchId ? slateView : existingSlateView))
+              : [...authoredSlates, slateView];
+
+            updateState(store, actionKey.success, {
+              slatesAuthored: authoredSlates.filter(s => s.pitchId !== 0),
+              isLoading: false,
+            });
+          })
+        )
+      ),
     };
   })
 );
+
+// async updateSlate1(slateView: SlateView) {
+//   const actionKey = actionKeys('Update Slate');
+//   updateState(store, actionKey.event, { isLoading: true });
+//   let authoredSlates = store.slatesAuthored();
+//   const isSlateFound = authoredSlates.some(b => b.pitchId === slateView.pitchId);
+//   authoredSlates = isSlateFound
+//     ? authoredSlates.map(existingSlateView => (existingSlateView.pitchId === slateView.pitchId ? slateView : existingSlateView))
+//     : [...authoredSlates, slateView];
+//   updateState(store, actionKey.success, {
+//     slatesAuthored: authoredSlates.filter(s => s.pitchId !== 0),
+//     isLoading: false,
+//   });
+// },

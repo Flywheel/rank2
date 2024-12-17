@@ -60,7 +60,7 @@ export class HydrationService {
         parentFolioId: parentFolioId,
       };
 
-      const { newFolio } = await this.folioStore.createFolioAsBranchingAsset(folioData);
+      const { newFolio } = await this.folioStore.createBranchFolio(folioData);
 
       this.folioStore.setFolioSelected(newFolio.id!);
 
@@ -76,7 +76,7 @@ export class HydrationService {
               assetId: 1,
               id: 0,
             };
-            await this.folioStore.createPlacement(placementData);
+            this.folioStore.createPlacement(placementData);
           } else {
             const assetData: Asset = {
               ...placement,
@@ -85,8 +85,8 @@ export class HydrationService {
               sourceId: placement.sourceId,
               id: 0,
             };
-            //  await this.folioStore.createPlacementAsAsset(assetData, placement.caption);
-            await this.folioStore.createPlacementWithAsset(newFolio.id, placement.caption, assetData);
+            this.folioStore.createPlacementWithAsset(newFolio.id, placement.caption, assetData);
+            //  this.folioStore.createPlacementWithAssetRX({ folioId: newFolio.id, caption: placement.caption, assetPrep: assetData });
           }
         }
       }
@@ -96,22 +96,6 @@ export class HydrationService {
     await this.delay(100);
     const folioViews = this.folioStore.folioViewsComputed().filter(p => p.authorId === authorId);
     folioViews.forEach(async f => await this.hydratePitchWithPlacement(f));
-  }
-
-  hydrateInitialPitches(authorId: string) {
-    const folioViews = this.folioStore.folioViewsComputed().filter(p => p.authorId === authorId);
-    folioViews.forEach(f => {
-      const pitchPrep = {
-        name: f.folioName,
-        description: f.folioName,
-        authorId,
-        folioId: f.id,
-        opens: new Date(),
-        closes: new Date(new Date().setMonth(new Date().getMonth() + 1)),
-      };
-      const newPitch = pitchPrep as unknown as Pitch; // cast with no ID to create new pitch
-      this.pitchStore.createPitch(newPitch);
-    });
   }
 
   async hydratePitchWithPlacement(folioView: FolioView): Promise<void> {
@@ -125,6 +109,8 @@ export class HydrationService {
     };
     const pitchPrep = pitchInit as unknown as Pitch; // cast with no ID to create new pitch
     const { newPitch } = await this.pitchStore.createPitchAndSlate(pitchPrep);
+
+    console.log(newPitch);
     const assetPrep: Asset = {
       id: 0,
       mediaType: 'pitch',
@@ -132,6 +118,7 @@ export class HydrationService {
       authorId: this.authorStore.authorLoggedIn().id,
     };
     this.folioStore.createPlacementWithAsset(folioView.parentFolioId!, folioView.folioName, assetPrep);
+    // this.folioStore.createPlacementWithAssetRX({ folioId: folioView.parentFolioId!, caption: folioView.folioName, assetPrep });
   }
 
   public async hydrateSlates(authorId: string): Promise<void> {

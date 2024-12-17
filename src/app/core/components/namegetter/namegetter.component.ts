@@ -30,7 +30,7 @@ export class NamegetterComponent {
       authorId: currentAuthor.id,
       folioName: '@' + this.channelName(),
     };
-    this.folioStore.createFolioAsRoot(newFolio);
+    this.folioStore.createRootFolio(newFolio);
     if (environment.ianConfig.showLogs) {
       console.log('Author updated: ', updatedAuthorData);
       console.log('New folio created: ', newFolio);

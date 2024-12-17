@@ -4,15 +4,16 @@ import { Asset, AssetView, Folio, FolioView, Placement, PlacementView } from '..
 import { assetInit, assetViewInit, folioInit, folioViewInit, placementInit } from '../../core/models/initValues';
 import { FolioService } from './folio.service';
 import { computed, inject } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { exhaustMap, firstValueFrom, pipe, tap } from 'rxjs';
 import { ErrorService } from '../../core/services/error.service';
 import { ActionKeyService } from '../../core/services/action-key.service';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
-const groupSource = 'Folio';
+const featureKey = 'Folio';
 
 export const FolioStore = signalStore(
   { providedIn: 'root' },
-  withDevtools(groupSource),
+  withDevtools(featureKey),
   withState({
     folios: [folioInit],
     folioIdSelected: 0,
@@ -24,7 +25,7 @@ export const FolioStore = signalStore(
   }),
 
   withStorageSync({
-    key: groupSource,
+    key: featureKey,
     autoSync: false,
   }),
 
@@ -91,19 +92,11 @@ export const FolioStore = signalStore(
     const errorService = inject(ErrorService);
     const handleError = errorService.handleSignalStoreResponse;
     const actionKeyService = inject(ActionKeyService);
-    const actionKeys = actionKeyService.getActionEvents(groupSource);
+    const actionKeys = actionKeyService.getActionEvents(featureKey);
 
     return {
-      toggleFolioAdder(state: boolean) {
-        updateState(store, actionKeys(`Folio Is Adding ${state}`).event, { isAddingFolio: state });
-      },
-
-      setFolioSelected(folioId: number) {
-        updateState(store, actionKeys(`Folio Select By Id: ${folioId}`).event, { folioIdSelected: folioId });
-      },
-
-      async createFolioAsRoot(folioPrep: Folio): Promise<void> {
-        const actionKey = actionKeys('Create Folio as Root');
+      async createRootFolio(folioPrep: Folio): Promise<void> {
+        const actionKey = actionKeys('Create Root Folio');
         updateState(store, actionKey.event, { isLoading: true });
         try {
           const newFolio = await firstValueFrom(dbFolio.createFolioAsRoot(folioPrep));
@@ -111,16 +104,87 @@ export const FolioStore = signalStore(
             folios: [...store.folios(), newFolio],
             isLoading: false,
           });
+          store.writeToStorage();
         } catch (error) {
           updateState(store, actionKey.failed, { isLoading: false });
-          throw handleError(error, actionKey.failed);
-        } finally {
-          store.writeToStorage();
+          handleError(error, actionKey.failed);
         }
       },
 
-      async createFolioAsBranchingAsset(folioPrep: Partial<Folio>): Promise<{ newFolio: Folio; newAsset: Asset; newPlacement: Placement }> {
-        const actionKey = actionKeys('Create Folio as Branch');
+      createRootFolioRX: rxMethod<Folio>(
+        pipe(
+          exhaustMap(folioPrep => {
+            const actionKey = actionKeys('Create Root Folio');
+            updateState(store, actionKey.event, { isLoading: true });
+            return dbFolio.createFolioAsRoot(folioPrep).pipe(
+              tap({
+                next: newFolio => {
+                  updateState(store, actionKey.success, {
+                    folios: [...store.folios(), newFolio],
+                    isLoading: false,
+                  });
+                  store.writeToStorage();
+                },
+                error: error => {
+                  updateState(store, actionKey.failed, { isLoading: false });
+                  handleError(error, actionKey.failed);
+                },
+              })
+            );
+          })
+        )
+      ),
+
+      createPlacement: rxMethod<Placement>(
+        pipe(
+          exhaustMap(placement => {
+            const actionKey = actionKeys('Create Placement');
+            updateState(store, actionKey.event, { isLoading: true });
+            return dbFolio.placementCreate(placement).pipe(
+              tap({
+                next: newPlacement => {
+                  updateState(store, actionKey.success, {
+                    placements: [...store.placements(), newPlacement],
+                    isLoading: false,
+                  });
+                  store.writeToStorage();
+                },
+                error: error => {
+                  updateState(store, actionKey.failed, { isLoading: false });
+                  handleError(error, actionKey.failed);
+                },
+              })
+            );
+          })
+        )
+      ),
+
+      assetCreate: rxMethod<Asset>(
+        pipe(
+          exhaustMap(assetPrep => {
+            const actionKey = actionKeys('Create Asset');
+            updateState(store, actionKey.event, { isLoading: true });
+            return dbFolio.assetCreate(assetPrep).pipe(
+              tap({
+                next: newAsset => {
+                  updateState(store, actionKey.success, {
+                    assets: [...store.assets(), newAsset],
+                    isLoading: false,
+                  });
+                  store.writeToStorage();
+                },
+                error: error => {
+                  updateState(store, actionKey.failed, { isLoading: false });
+                  handleError(error, actionKey.failed);
+                },
+              })
+            );
+          })
+        )
+      ),
+
+      async createBranchFolio(folioPrep: Partial<Folio>): Promise<{ newFolio: Folio; newAsset: Asset; newPlacement: Placement }> {
+        const actionKey = actionKeys('Create Branch Folio');
         updateState(store, actionKey.event, { isLoading: true });
         try {
           const { newFolio, newAsset, newPlacement } = await firstValueFrom(dbFolio.createFolioAsAsset(folioPrep));
@@ -144,61 +208,61 @@ export const FolioStore = signalStore(
       },
 
       async createPlacementWithAsset(folioId: number, caption: string, assetPrep: Asset) {
-        updateState(store, '[Asset-Media] Create Start', { isLoading: true });
+        const actionKey = actionKeys('Create Placement with Asset');
+        updateState(store, actionKey.event, { isLoading: true });
         try {
           const { newAsset, newPlacement } = await firstValueFrom(dbFolio.createPlacementAsAsset(assetPrep, folioId, caption));
 
-          updateState(store, '[Asset-Media] Placement Create Success', {
+          updateState(store, actionKey.success, {
             placements: [...store.placements(), newPlacement],
-          });
-          updateState(store, '[Asset-Media] Asset Create Success', {
             assets: [...store.assets(), newAsset],
           });
           store.writeToStorage();
         } catch (error) {
-          handleError(error, 'Placement with Asset Create Failed');
-          updateState(store, '[Placement With Asset] Create Failed', { isLoading: false });
-          throw error;
+          updateState(store, actionKey.failed, { isLoading: false });
+          handleError(error, actionKey.failed);
         }
       },
+
+      createPlacementWithAssetRX: rxMethod<{ folioId: number; caption: string; assetPrep: Asset }>(
+        pipe(
+          exhaustMap(({ assetPrep, folioId, caption }) => {
+            const actionKey = actionKeys('Create Placement with Asset');
+            updateState(store, actionKey.event, { isLoading: true });
+            return dbFolio.createPlacementAsAsset(assetPrep, folioId, caption).pipe(
+              tap({
+                next: ({ newAsset, newPlacement }) => {
+                  updateState(store, actionKey.success, {
+                    placements: [...store.placements(), newPlacement],
+                    assets: [...store.assets(), newAsset],
+                    isLoading: false,
+                  });
+                  store.writeToStorage();
+                },
+                error: error => {
+                  updateState(store, actionKey.failed, { isLoading: false });
+                  handleError(error, actionKey.failed);
+                },
+              })
+            );
+          })
+        )
+      ),
 
       togglePlacementAdder(state: boolean) {
         updateState(store, `[Placement] Is Adding = ${state}`, { isAddingPlacement: state });
       },
 
-      async createPlacement(placement: Placement) {
-        updateState(store, '[Placement] Create Start', { isLoading: true });
-        try {
-          const newPlacement = await firstValueFrom(dbFolio.placementCreate(placement));
-          updateState(store, '[Placement] Create Success', {
-            placements: [...store.placements(), newPlacement],
-            isLoading: false,
-          });
-          store.writeToStorage();
-        } catch (error) {
-          handleError(error, 'Placement Create Failed');
-          updateState(store, '[Placement] Create Failed', { isLoading: false });
-          throw error;
-        }
+      toggleFolioAdder(state: boolean) {
+        updateState(store, actionKeys(`Folio Is Adding ${state}`).event, { isAddingFolio: state });
       },
 
-      async assetCreate(assetPrep: Asset) {
-        updateState(store, '[Asset] Create Start', { isLoading: true });
-        try {
-          const newAsset = await firstValueFrom(dbFolio.assetCreate(assetPrep));
-          updateState(store, '[Asset] Create Success', {
-            assets: [...store.assets(), newAsset],
-            isLoading: false,
-          });
-          store.writeToStorage();
-        } catch (error) {
-          handleError(error, 'Placement Create Failed');
-          updateState(store, '[Placement] Create Failed', { isLoading: false });
-          throw error;
-        }
+      setFolioSelected(folioId: number) {
+        updateState(store, actionKeys(`Folio Select By Id: ${folioId}`).event, { folioIdSelected: folioId });
       },
     };
   })
+
   //#endregion
 
   // withStorageSync({
@@ -296,4 +360,35 @@ export const FolioStore = signalStore(
 //       })
 //     )
 //     .subscribe();
+// },
+
+// async createPlacement2(placement: Placement) {
+//   updateState(store, '[Placement] Create Start', { isLoading: true });
+//   try {
+//     const newPlacement = await firstValueFrom(dbFolio.placementCreate(placement));
+//     updateState(store, '[Placement] Create Success', {
+//       placements: [...store.placements(), newPlacement],
+//       isLoading: false,
+//     });
+//     store.writeToStorage();
+//   } catch (error) {
+//     handleError(error, 'Placement Create Failed');
+//     updateState(store, '[Placement] Create Failed', { isLoading: false });
+//     throw error;
+//   }
+// },
+// async assetCreate1(assetPrep: Asset) {
+//   updateState(store, '[Asset] Create Start', { isLoading: true });
+//   try {
+//     const newAsset = await firstValueFrom(dbFolio.assetCreate(assetPrep));
+//     updateState(store, '[Asset] Create Success', {
+//       assets: [...store.assets(), newAsset],
+//       isLoading: false,
+//     });
+//     store.writeToStorage();
+//   } catch (error) {
+//     handleError(error, 'Placement Create Failed');
+//     updateState(store, '[Placement] Create Failed', { isLoading: false });
+//     throw error;
+//   }
 // },

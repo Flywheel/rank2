@@ -12,11 +12,11 @@ import { PitchStore } from '../pitch/pitch.store';
 import { ErrorService } from '../../core/services/error.service';
 import { ActionKeyService } from '../../core/services/action-key.service';
 
-const groupSource = 'Author';
+const featureKey = 'Author';
 
 export const AuthorStore = signalStore(
   { providedIn: 'root' },
-  withDevtools(groupSource),
+  withDevtools(featureKey),
   withState({
     authors: [authorInit],
     authorLoggedIn: authorInit,
@@ -27,7 +27,7 @@ export const AuthorStore = signalStore(
   }),
 
   withStorageSync({
-    key: groupSource,
+    key: featureKey,
     autoSync: false,
   }),
 
@@ -116,7 +116,7 @@ export const AuthorStore = signalStore(
     const errorService = inject(ErrorService);
     const handleError = errorService.handleSignalStoreResponse;
     const actionKeyService = inject(ActionKeyService);
-    const actionKeys = actionKeyService.getActionEvents(groupSource);
+    const actionKeys = actionKeyService.getActionEvents(featureKey);
 
     return {
       async getConsentValueFromLocalStorage(consentValue: string) {
@@ -214,7 +214,7 @@ export const AuthorStore = signalStore(
       },
 
       setStartupCompleted() {
-        updateState(store, `[${groupSource}] Startup Completed`, {
+        updateState(store, `[${featureKey}] Startup Completed`, {
           startupCompleted: true,
         });
       },

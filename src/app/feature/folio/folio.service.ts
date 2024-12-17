@@ -12,7 +12,7 @@ import { ErrorService } from '../../core/services/error.service';
 export class FolioService {
   http = inject(HttpClient);
   errorService = inject(ErrorService);
-  err = this.errorService.handleHttpErrorResponse;
+  handleError = this.errorService.handleHttpErrorResponse;
 
   private folioAPIUrl = `api/folio`;
   private folioViewAPIUrl = `api/folioview`;
@@ -21,7 +21,7 @@ export class FolioService {
     return this.http.post<Folio>(this.folioAPIUrl, { authorId, folioName }).pipe(
       timeout(2500),
       retry(2),
-      catchError(error => this.err(error, 'Folio creation failed'))
+      catchError(error => this.handleError(error, 'Folio creation failed'))
     );
   }
 
@@ -55,7 +55,7 @@ export class FolioService {
           })
         );
       }),
-      catchError(error => this.err(error, 'Folio creation failed'))
+      catchError(error => this.handleError(error, 'Folio creation failed'))
     );
   }
 
@@ -65,7 +65,7 @@ export class FolioService {
     const id = undefined;
     return this.http
       .post<Placement>(this.placementAPIUrl, { id, authorId, assetId, folioId, caption })
-      .pipe(catchError(error => this.err(error, 'Folio creation failed')));
+      .pipe(catchError(error => this.handleError(error, 'Folio creation failed')));
   }
 
   private assetAPIUrl = `api/asset`;
@@ -73,7 +73,7 @@ export class FolioService {
   assetCreate({ authorId, mediaType, sourceId }: Asset): Observable<Asset> {
     return this.http
       .post<Asset>(this.assetAPIUrl, { authorId, mediaType, sourceId })
-      .pipe(catchError(error => this.err(error, 'Asset creation failed')));
+      .pipe(catchError(error => this.handleError(error, 'Asset creation failed')));
   }
 
   createPlacementAsAsset(assetData: Asset, folioId: number, caption: string): Observable<{ newAsset: Asset; newPlacement: Placement }> {
@@ -93,7 +93,7 @@ export class FolioService {
           }))
         );
       }),
-      catchError(error => this.err(error, 'Placement creation failed'))
+      catchError(error => this.handleError(error, 'Placement creation failed'))
     );
   }
 

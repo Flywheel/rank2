@@ -23,7 +23,11 @@ export class StartupService {
   }
 
   async importMiniHeraldAssets() {
-    const authorStartup: Author = miniHeraldData.author;
+    await this.importAssets(miniHeraldData);
+  }
+
+  async importAssets(data: DataImporter) {
+    const authorStartup: Author = data.author;
 
     await this.authorStore.createAuthor(authorStartup, false);
     const folioDefault: Folio = {
@@ -32,13 +36,33 @@ export class StartupService {
       folioName: '@' + authorStartup.name,
       parentFolioId: undefined,
     };
-    await this.folioStore.createFolioAsRoot(folioDefault);
+    await this.folioStore.createRootFolio(folioDefault);
 
     await this.delay(100);
     const theTopFolio = this.folioStore.folios().find(f => f.authorId === authorStartup.id && f.parentFolioId === undefined);
-    if (theTopFolio) await this.hydrationService.hydrateFolios(theTopFolio.authorId!, miniHeraldData);
+    if (theTopFolio) await this.hydrationService.hydrateFolios(theTopFolio.authorId!, data);
     else alert('No top folio found');
     await this.delay(100);
     await this.hydrationService.hydrateSlates(folioDefault.authorId);
   }
 }
+
+// async importMiniHeraldAssets1() {
+//   const authorStartup: Author = miniHeraldData.author;
+
+//   await this.authorStore.createAuthor(authorStartup, false);
+//   const folioDefault: Folio = {
+//     id: 0,
+//     authorId: authorStartup.id,
+//     folioName: '@' + authorStartup.name,
+//     parentFolioId: undefined,
+//   };
+//   await this.folioStore.createFolioAsRoot(folioDefault);
+
+//   await this.delay(100);
+//   const theTopFolio = this.folioStore.folios().find(f => f.authorId === authorStartup.id && f.parentFolioId === undefined);
+//   if (theTopFolio) await this.hydrationService.hydrateFolios(theTopFolio.authorId!, miniHeraldData);
+//   else alert('No top folio found');
+//   await this.delay(100);
+//   await this.hydrationService.hydrateSlates(folioDefault.authorId);
+// }

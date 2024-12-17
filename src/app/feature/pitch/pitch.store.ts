@@ -4,16 +4,16 @@ import { Pitch, PitchView, SlateMember, SlateView, SlateMemberView, Slate } from
 import { pitchInit, pitchViewInit, slateViewInit, slateInit, slateMemberInit, placementViewInit } from '../../core/models/initValues';
 import { PitchService } from './pitch.service';
 import { computed, inject } from '@angular/core';
-import { catchError, exhaustMap, firstValueFrom, mergeMap, pipe, switchMap, tap, throwError } from 'rxjs';
+import { firstValueFrom, mergeMap, pipe, switchMap, tap } from 'rxjs';
 import { FolioStore } from '../folio/folio.store';
 import { ErrorService } from '../../core/services/error.service';
 import { ActionKeyService } from '../../core/services/action-key.service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
-const groupSource = 'Pitch';
+const featureKey = 'Pitch';
 export const PitchStore = signalStore(
   { providedIn: 'root' },
-  withDevtools(groupSource),
+  withDevtools(featureKey),
   withState({
     pitchIdSelected: 0,
     pitches: [pitchInit],
@@ -28,10 +28,12 @@ export const PitchStore = signalStore(
     isAddingSlateMember: false,
     pitchTest: pitchInit,
     pitchesTest: [pitchInit],
+    newPitch: pitchInit,
+    newSlate: slateInit,
   }),
 
   withStorageSync({
-    key: groupSource,
+    key: featureKey,
     autoSync: false,
   }),
 
@@ -90,50 +92,12 @@ export const PitchStore = signalStore(
   }),
 
   withMethods(store => {
-    return {
-      async pitchStateToLocalStorage() {
-        updateState(store, '[Pitch] WriteToLocalStorage Start', { isLoading: true });
-        store.writeToStorage();
-        updateState(store, '[Pitch] WriteToLocalStorage Success', { isLoading: false });
-      },
-    };
-  }),
-  withMethods(store => {
     const dbPitch = inject(PitchService);
     const errorService = inject(ErrorService);
     const handleError = errorService.handleSignalStoreResponse;
     const actionKeyService = inject(ActionKeyService);
-    const actionKeys = actionKeyService.getActionEvents(groupSource);
+    const actionKeys = actionKeyService.getActionEvents(featureKey);
     return {
-      setPitchSelected(pitchId: number) {
-        updateState(store, `[Pitch] Select By Id  ${pitchId}`, { pitchIdSelected: pitchId });
-      },
-
-      createPitch: rxMethod<Pitch>(
-        pipe(
-          exhaustMap(pitch => {
-            const actionKey = actionKeys('Create Pitch');
-            updateState(store, actionKey.event, { isLoading: true });
-            return dbPitch.createPitchWithSlate(pitch).pipe(
-              tap({
-                next: ({ newPitch, newSlate }) => {
-                  updateState(store, actionKey.success, {
-                    pitches: [...store.pitches(), newPitch],
-                    slates: [...store.slates(), newSlate],
-                    isLoading: false,
-                  });
-                  store.writeToStorage();
-                },
-                error: error => {
-                  handleError(error, actionKey.failed);
-                  updateState(store, actionKey.failed, { isLoading: false });
-                },
-              })
-            );
-          })
-        )
-      ),
-
       async createPitchAndSlate(pitchPrep: Partial<Pitch>): Promise<{ newPitch: Pitch; newSlate: Slate }> {
         const actionKey = actionKeys('Create Pitch with Slate');
         updateState(store, actionKey.event, { isLoading: true });
@@ -142,7 +106,6 @@ export const PitchStore = signalStore(
 
           updateState(store, actionKey.success + ' Pitch', {
             pitches: [...store.pitches(), newPitch],
-            isLoading: false,
           });
           updateState(store, actionKey.success + ' Slate', {
             slates: [...store.slates(), newSlate],
@@ -187,6 +150,9 @@ export const PitchStore = signalStore(
           })
         )
       ),
+      setPitchSelected(pitchId: number) {
+        updateState(store, `[${featureKey}] Select By Id  ${pitchId}`, { pitchIdSelected: pitchId });
+      },
 
       loadPitchById: rxMethod<number>(
         pipe(
@@ -213,19 +179,18 @@ export const PitchStore = signalStore(
       ),
     };
   })
-
-  // withMethods(store => {
-  //   return {
-  //     rxSLateMaker: (x: SlateMember[]) =>
-  //     {
-  //    const newMembersSignal = signal<SlateMember[]>([]);
-
-  //       store.addSlateMembersRX(x);
-  //       return x;
-  //   };
-  // })
 );
 
+// withMethods(store => {
+//   return {
+//     rxSLateMaker: (x: SlateMember[]) =>
+//     {
+//    const newMembersSignal = signal<SlateMember[]>([]);
+
+//       store.addSlateMembersRX(x);
+//       return x;
+//   };
+// })
 // createPitchOld(pitch: Pitch) {
 //   const actionKey = actionKeys('Create Pitch');
 //   updateState(store, actionKey.event, { isLoading: true });
@@ -296,3 +261,37 @@ export const PitchStore = signalStore(
 //   store.writeToStorage();
 //   return { newPitch, newSlate };
 // },
+// withMethods(store => {
+//   return {
+//     async pitchStateToLocalStorage() {
+//       updateState(store, '[Pitch] WriteToLocalStorage Start', { isLoading: true });
+//       store.writeToStorage();
+//       updateState(store, '[Pitch] WriteToLocalStorage Success', { isLoading: false });
+//     },
+//   };
+// }),
+
+// createPitch: rxMethod<Pitch>(
+//   pipe(
+//     exhaustMap(pitch => {
+//       const actionKey = actionKeys('Create Pitch');
+//       updateState(store, actionKey.event, { isLoading: true });
+//       return dbPitch.createPitchWithSlate(pitch).pipe(
+//         tap({
+//           next: ({ newPitch, newSlate }) => {
+//             updateState(store, actionKey.success, {
+//               pitches: [...store.pitches(), newPitch],
+//               slates: [...store.slates(), newSlate],
+//               isLoading: false,
+//             });
+//             store.writeToStorage();
+//           },
+//           error: error => {
+//             handleError(error, actionKey.failed);
+//             updateState(store, actionKey.failed, { isLoading: false });
+//           },
+//         })
+//       );
+//     })
+//   )
+// ),
