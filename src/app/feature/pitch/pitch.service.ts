@@ -52,6 +52,9 @@ export class PitchService {
     );
   }
 
+  getPitchById(id: number): Observable<Pitch> {
+    return this.http.get<Pitch>(`${this.pitchAPIUrl}/${id}`);
+  }
   //#endregion Contest
 
   //#region Slate
@@ -81,7 +84,8 @@ export class PitchService {
         rankOrder: slateMember.rankOrder,
       })
     );
-    return forkJoin(requests);
+    const retval = forkJoin(requests);
+    return retval;
   }
 
   updateSlateMembers(slateMembers: SlateMember[]): Observable<SlateMember[]> {

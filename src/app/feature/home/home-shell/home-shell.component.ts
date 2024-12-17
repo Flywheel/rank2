@@ -7,20 +7,20 @@ import { SlateMemberView } from '../../../core/models/interfaces';
 import { FormsModule } from '@angular/forms';
 import { HomePitchComponent } from '../home-pitch/home-pitch.component';
 import { PitchShellComponent } from '../../pitch/pitch-shell/pitch-shell.component';
+import { BackdoorComponent } from '../../../core/components/backdoor/backdoor.component';
 
 @Component({
   selector: 'mh5-home-shell',
   standalone: true,
-  imports: [HeaderComponent, ViewerComponent, HomeMenuComponent, FormsModule, HomePitchComponent, PitchShellComponent],
+  imports: [HeaderComponent, ViewerComponent, HomeMenuComponent, FormsModule, HomePitchComponent, PitchShellComponent, BackdoorComponent],
   templateUrl: './home-shell.component.html',
   styleUrl: './home-shell.component.scss',
 })
 export class HomeShellComponent {
+  hidBackdoor = signal<boolean>(true);
   hidePlacementViewer = signal<boolean>(true);
   slateMember = signal<SlateMemberView>(slateMemberViewInit);
-
   navigationId = computed<number>(() => this.slateMember().id);
-
   resetPitch = output<void>();
 
   togglePlacementViewer(toggle: boolean) {

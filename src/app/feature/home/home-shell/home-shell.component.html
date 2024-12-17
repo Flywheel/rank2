@@ -16,3 +16,12 @@
     (placementToDisplay)="setSlateMemberView($event)"
     (pitchToDisplay)="setPitchView($event)" />
 }
+
+<div class="footer" (click)="hidBackdoor.set(false)" (keydown)="hidBackdoor.set(false)" tabindex="0">
+  &copy; Indaba Application Network 2024
+</div>
+<div class="footer">
+  @defer (when hidBackdoor() === false) {
+    <mh5-backdoor />
+  }
+</div>

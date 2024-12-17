@@ -139,7 +139,7 @@ export class HydrationService {
     console.log(pitches);
     const folios = this.folioStore.folioViewsComputed();
 
-    pitches.forEach(pitch => {
+    pitches.forEach(async pitch => {
       const hasFolio = folios.filter(folio => folio.id === pitch.folioId)[0];
       const members = hasFolio.placementViews;
       const newMembers: SlateMember[] = [];
@@ -152,7 +152,6 @@ export class HydrationService {
         } as SlateMember;
         newMembers.push(member);
       });
-
       this.pitchStore.addSlateMembers(newMembers);
     });
   }

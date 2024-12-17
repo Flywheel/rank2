@@ -2,8 +2,7 @@ import { Component, computed, inject } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 
 import { AUTHOR_DEFAULT_NAME } from '../../models/constants';
-import { theData } from '../../../../mocks/mockdataForHydration';
-import { DataImporter } from '../../models/interfaces';
+
 import { StartupService } from '../../services/startup.service';
 import { AuthorStore } from '../../../feature/author/author.store';
 import { BallotStore } from '../../../feature/ballot/ballot.store';
@@ -11,6 +10,7 @@ import { FolioStore } from '../../../feature/folio/folio.store';
 import { PitchService } from '../../../feature/pitch/pitch.service';
 import { PitchStore } from '../../../feature/pitch/pitch.store';
 import { HydrationService } from '../../services/hydration.service';
+import { slateMemberInit } from '../../models/initValues';
 
 @Component({
   selector: 'mh5-backdoor',
@@ -34,6 +34,28 @@ export class BackdoorComponent {
 
   import() {
     this.startupService.importAuthorLoggedInAssets();
+  }
+
+  thePitches = computed(() => this.pitchStore.pitchesTest());
+  pitchrx() {
+    this.pitchStore.loadPitchById(this.pitchStore.pitchIdSelected());
+    console.log(this.pitchStore.pitchesTest());
+  }
+
+  theSlates = computed(() => this.pitchStore.slateMembers().sort((a, b) => b.id - a.id));
+
+  slateRx() {
+    this.pitchStore.addSlateMembers([slateMemberInit]);
+    // const slateMembers = [slateMemberInit];
+    //  const x =  this.pitchStore.rxSLateMaker(slateMembers);s
+    // this.pitchStore.addSlateMembersRX(slateMembers).subscribe({
+    //   next: newMembers => {
+    //     console.log('New members added:', newMembers);
+    //   },
+    //   error: err => {
+    //     console.error('Error adding members:', err);
+    //   }
+    // });
   }
 
   // private async loadData() {
