@@ -169,8 +169,11 @@ export class FolioPlacementNewComponent {
   mediaService = inject(MediaService);
 
   assetViewPrepared = signal<Asset | AssetView>(assetViewInit);
+
   displayMedia(input: string) {
-    this.assetViewPrepared.set(this.mediaService.castUrlToAsset(input));
+    const assetInit = this.mediaService.castUrlToAsset(input);
+    console.log(assetInit);
+    this.assetViewPrepared.set(assetInit);
   }
 
   test() {

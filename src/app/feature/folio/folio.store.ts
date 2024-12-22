@@ -10,7 +10,6 @@ import { ActionKeyService } from '../../core/services/action-key.service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
 const featureKey = 'Folio';
-
 export const FolioStore = signalStore(
   { providedIn: 'root' },
   withDevtools(featureKey),
@@ -85,7 +84,6 @@ export const FolioStore = signalStore(
   }),
 
   //#endregion
-
   //#region Methods
   withMethods(store => {
     const dbFolio = inject(FolioService);

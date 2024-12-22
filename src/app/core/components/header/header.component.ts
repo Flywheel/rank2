@@ -1,4 +1,4 @@
-import { Component, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { IconCommunityComponent } from '../../svg/icon-community';
@@ -13,6 +13,7 @@ import { IconMhComponent } from '../../svg/icon-mh';
   imports: [IconMhComponent, IconCommunityComponent, IconShareComponent, IconProfileComponent, IconDashboardComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
   router = inject(Router);

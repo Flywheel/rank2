@@ -16,9 +16,10 @@ export class MediaService {
       if (match) {
         const result = value.parse(match);
         if (result !== null) {
+          const idPosition = key == 'tiktok' ? 2 : 1;
           return {
             mediaType: result.mediaType,
-            sourceId: match ? match[1] : '',
+            sourceId: match ? match[idPosition] : '',
             authorId: '1',
             id: 0,
           } as Asset;
@@ -65,8 +66,9 @@ export const mediaPlatforms = {
       id: match[1],
     }),
   },
+
   tiktok: {
-    regex: /tiktok\.com\/@(\S+)\/video\/(\d+)/,
+    regex: /tiktok\.com\/@([a-zA-Z0-9._-]+)\/video\/(\d+)/,
     parse: (match: RegExpExecArray): MediaPlatform => ({
       mediaType: 'tiktok',
       user: match[1],

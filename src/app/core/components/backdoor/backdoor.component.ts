@@ -3,7 +3,7 @@ import { environment } from '../../../../environments/environment';
 
 import { AUTHOR_DEFAULT_NAME } from '../../models/constants';
 
-import { StartupService } from '../../services/startup.service';
+import { MockDataService } from '../../services/mock-data.service';
 import { AuthorStore } from '../../../feature/author/author.store';
 import { BallotStore } from '../../../feature/ballot/ballot.store';
 import { FolioStore } from '../../../feature/folio/folio.store';
@@ -24,7 +24,7 @@ export class BackdoorComponent {
   folioStore = inject(FolioStore);
   pitchStore = inject(PitchStore);
   ballotStore = inject(BallotStore);
-  startupService = inject(StartupService);
+  startupService = inject(MockDataService);
 
   pitchService = inject(PitchService);
   hydrationService = inject(HydrationService);

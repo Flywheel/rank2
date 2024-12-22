@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthorStore } from './feature/author/author.store';
 import { AUTHOR_CONSENT_KEY, AUTHOR_HOST_NAME } from './core/models/constants';
@@ -7,7 +7,6 @@ import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { SwUpdate } from '@angular/service-worker';
 import { StartupService } from './core/services/startup.service';
-import { MockChannelService } from './core/services/mock-channel.service';
 
 @Component({
   selector: 'mh5-root',
@@ -15,12 +14,13 @@ import { MockChannelService } from './core/services/mock-channel.service';
   imports: [CommonModule, RouterOutlet, AuthorConsentComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit, OnDestroy {
   authorStore = inject(AuthorStore);
   //folioStore = inject(FolioStore);
-  mockChannelService = inject(MockChannelService);
   startupService = inject(StartupService);
+
   swUpdate = inject(SwUpdate);
   title = AUTHOR_HOST_NAME;
   isIframe = false;
@@ -41,7 +41,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (consent) {
       this.authorStore.getConsentValueFromLocalStorage(consent);
       if (consent === 'accepted') {
-        this.mockChannelService.loadForDemo_NoBackend();
+        this.startupService.loadForDemo_NoBackend();
       }
     }
   }

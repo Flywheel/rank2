@@ -4,11 +4,11 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class ActionKeyService {
-  getActionEvents(group: string) {
+  getActionEvents(featureKey: string) {
     return (action: string) => ({
-      event: `[${group}] ${action}`,
-      success: `[${group}] ${action} Success`,
-      failed: `[${group}] ${action} Failed`,
+      event: `[${featureKey}] ${action}`,
+      success: `[${featureKey}] ${action} Success`,
+      failed: `[${featureKey}] ${action} Failed`,
     });
   }
 }
