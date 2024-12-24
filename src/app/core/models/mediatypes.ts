@@ -1,12 +1,22 @@
-export type MediaType = 'youtube' | 'ytshort' | 'tiktok' | 'instagram' | 'twitter' | 'textinput'; // Add other platforms as needed
-export type MediaPlatform = YouTube | YouTubeShort | Tiktok | Instagram | Twitter | TextInput; // Add other platform interfaces as needed
+export enum MediaType {
+  Youtube = 'youtube',
+  YouTubeShort = 'youtubeshort',
+  Tiktok = 'tiktok',
+  Instagram = 'instagram',
+  Twitter = 'twitter',
+  Textinput = 'textinput',
+  Textcaption = 'textcaption',
+  Pitch = 'pitch',
+}
+
+export type MediaPlatform = YouTube | YouTubeShort | Tiktok | Instagram | Twitter | TextInput | TextCaption | Pitch;
 
 interface YouTube {
   mediaType: 'youtube';
   id: string;
 }
 interface YouTubeShort {
-  mediaType: 'ytshort';
+  mediaType: 'youtubeshort';
   id: string;
 }
 
@@ -25,6 +35,15 @@ interface Twitter {
   mediaType: 'twitter';
   user: string;
   statusId: string;
+}
+
+interface TextCaption {
+  mediaType: 'textcaption';
+  theCaption: string;
+}
+interface Pitch {
+  mediaType: 'pitch';
+  theCaption: string;
 }
 
 interface TextInput {

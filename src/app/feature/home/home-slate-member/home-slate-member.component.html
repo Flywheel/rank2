@@ -56,7 +56,30 @@
     <div class="sectionContentTitle">{{ caption() }}</div>
     <div class="sectionContentCaption">
       <br />
-      <mh5-icon-play-circle />
+      @switch (mediaType()) {
+        @case ('topicList') {}
+        @case (mediaTypes.Youtube) {
+          <mh5-icon-youtube />
+        }
+        @case ('youtubeshort') {
+          <mh5-icon-youtube-shorts />
+        }
+        @case (mediaTypes.Textcaption) {
+          <mh5-icon-frame />
+        }
+        @case (mediaTypes.Tiktok) {
+          <mh5-icon-tiktok />
+        }
+        <!-- @case (mediaTypes.Instagram) {
+          <mh5-icon-i />
+        } -->
+        @case (mediaTypes.Pitch) {
+          <mh5-icon-play-triangle />
+        }
+        @default {
+          <mh5-icon-play-circle />
+        }
+      }
     </div>
   </div>
 </div>

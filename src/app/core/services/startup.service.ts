@@ -17,7 +17,7 @@ export class StartupService {
 
   async loadForDemo_NoBackend() {
     const loggedInAuthorId = this.authorStore.authorLoggedIn().id;
-    const author = this.authorStore.authorSelectedSetById(loggedInAuthorId);
+    let author = this.authorStore.authorSelectedSetById(loggedInAuthorId);
 
     if (environment.ianConfig.showLogs) {
       console.log(this.authorStore.authorLoggedIn());
@@ -26,6 +26,7 @@ export class StartupService {
     if (!author) {
       await this.authorStore.createAuthor(author, false);
       await this.authorStore.loginAuthor(author);
+      author = this.authorStore.authorSelectedSetById(loggedInAuthorId);
     }
 
     if (this.authorStore.authorLoggedIn().name !== AUTHOR_DEFAULT_NAME) {

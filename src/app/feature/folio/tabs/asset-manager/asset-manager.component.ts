@@ -11,6 +11,7 @@ import { IconYoutubeComponent } from '../../../../core/svg/icon-youtube';
 import { IconTiktokComponent } from '../../../../core/svg/icon-tiktok';
 import { IconYouTubeShortsComponent } from '../../../../core/svg/icon-youtube-shorts';
 import { IconDashboardComponent } from '../../../../core/svg/icon-dashboard';
+import { MediaType } from '../../../../core/models/mediatypes';
 
 @Component({
   selector: 'mh5-asset-manager',
@@ -54,6 +55,7 @@ export class AssetManagerComponent {
     this.folioStore.setFolioSelected(folio.id);
   }
 
+  mediaTypes = MediaType;
   hidePlacementDisplay = signal<boolean>(true);
   placementToDisplay = signal<PlacementView>(placementViewInit);
   displayPlacementAsset(placement: PlacementView) {

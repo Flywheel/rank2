@@ -20,21 +20,19 @@
         @for (item of placementsOnSelectedFolio(); track $index) {
           <div class="placement-list-item" (click)="displayPlacementAsset(item)" (keydown)="displayPlacementAsset(item)" tabindex="0">
             @switch (item.assetView.mediaType) {
-              @case ('youtube') {
+              @case (mediaTypes.Youtube) {
                 <mh5-icon-youtube />
               }
-              @case ('ytshort') {
+              @case (mediaTypes.YouTubeShort) {
                 <mh5-icon-youtube-shorts />
               }
-              @case ('tiktok') {
+              @case (mediaTypes.Tiktok) {
                 <mh5-icon-tiktok />
               }
-              @case ('pitch') {
+              @case (mediaTypes.Pitch) {
                 <mh5-icon-pitch />
               }
-              @case ('pitchlink') {
-                <mh5-icon-pitch />
-              }
+
               @case ('folio') {
                 <mh5-icon-dashboard />
               }
