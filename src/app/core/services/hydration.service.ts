@@ -110,7 +110,7 @@ export class HydrationService {
     const pitchPrep = pitchInit as unknown as Pitch; // cast with no ID to create new pitch
     const { newPitch } = await this.pitchStore.createPitchAndSlate(pitchPrep);
 
-    console.log(newPitch);
+    //console.log(newPitch);
     const assetPrep: Asset = {
       id: 0,
       mediaType: 'pitch',

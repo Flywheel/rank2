@@ -58,4 +58,5 @@ export interface ContentTransform {
   height: number;
   paddingBottom: string;
   url: string;
+  segmentHeight: number;
 }

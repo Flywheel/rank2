@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Asset, AssetView } from '../models/interfaces';
 import { environment } from '../../../environments/environment';
-import { MediaPlatform } from '../models/mediatypes';
+import { ContentTransform, MediaPlatform, MediaType } from '../models/mediatypes';
 import { assetInit } from '../models/initValues';
 
 @Injectable({
@@ -49,6 +49,72 @@ export class MediaService {
         return '';
     }
   }
+
+  transformCSourcetoContent(source: string, mediaType: MediaType): ContentTransform {
+    let retval = {} as ContentTransform;
+    switch (mediaType) {
+      case MediaType.Youtube:
+        retval = {
+          typeName: 'youtube',
+          width: 150,
+          height: 150 / 1.33,
+          paddingBottom: '56.25%',
+          segmentHeight: 120,
+          url: 'https://img.youtube.com/vi/' + source + '/0.jpg',
+        };
+        break;
+      case MediaType.Tiktok:
+        retval = {
+          typeName: 'tiktok',
+          width: 150,
+          height: 150 / 1.33,
+          segmentHeight: 200,
+          paddingBottom: '56.25%',
+          url: source,
+        };
+        break;
+      case MediaType.Pitch:
+        retval = {
+          typeName: 'pitch',
+          width: 150,
+          height: 40,
+          paddingBottom: '0%',
+          segmentHeight: 50,
+          url: source,
+        };
+        break;
+    }
+    return retval;
+  }
+
+  // case MediaType.jpeg:
+  //   retval = {
+  //     typeName: 'jpeg',
+  //     width: 116,
+  //     height: 202,
+  //     paddingBottom: '56.25%',
+  //     url: source,
+  //   };
+  //   break;
+  // case MediaType.jpg-280:
+  //   retval = {
+  //     typeName: 'jpg-280',
+  //     width: 100,
+  //     height: 120,
+  //     paddingBottom: '0%',
+  //     url: source,
+  //   };
+  //   break;
+  // case 'topic':
+  // case 'ad':
+  //   retval = {
+  //     typeName: 'topic',
+  //     width: 116,
+  //     height: 202,
+  //     paddingBottom: '56.25%',
+  //     url: this.sourceId(),
+  //   };
+  //   break;
 }
 
 export const mediaPlatforms = {
