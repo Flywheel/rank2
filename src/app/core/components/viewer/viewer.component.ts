@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MediaService } from '../../services/media.service';
 import { AssetView, PlacementView } from '../../models/interfaces';
 import { DomSanitizer } from '@angular/platform-browser';
-import { PitchShellComponent } from '../../../feature/pitch/pitch-shell/pitch-shell.component';
+import { PitchShellComponent } from '@feature/pitch/pitch-shell/pitch-shell.component';
 @Component({
   selector: 'mh5-viewer',
   standalone: true,

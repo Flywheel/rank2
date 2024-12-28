@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HydrationService } from './hydration.service';
-import { AuthorStore } from '../../feature/author/author.store';
-import { FolioStore } from '../../feature/folio/folio.store';
+import { AuthorStore } from '@feature/author/author.store';
+import { FolioStore } from '@feature/folio/folio.store';
 import { theData } from '../../../mocks/mockdataForHydration';
 import { Author, DataImporter, Folio } from '../models/interfaces';
 import { miniHeraldData } from '../../../mocks/mockdataMH';

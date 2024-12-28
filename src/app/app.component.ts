@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AuthorStore } from './feature/author/author.store';
+import { AuthorStore } from '@feature/author/author.store';
 import { AUTHOR_CONSENT_KEY, AUTHOR_HOST_NAME } from './core/models/constants';
-import { AuthorConsentComponent } from './feature/author/author-consent/author-consent.component';
+import { AuthorConsentComponent } from '@feature/author/author-consent/author-consent.component';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { SwUpdate } from '@angular/service-worker';

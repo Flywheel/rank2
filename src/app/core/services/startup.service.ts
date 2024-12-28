@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { delay } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AuthorStore } from '../../feature/author/author.store';
-import { FolioStore } from '../../feature/folio/folio.store';
+import { AuthorStore } from '@feature/author/author.store';
+import { FolioStore } from '@feature/folio/folio.store';
 import { AUTHOR_DEFAULT_NAME } from '../models/constants';
 import { Folio } from '../models/interfaces';
 import { MockDataService } from './mock-data.service';

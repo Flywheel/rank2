@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { AuthorStore } from '../../feature/author/author.store';
-import { FolioStore } from '../../feature/folio/folio.store';
-import { PitchStore } from '../../feature/pitch/pitch.store';
+import { AuthorStore } from '@feature/author/author.store';
+import { FolioStore } from '@feature/folio/folio.store';
+import { PitchStore } from '@feature/pitch/pitch.store';
 import {
   Asset,
   AssetImporter,

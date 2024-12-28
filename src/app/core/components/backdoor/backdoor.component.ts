@@ -4,11 +4,11 @@ import { environment } from '../../../../environments/environment';
 import { AUTHOR_DEFAULT_NAME } from '../../models/constants';
 
 import { MockDataService } from '../../services/mock-data.service';
-import { AuthorStore } from '../../../feature/author/author.store';
-import { BallotStore } from '../../../feature/ballot/ballot.store';
-import { FolioStore } from '../../../feature/folio/folio.store';
-import { PitchService } from '../../../feature/pitch/pitch.service';
-import { PitchStore } from '../../../feature/pitch/pitch.store';
+import { AuthorStore } from '@feature/author/author.store';
+import { BallotStore } from '@feature/ballot/ballot.store';
+import { FolioStore } from '@feature/folio/folio.store';
+import { PitchService } from '@feature/pitch/pitch.service';
+import { PitchStore } from '@feature/pitch/pitch.store';
 import { HydrationService } from '../../services/hydration.service';
 import { slateMemberInit } from '../../models/initValues';
 
