@@ -1,17 +1,17 @@
 import { Component, computed, inject, input, output, signal } from '@angular/core';
-import { PitchView, FolioView, PlacementView } from '../../../../core/models/interfaces';
+import { PitchView, FolioView, PlacementView } from '@core/models/interfaces';
 import { FolioStore } from '../../folio.store';
 import { PitchStore } from '../../../pitch/pitch.store';
 import { AuthorStore } from '../../../author/author.store';
-import { pitchViewInit, placementViewInit } from '../../../../core/models/initValues';
-import { ViewerComponent } from '../../../../core/components/viewer/viewer.component';
+import { pitchViewInit, placementViewInit } from '@core/models/initValues';
+import { ViewerComponent } from '@core/components/viewer/viewer.component';
 import { TopSlateManagerComponent } from '../topslate-manager/topslate-manager.component';
-import { IconPitchComponent } from '../../../../core/svg/icon-pitch';
-import { IconYoutubeComponent } from '../../../../core/svg/icon-youtube';
-import { IconTiktokComponent } from '../../../../core/svg/icon-tiktok';
-import { IconYouTubeShortsComponent } from '../../../../core/svg/icon-youtube-shorts';
-import { IconDashboardComponent } from '../../../../core/svg/icon-dashboard';
-import { MediaType } from '../../../../core/models/mediatypes';
+import { IconPitchComponent } from '@core/svg/icon-pitch';
+import { IconYoutubeComponent } from '@core/svg/icon-youtube';
+import { IconTiktokComponent } from '@core/svg/icon-tiktok';
+import { IconYouTubeShortsComponent } from '@core/svg/icon-youtube-shorts';
+import { IconDashboardComponent } from '@core/svg/icon-dashboard';
+import { MediaType } from '@core/models/mediatypes';
 
 @Component({
   selector: 'mh5-asset-manager',

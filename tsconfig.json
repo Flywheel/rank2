@@ -21,7 +21,8 @@
     "lib": ["ES2022", "dom"],
     "baseUrl": "./",
     "paths": {
-      "@feature/*": ["src/app/feature/*"]
+      "@feature/*": ["src/app/feature/*"],
+      "@core/*": ["src/app/core/*"]
     }
   },
   "angularCompilerOptions": {

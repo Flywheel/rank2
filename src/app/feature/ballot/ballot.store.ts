@@ -1,10 +1,10 @@
 import { signalStore, withState, withMethods, withComputed } from '@ngrx/signals';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
-import { PitchView, SlateView } from '../../core/models/interfaces';
-import { slateViewInit } from '../../core/models/initValues';
+import { PitchView, SlateView } from '@core/models/interfaces';
+import { slateViewInit } from '@core/models/initValues';
 import { computed, inject } from '@angular/core';
 import { PitchStore } from '../pitch/pitch.store';
-import { ActionKeyService } from '../../core/services/action-key.service';
+import { ActionKeyService } from '@core/services/action-key.service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, tap } from 'rxjs';
 

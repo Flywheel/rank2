@@ -1,12 +1,12 @@
 import { signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
-import { Asset, AssetView, Folio, FolioView, Placement, PlacementView } from '../../core/models/interfaces';
-import { assetInit, assetViewInit, folioInit, folioViewInit, placementInit } from '../../core/models/initValues';
+import { Asset, AssetView, Folio, FolioView, Placement, PlacementView } from '@core/models/interfaces';
+import { assetInit, assetViewInit, folioInit, folioViewInit, placementInit } from '@core/models/initValues';
 import { FolioService } from './folio.service';
 import { computed, inject } from '@angular/core';
 import { exhaustMap, firstValueFrom, pipe, tap } from 'rxjs';
-import { ErrorService } from '../../core/services/error.service';
-import { ActionKeyService } from '../../core/services/action-key.service';
+import { ErrorService } from '@core/services/error.service';
+import { ActionKeyService } from '@core/services/action-key.service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
 const featureKey = 'Folio';

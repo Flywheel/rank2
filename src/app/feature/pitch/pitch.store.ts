@@ -1,13 +1,13 @@
 import { signalStore, withState, withComputed, withMethods } from '@ngrx/signals';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
-import { Pitch, PitchView, SlateMember, SlateView, SlateMemberView, Slate } from '../../core/models/interfaces';
-import { pitchInit, pitchViewInit, slateViewInit, slateInit, slateMemberInit, placementViewInit } from '../../core/models/initValues';
+import { Pitch, PitchView, SlateMember, SlateView, SlateMemberView, Slate } from '@core/models/interfaces';
+import { pitchInit, pitchViewInit, slateViewInit, slateInit, slateMemberInit, placementViewInit } from '@core/models/initValues';
 import { PitchService } from './pitch.service';
 import { computed, inject } from '@angular/core';
 import { firstValueFrom, mergeMap, pipe, switchMap, tap } from 'rxjs';
 import { FolioStore } from '../folio/folio.store';
-import { ErrorService } from '../../core/services/error.service';
-import { ActionKeyService } from '../../core/services/action-key.service';
+import { ErrorService } from '@core/services/error.service';
+import { ActionKeyService } from '@core/services/action-key.service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
 const featureKey = 'Pitch';

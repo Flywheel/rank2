@@ -1,7 +1,7 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Asset, AssetView } from '../../../core/models/interfaces';
-import { MediaService } from '../../../core/services/media.service';
+import { Asset, AssetView } from '@core/models/interfaces';
+import { MediaService } from '@core/services/media.service';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 
 @Component({

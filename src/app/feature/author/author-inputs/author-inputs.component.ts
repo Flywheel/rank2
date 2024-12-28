@@ -1,7 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
-import { Author, Folio } from '../../../core/models/interfaces';
+import { Author, Folio } from '@core/models/interfaces';
 import { AuthorStore } from '../author.store';
 import { FolioStore } from '../../folio/folio.store';
 

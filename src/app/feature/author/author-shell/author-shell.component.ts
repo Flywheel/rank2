@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HeaderComponent } from '../../../core/components/header/header.component';
+import { HeaderComponent } from '@core/components/header/header.component';
 import { AuthorProfileComponent } from '../author-profile/author-profile.component';
 
 @Component({

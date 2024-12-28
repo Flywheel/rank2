@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authDashboardAdminGuard } from './core/guards/authorDashbordAdminGuard';
+import { authDashboardAdminGuard } from '@core/guards/authorDashbordAdminGuard';
 import { BallotComponent } from '@feature/ballot/ballot/ballot.component';
 import { PitchShellComponent } from '@feature/pitch/pitch-shell/pitch-shell.component';
 

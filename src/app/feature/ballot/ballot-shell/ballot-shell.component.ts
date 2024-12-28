@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, output, signal } from '@angular/core';
-import { HeaderComponent } from '../../../core/components/header/header.component';
+import { HeaderComponent } from '@core/components/header/header.component';
 import { BallotBodyComponent } from '../ballot-body/ballot-body.component';
 import { BallotMenuComponent } from '../ballot-menu/ballot-menu.component';
-import { slateMemberViewInit } from '../../../core/models/initValues';
-import { ViewerComponent } from '../../../core/components/viewer/viewer.component';
-import { SlateMemberView } from '../../../core/models/interfaces';
+import { slateMemberViewInit } from '@core/models/initValues';
+import { ViewerComponent } from '@core/components/viewer/viewer.component';
+import { SlateMemberView } from '@core/models/interfaces';
 
 @Component({
   selector: 'mh5-ballot-shell',

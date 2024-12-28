@@ -1,17 +1,17 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { HeaderComponent } from '../../../core/components/header/header.component';
+import { HeaderComponent } from '@core/components/header/header.component';
 import { FolioScrollHorizontalComponent } from '../folio-scroll-horizontal/folio-scroll-horizontal.component';
 import { FolioPlacementNewComponent } from '../folio-placement-new/folio-placement-new.component';
 import { AuthorStore } from '../../author/author.store';
-import { AssetType, AuthorView, TabList } from '../../../core/models/interfaces';
-import { IconPlusComponent } from '../../../core/svg/icon-plus';
+import { AssetType, AuthorView, TabList } from '@core/models/interfaces';
+import { IconPlusComponent } from '@core/svg/icon-plus';
 import { AssetManagerComponent } from '../tabs/asset-manager/asset-manager.component';
-import { BackdoorComponent } from '../../../core/components/backdoor/backdoor.component';
-import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
+import { BackdoorComponent } from '@core/components/backdoor/backdoor.component';
+import { AUTHOR_DEFAULT_NAME } from '@core/models/constants';
 import { Router } from '@angular/router';
 import { PitchManagerComponent } from '../tabs/pitch-manager/pitch-manager.component';
 import { SlatesAuthoredComponent } from '../tabs/slates-authored/slates-authored.component';
-import { NamegetterComponent } from '../../../core/components/namegetter/namegetter.component';
+import { NamegetterComponent } from '@core/components/namegetter/namegetter.component';
 @Component({
   selector: 'mh5-folio-shell',
   standalone: true,

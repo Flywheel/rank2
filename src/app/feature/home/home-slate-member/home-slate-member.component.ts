@@ -1,16 +1,16 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { SlateMemberView } from '../../../core/models/interfaces';
-import { ContentTransform } from '../../../core/models/mediatypes';
-import { MediaService } from '../../../core/services/media.service';
+import { SlateMemberView } from '@core/models/interfaces';
+import { ContentTransform } from '@core/models/mediatypes';
+import { MediaService } from '@core/services/media.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgOptimizedImage } from '@angular/common';
-import { IconPlayCircleComponent } from '../../../core/svg/icon-play-circle';
-import { IconPlayTriangleComponent } from '../../../core/svg/icon-play-triangle';
-import { IconYoutubeComponent } from '../../../core/svg/icon-youtube';
-import { IconTiktokComponent } from '../../../core/svg/icon-tiktok';
-import { IconYouTubeShortsComponent } from '../../../core/svg/icon-youtube-shorts';
-import { MediaType } from '../../../core/models/mediatypes';
-import { IconFrameComponent } from '../../../core/svg/icon-frame';
+import { IconPlayCircleComponent } from '@core/svg/icon-play-circle';
+import { IconPlayTriangleComponent } from '@core/svg/icon-play-triangle';
+import { IconYoutubeComponent } from '@core/svg/icon-youtube';
+import { IconTiktokComponent } from '@core/svg/icon-tiktok';
+import { IconYouTubeShortsComponent } from '@core/svg/icon-youtube-shorts';
+import { MediaType } from '@core/models/mediatypes';
+import { IconFrameComponent } from '@core/svg/icon-frame';
 
 @Component({
   selector: 'mh5-home-slate-member',

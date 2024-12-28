@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, input, untracked } from '@angular/core';
 import { FolioStore } from '../folio.store';
-import { AuthorView, FolioView } from '../../../core/models/interfaces';
+import { AuthorView, FolioView } from '@core/models/interfaces';
 import { AuthorStore } from '../../author/author.store';
 
 @Component({

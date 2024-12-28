@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, catchError, retry, tap, timeout } from 'rxjs';
-import { Author, AuthorView } from '../../core/models/interfaces';
+import { Author, AuthorView } from '@core/models/interfaces';
 import { environment } from '../../../environments/environment';
-import { ErrorService } from '../../core/services/error.service';
+import { ErrorService } from '@core/services/error.service';
 
 @Injectable({
   providedIn: 'root',

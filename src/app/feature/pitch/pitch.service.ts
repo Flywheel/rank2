@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Pitch, Slate, SlateMember } from '../../core/models/interfaces';
+import { Pitch, Slate, SlateMember } from '@core/models/interfaces';
 import { catchError, exhaustMap, forkJoin, map, Observable, retry, tap, throwError, timeout } from 'rxjs';
-import { ErrorService } from '../../core/services/error.service';
+import { ErrorService } from '@core/services/error.service';
 
 @Injectable({
   providedIn: 'root',

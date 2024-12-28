@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Asset, Folio, FolioView, Placement } from '../../core/models/interfaces';
+import { Asset, Folio, FolioView, Placement } from '@core/models/interfaces';
 import { catchError, exhaustMap, Observable, map, timeout, retry } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { environment } from '../../../environments/environment';
-import { ErrorService } from '../../core/services/error.service';
+import { ErrorService } from '@core/services/error.service';
 
 @Injectable({
   providedIn: 'root',
