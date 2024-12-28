@@ -12,6 +12,7 @@ import {
   Pitch,
   PitchView,
   Placement,
+  PlacementView,
   SlateMember,
 } from '../models/interfaces';
 import { environment } from '../../../environments/environment';
@@ -128,18 +129,22 @@ export class HydrationService {
 
     pitches.forEach(async pitch => {
       const hasFolio = folios.filter(folio => folio.id === pitch.folioId)[0];
-      const members = hasFolio.placementViews;
-      const newMembers: SlateMember[] = [];
-      const theSlateMembersPrep = this.slateMembersCastFromFolio(members, pitch);
-      theSlateMembersPrep.forEach(slateMember => {
-        const member = {
-          slateId: slateMember.slateId,
-          placementId: slateMember.placementId,
-          rankOrder: slateMember.rankOrder,
-        } as SlateMember;
-        newMembers.push(member);
-      });
-      this.pitchStore.addSlateMembers(newMembers);
+      if (hasFolio && hasFolio.placementViews) {
+        const members = hasFolio.placementViews ?? ([] as PlacementView[]);
+        const newMembers: SlateMember[] = [];
+        const theSlateMembersPrep = this.slateMembersCastFromFolio(members, pitch);
+        theSlateMembersPrep.forEach(slateMember => {
+          const member = {
+            slateId: slateMember.slateId,
+            placementId: slateMember.placementId,
+            rankOrder: slateMember.rankOrder,
+          } as SlateMember;
+          newMembers.push(member);
+        });
+        this.pitchStore.addSlateMembers(newMembers);
+      } else {
+        console.warn(`Folio with id ${pitch.folioId} not found or has no placement views.`);
+      }
     });
   }
 }

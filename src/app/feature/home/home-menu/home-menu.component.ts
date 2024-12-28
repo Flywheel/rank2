@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
 import { IconArrowBackComponent } from '../../../core/svg/icon-arrow-back';
 import { IconArrowForwardComponent } from '../../../core/svg/icon-arrow-forward';
-
+import { AUTHOR_DEFAULT_NAME } from '../../../core/models/constants';
 @Component({
   selector: 'mh5-home-menu',
   standalone: true,
@@ -31,7 +31,7 @@ export class HomeMenuComponent {
   topChannel = computed<string>(() => '@' + this.selectedAuthorName());
 
   authorList = computed<AuthorView[]>(() => {
-    return this.authorStore.authorViews();
+    return this.authorStore.authorViews().filter(a => a.name !== AUTHOR_DEFAULT_NAME);
   });
 
   pitchViews = computed<PitchView[]>(() => {

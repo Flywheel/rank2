@@ -36,12 +36,14 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   async onLoad() {
+    await this.startupService.loadMH5();
     const consent = localStorage.getItem(AUTHOR_CONSENT_KEY);
     console.log(consent);
     if (consent) {
-      this.authorStore.getConsentValueFromLocalStorage(consent);
+      await this.authorStore.getConsentValueFromLocalStorage(consent);
       if (consent === 'accepted') {
-        this.startupService.loadForDemo_NoBackend();
+        await this.startupService.loadForDemo_NoBackend();
+        await this.authorStore.setStartupCompleted();
       }
     }
   }

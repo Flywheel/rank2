@@ -43,8 +43,12 @@ export class StartupService {
       console.log(this.folioStore.folios());
     }
     console.log(this.folioStore.folios());
-    await this.mockDataService.importMiniHeraldAssets();
+
     await this.mockDataService.importAuthorLoggedInAssets();
-    this.authorStore.setStartupCompleted();
+    //   this.authorStore.setStartupCompleted();
+  }
+
+  async loadMH5() {
+    await this.mockDataService.importMiniHeraldAssets();
   }
 }

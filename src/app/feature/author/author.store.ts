@@ -167,7 +167,7 @@ export const AuthorStore = signalStore(
         }
       },
 
-      async updateLoggedInAuthor(authorId: string, authorPrep: Author) {
+      async updateLoggedInAuthor(authorId: string, authorPrep: Author): Promise<void> {
         const actionKey = actionKeys('Set Author Name');
         updateState(store, actionKey.event, { isLoading: true });
         try {

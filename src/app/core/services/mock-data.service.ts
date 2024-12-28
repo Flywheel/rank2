@@ -22,11 +22,11 @@ export class MockDataService {
     await this.hydrationService.hydrateSlates(theAuthor.id);
   }
 
-  async importMiniHeraldAssets() {
+  async importMiniHeraldAssets(): Promise<void> {
     await this.importAssets(miniHeraldData);
   }
 
-  async importAssets(data: DataImporter) {
+  async importAssets(data: DataImporter): Promise<void> {
     const authorStartup: Author = data.author;
 
     await this.authorStore.createAuthor(authorStartup, false);
@@ -38,11 +38,11 @@ export class MockDataService {
     };
     await this.folioStore.createRootFolio(folioDefault);
 
-    await this.delay(100);
+    await this.delay(1000);
     const theTopFolio = this.folioStore.folios().find(f => f.authorId === authorStartup.id && f.parentFolioId === undefined);
     if (theTopFolio) await this.hydrationService.hydrateFolios(theTopFolio.authorId!, data);
     else alert('No top folio found');
-    await this.delay(100);
+    await this.delay(1000);
     await this.hydrationService.hydrateSlates(folioDefault.authorId);
   }
 }
