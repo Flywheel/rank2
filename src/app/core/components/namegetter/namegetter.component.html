@@ -12,6 +12,6 @@
         (keyup.enter)="initializeAuthorHandle()"
         placeholder="Enter name" />
     </div>
-    <button (click)="initializeAuthorHandle()" [disabled]="allowPost()">Submit</button>
+    <button (click)="initializeAuthorHandle()" [disabled]="disallowPost()">Submit</button>
   </div>
 </div>

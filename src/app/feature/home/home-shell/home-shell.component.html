@@ -18,11 +18,11 @@
 }
 
 <div class="sticky-footer">
-  <div class="footer" (click)="hidBackdoor.set(false)" (keydown)="hidBackdoor.set(false)" tabindex="0">
+  <div class="footer" (click)="hideBackdoor.set(false)" (keydown)="hideBackdoor.set(false)" tabindex="0">
     &copy; Indaba Application Network 2024
   </div>
   <div class="footer">
-    @defer (when hidBackdoor() === false) {
+    @defer (when hideBackdoor() === false) {
       <mh5-backdoor />
     }
   </div>

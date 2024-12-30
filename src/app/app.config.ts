@@ -7,6 +7,7 @@ import { DbService } from '../mocks/db.service';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideServiceWorker } from '@angular/service-worker';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 const commonProviders = [
   provideHttpClient(withFetch()),
@@ -19,6 +20,7 @@ const commonProviders = [
   }),
   provideAnimationsAsync(),
   provideAnimations(),
+  provideClientHydration(withEventReplay()),
 ];
 
 const inMemoryDbProvidersForProd = [

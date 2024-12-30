@@ -59,7 +59,10 @@
     }
   </div>
   <div class="sectionContentTitle">Placements Added</div>
-  <div class="sectionContent">{{ author().authorFolio.placementViews.length }}</div>
+  <div class="sectionContent">
+    {{ author().authorFolio.placementViews.length }}
+    <div class=""><button (click)="exportFolios()">Export Folios</button></div>
+  </div>
   <div class="sectionContentTitle">Pitches Added</div>
   <div class="sectionContent">{{ author().pitches.length }}</div>
 

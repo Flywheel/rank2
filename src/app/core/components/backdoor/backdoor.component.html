@@ -8,7 +8,9 @@
     <button class="adminButton" (click)="slateRx()">Slate RX</button>
   }
 </div>
+<div class="">Logged In Author {{ authorStore.authorLoggedInView().name }} {{ authorStore.authorSelectedId() }}</div>
+<button class="adminButton" (click)="testService()">Test Authors in DB</button>
 
-@for (item of theSlates(); track $index) {
+<!-- @for (item of theSlates(); track $index) {
   <div>{{ item.rankOrder }} - {{ item.slateId }} - {{ item.placementId }} - {{ item.id }}</div>
-}
+}  -->

@@ -11,6 +11,7 @@ import { FolioStore } from '../folio/folio.store';
 import { PitchStore } from '../pitch/pitch.store';
 import { ErrorService } from '@core/services/error.service';
 import { ActionKeyService } from '@core/services/action-key.service';
+import { environment } from 'src/environments/environment';
 
 const featureKey = 'Author';
 
@@ -168,6 +169,9 @@ export const AuthorStore = signalStore(
       },
 
       async updateLoggedInAuthor(authorId: string, authorPrep: Author): Promise<void> {
+        if (environment.ianConfig.showLogs) {
+          console.log('Updating author', authorPrep, authorId);
+        }
         const actionKey = actionKeys('Set Author Name');
         updateState(store, actionKey.event, { isLoading: true });
         try {
@@ -210,6 +214,17 @@ export const AuthorStore = signalStore(
             updateState(store, actionKey.failed, { isLoading: false });
             throw error;
           }
+        }
+      },
+
+      async authorGetFromDbByd(authorId: string): Promise<Author> {
+        try {
+          const author = await firstValueFrom(dbAuthor.authorGetById(authorId));
+
+          return author;
+        } catch (error) {
+          handleError(error, 'getbyId failed');
+          throw error;
         }
       },
 

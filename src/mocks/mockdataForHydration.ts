@@ -5,8 +5,8 @@ export const theData: DataImporter = {
     name: 'Mini Herald',
   },
   folios: [
-    { folioName: 'US Pres 2024', parentFolioName: '' },
-    { folioName: 'Ladder Singles 2009', parentFolioName: '' },
+    // { folioName: 'US Pres 2024', parentFolioName: '' },
+    // { folioName: 'Ladder Singles 2009', parentFolioName: '' },
   ],
   assets: [
     {

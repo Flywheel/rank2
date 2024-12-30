@@ -17,6 +17,7 @@ export class MockDataService {
 
   async importAuthorLoggedInAssets(): Promise<void> {
     const theAuthor = this.authorStore.authorLoggedIn();
+    if (!theAuthor) return;
     await this.hydrationService.hydrateFolios(theAuthor.id, theData as DataImporter);
     await this.delay(100);
     await this.hydrationService.hydrateSlates(theAuthor.id);
@@ -38,11 +39,11 @@ export class MockDataService {
     };
     await this.folioStore.createRootFolio(folioDefault);
 
-    await this.delay(1000);
+    await this.delay(100);
     const theTopFolio = this.folioStore.folios().find(f => f.authorId === authorStartup.id && f.parentFolioId === undefined);
     if (theTopFolio) await this.hydrationService.hydrateFolios(theTopFolio.authorId!, data);
     else alert('No top folio found');
-    await this.delay(1000);
+    await this.delay(100);
     await this.hydrationService.hydrateSlates(folioDefault.authorId);
   }
 }

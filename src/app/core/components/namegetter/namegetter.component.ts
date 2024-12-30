@@ -18,8 +18,8 @@ export class NamegetterComponent {
   folioStore = inject(FolioStore);
   channelName = signal<string>('');
   dupeNameFound = computed<boolean>(() => this.authorStore.authorViews().find(a => a.name === this.channelName()) !== undefined);
-  meetsRequirements = computed(() => this.channelName().length > 5 && this.channelName().substring(0, 1) !== '@');
-  allowPost = computed(() => !this.dupeNameFound() && this.meetsRequirements());
+  meetsRequirements = computed(() => this.channelName().length > 4 && this.channelName().substring(0, 1) !== '@');
+  disallowPost = computed(() => !this.meetsRequirements() || this.dupeNameFound());
 
   initializeAuthorHandle() {
     const currentAuthor = this.authorStore.authorLoggedIn();
@@ -31,9 +31,5 @@ export class NamegetterComponent {
       folioName: '@' + this.channelName(),
     };
     this.folioStore.createRootFolio(newFolio);
-    if (environment.ianConfig.showLogs) {
-      console.log('Author updated: ', updatedAuthorData);
-      console.log('New folio created: ', newFolio);
-    }
   }
 }

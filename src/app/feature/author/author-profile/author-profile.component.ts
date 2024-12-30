@@ -49,6 +49,28 @@ export class AuthorProfileComponent implements AfterViewInit {
     }
   }
 
+  exportPitches() {
+    const pitches = this.pitchStore.pitchViewsComputed();
+    const json = JSON.stringify(pitches);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'pitches.json';
+    a.click();
+  }
+
+  exportFolios() {
+    const folios = this.folioStore.folios();
+    const json = JSON.stringify(folios);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'folios.json';
+    a.click();
+  }
+
   pitchById(pitchId: number): Pitch {
     return this.pitchStore.pitchViewsComputed().find(p => p.id === pitchId) ?? pitchInit;
   }

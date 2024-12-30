@@ -11,6 +11,8 @@ import { PitchService } from '@feature/pitch/pitch.service';
 import { PitchStore } from '@feature/pitch/pitch.store';
 import { HydrationService } from '../../services/hydration.service';
 import { slateMemberInit } from '../../models/initValues';
+import { SlateMember } from '@core/models/interfaces';
+import { AuthorService } from '@feature/author/author.service';
 
 @Component({
   selector: 'mh5-backdoor',
@@ -26,6 +28,7 @@ export class BackdoorComponent {
   ballotStore = inject(BallotStore);
   startupService = inject(MockDataService);
 
+  authorService = inject(AuthorService);
   pitchService = inject(PitchService);
   hydrationService = inject(HydrationService);
 
@@ -36,13 +39,13 @@ export class BackdoorComponent {
     this.startupService.importAuthorLoggedInAssets();
   }
 
-  thePitches = computed(() => this.pitchStore.pitchesTest());
+  thePitches = computed(() => this.pitchStore.pitchesViaRxMethod());
   pitchrx() {
-    this.pitchStore.loadPitchById(this.pitchStore.pitchIdSelected());
-    console.log(this.pitchStore.pitchesTest());
+    this.pitchStore.loadPitchByIdViaRxMethod(this.pitchStore.pitchIdSelected());
+    console.log(this.pitchStore.pitchesViaRxMethod());
   }
 
-  theSlates = computed(() => this.pitchStore.slateMembers().sort((a, b) => b.id - a.id));
+  theSlates = computed(() => this.pitchStore.slateMembers().sort((a: SlateMember, b: SlateMember) => b.id - a.id));
 
   slateRx() {
     this.pitchStore.addSlateMembers([slateMemberInit]);
@@ -72,12 +75,18 @@ export class BackdoorComponent {
   // }
 
   testService() {
-    //#region Read
+    const loggedInAuthorId = this.authorStore.authorLoggedIn().id;
+    this.authorService.authorGetById(loggedInAuthorId).subscribe(data => {
+      console.log(data);
+    });
+    this.authorService.authorsGetAll().subscribe(data => {
+      console.log(data);
+    });
+
     // this.pitchService.contestsGetAll().subscribe(data => {
     //   console.log(data);
     // });
-    //#endregion Read
-    //#region Create
+
     // const contest: Pitch = {
     //   id: 4,
     //   folioId: 1,
@@ -96,7 +105,6 @@ export class BackdoorComponent {
     // this.db.slateCreate({ contestId: 4, authorId: '1', isTopSlate: true }).subscribe(data => {
     //   console.log(data);
     // });
-    //#endregion Create
   }
 
   async storeLogs(): Promise<void> {

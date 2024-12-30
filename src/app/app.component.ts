@@ -42,8 +42,8 @@ export class AppComponent implements OnInit, OnDestroy {
     if (consent) {
       await this.authorStore.getConsentValueFromLocalStorage(consent);
       if (consent === 'accepted') {
-        await this.startupService.loadForDemo_NoBackend();
-        await this.authorStore.setStartupCompleted();
+        await this.startupService.loadForDemo();
+        this.authorStore.setStartupCompleted();
       }
     }
   }

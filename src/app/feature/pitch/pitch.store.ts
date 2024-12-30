@@ -20,16 +20,15 @@ export const PitchStore = signalStore(
     slates: [slateInit],
     slateMembers: [slateMemberInit],
 
-    slateView: slateViewInit,
-
     isLoading: false,
     isAddingPitch: false,
     isAddingSlate: false,
     isAddingSlateMember: false,
-    pitchTest: pitchInit,
-    pitchesTest: [pitchInit],
     newPitch: pitchInit,
     newSlate: slateInit,
+
+    pitchViaRxMethod: pitchInit,
+    pitchesViaRxMethod: [pitchInit],
   }),
 
   withStorageSync({
@@ -121,7 +120,7 @@ export const PitchStore = signalStore(
         return { newPitch: pitchInit, newSlate: slateInit };
       },
 
-      addSlateMembers: rxMethod<SlateMember[]>(
+      addSlateMembers1: rxMethod<SlateMember[]>(
         pipe(
           mergeMap(slateMembers => {
             const actionKey = actionKeys('Add Slatemembers');
@@ -135,10 +134,12 @@ export const PitchStore = signalStore(
             const newMembers = dbPitch.addSlateMembers(members).pipe(
               tap({
                 next: members => {
+                  console.log('New members added:', members);
                   updateState(store, actionKey.success, {
                     slateMembers: [...store.slateMembers(), ...members],
                     isLoading: false,
                   });
+                  store.writeToStorage();
                 },
                 error: error => {
                   handleError(error, actionKey.failed);
@@ -146,6 +147,7 @@ export const PitchStore = signalStore(
                 },
               })
             );
+
             return newMembers;
           })
         )
@@ -154,7 +156,29 @@ export const PitchStore = signalStore(
         updateState(store, `[${featureKey}] Select By Id  ${pitchId}`, { pitchIdSelected: pitchId });
       },
 
-      loadPitchById: rxMethod<number>(
+      async addSlateMembers(slateMembers: SlateMember[]) {
+        const actionKey = actionKeys('Add Slatemembers');
+        updateState(store, actionKey.event, { isLoading: true });
+        try {
+          const members = slateMembers.map(slateMember => ({
+            id: 0,
+            placementId: slateMember.placementId,
+            slateId: slateMember.slateId,
+            rankOrder: slateMember.rankOrder,
+          }));
+          const newMembers = await firstValueFrom(dbPitch.addSlateMembers(members));
+          updateState(store, actionKey.success, {
+            slateMembers: [...store.slateMembers(), ...newMembers],
+            isLoading: false,
+          });
+          store.writeToStorage();
+        } catch (error) {
+          handleError(error, actionKey.failed);
+          updateState(store, actionKey.failed, { isLoading: false });
+        }
+      },
+
+      loadPitchByIdViaRxMethod: rxMethod<number>(
         pipe(
           switchMap(pitchId => {
             const actionKey = actionKeys('Load Pitches From DB');
@@ -163,8 +187,8 @@ export const PitchStore = signalStore(
               tap({
                 next: (pitch: Pitch) => {
                   updateState(store, actionKey.success, {
-                    pitchesTest: [...store.pitchesTest(), pitch],
-                    pitchTest: pitch,
+                    pitchesViaRxMethod: [...store.pitchesViaRxMethod(), pitch],
+                    pitchViaRxMethod: pitch,
                   });
                 },
                 error: error => {
@@ -213,28 +237,6 @@ export const PitchStore = signalStore(
 //       })
 //     )
 //     .subscribe();
-// },
-
-// async addSlateMembers(slateMembers: SlateMember[]) {
-//   const actionKey = actionKeys('Add Slatemembers');
-//   updateState(store, actionKey.event, { isLoading: true });
-//   try {
-//     const members = slateMembers.map(slateMember => ({
-//       id: 0,
-//       placementId: slateMember.placementId,
-//       slateId: slateMember.slateId,
-//       rankOrder: slateMember.rankOrder,
-//     }));
-//     const newMembers = await firstValueFrom(dbPitch.addSlateMembers(members));
-
-//     updateState(store, actionKey.success, {
-//       slateMembers: [...store.slateMembers(), ...newMembers],
-//       isLoading: false,
-//     });
-//   } catch (error) {
-//     handleError(error, actionKey.failed);
-//     updateState(store, actionKey.failed, { isLoading: false });
-//   }
 // },
 
 // async createPitchAndSlate3(pitchPrep: Partial<Pitch>): Promise<{ newPitch: Pitch; newSlate: Slate }> {
