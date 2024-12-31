@@ -40,8 +40,8 @@
     z-index: 1;
 
     /* Make the grid lines more visible initially to confirm it works */
-    background: linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+    background: linear-gradient(rgba(200, 200, 200, 0.25) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200, 200, 200, 0.15) 1px, transparent 1px);
 
     /* Each cell is 50x50. Adjust as needed. */
     background-size: 50px 15.4px;
@@ -60,7 +60,7 @@
     width: 200%;
     height: 100%;
     z-index: 2;
-    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
+    background-image: radial-gradient(circle, rgba(200, 200, 200, 0.5) 1px, transparent 1px);
     background-size: 50px 15.4px;
     background-position: 25px 7.7px; // Center the dots in each cell
     pointer-events: none;
