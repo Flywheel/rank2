@@ -18,13 +18,13 @@ export class BallotShellComponent {
   hidePlacementViewer = signal<boolean>(true);
   slateMember = signal<SlateMemberView>(slateMemberViewInit);
 
-  //resetPitch = output<void>();
+  resetPitch = output<void>();
 
   togglePlacementViewer(toggle: boolean) {
     console.log('togglePlacementViewer', toggle);
     this.hidePlacementViewer.set(toggle);
     if (toggle) {
-      //   this.resetPitch.emit();
+      this.resetPitch.emit();
     }
   }
   setSlateMemberView(slateMemberView: SlateMemberView) {
@@ -35,6 +35,6 @@ export class BallotShellComponent {
   setPitchView(slateMemberView: SlateMemberView) {
     console.log('setSlateMemberView', slateMemberView);
     this.slateMember.set(slateMemberView);
-    //   this.resetPitch.emit();
+    this.resetPitch.emit();
   }
 }

@@ -3,11 +3,11 @@ import { HomePitchComponent } from '../../home/home-pitch/home-pitch.component';
 import { PitchStore } from '../pitch.store';
 
 @Component({
-  selector: 'mh5-pitch-shell',
+  selector: 'mh5-pitch-chooser',
   standalone: true,
   imports: [HomePitchComponent],
-  templateUrl: './pitch-shell.component.html',
-  styleUrl: './pitch-shell.component.scss',
+  templateUrl: './pitch-chooser.component.html',
+  styleUrl: './pitch-chooser.component.scss',
 })
 export class PitchShellComponent {
   pitchStore = inject(PitchStore);

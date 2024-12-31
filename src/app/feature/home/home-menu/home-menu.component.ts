@@ -18,12 +18,13 @@ import { AUTHOR_DEFAULT_NAME } from '@core/models/constants';
 export class HomeMenuComponent {
   authorStore = inject(AuthorStore);
   pitchStore = inject(PitchStore);
-
   returnToPitchFromView = input<number>();
-  selectedPitch = signal<PitchView>(pitchViewInit);
-  topPitchSelected = signal<boolean>(false);
 
+  topPitchSelected = signal<boolean>(false);
   selectedAuthorName = signal<string>(environment.ianConfig.defaultAuthor);
+
+  selectedPitch = computed<PitchView>(() => this.pitchStore.pitchViewSelected());
+
   selectedAuthor = computed<AuthorView>(
     () => this.authorStore.authorViews().find(a => a.name === this.selectedAuthorName()) ?? authorViewInit
   );
@@ -79,7 +80,6 @@ export class HomeMenuComponent {
 
   selectPitch(pitchView: PitchView) {
     this.topPitchSelected.set(false);
-    this.selectedPitch.set(pitchView);
     this.pitchStore.setPitchSelected(pitchView.id);
   }
 
