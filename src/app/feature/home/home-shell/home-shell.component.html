@@ -3,7 +3,7 @@
     <mh5-header callerPage="pitch" (hidePlacementViewer)="togglePlacementViewer($event)" [caption]="slateMember().placementView.caption" />
     <mh5-pitch-chooser [id]="slateMember().placementView.assetView.sourceId" />
   } @else {
-    <div mh5SwipeLeft (swipeLeftDetected)="togglePlacementViewer(true)">
+    <div mh5SwipeRight (swipeRightDetected)="togglePlacementViewer(true)">
       <mh5-header callerPage="viewer" (hidePlacementViewer)="togglePlacementViewer($event)" />
       <div class="placement-viewer">
         <mh5-viewer [placementView]="slateMember().placementView" />

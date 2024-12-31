@@ -5,12 +5,12 @@ import { HomeSlateMemberComponent } from '../home-slate-member/home-slate-member
 import { Router } from '@angular/router';
 import { ErrorService } from '@shared/services/error.service';
 import { PitchMetaComponent } from '../pitch-meta/pitch-meta.component';
-import { SwipeRightDirective } from '@shared/directives/swipe-right.directive';
+import { SwipeLeftDirective } from '@shared/directives/swipe-left.directive';
 
 @Component({
   selector: 'mh5-home-pitch',
   standalone: true,
-  imports: [HomeSlateMemberComponent, PitchMetaComponent, SwipeRightDirective],
+  imports: [HomeSlateMemberComponent, PitchMetaComponent, SwipeLeftDirective],
   templateUrl: './home-pitch.component.html',
   styleUrl: './home-pitch.component.scss',
 })

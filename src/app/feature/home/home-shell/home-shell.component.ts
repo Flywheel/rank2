@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { HomePitchComponent } from '../home-pitch/home-pitch.component';
 import { PitchShellComponent } from '../../pitch/pitch-chooser/pitch-chooser.component';
 import { BackdoorComponent } from '@shared/components/backdoor/backdoor.component';
-import { SwipeLeftDirective } from '@shared/directives/swipe-left.directive';
+import { SwipeRightDirective } from '@shared/directives/swipe-right.directive';
 
 @Component({
   selector: 'mh5-home-shell',
@@ -21,7 +21,7 @@ import { SwipeLeftDirective } from '@shared/directives/swipe-left.directive';
     HomePitchComponent,
     PitchShellComponent,
     BackdoorComponent,
-    SwipeLeftDirective,
+    SwipeRightDirective,
   ],
   templateUrl: './home-shell.component.html',
   styleUrl: './home-shell.component.scss',
