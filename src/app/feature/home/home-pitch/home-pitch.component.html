@@ -14,6 +14,8 @@
     class="placementDisplayContainer"
     (click)="viewPlacement(slateMember)"
     (keypress)="viewPlacement(slateMember)"
+    mh5SwipeRight
+    (swipeRightDetected)="viewPlacement(slateMember)"
     tabindex="slateMember.id">
     <div class="topBorder"></div>
     <mh5-home-slate-member [placementInput]="slateMember" />

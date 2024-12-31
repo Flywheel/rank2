@@ -8,11 +8,21 @@ import { FormsModule } from '@angular/forms';
 import { HomePitchComponent } from '../home-pitch/home-pitch.component';
 import { PitchShellComponent } from '../../pitch/pitch-chooser/pitch-chooser.component';
 import { BackdoorComponent } from '@shared/components/backdoor/backdoor.component';
+import { SwipeLeftDirective } from '@shared/directives/swipe-left.directive';
 
 @Component({
   selector: 'mh5-home-shell',
   standalone: true,
-  imports: [HeaderComponent, ViewerComponent, HomeMenuComponent, FormsModule, HomePitchComponent, PitchShellComponent, BackdoorComponent],
+  imports: [
+    HeaderComponent,
+    ViewerComponent,
+    HomeMenuComponent,
+    FormsModule,
+    HomePitchComponent,
+    PitchShellComponent,
+    BackdoorComponent,
+    SwipeLeftDirective,
+  ],
   templateUrl: './home-shell.component.html',
   styleUrl: './home-shell.component.scss',
 })
@@ -23,6 +33,7 @@ export class HomeShellComponent {
   navigationId = computed<number>(() => this.slateMember().id);
   resetPitch = output<void>();
   togglePlacementViewer(toggle: boolean) {
+    console.log(toggle);
     this.hidePlacementViewer.set(toggle);
     if (toggle) {
       this.resetPitch.emit();
