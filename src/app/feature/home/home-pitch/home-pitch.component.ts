@@ -4,11 +4,12 @@ import { PitchView, SlateMemberView } from '@core/models/interfaces';
 import { HomeSlateMemberComponent } from '../home-slate-member/home-slate-member.component';
 import { Router } from '@angular/router';
 import { ErrorService } from '@core/services/error.service';
+import { PitchMetaComponent } from '../pitch-meta/pitch-meta.component';
 
 @Component({
   selector: 'mh5-home-pitch',
   standalone: true,
-  imports: [HomeSlateMemberComponent],
+  imports: [HomeSlateMemberComponent, PitchMetaComponent],
   templateUrl: './home-pitch.component.html',
   styleUrl: './home-pitch.component.scss',
 })
@@ -41,15 +42,9 @@ export class HomePitchComponent {
 
   gotoComments() {
     alert('The comments feature is still in development. Thanks for trying Mini Herald.');
-    // if (this.logger.enabled) {
-    //   console.log(this.slateMemberViews());
-    // }
-  }
-  closeWaitingComponent() {
-    //  this.showWaitingComponent.set(false);
   }
 
   gotoResults() {
-    //  this.showWaitingComponent.set(true);
+    alert('The comments feature is still in development. Thanks for trying Mini Herald.');
   }
 }

@@ -7,11 +7,7 @@
   @if (errorService.error) {
     <div class="error-message">{{ errorService.error }}</div>
   }
-  <div class="streamHeaderCaption">
-    <span>-</span>
-    <span>{{ pitchViewSelected().name }}</span>
-    <span>-</span>
-  </div>
+  <mh5-pitch-meta />
 </div>
 @for (slateMember of pitchViewSelected().slateView.slateMemberViews; track slateMember.id) {
   <div
