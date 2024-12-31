@@ -7,7 +7,7 @@
   100% {
     background-position:
       50px -50px,
-      30.9px -30.9px;
+      50px -50px;
   }
 }
 
@@ -31,7 +31,7 @@
     top: 0;
     left: 0;
     /* fill the entire parent */
-    width: 100%;
+    width: 200%;
     height: 100%;
 
     // OPTIONAL: if you want to see it "slide" further, use 200% width
@@ -40,8 +40,8 @@
     z-index: 1;
 
     /* Make the grid lines more visible initially to confirm it works */
-    background: linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+    background: linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
 
     /* Each cell is 50x50. Adjust as needed. */
     background-size: 50px 15.4px;
@@ -49,13 +49,27 @@
     pointer-events: none;
 
     /* Animate the background, not the entire element */
-    animation: panGrid 10s linear infinite;
+    animation: panGrid 20s linear infinite;
   }
 
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    z-index: 2;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
+    background-size: 50px 15.4px;
+    background-position: 25px 7.7px; // Center the dots in each cell
+    pointer-events: none;
+    animation: panGrid 10s linear infinite;
+  }
   /* Ensure the text layers on top of the pseudo-element */
   span, /* or “> *” if you have other children */
     .headerText {
     position: relative;
-    z-index: 2;
+    z-index: 3;
   }
 }

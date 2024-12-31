@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { AuthorStore } from '../author.store';
-import { HeaderComponent } from '@core/components/header/header.component';
+import { HeaderComponent } from '@shared/components/header/header.component';
 
 @Component({
   selector: 'mh5-author-dashboard',

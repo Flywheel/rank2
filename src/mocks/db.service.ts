@@ -1,17 +1,6 @@
 import { Injectable } from '@angular/core';
 import { InMemoryDbService, ResponseOptions } from 'angular-in-memory-web-api';
-import {
-  Asset,
-  Author,
-  Pitch,
-  PitchView,
-  Folio,
-  FolioView,
-  Placement,
-  PlacementView,
-  Slate,
-  SlateMember,
-} from '../app/core/models/interfaces';
+import { Asset, Author, Pitch, PitchView, Folio, FolioView, Placement, PlacementView, Slate, SlateMember } from '@shared/models/interfaces';
 import { Observable } from 'rxjs';
 import {
   assetInit,
@@ -24,7 +13,7 @@ import {
   placementViewInit,
   slateInit,
   slateMemberInit,
-} from '../app/core/models/initValues';
+} from '@shared/models/initValues';
 
 @Injectable({
   providedIn: 'root',

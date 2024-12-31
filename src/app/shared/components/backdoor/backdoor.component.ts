@@ -11,7 +11,7 @@ import { PitchService } from '@feature/pitch/pitch.service';
 import { PitchStore } from '@feature/pitch/pitch.store';
 import { HydrationService } from '../../services/hydration.service';
 import { slateMemberInit } from '../../models/initValues';
-import { SlateMember } from '@core/models/interfaces';
+import { SlateMember } from '@shared/models/interfaces';
 import { AuthorService } from '@feature/author/author.service';
 
 @Component({

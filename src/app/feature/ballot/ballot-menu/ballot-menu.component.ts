@@ -1,7 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { AuthorStore } from '../../author/author.store';
-import { pitchViewInit } from '@core/models/initValues';
-import { AuthorView, PitchView } from '@core/models/interfaces';
+import { pitchViewInit } from '@shared/models/initValues';
+import { AuthorView, PitchView } from '@shared/models/interfaces';
 import { PitchStore } from '../../pitch/pitch.store';
 import { FormsModule } from '@angular/forms';
 

@@ -2,16 +2,16 @@ import { AfterViewInit, Component, computed, ElementRef, inject, signal, ViewChi
 import { AuthorStore } from '../author.store';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { HydrationService } from '@core/services/hydration.service';
+import { HydrationService } from '@shared/services/hydration.service';
 import { AuthorConsentComponent } from '../author-consent/author-consent.component';
 import { environment } from '../../../../environments/environment';
-import { Author, Folio, Pitch } from '@core/models/interfaces';
-import { AUTHOR_DEFAULT_NAME } from '@core/models/constants';
+import { Author, Folio, Pitch } from '@shared/models/interfaces';
+import { AUTHOR_DEFAULT_NAME } from '@shared/models/constants';
 import { FolioStore } from '../../folio/folio.store';
-import { BackdoorComponent } from '@core/components/backdoor/backdoor.component';
+import { BackdoorComponent } from '@shared/components/backdoor/backdoor.component';
 import { PitchStore } from '../../pitch/pitch.store';
 import { BallotStore } from '../../ballot/ballot.store';
-import { pitchInit } from '@core/models/initValues';
+import { pitchInit } from '@shared/models/initValues';
 
 @Component({
   selector: 'mh5-author-profile',

@@ -6,9 +6,10 @@ import { Component } from '@angular/core';
   template: `
     <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
       <!-- Outline triangle pointing to the right -->
-      <path d="M8 5 L8 19 L19 12 Z" fill="none" stroke="#CCF" stroke-width="2" />
+      <path d="M8 5 L8 19 L19 12 Z" fill="none" stroke="#CCF" stroke-width="1.5" />
+
       <!-- Outline circle inside the triangle -->
-      <circle cx="12" cy="12" r="4" fill="none" stroke="#CCF" stroke-width="2" />
+      <circle cx="12" cy="12" r="2" fill="none" stroke="#CCF" stroke-width="1" />
     </svg>
   `,
 })

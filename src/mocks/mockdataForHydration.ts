@@ -1,4 +1,4 @@
-import { DataImporter } from '../app/core/models/interfaces';
+import { DataImporter } from '@shared/models/interfaces';
 export const theData: DataImporter = {
   author: {
     id: 'miniherald',

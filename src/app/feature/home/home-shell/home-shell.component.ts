@@ -1,13 +1,13 @@
 import { Component, computed, output, signal } from '@angular/core';
-import { HeaderComponent } from '@core/components/header/header.component';
-import { ViewerComponent } from '@core/components/viewer/viewer.component';
+import { HeaderComponent } from '@shared/components/header/header.component';
+import { ViewerComponent } from '@shared/components/viewer/viewer.component';
 import { HomeMenuComponent } from '../home-menu/home-menu.component';
-import { slateMemberViewInit } from '@core/models/initValues';
-import { SlateMemberView } from '@core/models/interfaces';
+import { slateMemberViewInit } from '@shared/models/initValues';
+import { SlateMemberView } from '@shared/models/interfaces';
 import { FormsModule } from '@angular/forms';
 import { HomePitchComponent } from '../home-pitch/home-pitch.component';
 import { PitchShellComponent } from '../../pitch/pitch-chooser/pitch-chooser.component';
-import { BackdoorComponent } from '@core/components/backdoor/backdoor.component';
+import { BackdoorComponent } from '@shared/components/backdoor/backdoor.component';
 
 @Component({
   selector: 'mh5-home-shell',

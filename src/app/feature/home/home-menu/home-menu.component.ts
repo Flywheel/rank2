@@ -1,13 +1,13 @@
 import { Component, computed, effect, inject, input, signal, untracked } from '@angular/core';
-import { authorViewInit, pitchViewInit } from '@core/models/initValues';
-import { AuthorView, PitchView } from '@core/models/interfaces';
+import { authorViewInit, pitchViewInit } from '@shared/models/initValues';
+import { AuthorView, PitchView } from '@shared/models/interfaces';
 import { AuthorStore } from '../../author/author.store';
 import { PitchStore } from '../../pitch/pitch.store';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
-import { IconArrowBackComponent } from '@core/svg/icon-arrow-back';
-import { IconArrowForwardComponent } from '@core/svg/icon-arrow-forward';
-import { AUTHOR_DEFAULT_NAME } from '@core/models/constants';
+import { IconArrowBackComponent } from '@shared/svg/icon-arrow-back';
+import { IconArrowForwardComponent } from '@shared/svg/icon-arrow-forward';
+import { AUTHOR_DEFAULT_NAME } from '@shared/models/constants';
 @Component({
   selector: 'mh5-home-menu',
   standalone: true,

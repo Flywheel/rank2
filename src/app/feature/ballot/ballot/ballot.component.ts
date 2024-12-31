@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { HeaderComponent } from '@core/components/header/header.component';
+import { HeaderComponent } from '@shared/components/header/header.component';
 import { BallotBodyComponent } from '../ballot-body/ballot-body.component';
 
 @Component({

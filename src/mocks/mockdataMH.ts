@@ -1,4 +1,4 @@
-import { DataImporter } from '../app/core/models/interfaces';
+import { DataImporter } from '@shared/models/interfaces';
 
 export const miniHeraldData: DataImporter = {
   author: {
@@ -7,13 +7,13 @@ export const miniHeraldData: DataImporter = {
   },
   folios: [
     { folioName: 'Grammy 2024', parentFolioName: '@miniherald' },
-    { folioName: 'Noosphere', parentFolioName: '@miniherald' },
     { folioName: 'Tony Best Play 2024', parentFolioName: '@miniherald' },
     // { folioName: 'Tony Best Musical 2024', parentFolioName: '@miniherald' },
     { folioName: 'Eurovision 2024', parentFolioName: '@miniherald' },
     { folioName: 'Oscars 2024', parentFolioName: '@miniherald' },
     { folioName: 'Corey Bradford', parentFolioName: '@miniherald' },
     { folioName: 'US Pres 2024', parentFolioName: '@miniherald' },
+    { folioName: 'Noosphere', parentFolioName: '@miniherald' },
     { folioName: 'Ladder Singles', parentFolioName: '@miniherald' },
     { folioName: 'AimsPoll', parentFolioName: '@miniherald' },
     { folioName: 'Border Integrity', parentFolioName: 'AimsPoll' },

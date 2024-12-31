@@ -1,12 +1,12 @@
 import { Component, computed, effect, ElementRef, inject, input, output, signal, viewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { Asset, AssetType, AssetView, Folio, Pitch, Placement } from '@core/models/interfaces';
+import { Asset, AssetType, AssetView, Folio, Pitch, Placement } from '@shared/models/interfaces';
 import { FolioStore } from '../folio.store';
 import { AuthorStore } from '../../author/author.store';
 import { environment } from '../../../../environments/environment';
-import { MediaService } from '@core/services/media.service';
+import { MediaService } from '@shared/services/media.service';
 import { FolioPlacementMediaComponent } from '../folio-placement-media/folio-placement-media.component';
-import { assetViewInit } from '@core/models/initValues';
+import { assetViewInit } from '@shared/models/initValues';
 import { PitchStore } from '../../pitch/pitch.store';
 
 @Component({

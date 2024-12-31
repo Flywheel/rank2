@@ -1,8 +1,8 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { TopSlateManagerComponent } from '../topslate-manager/topslate-manager.component';
 import { FolioStore } from '../../folio.store';
-import { PitchView } from '@core/models/interfaces';
-import { pitchViewInit } from '@core/models/initValues';
+import { PitchView } from '@shared/models/interfaces';
+import { pitchViewInit } from '@shared/models/initValues';
 import { FormsModule } from '@angular/forms';
 
 @Component({

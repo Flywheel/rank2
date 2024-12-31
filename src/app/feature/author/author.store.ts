@@ -3,14 +3,14 @@ import { signalStore, withComputed, withMethods, withState } from '@ngrx/signals
 import { firstValueFrom } from 'rxjs';
 
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
-import { Author, AuthorView, PitchView, FolioView, TreeNode } from '@core/models/interfaces';
-import { authorInit, authorViewInit } from '@core/models/initValues';
+import { Author, AuthorView, PitchView, FolioView, TreeNode } from '@shared/models/interfaces';
+import { authorInit, authorViewInit } from '@shared/models/initValues';
 import { AuthorService } from './author.service';
 
 import { FolioStore } from '../folio/folio.store';
 import { PitchStore } from '../pitch/pitch.store';
-import { ErrorService } from '@core/services/error.service';
-import { ActionKeyService } from '@core/services/action-key.service';
+import { ErrorService } from '@shared/services/error.service';
+import { ActionKeyService } from '@shared/services/action-key.service';
 import { environment } from 'src/environments/environment';
 
 const featureKey = 'Author';

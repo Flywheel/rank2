@@ -1,8 +1,8 @@
 import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { AuthorStore } from '../author.store';
-import { AUTHOR_CONSENT_KEY, AUTHOR_DEFAULT_NAME } from '@core/models/constants';
+import { AUTHOR_CONSENT_KEY, AUTHOR_DEFAULT_NAME } from '@shared/models/constants';
 import { uuidv7 } from 'uuidv7';
-import { Author } from '@core/models/interfaces';
+import { Author } from '@shared/models/interfaces';
 
 @Component({
   selector: 'mh5-author-consent',

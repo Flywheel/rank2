@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authDashboardAdminGuard } from '@core/guards/authorDashbordAdminGuard';
+import { authDashboardAdminGuard } from '@shared/guards/authorDashbordAdminGuard';
 import { PitchShellComponent } from '@feature/pitch/pitch-chooser/pitch-chooser.component';
 
 const DEFAULT_ROUTE = 'home';
