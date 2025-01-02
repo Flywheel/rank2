@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, input, output, signal, untracked } from '@angular/core';
-import { AuthorStore } from '../../../author/author.store';
-import { PitchStore } from '../../../pitch/pitch.store';
-import { FolioStore } from '../../folio.store';
+import { AuthorStore } from '@feature/author/author.store';
+import { PitchStore } from '@feature/pitch/pitch.store';
+import { FolioStore } from '@feature/folio/folio.store';
 import { PitchView, PlacementView, SlateMemberView } from '@shared/models/interfaces';
 import {
   CdkDrag,

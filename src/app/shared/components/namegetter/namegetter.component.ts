@@ -1,9 +1,9 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { IconProfileComponent } from '../../svg/icon-profile';
-import { environment } from '../../../../environments/environment';
+import { environment } from 'src/environments/environment';
 import { AuthorStore } from '@feature/author/author.store';
 import { FolioStore } from '@feature/folio/folio.store';
-import { Author, Folio } from '../../models/interfaces';
+import { Author, Folio } from '@shared/models/interfaces';
 import { FormsModule } from '@angular/forms';
 
 @Component({

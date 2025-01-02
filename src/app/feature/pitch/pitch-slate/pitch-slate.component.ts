@@ -1,20 +1,20 @@
 import { Component, computed, inject, output } from '@angular/core';
-import { PitchStore } from '../../pitch/pitch.store';
+import { PitchStore } from '@feature/pitch/pitch.store';
 import { PitchView, SlateMemberView } from '@shared/models/interfaces';
-import { HomeSlateMemberComponent } from '../home-slate-member/home-slate-member.component';
+import { PitchSlateMemberComponent } from '../pitch-slate-member/pitch-slate-member.component';
 import { Router } from '@angular/router';
 import { ErrorService } from '@shared/services/error.service';
-import { PitchMetaComponent } from '../pitch-meta/pitch-meta.component';
+import { PitchMetaComponent } from '@feature/pitch/pitch-meta/pitch-meta.component';
 import { SwipeLeftDirective } from '@shared/directives/swipe-left.directive';
 
 @Component({
-  selector: 'mh5-home-pitch',
+  selector: 'mh5-pitch-slate',
   standalone: true,
-  imports: [HomeSlateMemberComponent, PitchMetaComponent, SwipeLeftDirective],
-  templateUrl: './home-pitch.component.html',
-  styleUrl: './home-pitch.component.scss',
+  imports: [PitchSlateMemberComponent, PitchMetaComponent, SwipeLeftDirective],
+  templateUrl: './pitch-slate.component.html',
+  styleUrl: './pitch-slate.component.scss',
 })
-export class HomePitchComponent {
+export class PitchSlateComponent {
   errorService = inject(ErrorService);
   pitchStore = inject(PitchStore);
   router = inject(Router);

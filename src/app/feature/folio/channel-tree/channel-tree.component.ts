@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { TreeNode } from '@shared/models/interfaces';
-import { environment } from '../../../../environments/environment';
+import { environment } from 'src/environments/environment';
 import { CommonModule } from '@angular/common';
 
 @Component({

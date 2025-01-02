@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { FolioScrollHorizontalComponent } from '../folio-scroll-horizontal/folio-scroll-horizontal.component';
 import { FolioPlacementNewComponent } from '../folio-placement-new/folio-placement-new.component';
-import { AuthorStore } from '../../author/author.store';
+import { AuthorStore } from '@feature/author/author.store';
 import { AssetType, AuthorView, TabList } from '@shared/models/interfaces';
 import { IconPlusComponent } from '@shared/svg/icon-plus';
 import { AssetManagerComponent } from '../tabs/asset-manager/asset-manager.component';

@@ -12,8 +12,8 @@
   }
 } @else {
   <mh5-header callerPage="home" />
-  <mh5-home-menu [returnToPitchFromView]="navigationId()" />
-  <mh5-home-pitch
+  <mh5-pitch-menu [returnToPitchFromView]="navigationId()" />
+  <mh5-pitch-slate
     (hidePlacementViewer)="togglePlacementViewer($event)"
     (placementToDisplay)="setSlateMemberView($event)"
     (pitchToDisplay)="setPitchView($event)" />

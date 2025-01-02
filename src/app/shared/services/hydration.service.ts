@@ -14,8 +14,8 @@ import {
   Placement,
   PlacementView,
   SlateMember,
-} from '../models/interfaces';
-import { environment } from '../../../environments/environment';
+} from '@shared/models/interfaces';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',

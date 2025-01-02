@@ -1,32 +1,32 @@
 import { Component, computed, output, signal } from '@angular/core';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { ViewerComponent } from '@shared/components/viewer/viewer.component';
-import { HomeMenuComponent } from '../home-menu/home-menu.component';
+import { PitchMenuComponent } from '@feature/pitch/pitch-menu/pitch-menu.component';
 import { slateMemberViewInit } from '@shared/models/initValues';
 import { SlateMemberView } from '@shared/models/interfaces';
 import { FormsModule } from '@angular/forms';
-import { HomePitchComponent } from '../home-pitch/home-pitch.component';
-import { PitchShellComponent } from '../../pitch/pitch-chooser/pitch-chooser.component';
+import { PitchSlateComponent } from '@feature/pitch/pitch-slate/pitch-slate.component';
+import { PitchChooserComponent } from '@feature/pitch/pitch-chooser/pitch-chooser.component';
 import { BackdoorComponent } from '@shared/components/backdoor/backdoor.component';
 import { SwipeRightDirective } from '@shared/directives/swipe-right.directive';
 
 @Component({
-  selector: 'mh5-home-shell',
+  selector: 'mh5-pitch-shell',
   standalone: true,
   imports: [
     HeaderComponent,
     ViewerComponent,
-    HomeMenuComponent,
+    PitchMenuComponent,
     FormsModule,
-    HomePitchComponent,
-    PitchShellComponent,
+    PitchSlateComponent,
+    PitchChooserComponent,
     BackdoorComponent,
     SwipeRightDirective,
   ],
-  templateUrl: './home-shell.component.html',
-  styleUrl: './home-shell.component.scss',
+  templateUrl: './pitch-shell.component.html',
+  styleUrl: './pitch-shell.component.scss',
 })
-export class HomeShellComponent {
+export class PitchShellComponent {
   hideBackdoor = signal<boolean>(true);
   hidePlacementViewer = signal<boolean>(true);
   slateMember = signal<SlateMemberView>(slateMemberViewInit);

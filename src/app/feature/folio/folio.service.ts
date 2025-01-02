@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Asset, Folio, FolioView, Placement } from '@shared/models/interfaces';
 import { catchError, exhaustMap, Observable, map, timeout, retry } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { environment } from '../../../environments/environment';
+import { environment } from 'src/environments/environment';
 import { ErrorService } from '@shared/services/error.service';
 
 @Injectable({

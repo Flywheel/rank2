@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ShareService } from '../services/share.service';
+import { ShareService } from '@shared/services/share.service';
 
 @Component({
   selector: 'mh5-icon-share',

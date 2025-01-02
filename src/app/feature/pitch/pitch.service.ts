@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
+import { environment } from 'src/environments/environment';
 import { Pitch, Slate, SlateMember } from '@shared/models/interfaces';
 import { catchError, exhaustMap, forkJoin, map, Observable, retry, tap, throwError, timeout } from 'rxjs';
 import { ErrorService } from '@shared/services/error.service';

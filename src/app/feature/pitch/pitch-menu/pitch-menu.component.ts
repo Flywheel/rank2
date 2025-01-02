@@ -1,21 +1,21 @@
 import { Component, computed, effect, inject, input, signal, untracked } from '@angular/core';
 import { authorViewInit, pitchViewInit } from '@shared/models/initValues';
 import { AuthorView, PitchView } from '@shared/models/interfaces';
-import { AuthorStore } from '../../author/author.store';
-import { PitchStore } from '../../pitch/pitch.store';
+import { AuthorStore } from '@feature/author/author.store';
+import { PitchStore } from '@feature/pitch/pitch.store';
 import { FormsModule } from '@angular/forms';
-import { environment } from '../../../../environments/environment';
+import { environment } from 'src/environments/environment';
 import { IconArrowBackComponent } from '@shared/svg/icon-arrow-back';
 import { IconArrowForwardComponent } from '@shared/svg/icon-arrow-forward';
 import { AUTHOR_DEFAULT_NAME } from '@shared/models/constants';
 @Component({
-  selector: 'mh5-home-menu',
+  selector: 'mh5-pitch-menu',
   standalone: true,
   imports: [FormsModule, IconArrowBackComponent, IconArrowForwardComponent],
-  templateUrl: './home-menu.component.html',
-  styleUrl: './home-menu.component.scss',
+  templateUrl: './pitch-menu.component.html',
+  styleUrl: './pitch-menu.component.scss',
 })
-export class HomeMenuComponent {
+export class PitchMenuComponent {
   authorStore = inject(AuthorStore);
   pitchStore = inject(PitchStore);
   returnToPitchFromView = input<number>();

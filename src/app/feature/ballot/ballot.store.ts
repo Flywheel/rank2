@@ -3,7 +3,7 @@ import { withDevtools, updateState, withStorageSync } from '@angular-architects/
 import { PitchView, SlateView } from '@shared/models/interfaces';
 import { slateViewInit } from '@shared/models/initValues';
 import { computed, inject } from '@angular/core';
-import { PitchStore } from '../pitch/pitch.store';
+import { PitchStore } from '@feature/pitch/pitch.store';
 import { ActionKeyService } from '@shared/services/action-key.service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, tap } from 'rxjs';

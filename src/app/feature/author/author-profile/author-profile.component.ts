@@ -4,13 +4,13 @@ import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HydrationService } from '@shared/services/hydration.service';
 import { AuthorConsentComponent } from '../author-consent/author-consent.component';
-import { environment } from '../../../../environments/environment';
+import { environment } from 'src/environments/environment';
 import { Author, Folio, Pitch } from '@shared/models/interfaces';
 import { AUTHOR_DEFAULT_NAME } from '@shared/models/constants';
-import { FolioStore } from '../../folio/folio.store';
+import { FolioStore } from '@feature/folio/folio.store';
 import { BackdoorComponent } from '@shared/components/backdoor/backdoor.component';
-import { PitchStore } from '../../pitch/pitch.store';
-import { BallotStore } from '../../ballot/ballot.store';
+import { PitchStore } from '@feature/pitch/pitch.store';
+import { BallotStore } from '@feature/ballot/ballot.store';
 import { pitchInit } from '@shared/models/initValues';
 
 @Component({

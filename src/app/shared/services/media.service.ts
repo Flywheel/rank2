@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Asset, AssetView } from '../models/interfaces';
-import { environment } from '../../../environments/environment';
-import { ContentTransform, MediaPlatform, MediaType } from '../models/mediatypes';
-import { assetInit } from '../models/initValues';
+import { Asset, AssetView } from '@shared/models/interfaces';
+import { environment } from 'src/environments/environment';
+import { ContentTransform, MediaPlatform, MediaType } from '@shared/models/mediatypes';
+import { assetInit } from '@shared/models/initValues';
 
 @Injectable({
   providedIn: 'root',

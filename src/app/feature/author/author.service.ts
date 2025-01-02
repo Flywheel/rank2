@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, catchError, retry, tap, timeout } from 'rxjs';
 import { Author, AuthorView } from '@shared/models/interfaces';
-import { environment } from '../../../environments/environment';
+import { environment } from 'src/environments/environment';
 import { ErrorService } from '@shared/services/error.service';
 
 @Injectable({

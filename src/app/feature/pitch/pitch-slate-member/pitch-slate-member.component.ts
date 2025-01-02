@@ -13,7 +13,7 @@ import { MediaType } from '@shared/models/mediatypes';
 import { IconFrameComponent } from '@shared/svg/icon-frame';
 
 @Component({
-  selector: 'mh5-home-slate-member',
+  selector: 'mh5-pitch-slate-member',
   standalone: true,
   imports: [
     NgOptimizedImage,
@@ -24,10 +24,10 @@ import { IconFrameComponent } from '@shared/svg/icon-frame';
     IconYouTubeShortsComponent,
     IconFrameComponent,
   ],
-  templateUrl: './home-slate-member.component.html',
-  styleUrl: './home-slate-member.component.scss',
+  templateUrl: './pitch-slate-member.component.html',
+  styleUrl: './pitch-slate-member.component.scss',
 })
-export class HomeSlateMemberComponent {
+export class PitchSlateMemberComponent {
   mediaService = inject(MediaService);
   sanitizer = inject(DomSanitizer);
 

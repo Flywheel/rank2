@@ -1,13 +1,13 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MediaService } from '../../services/media.service';
-import { AssetView, PlacementView } from '../../models/interfaces';
+import { MediaService } from '@shared/services/media.service';
+import { AssetView, PlacementView } from '@shared/models/interfaces';
 import { DomSanitizer } from '@angular/platform-browser';
-import { PitchShellComponent } from '@feature/pitch/pitch-chooser/pitch-chooser.component';
+import { PitchChooserComponent } from '@feature/pitch/pitch-chooser/pitch-chooser.component';
 @Component({
   selector: 'mh5-viewer',
   standalone: true,
-  imports: [CommonModule, PitchShellComponent],
+  imports: [CommonModule, PitchChooserComponent],
   templateUrl: './viewer.component.html',
   styleUrl: './viewer.component.scss',
 })

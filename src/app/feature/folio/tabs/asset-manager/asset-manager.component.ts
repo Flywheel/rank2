@@ -1,8 +1,8 @@
 import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { PitchView, FolioView, PlacementView } from '@shared/models/interfaces';
-import { FolioStore } from '../../folio.store';
-import { PitchStore } from '../../../pitch/pitch.store';
-import { AuthorStore } from '../../../author/author.store';
+import { FolioStore } from '@feature/folio/folio.store';
+import { PitchStore } from '@feature/pitch/pitch.store';
+import { AuthorStore } from '@feature/author/author.store';
 import { pitchViewInit, placementViewInit } from '@shared/models/initValues';
 import { ViewerComponent } from '@shared/components/viewer/viewer.component';
 import { TopSlateManagerComponent } from '../topslate-manager/topslate-manager.component';

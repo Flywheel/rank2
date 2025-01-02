@@ -1,15 +1,15 @@
 import { Component, effect, inject, input, untracked } from '@angular/core';
-import { HomePitchComponent } from '../../home/home-pitch/home-pitch.component';
+import { PitchSlateComponent } from '@feature/pitch/pitch-slate/pitch-slate.component';
 import { PitchStore } from '../pitch.store';
 
 @Component({
   selector: 'mh5-pitch-chooser',
   standalone: true,
-  imports: [HomePitchComponent],
+  imports: [PitchSlateComponent],
   templateUrl: './pitch-chooser.component.html',
   styleUrl: './pitch-chooser.component.scss',
 })
-export class PitchShellComponent {
+export class PitchChooserComponent {
   pitchStore = inject(PitchStore);
   id = input<string>();
 

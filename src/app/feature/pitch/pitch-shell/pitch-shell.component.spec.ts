@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HomePitchComponent } from './home-pitch.component';
+import { PitchShellComponent } from './pitch-shell.component';
 
-describe('HomePitchComponent', () => {
-  let component: HomePitchComponent;
-  let fixture: ComponentFixture<HomePitchComponent>;
+describe('PitchShellComponent', () => {
+  let component: PitchShellComponent;
+  let fixture: ComponentFixture<PitchShellComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HomePitchComponent]
+      imports: [PitchShellComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(HomePitchComponent);
+    fixture = TestBed.createComponent(PitchShellComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

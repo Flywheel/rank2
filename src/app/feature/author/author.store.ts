@@ -5,10 +5,10 @@ import { firstValueFrom } from 'rxjs';
 import { withDevtools, updateState, withStorageSync } from '@angular-architects/ngrx-toolkit';
 import { Author, AuthorView, PitchView, FolioView, TreeNode } from '@shared/models/interfaces';
 import { authorInit, authorViewInit } from '@shared/models/initValues';
-import { AuthorService } from './author.service';
+import { AuthorService } from '@feature/author/author.service';
 
-import { FolioStore } from '../folio/folio.store';
-import { PitchStore } from '../pitch/pitch.store';
+import { FolioStore } from '@feature/folio/folio.store';
+import { PitchStore } from '@feature/pitch/pitch.store';
 import { ErrorService } from '@shared/services/error.service';
 import { ActionKeyService } from '@shared/services/action-key.service';
 import { environment } from 'src/environments/environment';

@@ -1,8 +1,8 @@
 import { Component, computed, inject } from '@angular/core';
-import { BallotStore } from '../../../ballot/ballot.store';
-import { AuthorStore } from '../../../author/author.store';
+import { BallotStore } from '@feature/ballot/ballot.store';
+import { AuthorStore } from '@feature/author/author.store';
 import { Router } from '@angular/router';
-import { PitchStore } from '../../../pitch/pitch.store';
+import { PitchStore } from '@feature/pitch/pitch.store';
 
 @Component({
   selector: 'mh5-slates-authored',

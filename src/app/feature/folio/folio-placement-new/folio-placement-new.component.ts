@@ -1,13 +1,13 @@
 import { Component, computed, effect, ElementRef, inject, input, output, signal, viewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Asset, AssetType, AssetView, Folio, Pitch, Placement } from '@shared/models/interfaces';
-import { FolioStore } from '../folio.store';
-import { AuthorStore } from '../../author/author.store';
-import { environment } from '../../../../environments/environment';
+import { FolioStore } from '@feature/folio/folio.store';
+import { AuthorStore } from '@feature/author/author.store';
+import { environment } from 'src/environments/environment';
 import { MediaService } from '@shared/services/media.service';
 import { FolioPlacementMediaComponent } from '../folio-placement-media/folio-placement-media.component';
 import { assetViewInit } from '@shared/models/initValues';
-import { PitchStore } from '../../pitch/pitch.store';
+import { PitchStore } from '@feature/pitch/pitch.store';
 
 @Component({
   selector: 'mh5-folio-placement-new',
