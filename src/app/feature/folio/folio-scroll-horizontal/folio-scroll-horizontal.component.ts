@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, input, untracked } from '@angular/core';
 import { FolioStore } from '../folio.store';
 import { AuthorView, FolioView } from '@shared/models/interfaces';
-import { AuthorStore } from '../../author/author.store';
+import { AuthorStore } from '@feature//author/author.store';
 
 @Component({
   selector: 'mh5-folio-scroll-horizontal',

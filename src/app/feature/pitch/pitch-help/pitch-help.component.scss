@@ -1,0 +1,13 @@
+.container {
+  display: flex;
+  justify-content: left;
+  background-color: #558;
+  margin: 3px;
+}
+
+.container p {
+  font-family: monospace;
+  font-size: 0.6rem;
+  margin-inline: auto;
+  margin: 2px 8px;
+}

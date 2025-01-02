@@ -1,5 +1,5 @@
 <div class="">
-  @if (!needsAuthorName()) {
+  @if (!authorStore.needsAuthorName()) {
     <!-- <button class="adminButton" (click)="import()">Load Data</button> -->
     <!-- <button class="adminButton" (click)="loadData2()">Load Tony</button> -->
     <!-- <button class="adminButton" (click)="testService()">Services</button> -->
@@ -10,7 +10,3 @@
 </div>
 <div class="">Logged In Author {{ authorStore.authorLoggedInView().name }} {{ authorStore.authorSelectedId() }}</div>
 <button class="adminButton" (click)="testService()">Test Authors in DB</button>
-
-<!-- @for (item of theSlates(); track $index) {
-  <div>{{ item.rankOrder }} - {{ item.slateId }} - {{ item.placementId }} - {{ item.id }}</div>
-}  -->

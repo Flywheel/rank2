@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { IconCommunityComponent } from '../../svg/icon-community';
-import { IconShareComponent } from '../../svg/icon-share';
-import { IconProfileComponent } from '../../svg/icon-profile';
-import { IconDashboardComponent } from '../../svg/icon-dashboard';
-import { IconMhComponent } from '../../svg/icon-mh';
+import { IconCommunityComponent } from '@shared/svg/icon-community';
+import { IconShareComponent } from '@shared/svg/icon-share';
+import { IconProfileComponent } from '@shared/svg/icon-profile';
+import { IconDashboardComponent } from '@shared/svg/icon-dashboard';
+import { IconMhComponent } from '@shared/svg/icon-mh';
 
 @Component({
   selector: 'mh5-header',

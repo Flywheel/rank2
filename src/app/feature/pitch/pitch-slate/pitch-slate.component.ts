@@ -6,17 +6,21 @@ import { Router } from '@angular/router';
 import { ErrorService } from '@shared/services/error.service';
 import { PitchMetaComponent } from '@feature/pitch/pitch-meta/pitch-meta.component';
 import { SwipeLeftDirective } from '@shared/directives/swipe-left.directive';
+import { PitchHelpComponent } from '../pitch-help/pitch-help.component';
+import { AuthorStore } from '@feature/author/author.store';
+import { AUTHOR_DEFAULT_NAME } from '@shared/models/constants';
 
 @Component({
   selector: 'mh5-pitch-slate',
   standalone: true,
-  imports: [PitchSlateMemberComponent, PitchMetaComponent, SwipeLeftDirective],
+  imports: [PitchSlateMemberComponent, PitchMetaComponent, SwipeLeftDirective, PitchHelpComponent],
   templateUrl: './pitch-slate.component.html',
   styleUrl: './pitch-slate.component.scss',
 })
 export class PitchSlateComponent {
   errorService = inject(ErrorService);
   pitchStore = inject(PitchStore);
+  authorStore = inject(AuthorStore);
   router = inject(Router);
 
   pitchViewSelected = computed<PitchView>(() => this.pitchStore.pitchViewSelected());

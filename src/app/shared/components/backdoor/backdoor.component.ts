@@ -32,7 +32,6 @@ export class BackdoorComponent {
   pitchService = inject(PitchService);
   hydrationService = inject(HydrationService);
 
-  needsAuthorName = computed<boolean>(() => this.authorStore.authorLoggedIn().name === AUTHOR_DEFAULT_NAME);
   isHydrated = false;
 
   import() {

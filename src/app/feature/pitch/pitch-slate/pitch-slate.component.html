@@ -1,28 +1,27 @@
-@if (pitchViewSelected().id !== 0) {
-  <div class="streamHeaderContainer">
-    <div class="streamHeaderButtonGroup">
-      <button class="streamButton left" (click)="gotoBallot()">Ballot</button>
-      <button class="streamButton middle" (click)="gotoComments()">Comments</button>
-      <button class="streamButton right" (click)="gotoResults()">Results</button>
-    </div>
-    @if (errorService.error) {
-      <div class="error-message">{{ errorService.error }}</div>
-    }
-    <mh5-pitch-meta />
+@if (authorStore.needsAuthorName()) {
+  <mh5-pitch-help />
+}
+<div class="streamHeaderContainer">
+  <div class="streamHeaderButtonGroup">
+    <button class="streamButton left" (click)="gotoBallot()">Ballot</button>
+    <button class="streamButton middle" (click)="gotoComments()">Comments</button>
+    <button class="streamButton right" (click)="gotoResults()">Results</button>
   </div>
-
-  @for (slateMember of pitchViewSelected().slateView.slateMemberViews; track slateMember.id) {
-    <div
-      class="placementDisplayContainer"
-      (click)="viewPlacement(slateMember)"
-      (keypress)="viewPlacement(slateMember)"
-      mh5SwipeLeft
-      (swipeLeftDetected)="viewPlacement(slateMember)"
-      tabindex="slateMember.id">
-      <div class="topBorder"></div>
-      <mh5-pitch-slate-member [placementInput]="slateMember" />
-    </div>
+  @if (errorService.error) {
+    <div class="error-message">{{ errorService.error }}</div>
   }
-} @else {
-  <div class="">Instructions go here</div>
+  <mh5-pitch-meta />
+</div>
+
+@for (slateMember of pitchViewSelected().slateView.slateMemberViews; track slateMember.id) {
+  <div
+    class="placementDisplayContainer"
+    (click)="viewPlacement(slateMember)"
+    (keypress)="viewPlacement(slateMember)"
+    mh5SwipeLeft
+    (swipeLeftDetected)="viewPlacement(slateMember)"
+    tabindex="slateMember.id">
+    <div class="topBorder"></div>
+    <mh5-pitch-slate-member [placementInput]="slateMember" />
+  </div>
 }

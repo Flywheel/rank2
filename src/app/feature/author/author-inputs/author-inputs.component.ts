@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { Author, Folio } from '@shared/models/interfaces';
 import { AuthorStore } from '../author.store';
-import { FolioStore } from '../../folio/folio.store';
+import { FolioStore } from '@feature/folio/folio.store';
 
 @Component({
   selector: 'mh5-author-inputs',

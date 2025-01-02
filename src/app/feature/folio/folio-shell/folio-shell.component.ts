@@ -35,7 +35,6 @@ export class FolioShellComponent {
   router = inject(Router);
   authorStore = inject(AuthorStore);
   knownAuthors = computed<AuthorView[]>(() => this.authorStore.authorViews());
-  needsAuthorName = computed<boolean>(() => this.authorStore.authorLoggedIn().name === AUTHOR_DEFAULT_NAME);
 
   tabs = signal<TabList[]>([
     { name: 'Assets', title: 'Assets' },

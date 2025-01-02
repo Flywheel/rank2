@@ -1,6 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { IconProfileComponent } from '../../svg/icon-profile';
-import { environment } from 'src/environments/environment';
+import { IconProfileComponent } from '@shared/svg/icon-profile';
 import { AuthorStore } from '@feature/author/author.store';
 import { FolioStore } from '@feature/folio/folio.store';
 import { Author, Folio } from '@shared/models/interfaces';

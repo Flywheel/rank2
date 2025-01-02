@@ -15,7 +15,7 @@ export class StartupService {
   folioStore = inject(FolioStore);
   mockDataService = inject(MockDataService);
 
-  async loadForDemo() {
+  async loadAuthorForDemo() {
     const loggedInAuthorId = this.authorStore.authorLoggedIn().id;
     let author = this.authorStore.authorSelectedSetById(loggedInAuthorId);
 
@@ -47,7 +47,7 @@ export class StartupService {
     await this.mockDataService.importAuthorLoggedInAssets();
   }
 
-  async loadMH5() {
+  async loadMH5DemoData() {
     await this.mockDataService.importMiniHeraldAssets();
   }
 }

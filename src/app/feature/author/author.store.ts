@@ -12,6 +12,7 @@ import { PitchStore } from '@feature/pitch/pitch.store';
 import { ErrorService } from '@shared/services/error.service';
 import { ActionKeyService } from '@shared/services/action-key.service';
 import { environment } from 'src/environments/environment';
+import { AUTHOR_DEFAULT_NAME } from '@shared/models/constants';
 
 const featureKey = 'Author';
 
@@ -20,7 +21,7 @@ export const AuthorStore = signalStore(
   withDevtools(featureKey),
   withState({
     authors: [authorInit],
-    authorLoggedIn: authorInit,
+    authorLoggedIn: { id: '0', name: AUTHOR_DEFAULT_NAME },
     authorSelectedId: '',
     isLoading: false,
     consentStatus: 'unknown' as string,
@@ -37,6 +38,10 @@ export const AuthorStore = signalStore(
     const pitchStore = inject(PitchStore);
 
     return {
+      needsAuthorName: computed<boolean>(
+        () => store.authorLoggedIn().name === AUTHOR_DEFAULT_NAME && store.startupCompleted() && store.consentStatus() === 'accepted'
+      ),
+
       authorSelectedFolioViews: computed<FolioView[]>(() =>
         folioStore.folioViewsComputed().filter(folio => folio.authorId === store.authorSelectedId())
       ),
