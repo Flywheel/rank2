@@ -39,7 +39,7 @@ export const AuthorStore = signalStore(
 
     return {
       needsAuthorName: computed<boolean>(
-        () => store.authorLoggedIn().name === AUTHOR_DEFAULT_NAME && store.startupCompleted() && store.consentStatus() === 'accepted'
+        () => store.authorLoggedIn().name === AUTHOR_DEFAULT_NAME && store.consentStatus() === 'accepted' && store.startupCompleted()
       ),
 
       authorSelectedFolioViews: computed<FolioView[]>(() =>

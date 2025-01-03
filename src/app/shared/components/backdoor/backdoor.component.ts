@@ -1,8 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
-
-import { AUTHOR_DEFAULT_NAME } from '@shared/models/constants';
-
 import { MockDataService } from '@shared/services/mock-data.service';
 import { AuthorStore } from '@feature/author/author.store';
 import { BallotStore } from '@feature/ballot/ballot.store';

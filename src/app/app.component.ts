@@ -38,7 +38,6 @@ export class AppComponent implements OnInit, OnDestroy {
   async onLoad() {
     await this.startupService.loadMH5DemoData();
     const consent = localStorage.getItem(AUTHOR_CONSENT_KEY);
-    console.log(consent);
     if (consent) {
       await this.authorStore.getConsentValueFromLocalStorage(consent);
       if (consent === 'accepted') {

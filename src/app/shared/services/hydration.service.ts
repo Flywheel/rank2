@@ -28,7 +28,7 @@ export class HydrationService {
   delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
   authorLoggedIn = this.authorStore.authorLoggedIn;
 
-  slateMembersCastFromFolio(placements: Placement[], pitch: PitchView): SlateMember[] {
+  castSlateMembersFromFolio(placements: Placement[], pitch: PitchView): SlateMember[] {
     return placements.map(({ id }, index) => ({
       id: 0,
       placementId: id,
@@ -40,7 +40,7 @@ export class HydrationService {
   public async hydrateFolios(authorId: string, theData: DataImporter): Promise<void> {
     const theAuthor = this.authorStore.authorViews().find(f => f.id === authorId);
     if (!theAuthor) {
-      console.log('Author not found');
+      if (environment.ianConfig.showLogs) console.log('Author not found');
       return;
     }
 
@@ -116,6 +116,7 @@ export class HydrationService {
       id: 0,
       mediaType: 'pitch',
       sourceId: newPitch.id.toLocaleString(),
+
       authorId: this.authorStore.authorLoggedIn().id,
     };
     this.folioStore.createPlacementWithAsset(folioView.parentFolioId!, folioView.folioName, assetPrep);
@@ -124,15 +125,15 @@ export class HydrationService {
 
   public async hydrateSlates(authorId: string): Promise<void> {
     const pitches = this.pitchStore.pitchViewsComputed().filter(p => p.authorId === authorId);
-    console.log(pitches);
+    if (pitches.length === 0) return;
     const folios = this.folioStore.folioViewsComputed();
-
     pitches.forEach(async pitch => {
       const hasFolio = folios.filter(folio => folio.id === pitch.folioId)[0];
       if (hasFolio && hasFolio.placementViews) {
         const members = hasFolio.placementViews ?? ([] as PlacementView[]);
+        if (members.length === 0) return;
         const newMembers: SlateMember[] = [];
-        const theSlateMembersPrep = this.slateMembersCastFromFolio(members, pitch);
+        const theSlateMembersPrep = this.castSlateMembersFromFolio(members, pitch);
         theSlateMembersPrep.forEach(slateMember => {
           const member = {
             slateId: slateMember.slateId,

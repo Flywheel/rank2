@@ -17,12 +17,24 @@
   margin: 2px 0 6px 2px;
   padding: 2px;
   border: 1px solid #aa7;
-  background-color: #111; // Dark but not pure black (easier to see faint lines)
-  color: #fff; // Make text light
+  background-color: #113;
+  color: #ffa; // Make text light
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  .col-left,
+  .col-right {
+    flex: 1;
+    text-align: center;
+  }
+
+  .col-middle {
+    flex: 0 1 auto;
+    text-align: center;
+    margin: 0 auto;
+  }
 
   // The pseudo-element overlay
   &::before {
@@ -30,22 +42,15 @@
     position: absolute;
     top: 0;
     left: 0;
-    /* fill the entire parent */
     width: 200%;
     height: 100%;
 
-    // OPTIONAL: if you want to see it "slide" further, use 200% width
-    // width: 200%;
-
     z-index: 1;
 
-    /* Make the grid lines more visible initially to confirm it works */
-    background: linear-gradient(rgba(200, 200, 200, 0.25) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(200, 200, 200, 0.15) 1px, transparent 1px);
+    background: linear-gradient(rgba(200, 200, 200, 0.2) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200, 200, 200, 0.1) 1px, transparent 1px);
 
-    /* Each cell is 50x50. Adjust as needed. */
     background-size: 50px 15.4px;
-
     pointer-events: none;
 
     /* Animate the background, not the entire element */

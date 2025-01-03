@@ -21,7 +21,17 @@ export class StartupService {
 
     if (environment.ianConfig.showLogs) {
       console.log(this.authorStore.authorLoggedIn());
-      console.log(author);
+      author
+        .then(a => {
+          if (a) {
+            console.log(a);
+          } else {
+            console.log('Author or author name is undefined');
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching author:', error);
+        });
     }
     if (!author) {
       await this.authorStore.createAuthor(author, false);
