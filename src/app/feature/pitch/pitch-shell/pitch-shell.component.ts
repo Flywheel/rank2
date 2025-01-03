@@ -7,8 +7,8 @@ import { SlateMemberView } from '@shared/models/interfaces';
 import { FormsModule } from '@angular/forms';
 import { PitchSlateComponent } from '@feature/pitch/pitch-slate/pitch-slate.component';
 import { PitchChooserComponent } from '@feature/pitch/pitch-chooser/pitch-chooser.component';
-import { BackdoorComponent } from '@shared/components/backdoor/backdoor.component';
 import { SwipeRightDirective } from '@shared/directives/swipe-right.directive';
+import { FooterComponent } from '../../../shared/components/footer/footer.component';
 
 @Component({
   selector: 'mh5-pitch-shell',
@@ -20,14 +20,13 @@ import { SwipeRightDirective } from '@shared/directives/swipe-right.directive';
     FormsModule,
     PitchSlateComponent,
     PitchChooserComponent,
-    BackdoorComponent,
     SwipeRightDirective,
+    FooterComponent,
   ],
   templateUrl: './pitch-shell.component.html',
   styleUrl: './pitch-shell.component.scss',
 })
 export class PitchShellComponent {
-  hideBackdoor = signal<boolean>(true);
   hidePlacementViewer = signal<boolean>(true);
   slateMember = signal<SlateMemberView>(slateMemberViewInit);
   navigationId = computed<number>(() => this.slateMember().id);

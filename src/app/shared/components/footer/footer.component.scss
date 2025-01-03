@@ -1,0 +1,14 @@
+.sticky-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: left;
+  z-index: 1000;
+}
+
+.footer {
+  color: #99c;
+  margin: 0;
+  padding-bottom: 0.3em;
+  font-size: xx-small;
+}

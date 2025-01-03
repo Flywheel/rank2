@@ -5,11 +5,12 @@ import { BallotMenuComponent } from '../ballot-menu/ballot-menu.component';
 import { slateMemberViewInit } from '@shared/models/initValues';
 import { ViewerComponent } from '@shared/components/viewer/viewer.component';
 import { SlateMemberView } from '@shared/models/interfaces';
+import { FooterComponent } from '../../../shared/components/footer/footer.component';
 
 @Component({
   selector: 'mh5-ballot-shell',
   standalone: true,
-  imports: [HeaderComponent, BallotBodyComponent, ViewerComponent, BallotMenuComponent],
+  imports: [HeaderComponent, BallotBodyComponent, ViewerComponent, BallotMenuComponent, FooterComponent],
   templateUrl: './ballot-shell.component.html',
   styleUrl: './ballot-shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

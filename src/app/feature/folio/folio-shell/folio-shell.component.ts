@@ -7,11 +7,11 @@ import { AssetType, AuthorView, TabList } from '@shared/models/interfaces';
 import { IconPlusComponent } from '@shared/svg/icon-plus';
 import { AssetManagerComponent } from '../tabs/asset-manager/asset-manager.component';
 import { BackdoorComponent } from '@shared/components/backdoor/backdoor.component';
-import { AUTHOR_DEFAULT_NAME } from '@shared/models/constants';
 import { Router } from '@angular/router';
 import { PitchManagerComponent } from '../tabs/pitch-manager/pitch-manager.component';
 import { SlatesAuthoredComponent } from '../tabs/slates-authored/slates-authored.component';
 import { NamegetterComponent } from '@shared/components/namegetter/namegetter.component';
+import { FooterComponent } from '@shared/components/footer/footer.component';
 @Component({
   selector: 'mh5-folio-shell',
   standalone: true,
@@ -25,6 +25,7 @@ import { NamegetterComponent } from '@shared/components/namegetter/namegetter.co
     PitchManagerComponent,
     SlatesAuthoredComponent,
     NamegetterComponent,
+    FooterComponent,
   ],
   templateUrl: './folio-shell.component.html',
   styleUrl: './folio-shell.component.scss',
