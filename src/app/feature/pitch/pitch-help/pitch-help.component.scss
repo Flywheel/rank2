@@ -1,13 +1,25 @@
 .container {
   display: flex;
-  justify-content: left;
+  justify-content: space-between;
+  align-items: center;
   background-color: #558;
   margin: 3px;
+  padding: 5px;
+}
+
+.help-text {
+  flex: 1;
+  text-align: left;
+}
+
+.close-button {
+  text-align: right;
+  cursor: pointer;
+  padding: 0 10px;
 }
 
 .container p {
   font-family: monospace;
   font-size: 0.6rem;
-  margin-inline: auto;
   margin: 2px 8px;
 }

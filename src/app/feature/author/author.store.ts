@@ -12,7 +12,7 @@ import { PitchStore } from '@feature/pitch/pitch.store';
 import { ErrorService } from '@shared/services/error.service';
 import { ActionKeyService } from '@shared/services/action-key.service';
 import { environment } from 'src/environments/environment';
-import { AUTHOR_DEFAULT_NAME } from '@shared/models/constants';
+import { AUTHOR_CONSENTED_VALUE, AUTHOR_DEFAULT_NAME } from '@shared/models/constants';
 
 const featureKey = 'Author';
 
@@ -24,7 +24,8 @@ export const AuthorStore = signalStore(
     authorLoggedIn: { id: '0', name: AUTHOR_DEFAULT_NAME },
     authorSelectedId: '',
     isLoading: false,
-    consentStatus: 'unknown' as string,
+    consentStatus: 'unknown',
+    needsAuthorNameNotice: true,
     startupCompleted: false,
   }),
 
@@ -39,7 +40,10 @@ export const AuthorStore = signalStore(
 
     return {
       needsAuthorName: computed<boolean>(
-        () => store.authorLoggedIn().name === AUTHOR_DEFAULT_NAME && store.consentStatus() === 'accepted' && store.startupCompleted()
+        () =>
+          store.authorLoggedIn().name === AUTHOR_DEFAULT_NAME &&
+          store.consentStatus() === AUTHOR_CONSENTED_VALUE &&
+          store.startupCompleted()
       ),
 
       authorSelectedFolioViews: computed<FolioView[]>(() =>
@@ -236,6 +240,12 @@ export const AuthorStore = signalStore(
       setStartupCompleted() {
         updateState(store, `[${featureKey}] Startup Completed`, {
           startupCompleted: true,
+        });
+      },
+
+      setAuthorNameNoticeFalse() {
+        updateState(store, `[${featureKey}] Close AuthorName Notice`, {
+          needsAuthorNameNotice: false,
         });
       },
     };

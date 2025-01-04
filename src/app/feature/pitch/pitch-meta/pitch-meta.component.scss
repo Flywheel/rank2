@@ -11,14 +11,13 @@
   }
 }
 
-.streamHeaderCaption {
-  // Container styles
+.container {
   position: relative;
   margin: 2px 0 6px 2px;
   padding: 2px;
   border: 1px solid #aa7;
   background-color: #113;
-  color: #ffa; // Make text light
+  color: #ffa;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -36,7 +35,7 @@
     margin: 0 auto;
   }
 
-  // The pseudo-element overlay
+  // pseudo-element overlay
   &::before {
     content: '';
     position: absolute;
@@ -53,7 +52,7 @@
     background-size: 50px 15.4px;
     pointer-events: none;
 
-    /* Animate the background, not the entire element */
+    // Animate the background, not the entire element
     animation: panGrid 20s linear infinite;
   }
 
@@ -67,13 +66,12 @@
     z-index: 2;
     background-image: radial-gradient(circle, rgba(200, 200, 200, 0.5) 1px, transparent 1px);
     background-size: 50px 15.4px;
-    background-position: 25px 7.7px; // Center the dots in each cell
+    background-position: 25px 7.7px;
     pointer-events: none;
     animation: panGrid 10s linear infinite;
   }
-  /* Ensure the text layers on top of the pseudo-element */
-  span, /* or “> *” if you have other children */
-    .headerText {
+  span,
+  .headerText {
     position: relative;
     z-index: 3;
   }
