@@ -6,13 +6,13 @@ import { PitchStore } from '@feature/pitch/pitch.store';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'mh5-ballot-menu',
+  selector: 'mh5-multiballot-menu',
   standalone: true,
   imports: [FormsModule],
-  templateUrl: './ballot-menu.component.html',
-  styleUrl: './ballot-menu.component.scss',
+  templateUrl: './multiballot-menu.component.html',
+  styleUrl: './multiballot-menu.component.scss',
 })
-export class BallotMenuComponent {
+export class MultiballotMenuComponent {
   authorStore = inject(AuthorStore);
   pitchStore = inject(PitchStore);
 

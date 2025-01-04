@@ -7,12 +7,13 @@ const DEFAULT_ROUTE = 'home';
 export const routes: Routes = [
   {
     path: 'contests',
-    loadComponent: () => import('@feature/ballot/ballot-shell/ballot-shell.component').then(m => m.BallotShellComponent),
+    loadComponent: () =>
+      import('./feature/multiballot/multiballot-shell/multiballot-shell.component').then(m => m.MultiballotShellComponent),
   },
   { path: 'contest', redirectTo: 'contests' },
   { path: 'pitch/:id', component: PitchChooserComponent },
 
-  { path: 'ballot/:id', loadComponent: () => import('@feature/ballot/ballot/ballot.component').then(m => m.BallotComponent) },
+  { path: 'ballot/:id', loadComponent: () => import('./feature/ballot/ballot-shell/ballot-shell.component').then(m => m.BallotShellComponent) },
   { path: 'folio', loadComponent: () => import('@feature/folio/folio-shell/folio-shell.component').then(m => m.FolioShellComponent) },
   { path: 'home', loadComponent: () => import('./feature/pitch/pitch-shell/pitch-shell.component').then(m => m.PitchShellComponent) },
   {

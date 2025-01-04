@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BallotMenuComponent } from './ballot-menu.component';
+import { MultiballotMenuComponent } from './multiballot-menu.component';
 
-describe('BallotMenuComponent', () => {
-  let component: BallotMenuComponent;
-  let fixture: ComponentFixture<BallotMenuComponent>;
+describe('MultiballotMenuComponent', () => {
+  let component: MultiballotMenuComponent;
+  let fixture: ComponentFixture<MultiballotMenuComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BallotMenuComponent]
+      imports: [MultiballotMenuComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(BallotMenuComponent);
+    fixture = TestBed.createComponent(MultiballotMenuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

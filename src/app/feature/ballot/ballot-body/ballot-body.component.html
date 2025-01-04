@@ -48,8 +48,7 @@
           <button class="move-candidate-down" (click)="moveDownOnePosition(rankedMember)">&#8595;</button>
         </div>
       } @empty {
-        <p>Ready to accept your preferences for {{ pitchViewSelected().name }}.</p>
-        <p>Drag and reorder candidates here.</p>
+        <mh5-ballot-help [passedInName]="pitchViewSelected().name" />
       }
     </div>
   </div>

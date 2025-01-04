@@ -4,11 +4,12 @@ import { PitchStore } from '@feature/pitch/pitch.store';
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { BallotStore } from '@feature/ballot/ballot.store';
 import { AuthorStore } from '@feature/author/author.store';
+import { BallotHelpComponent } from '../ballot-help/ballot-help.component';
 
 @Component({
   selector: 'mh5-ballot-body',
   standalone: true,
-  imports: [CdkDrag, CdkDropList, CdkDragHandle],
+  imports: [CdkDrag, CdkDropList, CdkDragHandle, BallotHelpComponent],
   templateUrl: './ballot-body.component.html',
   styleUrl: './ballot-body.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
