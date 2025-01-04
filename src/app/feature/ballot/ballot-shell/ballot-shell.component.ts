@@ -10,6 +10,4 @@ import { FooterComponent } from '@shared/components/footer/footer.component';
   templateUrl: './ballot-shell.component.html',
   styleUrl: './ballot-shell.component.scss',
 })
-export class BallotShellComponent {
-  id = input<string>();
-}
+export class BallotShellComponent {}

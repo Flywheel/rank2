@@ -6,7 +6,7 @@
 }
 
 .notice {
-  width: 400px;
+  width: 324px;
   height: 200px;
   background-color: #558;
   border: 2px solid #007bff;
@@ -36,14 +36,16 @@
   background: linear-gradient(180deg, #555, #444);
   border-radius: 8px;
   padding: 10px;
-  //   box-shadow:
-  //     2px 2px 5px rgba(0, 0, 0, 0.2),
-  //     -2px -2px 5px rgba(255, 255, 255, 0.1);
+}
+.noticee-text {
+  color: #99c;
+  font-size: 9rem;
+  font-weight: bold;
 }
 
 .contest-name {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #ccf;
+  color: #cc9;
   margin: 10px 0;
 }

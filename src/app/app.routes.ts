@@ -13,7 +13,15 @@ export const routes: Routes = [
   { path: 'contest', redirectTo: 'contests' },
   { path: 'pitch/:id', component: PitchChooserComponent },
 
-  { path: 'ballot/:id', loadComponent: () => import('./feature/ballot/ballot-shell/ballot-shell.component').then(m => m.BallotShellComponent) },
+  {
+    path: 'ballotInSpa/:id',
+    loadComponent: () => import('./feature/ballot/ballot-shell/ballot-shell.component').then(m => m.BallotShellComponent),
+  },
+
+  {
+    path: 'ballot/:id',
+    loadComponent: () => import('./feature/ballot/ballot-chooser/ballot-chooser.component').then(m => m.BallotChooserComponent),
+  },
   { path: 'folio', loadComponent: () => import('@feature/folio/folio-shell/folio-shell.component').then(m => m.FolioShellComponent) },
   { path: 'home', loadComponent: () => import('./feature/pitch/pitch-shell/pitch-shell.component').then(m => m.PitchShellComponent) },
   {

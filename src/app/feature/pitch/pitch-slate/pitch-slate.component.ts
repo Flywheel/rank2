@@ -8,7 +8,6 @@ import { PitchMetaComponent } from '@feature/pitch/pitch-meta/pitch-meta.compone
 import { SwipeLeftDirective } from '@shared/directives/swipe-left.directive';
 import { PitchHelpComponent } from '../pitch-help/pitch-help.component';
 import { AuthorStore } from '@feature/author/author.store';
-import { AUTHOR_DEFAULT_NAME } from '@shared/models/constants';
 
 @Component({
   selector: 'mh5-pitch-slate',
@@ -41,7 +40,7 @@ export class PitchSlateComponent {
   }
   gotoBallot() {
     if (this.pitchViewSelected().id > 0) {
-      this.router.navigate(['/ballot', this.pitchViewSelected().id]);
+      this.router.navigate(['/ballotInSpa', this.pitchViewSelected().id]);
     }
   }
 
